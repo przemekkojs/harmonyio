@@ -25,6 +25,7 @@ Aplikacja będzie umożliwiać:
 - Platforma .NET 8.0\
 - Silnik Razor
 - Język programowania C#
+- Biblioteka [p5.js](https://p5js.org/)
 
 ## Roadmap
 W tej sekcji przedstawione zostały poszczególne etapy realizacji projektu.
