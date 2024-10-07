@@ -29,5 +29,15 @@
         {
 
         }
+
+        public static List<Note> NotesAbove (Note note, int semitones)
+        {
+            return null;
+        }
+
+        public static List<string> NoteNamesAbove(string name, int semitones)
+        {
+            return null;
+        }
     }
 }
