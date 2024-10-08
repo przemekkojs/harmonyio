@@ -11,6 +11,7 @@ namespace Algorithm.Music
         public string Name { get => name; }
         public Mode Mode { get => mode; }
         public string this[int index] => scale[index];
+        public Scale Scale { get => scale; }
 
         private readonly int numberOfFlats;
         private readonly int numberOfSharps;
@@ -19,9 +20,6 @@ namespace Algorithm.Music
         private readonly Mode mode;
 
         private readonly Scale scale;
-
-        private readonly int sharpsCount;
-        private readonly int flatsCount;
 
         private static readonly List<string> sharpsQueue = ["F", "C", "G", "D", "A", "E", "B"];
         private static readonly List<string> flatsQueue = ["B", "E", "A", "D", "G", "C", "F"];
@@ -41,25 +39,25 @@ namespace Algorithm.Music
 
         private void DeductNotes()
         {
-            int startIndex = allNotes.IndexOf(name);
-            int accidentalsCount = sharpsCount + flatsCount;
+            int startIndex = allNotes.IndexOf(name[0].ToString());
+            int accidentalsCount = numberOfFlats + numberOfSharps;
             string accidentalSign = "";
             List<string> accidentalsList = [];            
 
             if (accidentalsCount != 0)
             {
-                accidentalsList = flatsCount != 0 ? flatsQueue : sharpsQueue;
-                accidentalSign = flatsCount != 0 ? "b" : "#";
-            }            
+                accidentalsList = numberOfFlats != 0 ? flatsQueue : sharpsQueue;
+                accidentalSign = numberOfFlats != 0 ? "b" : "#";
+            }
 
-            for (int index = 0; index < NOTES_IN_TONATION; index++)
+            for (int index = 0; index < allNotes.Count; index++)
             {
                 int actualIndex = (index + startIndex) % NOTES_IN_TONATION;
                 string currentNote = allNotes[actualIndex];
 
                 for (int accidentalIndex = 0; accidentalIndex < accidentalsCount; accidentalIndex++)
                 {
-                    if (currentNote == accidentalsList[accidentalIndex])
+                    if (currentNote.Equals(accidentalsList[accidentalIndex]))
                     {
                         currentNote += accidentalSign;
                     }
@@ -71,13 +69,13 @@ namespace Algorithm.Music
 
         private void Validate()
         {
-            if (sharpsCount < 0 || sharpsCount > 7)
+            if (numberOfSharps < 0 || numberOfSharps > 7)
                 throw new ArgumentException("Invalid sharps count.");
 
-            if (flatsCount < 0 || flatsCount > 7)
+            if (numberOfFlats < 0 || numberOfFlats > 7)
                 throw new ArgumentException("Invalid flats count.");
 
-            if (sharpsCount != 0 && flatsCount != 0)
+            if (numberOfSharps != 0 && numberOfFlats != 0)
                 throw new ArgumentException("Invalid accidentals count.");
         }
     }

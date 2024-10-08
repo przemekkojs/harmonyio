@@ -1,6 +1,6 @@
 ﻿namespace Algorithm.Music
 {
-    internal class Chord
+    public class Chord
     {
         public Function Function { get => function; }
         public Tonation Tonation { get => tonation; }
@@ -84,6 +84,24 @@
 
                 notes.Add(toAdd);
             }
+        }
+
+        public List<string> UniqueNoteNames()
+        {
+            List<string> names = [];
+
+            foreach (var note in this.Notes)
+            {
+                var name = note.Name;
+
+                if(!names.Contains(name))
+                {
+                    names.Add(name);
+                }
+            }
+
+            names.Sort();
+            return names;
         }
     }
 }

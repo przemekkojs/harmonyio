@@ -49,13 +49,12 @@ namespace Algorithm.Music
             if (symbol.Position != null)
                 components.Add(symbol.Position);
 
-            components.Add(FunctionComponent.Root);
             components.Add(FunctionComponent.Third);
 
-            if (!symbol.Removed.Contains(FunctionComponent.Fifth))
+            if (!symbol.Removed.Contains(FunctionComponent.Fifth) && !components.Contains(FunctionComponent.Fifth))
                 components.Add(FunctionComponent.Fifth);
 
-            if (!symbol.Removed.Contains(FunctionComponent.Root))
+            if (!symbol.Removed.Contains(FunctionComponent.Root) && !components.Contains(FunctionComponent.Root))
                 components.Add(FunctionComponent.Root);
 
             if (symbol.Added.Count > 0)
