@@ -1,0 +1,70 @@
+﻿.bottom-bar{
+    height: 100px;
+    min-height: 100px;
+}
+
+.left-panel {
+    width: 200px;
+}
+
+.hr {
+    border: none;
+    height: 1px; 
+    margin: 0;
+}
+
+.hr, .vr {
+    border-color: gray;
+    background-color: gray;
+    color: gray;
+    opacity: 1;
+}
+
+.btn {
+    width: 150px;
+}
+
+.task {
+    height: 120px;
+    min-height: 120px;
+    padding: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+    border-width: 1px;
+    border-color: gray;
+    border-radius: 10px;
+}
+
+.task-add {
+    text-align: center;
+    cursor: pointer;
+    color: #666;
+    border-style: dashed;
+}
+
+.task-creator {
+    justify-content: space-between;
+    display: flex;
+
+    border-style: solid;
+}
+
+.plus {
+    margin-right: 10px;
+}
+
+.task-number {
+    text-align: center;
+    font-size: 1.5em;
+    width: 50px;
+}
+
+.delete-btn {
+    width: 50px;
+}
+
+.delete-btn {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
