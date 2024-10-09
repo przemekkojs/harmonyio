@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using System.Security.Cryptography;
+﻿using Algorithm.Utils;
 
 namespace Algorithm.Music
 {
@@ -20,9 +19,11 @@ namespace Algorithm.Music
         private readonly FunctionType chordType;
         private readonly bool isMain;
 
+        private const int NOTES_IN_FUNCTION = 4;
+
         public Function(Symbol symbol, bool isMain, int duration, int beat)
         {
-            this.components = new();
+            this.components = [];
             this.duration = duration;
             this.beat = beat;
             this.symbol = symbol;
@@ -36,13 +37,13 @@ namespace Algorithm.Music
         public void ValidateDuration()
         {
             if (!(new List<int>() { 1, 2, 3, 4, 6, 8, 12, 16 }.Contains(duration)))
-                throw new ArgumentException("Invalid function duration");
+                throw new ArgumentException("Invalid function duration.");
         }
 
         public void ValidateBeat()
         {
             if (beat < 0)
-                throw new ArgumentException("Invalid beat");
+                throw new ArgumentException("Invalid beat.");
         }
                     
         public void DeductFunctionComponents()
@@ -50,6 +51,14 @@ namespace Algorithm.Music
             List<FunctionComponent> doubled = [];
             List<FunctionComponent> added = [];
 
+            DeductRootAndPosition(doubled);
+            DeductAdded(added, doubled);
+            CreateComponents(added, doubled);
+            ValidateComponents();
+        }
+
+        private void DeductRootAndPosition(List<FunctionComponent> doubled)
+        {
             bool hasRoot = (symbol.Root != null);
             bool hasPosition = (symbol.Position != null);
 
@@ -98,7 +107,10 @@ namespace Algorithm.Music
                     doubled.Add(FunctionComponent.Fifth);
                 }
             }
+        }
 
+        private void DeductAdded(List<FunctionComponent> added, List<FunctionComponent> doubled)
+        {
             if (symbol.Added.Count != 0)
             {
                 if (symbol.Added.Contains(FunctionComponent.Seventh))
@@ -137,14 +149,19 @@ namespace Algorithm.Music
                 }
                 else if (symbol.Added.Contains(FunctionComponent.Sixth))
                 {
-                    added.Add(FunctionComponent.Sixth);                    
+                    added.Add(FunctionComponent.Sixth);
+                    added.Add(FunctionComponent.Seventh);
+                    doubled.Remove(FunctionComponent.Fifth);
                 }
                 else
                 {
                     throw new ArgumentException("Invalid symbol.");
-                }                
+                }
             }
+        }
 
+        private void CreateComponents(List<FunctionComponent> added, List<FunctionComponent> doubled)
+        {
             List<FunctionComponent> innerListTemplate = [];
             innerListTemplate.Add(FunctionComponent.Third);
 
@@ -154,11 +171,11 @@ namespace Algorithm.Music
                 Components.Add(innerListTemplate);
             }
 
-            int missing = 4 - innerListTemplate.Count;
+            int missing = NOTES_IN_FUNCTION - innerListTemplate.Count;
 
             if (missing <= doubled.Count)
             {
-                var perms = CreatePermutations<FunctionComponent>(doubled, missing);
+                var perms = Permutations.CreatePermutations<FunctionComponent>(doubled, missing);
 
                 foreach (var perm in perms)
                 {
@@ -168,8 +185,8 @@ namespace Algorithm.Music
                 }
             }
             else
-            {                
-                var perms = CreatePermutations<FunctionComponent>(doubled, doubled.Count);
+            {
+                var perms = Permutations.CreatePermutations<FunctionComponent>(doubled, doubled.Count);
 
                 foreach (var perm in perms)
                 {
@@ -193,31 +210,11 @@ namespace Algorithm.Music
                 components.Clear();
                 components.AddRange(substitution);
             }
-
-            components.RemoveAll(x => (x.Count != 4));
         }
 
-        private static List<List<T>> CreatePermutations<T>(List<T> set, int n)
+        private void ValidateComponents()
         {
-            var result = new List<List<T>>();
-            CreatePermutationsRecursive(set, new List<T>(), result, n, 0);
-            return result;
-        }
-
-        private static void CreatePermutationsRecursive<T>(List<T> set, List<T> current, List<List<T>> result, int n, int startIndex)
-        {
-            if (current.Count == n)
-            {
-                result.Add(new List<T>(current));
-                return;
-            }
-
-            for (int i = startIndex; i < set.Count; i++)
-            {
-                current.Add(set[i]);
-                CreatePermutationsRecursive(set, current, result, n, i + 1);
-                current.RemoveAt(current.Count - 1);
-            }
+            components.RemoveAll(x => (x.Count != NOTES_IN_FUNCTION));
         }
     }
 }

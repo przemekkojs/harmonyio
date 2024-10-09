@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Algorithm.Music;
+﻿using Algorithm.Music;
 
 namespace AlgorithmTests
 {
@@ -23,7 +18,7 @@ namespace AlgorithmTests
         }
 
         [Fact]
-        public void TonicInFSharpMinorTest()
+        public void mTInFSharpMinorTest()
         {
             bool result = TestTemplate(
                 tonation: new Tonation("F#", Mode.MINOR, 0, 3),
@@ -36,7 +31,7 @@ namespace AlgorithmTests
         }
 
         [Fact]
-        public void Tonic7InGMinor()
+        public void mT7InGMinor()
         {
             bool result = TestTemplate(
                 tonation: new Tonation("G", Mode.MINOR, 2, 0),
@@ -49,7 +44,7 @@ namespace AlgorithmTests
         }
 
         [Fact]
-        public void Tonic9InBMajor()
+        public void TInBMajor()
         {
             bool result = TestTemplate(
                 tonation: new Tonation("B", Mode.MAJOR, 0, 5),
@@ -61,25 +56,88 @@ namespace AlgorithmTests
             Assert.True(result, "This should be true");
         }
 
-        private bool TestTemplate(Tonation tonation, Symbol symbol, bool isMainFunction, List<string> expectedNotes)
+        [Fact]
+        public void Sii7InCMajor()
         {
-            var TonicFunction = new Function(symbol, true, 1, 0);
+            bool result = TestTemplate(
+                tonation: new Tonation("C", Mode.MAJOR, 0, 0),
+                symbol: new Symbol(false, FunctionSymbol.Sii, added: [FunctionComponent.Seventh]),
+                isMainFunction: true,
+                expectedNotes: ["D", "F", "A", "C"]
+            );
+
+            Assert.True(result, "This should be true");
+        }
+
+        [Fact]
+        public void Sii9InCMajor()
+        {
+            bool result = TestTemplate(
+                tonation: new Tonation("C", Mode.MAJOR, 0, 0),
+                symbol: new Symbol(false, FunctionSymbol.Sii, added: [FunctionComponent.Ninth]),
+                isMainFunction: true,
+                expectedNotes: ["D", "F", "A", "C", "E"]
+            );
+
+            Assert.True(result, "This should be true");
+        }
+
+        [Fact]
+        public void mSii9InFMinor()
+        {
+            bool result = TestTemplate(
+                tonation: new Tonation("F", Mode.MINOR, 4, 0),
+                symbol: new Symbol(false, FunctionSymbol.Sii, added: [FunctionComponent.Ninth]),
+                isMainFunction: true,
+                expectedNotes: ["G", "Bb", "Db", "F", "Ab"]
+            );
+
+            Assert.True(result, "This should be true");
+        }
+
+        [Fact]
+        public void D67InCMajor()
+        {
+            bool result = TestTemplate(
+                tonation: new Tonation("C", Mode.MAJOR, 0, 0),
+                symbol: new Symbol(false, FunctionSymbol.D, added: [FunctionComponent.Sixth]),
+                isMainFunction: true,
+                expectedNotes: ["G", "B", "E", "F"]
+            );
+
+            Assert.True(result, "This should be true");
+        }
+
+        [Fact]
+        public void D67InEflatMajor()
+        {
+            bool result = TestTemplate(
+                tonation: new Tonation("Eb", Mode.MAJOR, 3, 0),
+                symbol: new Symbol(false, FunctionSymbol.D, added: [FunctionComponent.Sixth]),
+                isMainFunction: true,
+                expectedNotes: ["Bb", "D", "G", "Ab"]
+            );
+
+            Assert.True(result, "This should be true");
+        }
+
+        private static bool TestTemplate(Tonation tonation, Symbol symbol, bool isMainFunction, List<string> expectedNotes)
+        {
+            var TonicFunction = new Function(symbol, isMainFunction, 1, 0);
             var Tonic = new Chord(TonicFunction, tonation);
             List<string> actualUniqueNoteNames = Tonic.UniqueNoteNames();
 
             expectedNotes.Sort();
 
             if (actualUniqueNoteNames.Count != expectedNotes.Count)
-            {
                 return false;
-            }
 
             int index = 0;
 
             while (index < actualUniqueNoteNames.Count && actualUniqueNoteNames[index].Equals(expectedNotes[index]))
                 index++;
 
-            return true;
+            return index == actualUniqueNoteNames.Count;
         }
     }
 }

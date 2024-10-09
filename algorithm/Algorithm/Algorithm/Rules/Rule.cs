@@ -12,12 +12,15 @@ namespace Algorithm.Algorithm.Rules
         public string Name { get; protected set; }
         public string Description { get; protected set; }
 
-        protected Rule(string name, string description="")
+        protected readonly int expectedParametersCount;
+
+        protected Rule(string name, string description = "", int expectedParametersCount = 2)
         {
             this.Name = name;
             this.Description = description;
+            this.expectedParametersCount = expectedParametersCount;
         }
 
-        public abstract bool IsSatisfied(params Function[] functions);
+        public abstract bool IsSatisfied(params Stack[] stacks);
     }
 }

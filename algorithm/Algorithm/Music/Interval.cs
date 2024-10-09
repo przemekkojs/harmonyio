@@ -39,5 +39,10 @@
         {
             return null;
         }
+
+        public static int SemitonesBetween(Note note1, Note note2)
+        {
+            return 0;
+        }
     }
 }
