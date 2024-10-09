@@ -12,91 +12,74 @@ namespace AlgorithmTests
         [Fact]
         public void TonicInCMajorTest()
         {
-            var CMajor = new Tonation("C", Mode.MAJOR, 0, 0);
-            var TonicSymbol = new Symbol(false, FunctionSymbol.T);
-            var TonicFunction = new Function(TonicSymbol, 1, 0);
-            var Tonic = new Chord(TonicFunction, CMajor);
+            bool result = TestTemplate(
+                tonation: new Tonation("C", Mode.MAJOR, 0, 0),
+                symbol: new Symbol(false, FunctionSymbol.T),
+                isMainFunction: true,
+                expectedNotes: ["C", "E", "G"]
+            );
 
-            List<string> expectedUniqueNoteNames = new List<string>() { "C", "E", "G" };
-            expectedUniqueNoteNames.Sort(); //For exact same behaviour
-
-            List<string> actualUniqueNoteNames = Tonic.UniqueNoteNames();
-
-            if (actualUniqueNoteNames.Count != expectedUniqueNoteNames.Count)
-            {
-                Assert.Fail();
-                return;
-            }
-
-            int index = 0;
-
-            while (index < actualUniqueNoteNames.Count && actualUniqueNoteNames[index].Equals(expectedUniqueNoteNames[index]))
-            {
-                index++;
-            }
-                
-
-            Assert.True(index == actualUniqueNoteNames.Count, "This should be true.");
+            Assert.True(result, "This should be true");
         }
 
         [Fact]
         public void TonicInFSharpMinorTest()
         {
-            var CMajor = new Tonation("F#", Mode.MINOR, 0, 3);
-            var TonicSymbol = new Symbol(true, FunctionSymbol.T);
-            var TonicFunction = new Function(TonicSymbol, 1, 0);
-            var Tonic = new Chord(TonicFunction, CMajor);
+            bool result = TestTemplate(
+                tonation: new Tonation("F#", Mode.MINOR, 0, 3),
+                symbol: new Symbol(false, FunctionSymbol.T),
+                isMainFunction: true,
+                expectedNotes: ["F#", "A", "C#"]
+            );
 
-            List<string> expectedUniqueNoteNames = new List<string>() { "F#", "A", "C#" };
-            expectedUniqueNoteNames.Sort(); //For exact same behaviour
-
-            List<string> actualUniqueNoteNames = Tonic.UniqueNoteNames();
-
-            if (actualUniqueNoteNames.Count != expectedUniqueNoteNames.Count)
-            {
-                Assert.Fail();
-                return;
-            }
-
-            int index = 0;
-
-            while (index < actualUniqueNoteNames.Count && actualUniqueNoteNames[index].Equals(expectedUniqueNoteNames[index]))
-            {
-                index++;
-            }
-
-
-            Assert.True(index == actualUniqueNoteNames.Count, "This should be true.");
+            Assert.True(result, "This should be true");
         }
 
         [Fact]
         public void Tonic7InGMinor()
         {
-            var CMajor = new Tonation("G", Mode.MINOR, 2, 0);
-            var TonicSymbol = new Symbol(true, FunctionSymbol.T, added: [FunctionComponent.Seventh]);
-            var TonicFunction = new Function(TonicSymbol, 1, 0);
-            var Tonic = new Chord(TonicFunction, CMajor);
+            bool result = TestTemplate(
+                tonation: new Tonation("G", Mode.MINOR, 2, 0),
+                symbol: new Symbol(false, FunctionSymbol.T, added: [FunctionComponent.Seventh]),
+                isMainFunction: true,
+                expectedNotes: ["G", "Bb", "D", "F"]
+            );
 
-            List<string> expectedUniqueNoteNames = new List<string>() { "G", "Bb", "D", "F" };
-            expectedUniqueNoteNames.Sort(); //For exact same behaviour
+            Assert.True(result, "This should be true");
+        }
 
+        [Fact]
+        public void Tonic9InBMajor()
+        {
+            bool result = TestTemplate(
+                tonation: new Tonation("B", Mode.MAJOR, 0, 5),
+                symbol: new Symbol(false, FunctionSymbol.T, FunctionComponent.Root, added: [FunctionComponent.Ninth]),
+                isMainFunction: true,
+                expectedNotes: ["B", "D#", "F#", "A#", "C#"]
+            );
+
+            Assert.True(result, "This should be true");
+        }
+
+        private bool TestTemplate(Tonation tonation, Symbol symbol, bool isMainFunction, List<string> expectedNotes)
+        {
+            var TonicFunction = new Function(symbol, true, 1, 0);
+            var Tonic = new Chord(TonicFunction, tonation);
             List<string> actualUniqueNoteNames = Tonic.UniqueNoteNames();
 
-            if (actualUniqueNoteNames.Count != expectedUniqueNoteNames.Count)
+            expectedNotes.Sort();
+
+            if (actualUniqueNoteNames.Count != expectedNotes.Count)
             {
-                Assert.Fail();
-                return;
+                return false;
             }
 
             int index = 0;
 
-            while (index < actualUniqueNoteNames.Count && actualUniqueNoteNames[index].Equals(expectedUniqueNoteNames[index]))
-            {
+            while (index < actualUniqueNoteNames.Count && actualUniqueNoteNames[index].Equals(expectedNotes[index]))
                 index++;
-            }
 
-
-            Assert.True(index == actualUniqueNoteNames.Count, "This should be true.");
+            return true;
         }
     }
 }

@@ -4,17 +4,17 @@
     {
         public Function Function { get => function; }
         public Tonation Tonation { get => tonation; }
-        public List<Note> Notes { get => notes; }
-        public Note this[string key]
+        public List<List<Note>> Notes { get => notes; }
+        public Note this[int index, string key]
         {
             get
             {
                 return key switch
                 {
-                    "S" => this.Notes[0],
-                    "A" => this.Notes[1],
-                    "T" => this.Notes[2],
-                    "B" => this.Notes[3],
+                    "S" => this.Notes[index][0],
+                    "A" => this.Notes[index][1],
+                    "T" => this.Notes[index][2],
+                    "B" => this.Notes[index][3],
                     _ => throw new ArgumentException("Invalid access parameter value."),
                 };
             }
@@ -22,7 +22,7 @@
 
         private readonly Function function;
         private readonly Tonation tonation;
-        private readonly List<Note> notes;
+        private readonly List<List<Note>> notes;
 
         private static readonly Dictionary<FunctionSymbol, int> symbolIndexes = new()
         {
@@ -72,36 +72,69 @@
 
             List<Voice> voiceQueue = [Voice.BASS, Voice.TENORE, Voice.ALTO, Voice.SOPRANO];
 
-            for (int index = 0; index < 4; index++)
+            foreach (var component in function.Components)
             {
-                Note toAdd = new (
-                    name: indexes[function.Components[index]],
-                    octave: 4,
-                    functionComponent: function.Components[index],
-                    rhytmicValue: RhytmicValue.GetRhytmicValueByDuration(function.Duration),
-                    voiceQueue[index]
-                );
+                List<Note> inner = [];
 
-                notes.Add(toAdd);
-            }
+                for (int index = 0; index < 4; index++)
+                {
+                    Note toAdd = new(
+                        name: indexes[component[index]],
+                        octave: 4,
+                        functionComponent: component[index],
+                        rhytmicValue: RhytmicValue.GetRhytmicValueByDuration(function.Duration),
+                        voiceQueue[index]
+                    );
+
+                    inner.Add(toAdd);
+                }
+
+                notes.Add(inner);
+            }            
         }
 
         public List<string> UniqueNoteNames()
         {
             List<string> names = [];
 
-            foreach (var note in this.Notes)
+            foreach (var list in Notes)
             {
-                var name = note.Name;
-
-                if(!names.Contains(name))
+                foreach (var note in list)
                 {
-                    names.Add(name);
-                }
+                    var name = note.Name;
+
+                    if (!names.Contains(name))
+                    {
+                        names.Add(name);
+                    }
+                }                
             }
 
             names.Sort();
             return names;
+        }
+
+        public override string ToString()
+        {
+            string result = "[";
+
+            foreach (var noteList in Notes)
+            {
+                result += "[";
+
+                foreach (var note in noteList)
+                {
+                    result += note.Name + ", ";
+                }
+
+                result = result
+                    .Trim()
+                    .TrimEnd(',');
+
+                result += "]";
+            }
+
+            return result;
         }
     }
 }

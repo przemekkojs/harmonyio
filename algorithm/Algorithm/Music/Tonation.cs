@@ -65,6 +65,9 @@ namespace Algorithm.Music
 
                 scale.NoteNames.Add(currentNote);
             }
+
+            if (scale.NoteNames.Count != 7)
+                throw new InvalidOperationException("Something went wrong.");
         }
 
         private void Validate()
