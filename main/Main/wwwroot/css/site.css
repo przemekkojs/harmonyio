@@ -24,19 +24,12 @@ body {
     height: 100vh;
 }
 
-/*Quality of life*/
+/*Navbar*/
 
-.max-vh-100 {
-    max-height: 100vh;
+.underline {
+    opacity: 1;
 }
 
-.d1 {
-    background-color: red;
-    flex-shrink: 0;
-}
-
-.d2 {
-    background-color: blue;
-    flex-grow: 1;
-    overflow: auto;  
+.nav-link {
+    text-decoration: none
 }
