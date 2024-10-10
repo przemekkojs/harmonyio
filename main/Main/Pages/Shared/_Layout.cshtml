@@ -11,9 +11,9 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container px-0">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">
-                    <img src="~/images/logo.png" alt="Logo" style="height: 40px;" />
+                    <img src="~/images/logo.png" alt="Logo" class="nav-logo"/>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -23,15 +23,15 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Index">
-                                <span class="text-primary">Dołącz</span>
-                                <hr class="mb-0 mt-1 bg-primary underline" />
+                                <span class="text-primary text-nowrap">Dołącz</span>
+                                <hr class="mb-0 mt-1 bg-primary nav-underline" />
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Moje kartkówki</a>
+                            <a class="nav-link text-dark text-nowrap" asp-area="" asp-page="/Privacy">Moje kartkówki</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Stworzone kartkówki</a>
+                            <a class="nav-link text-dark text-nowrap" asp-area="" asp-page="/Privacy">Stworzone kartkówki</a>
                         </li>
                     </ul>
 
@@ -46,7 +46,7 @@
                     <ul class="navbar-nav position-relative">
                         <li class="nav-item dropdown ml-auto d-flex align-items-center">
                             <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="text-dark me-2">Kamil Nowak</span>
+                                <span class="text-dark text-nowrap me-2">Kamil Nowak</span>
                                 <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;" />
                             </a>
                             <ul class="dropdown-menu custom-dropdown position-absolute" aria-labelledby="profileDropdown">

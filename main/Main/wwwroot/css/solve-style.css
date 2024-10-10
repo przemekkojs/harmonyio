@@ -1,0 +1,45 @@
+﻿.top-bar {
+    height: 40px;
+    min-height: 40px;
+}
+
+.timer-img {
+    width: 35px;
+    height: 35px;
+}
+
+.question-area {
+    min-height: 75px;
+}
+
+.question-square {
+    width: 75px;
+    min-width: 75px;
+    height: 75px;
+    border-radius: 10px;
+}
+
+.music-staff {
+    padding: 15px;
+    align-items: center;
+    border-width: 1px;
+    border-color: gray;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+.toolbox {
+    width: 200px;
+    padding: 15px;
+    align-items: center;
+    border-width: 1px;
+    border-color: gray;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+
+.three-dots-img {
+    width: 11px;
+    height: 11px;
+}

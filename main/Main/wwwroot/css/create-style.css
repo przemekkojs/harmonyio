@@ -1,27 +1,5 @@
-﻿.bottom-bar{
-    height: 100px;
-    min-height: 100px;
-}
-
-.left-panel {
+﻿.left-panel {
     width: 200px;
-}
-
-.hr {
-    border: none;
-    height: 1px; 
-    margin: 0;
-}
-
-.hr, .vr {
-    border-color: gray;
-    background-color: gray;
-    color: gray;
-    opacity: 1;
-}
-
-.btn {
-    width: 150px;
 }
 
 .task {

@@ -26,10 +26,44 @@ body {
 
 /*Navbar*/
 
-.underline {
+.nav-underline {
     opacity: 1;
 }
 
 .nav-link {
     text-decoration: none
+}
+
+.nav-logo{
+    width: 40px;
+    height: 40px;
+}
+
+/*Shared*/
+
+.bottom-bar {
+    height: 80px;
+    min-height: 80px;
+}
+
+.hr {
+    height: 1px;
+    min-height: 1px;
+    margin: 0;
+}
+
+.hr, .vr {
+    border-color: gray;
+    background-color: gray;
+    color: gray;
+    opacity: 1;
+}
+
+.btn-std-width {
+    width: 150px;
+}
+
+.btn-tiny-width{
+    width: 30px;
+    min-width: 30px;
 }
