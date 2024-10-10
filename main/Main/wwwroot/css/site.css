@@ -41,6 +41,11 @@ body {
 
 /*Shared*/
 
+.top-bar {
+    height: 40px;
+    min-height: 40px;
+}
+
 .bottom-bar {
     height: 80px;
     min-height: 80px;
