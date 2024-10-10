@@ -17,9 +17,7 @@ namespace Algorithm.Music
         private readonly int duration; //W jednostkach - z UI - slotach.
         private readonly int beat; // W jednostkach
         private readonly FunctionType chordType;
-        private readonly bool isMain;
-
-        private const int NOTES_IN_FUNCTION = 4;
+        private readonly bool isMain;        
 
         public Function(Symbol symbol, bool isMain, int duration, int beat)
         {
@@ -171,7 +169,7 @@ namespace Algorithm.Music
                 Components.Add(innerListTemplate);
             }
 
-            int missing = NOTES_IN_FUNCTION - innerListTemplate.Count;
+            int missing = Constants.Constants.NOTES_IN_FUNCTION - innerListTemplate.Count;
 
             if (missing <= doubled.Count)
             {
@@ -214,7 +212,7 @@ namespace Algorithm.Music
 
         private void ValidateComponents()
         {
-            components.RemoveAll(x => (x.Count != NOTES_IN_FUNCTION));
+            components.RemoveAll(x => (x.Count != Constants.Constants.NOTES_IN_FUNCTION));
         }
     }
 }

@@ -21,10 +21,6 @@ namespace Algorithm.Music
 
         private readonly Scale scale;
 
-        private static readonly List<string> sharpsQueue = ["F", "C", "G", "D", "A", "E", "B"];
-        private static readonly List<string> flatsQueue = ["B", "E", "A", "D", "G", "C", "F"];
-        private static readonly List<string> allNotes = ["C", "D", "E", "F", "G", "A", "B"];        
-
         public Tonation(string name, Mode mode, int numberOfFlats, int numberOfSharps)
         {
             this.name = name;
@@ -39,21 +35,21 @@ namespace Algorithm.Music
 
         private void DeductNotes()
         {
-            int startIndex = allNotes.IndexOf(name[0].ToString());
+            int startIndex = Constants.Constants.AllNotes.IndexOf(name[0].ToString());
             int accidentalsCount = numberOfFlats + numberOfSharps;
             string accidentalSign = "";
             List<string> accidentalsList = [];            
 
             if (accidentalsCount != 0)
             {
-                accidentalsList = numberOfFlats != 0 ? flatsQueue : sharpsQueue;
+                accidentalsList = numberOfFlats != 0 ? Constants.Constants.FlatsQueue : Constants.Constants.SharpsQueue;
                 accidentalSign = numberOfFlats != 0 ? "b" : "#";
             }
 
-            for (int index = 0; index < allNotes.Count; index++)
+            for (int index = 0; index < Constants.Constants.AllNotes.Count; index++)
             {
                 int actualIndex = (index + startIndex) % NOTES_IN_TONATION;
-                string currentNote = allNotes[actualIndex];
+                string currentNote = Constants.Constants.AllNotes[actualIndex];
 
                 for (int accidentalIndex = 0; accidentalIndex < accidentalsCount; accidentalIndex++)
                 {

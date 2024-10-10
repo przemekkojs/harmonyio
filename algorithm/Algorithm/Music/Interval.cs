@@ -9,7 +9,8 @@
         private readonly Note note1;
         private readonly Note note2;
         private readonly string name;
-        private readonly int semitones;
+
+        private int semitones;
 
         public Interval(Note note1, Note note2)
         {

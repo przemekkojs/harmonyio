@@ -1,42 +1,81 @@
 ﻿using Algorithm.Music;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithm.Algorithm
 {
     public class Stack
-    {
-        public Note Soprano {  get; private set; }
-        public Note Alto { get; private set; }
-        public Note Tenore { get; private set; }
-        public Note Bass { get; private set; }
-
-        public int Duration { get; private set; }
+    {        
+        public int Duration { get; set; }
         public int Beat { get; private set; }
+        public Function BaseChord { get => baseFunction; }
+        public Tonation Tonation { get => tonation; }
 
-        public Stack(Note soprano, Note alto, Note tenore, Note bass, int duration, int beat)
+        protected readonly Function baseFunction;
+        protected readonly Tonation tonation;
+        protected int startBeat;
+        protected int duration;
+
+        protected Note? soprano;
+        protected Note? alto;
+        protected Note? tenore;
+        protected Note? bass;
+
+        public Stack(Function baseFunction, Tonation tonation, int startBeat)
         {
-            Soprano = soprano;
-            Alto = alto;
-            Tenore = tenore;
-            Bass = bass;
+            soprano = null;
+            alto = null;
+            tenore = null;
+            bass = null;
 
-            Duration = duration;
-            Beat = beat;
+            this.startBeat = startBeat;
+            this.baseFunction = baseFunction;
+            this.tonation = tonation;
         }
 
-        public Stack(List<Note> notes, int duration, int beat)
+        public bool AllNotesValid()
         {
-            Soprano = notes[0];
-            Alto = notes[1];
-            Tenore = notes[2];
-            Bass = notes[3];
+            Chord checker = new(baseFunction, tonation);
+            List<Note> validNotes = checker.Notes
+                .SelectMany(x => x)
+                .Distinct()
+                .ToList();
 
-            Duration = duration;
-            Beat = beat;
+            List<Note?> notesToCheck = [soprano, alto, tenore, bass];
+            
+            foreach(var note in notesToCheck)
+            {
+                if (note == null)
+                    return false;
+
+                if (!validNotes.Contains(note))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool AllNotesPartiallyValid()
+        {
+            // TODO
+            return true;
+        }
+
+        public List<Note> ValidNotes()
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+
+        public List<Note> PartiallyValidNotes()
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+
+        public List<Note> InvalidNotes()
+        {
+            // TODO
+            throw new NotImplementedException();
         }
     }
 }
