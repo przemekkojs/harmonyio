@@ -2,33 +2,34 @@
 
 namespace Algorithm.Algorithm
 {
-    public class UserStack : Stack
+    public sealed class UserStack : Stack
     {
-        public Note? Soprano { get => soprano; set => SetSoprano(value); }
-        public Note? Alto { get => alto; set => SetAlto(value); }
-        public Note? Tenore { get => tenore; set => SetTenore(value); }
-        public Note? Bass { get => bass; set => SetBass(value); }
-
         public UserStack(Function baseFunction, Tonation tonation, int startBeat) : base(baseFunction, tonation, startBeat) { }
-        
-        private bool SetSoprano(Note? value) => SetNote(ref soprano, value);
-        private bool SetAlto(Note? value) => SetNote(ref alto, value);
-        private bool SetTenore(Note? value) => SetNote(ref tenore, value);
-        private bool SetBass(Note? value) => SetNote(ref bass, value);
 
-        private bool SetNote(ref Note? note, Note? newValue)
+        public override bool SetSoprano(Note? value, RhytmicValue rhytmicValue) => SetNote(ref soprano, value, rhytmicValue);
+        public override bool SetAlto(Note? value, RhytmicValue rhytmicValue) => SetNote(ref alto, value, rhytmicValue);
+        public override bool SetTenore(Note? value, RhytmicValue rhytmicValue) => SetNote(ref tenore, value, rhytmicValue);
+        public override bool SetBass(Note? value, RhytmicValue rhytmicValue) => SetNote(ref bass, value, rhytmicValue);
+
+        private bool SetNote(ref Note? note, Note? newValue, RhytmicValue rhytmicValue)
         {
-            if (duration != 0 && note != null && note.RhytmicValue.Duration == duration)
+            if (Duration == 0)
+            {
+                Duration = rhytmicValue.Duration;
+            }
+
+            if (Duration != 0 && note != null && rhytmicValue.Duration == Duration)
             {
                 note = newValue;
-                SetDuration();
+                SetDuration(rhytmicValue);
+                ValidateDuration();
                 return true;
             }
 
             return false;
         }
 
-        private void SetDuration()
+        private void SetDuration(RhytmicValue rhytmicValue)
         {
             List<Note?> all = [Soprano, Alto, Tenore, Bass];
 
@@ -36,12 +37,12 @@ namespace Algorithm.Algorithm
             {
                 if (note != null)
                 {
-                    duration = note.RhytmicValue.Duration;
+                    Duration = rhytmicValue.RealDuration;
                     return;
                 }
             }
 
-            duration = 0;
+            Duration = 0;
         }
     }
 }

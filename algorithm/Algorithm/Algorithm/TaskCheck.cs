@@ -1,4 +1,5 @@
-﻿using Algorithm.Algorithm.Rules;
+﻿using Algorithm.Algorithm.Mistakes;
+using Algorithm.Algorithm.Rules;
 using Algorithm.Music;
 
 namespace Algorithm.Algorithm
@@ -16,7 +17,7 @@ namespace Algorithm.Algorithm
             this.activeRules = activeRules;
         }
 
-        public void Check()
+        public List<Mistake> Check()
         {
             List<Function> userFunctions = userSolution
                 .Select(x => x.BaseChord)
@@ -27,16 +28,23 @@ namespace Algorithm.Algorithm
                 .SelectMany(x => x)
                 .ToList();
 
-            bool areEqual = userFunctions.SequenceEqual(taskFunctions);
-
-            if (!areEqual)
+            if (!AreTasksEqual(userFunctions, taskFunctions))
                 throw new Exception("Something's wrong with a task");
 
-            List<Stack> mistaken = [];
+            return GetAllMistakes();
+        }
 
-            for (int index = 0; index < userFunctions.Count; index++)
+        private static bool AreTasksEqual(List<Function> userFunctions, List<Function> taskFunctions) => userFunctions.SequenceEqual(taskFunctions);
+
+        private List<Mistake> GetAllMistakes()
+        {
+            List<Mistake> mistakes = [];
+
+            foreach (Rule rule in activeRules)
             {
-                foreach (Rule rule in activeRules)
+                Mistake toAdd = new(rule);
+
+                for (int index = 0; index < userSolution.Count; index++)
                 {
                     switch (rule.ExpectedParametersCount)
                     {
@@ -44,18 +52,18 @@ namespace Algorithm.Algorithm
                             Stack toCheck = userSolution[index];
 
                             if (!rule.IsSatisfied(toCheck))
-                                mistaken.Add(toCheck);
+                                toAdd.AddStack(toCheck);
 
                             break;
                         case 2:
-                            if (index == userFunctions.Count - 1)
-                                continue;
+                            if (index == userSolution.Count - 1)
+                                break;
 
                             Stack toCheck1 = userSolution[index];
                             Stack toCheck2 = userSolution[index];
 
                             if (!rule.IsSatisfied(toCheck1, toCheck2))
-                                mistaken.AddRange([toCheck1, toCheck2]);
+                                toAdd.AddStack(toCheck1);
 
                             break;
                         default:
@@ -63,6 +71,8 @@ namespace Algorithm.Algorithm
                     }
                 }
             }
+
+            return mistakes;
         }
     }
 }

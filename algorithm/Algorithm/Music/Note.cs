@@ -33,8 +33,7 @@ namespace Algorithm.Music
     }
 
     public class Note
-    {
-        public RhytmicValue RhytmicValue { get; private set; }
+    {        
         public string Name { get; private set; }
         public int Octave { get; private set; }
         public Accidental Accidental { get; private set; }
@@ -49,10 +48,9 @@ namespace Algorithm.Music
             dotted         
          */
 
-        public Note(string name, int octave, FunctionComponent functionComponent, RhytmicValue rhytmicValue, Voice voice, Accidental accidental=Accidental.NONE, bool neutralized=false)
+        public Note(string name, int octave, FunctionComponent functionComponent, Voice voice, Accidental accidental=Accidental.NONE, bool neutralized=false)
         {
             Octave = octave;
-            RhytmicValue = rhytmicValue;
             FunctionComponent = functionComponent;
 
             UpdateNoteInfo(voice);

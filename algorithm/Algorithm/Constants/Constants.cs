@@ -1,4 +1,7 @@
-﻿namespace Algorithm.Constants
+﻿using Algorithm.Algorithm.Rules;
+using System.Data;
+
+namespace Algorithm.Constants
 {
     public static class Constants
     {
@@ -13,5 +16,7 @@
         public static readonly List<string> SharpsQueue = ["F", "C", "G", "D", "A", "E", "B"];
         public static readonly List<string> FlatsQueue = ["B", "E", "A", "D", "G", "C", "F"];
         public static readonly List<string> AllNotes = ["C", "D", "E", "F", "G", "A", "B"];
+
+        public static readonly VoiceDistance VoiceDistance = new VoiceDistance();
     }
 }

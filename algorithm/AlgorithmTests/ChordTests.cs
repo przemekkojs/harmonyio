@@ -123,7 +123,7 @@ namespace AlgorithmTests
 
         private static bool TestTemplate(Tonation tonation, Symbol symbol, bool isMainFunction, List<string> expectedNotes)
         {
-            var TonicFunction = new Function(symbol, isMainFunction, 1, 0);
+            var TonicFunction = new Function(symbol, isMainFunction);
             var Tonic = new Chord(TonicFunction, tonation);
             List<string> actualUniqueNoteNames = Tonic.UniqueNoteNames();
 

@@ -82,7 +82,6 @@
                         name: indexes[component[index]],
                         octave: 4,
                         functionComponent: component[index],
-                        rhytmicValue: RhytmicValue.GetRhytmicValueByDuration(function.Duration),
                         voiceQueue[index]
                     );
 

@@ -1,4 +1,6 @@
-﻿namespace Algorithm.Music
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Algorithm.Music
 {
     internal class Interval
     {
@@ -31,8 +33,11 @@
 
         }
 
-        public static List<Note> NotesAbove (Note note, int semitones)
+        public static List<Note> NotesAbove (Note? note, int semitones)
         {
+            if (note == null)
+                throw new ArgumentException("Note cannot be null");
+
             return null;
         }
 
@@ -41,8 +46,11 @@
             return null;
         }
 
-        public static int SemitonesBetween(Note note1, Note note2)
+        public static int SemitonesBetween(Note? note1, Note? note2)
         {
+            if (note1 == null || note2 == null)
+                return 0;
+
             return 0;
         }
     }

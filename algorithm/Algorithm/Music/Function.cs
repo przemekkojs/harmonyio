@@ -6,42 +6,22 @@ namespace Algorithm.Music
     {
         public List<List<FunctionComponent>> Components { get => components; }   
         public Symbol Symbol { get => symbol; }
-        public int Duration { get => duration; }
-        public int Beat { get => beat; }
         public FunctionType ChordType { get => chordType; }
         public bool IsMain { get => isMain; }
         
         private readonly List<List<FunctionComponent>> components;        
         private readonly Symbol symbol;
 
-        private readonly int duration; //W jednostkach - z UI - slotach.
-        private readonly int beat; // W jednostkach
         private readonly FunctionType chordType;
         private readonly bool isMain;        
 
-        public Function(Symbol symbol, bool isMain, int duration, int beat)
+        public Function(Symbol symbol, bool isMain)
         {
             this.components = [];
-            this.duration = duration;
-            this.beat = beat;
             this.symbol = symbol;
             this.isMain = isMain;
             
-            ValidateBeat();
-            ValidateDuration();
             DeductFunctionComponents();
-        }
-
-        public void ValidateDuration()
-        {
-            if (!(new List<int>() { 1, 2, 3, 4, 6, 8, 12, 16 }.Contains(duration)))
-                throw new ArgumentException("Invalid function duration.");
-        }
-
-        public void ValidateBeat()
-        {
-            if (beat < 0)
-                throw new ArgumentException("Invalid beat.");
         }
                     
         public void DeductFunctionComponents()
