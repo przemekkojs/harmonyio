@@ -1,0 +1,66 @@
+@page
+@model Main.Pages.Menu
+@{
+}
+
+<style>
+    .tile {
+        width: 100%;
+        border-radius: 10px;
+        transition: transform 0.2s;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .tile:hover {
+        transform: scale(1.05); /* Slight zoom on hover */
+    }
+
+    .tile h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+
+
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        
+        <!-- Create -->
+        <div class="col-4 mb-4">
+            <a href="/create"
+               class="tile d-flex align-items-center justify-content-center flex-column"
+               style="background-color: gray; color: white">
+
+                <h3>Create</h3>
+                
+                <img src="img/tmp.png" alt="test" class="m-3"/>
+            </a>
+        </div>
+
+        <!-- Join -->
+        <div class="col-4 mb-4">
+            <a href="/join"
+               class="tile d-flex align-items-center justify-content-center flex-column"
+               style="background-color: gray; color: white">
+
+                <h3>Join</h3>
+                
+                <img src="img/tmp.png" alt="test" class="m-3"/>
+            </a>
+        </div>
+
+        <!-- List -->
+        <div class="col-4 mb-4">
+            <a href="/list"
+               class="tile d-flex align-items-center justify-content-center flex-column"
+               style="background-color: gray; color: white">
+
+                <h3>List</h3>
+                
+                <img src="img/tmp.png" alt="test" class="m-3"/>
+            </a>
+        </div>
+    </div>
+</div>
