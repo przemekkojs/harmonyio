@@ -1,27 +1,10 @@
-﻿.question-area {
-    min-height: 75px;
-}
-
-.question-square {
-    width: 75px;
-    min-width: 75px;
-    height: 75px;
-    border-radius: 10px;
-}
-
-.three-dots-img {
-    width: 11px;
-    height: 11px;
-}
-
-
-.music-staff {
+﻿.music-staff {
     align-items: center;
     border-width: 1px;
     border-color: gray;
     border-radius: 10px;
     border-style: solid;
-    min-height: 300px;
+    min-height: 270px;
 }
 
 .music-staff-grade-area {

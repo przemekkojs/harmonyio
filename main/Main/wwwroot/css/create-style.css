@@ -39,9 +39,6 @@
 
 .delete-btn {
     width: 50px;
-}
-
-.delete-btn {
     cursor: pointer;
     background-color: transparent;
     border: none;
