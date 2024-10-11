@@ -13,5 +13,11 @@
             this.count = count;
             this.value = value;
         }
+
+        public static readonly Meter Meter2_4 = new(2, 4);
+        public static readonly Meter Meter3_4 = new(3, 4);
+        public static readonly Meter Meter4_4 = new(4, 4);
+        public static readonly Meter Meter3_8 = new(3, 8);
+        public static readonly Meter Meter6_8 = new(6, 8);
     }
 }
