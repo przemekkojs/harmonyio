@@ -1,3 +1,7 @@
+function preload() {
+    preloadSymbols();
+}
+
 function setup() {
     createCanvas(400, 400);
   }
