@@ -12,7 +12,7 @@ namespace AlgorithmTests
         public void TSDTCMajorGood()
         {
             Meter taskMeter = Meter.Meter3_4;
-            Tonation tonation = new Tonation("C", Mode.MAJOR, 0, 0);
+            Tonation tonation = new("C", Mode.MAJOR, 0, 0);
 
             Symbol TSymbol = new(false, FunctionSymbol.T);
             Symbol SSymbol = new(false, FunctionSymbol.S);

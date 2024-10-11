@@ -17,6 +17,6 @@ namespace Algorithm.Constants
         public static readonly List<string> FlatsQueue = ["B", "E", "A", "D", "G", "C", "F"];
         public static readonly List<string> AllNotes = ["C", "D", "E", "F", "G", "A", "B"];
 
-        public static readonly VoiceDistance VoiceDistance = new VoiceDistance();
+        public static readonly VoiceDistance VoiceDistance = new();
     }
 }

@@ -11,6 +11,7 @@ namespace Algorithm.Music
         public Tonation Tonation { get => tonation; }
         public Meter Meter { get => meter; }
         public List<Function> Functions { get => functions; }
+        public int Length { get => meter.Count * meter.Value; }
 
         private readonly Tonation tonation;
         private readonly Meter meter;

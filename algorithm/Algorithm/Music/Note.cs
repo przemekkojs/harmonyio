@@ -39,8 +39,10 @@ namespace Algorithm.Music
         public Accidental Accidental { get; private set; }
         public NoteDirection Direction { get; private set; }
         public Staff Staff { get; private set; }
-        public FunctionComponent FunctionComponent { get; private set; } 
-        public Voice Voice { get; private set; }                
+        public FunctionComponent FunctionComponent { get => functionComponent; set => SetFunctionComponent(value); } 
+        public Voice Voice { get; private set; }
+
+        private FunctionComponent functionComponent;
 
         /*
          FOR UI:
@@ -48,10 +50,10 @@ namespace Algorithm.Music
             dotted         
          */
 
-        public Note(string name, int octave, FunctionComponent functionComponent, Voice voice, Accidental accidental=Accidental.NONE, bool neutralized=false)
+        public Note(string name, int octave, Voice voice, Accidental accidental=Accidental.NONE, bool neutralized=false)
         {
+            Name = name;
             Octave = octave;
-            FunctionComponent = functionComponent;
 
             UpdateNoteInfo(voice);
             AddAccidentals(name);
@@ -63,6 +65,23 @@ namespace Algorithm.Music
 
                 this.Accidental = Accidental.NEUTRAL;
             }
+
+            Staff = voice switch
+            {
+                Music.Voice.SOPRANO => Staff.UPPER,
+                Music.Voice.ALTO => Staff.UPPER,
+                Music.Voice.TENORE => Staff.LOWER,
+                Music.Voice.BASS => Staff.LOWER,
+                _ => throw new ArgumentException("Invalid voice")
+            };
+        }
+
+        public Note(string name, int octave, FunctionComponent functionComponent, Voice voice, Accidental accidental = Accidental.NONE, bool neutralized = false) : 
+            this(name, octave, voice, accidental, neutralized) => this.functionComponent = functionComponent;
+
+        private void SetFunctionComponent(FunctionComponent component)
+        {
+            functionComponent = component;
         }
 
         public void AddAccidentals(string name)
@@ -142,9 +161,7 @@ namespace Algorithm.Music
             if (obj == null)
                 return false;
 
-            var casted = obj as Note;
-
-            if (casted != null)
+            if (obj is Note casted)
             {
                 var checkName = (this.Name == casted.Name);
                 var checkOctave = (this.Octave == casted.Octave);

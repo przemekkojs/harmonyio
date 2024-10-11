@@ -12,7 +12,7 @@ namespace Algorithm.Music
         private readonly Note note2;
         private readonly string name;
 
-        private int semitones;
+        private readonly int semitones;
 
         public Interval(Note note1, Note note2)
         {
@@ -37,6 +37,9 @@ namespace Algorithm.Music
         {
             if (note == null)
                 throw new ArgumentException("Note cannot be null");
+
+            if (semitones == 0)
+                return [note];
 
             return null;
         }
