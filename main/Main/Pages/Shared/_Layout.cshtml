@@ -34,6 +34,7 @@
                             <a class="nav-link text-dark text-nowrap" asp-area="" asp-page="/Privacy">Stworzone kartkówki</a>
                         </li>
                     </ul>
+                    <partial name="_LoginPartial"/>
 
                     <!-- NIEZALOGOWANY* -->
                     @*<ul class="navbar-nav">
@@ -43,22 +44,22 @@
                     </ul>*@
 
                     <!-- ZALOGOWANY - Profil z menu -->
-                    <ul class="navbar-nav position-relative">
-                        <li class="nav-item dropdown ml-auto d-flex align-items-center">
-                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="text-dark text-nowrap me-2">Kamil Nowak</span>
-                                <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;" />
-                            </a>
-                            <ul class="dropdown-menu custom-dropdown position-absolute" aria-labelledby="profileDropdown">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Privacy">Profil</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Privacy">Wyloguj</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    @* <ul class="navbar-nav position-relative"> *@
+                    @*     <li class="nav-item dropdown ml-auto d-flex align-items-center"> *@
+                    @*         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> *@
+                    @*             <span class="text-dark text-nowrap me-2">Kamil Nowak</span> *@
+                    @*             <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px;" /> *@
+                    @*         </a> *@
+                    @*         <ul class="dropdown-menu custom-dropdown position-absolute" aria-labelledby="profileDropdown"> *@
+                    @*             <li> *@
+                    @*                 <a class="dropdown-item" asp-area="" asp-page="/Privacy">Profil</a> *@
+                    @*             </li> *@
+                    @*             <li> *@
+                    @*                 <a class="dropdown-item" asp-area="" asp-page="/Privacy">Wyloguj</a> *@
+                    @*             </li> *@
+                    @*         </ul> *@
+                    @*     </li> *@
+                    @* </ul> *@
                 </div>
             </div>
         </nav>
