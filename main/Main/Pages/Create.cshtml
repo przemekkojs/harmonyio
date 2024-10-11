@@ -1,0 +1,60 @@
+﻿@page
+@model Main.Pages.CreateModel
+@{
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/create-style.css" />
+</head>
+
+<div class="h-100 w-100 d-flex flex-column">
+    <div class="flex-grow-1 d-flex overflow-auto">
+        <div class="left-panel">
+            <div class="mb-3">
+                <label for="nazwa" class="form-label">Nazwa</label>
+                <input type="text" id="nazwa" class="form-control" value="Kartkówka 2A">
+            </div>
+
+            <div class="mb-3">
+                <label for="czasOtwarcia" class="form-label">Czas otwarcia</label>
+                <input type="datetime-local" id="czasOtwarcia" class="form-control" value="2024-11-12T10:00">
+            </div>
+
+            <div class="mb-3">
+                <label for="czasZamkniecia" class="form-label">Czas zamknięcia</label>
+                <input type="datetime-local" id="czasZamkniecia" class="form-control" value="2024-11-30T10:00">
+            </div>
+        </div>
+
+        <div class="vr mx-3"></div>
+
+        <div class="flex-grow-1 d-flex flex-column overflow-auto">
+            @for (int i = 0; i < 5; i++)
+            {
+                <div class="task task-creator p-0 overflow-hidden">
+                    <div class="d-flex h-100 align-items-center bg-secondary">
+                        <div class="task-number text-white">@(i+1)</div>
+                        <div class="vr"></div>
+                    </div>
+                    <div class="task-content">Kreator zadania</div>
+                    <div class="d-flex h-100 align-items-center">
+                        <div class="vr"></div>
+                        <button class="delete-btn">🗑️</button>
+                    </div>
+                </div>
+            }
+
+            <div class="task task-add d-flex justify-content-center align-items-center">
+                <span class="plus">+</span>
+                <span>Dodaj nowe zadanie</span>
+            </div>
+        </div>
+    </div>
+
+    <hr class="hr">
+
+    <div class="bottom-bar d-flex align-items-center justify-content-between">
+        <button class="btn btn-danger btn-std-width">Powrót</button>
+        <button class="btn btn-primary btn-std-width">Utwórz</button>
+    </div>
+</div>
