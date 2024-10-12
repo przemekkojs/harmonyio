@@ -7,19 +7,20 @@ const upperStaffLowerMargin = 2.5 * spaceBetweenStaffLines + stemHeight + 10;
 const lowerStaffUpperMargin = 3 * spaceBetweenStaffLines + stemHeight + 10;
 const lowerStaffLowerMargin = 2 * spaceBetweenStaffLines + stemHeight + 10;
 const upperStaffHeight =
-    upperStaffUpperMargin + 4 * spaceBetweenStaffLines + upperStaffLowerMargin;
+  upperStaffUpperMargin + 4 * spaceBetweenStaffLines + upperStaffLowerMargin;
 const lowerStaffHeight =
-    lowerStaffUpperMargin + 4 * spaceBetweenStaffLines + lowerStaffLowerMargin;
+  lowerStaffUpperMargin + 4 * spaceBetweenStaffLines + lowerStaffLowerMargin;
 const braceWidth = spaceBetweenStaffLines;
 const braceHeight =
-    4 * 2 * spaceBetweenStaffLines +
-    upperStaffLowerMargin +
-    lowerStaffUpperMargin;
+  4 * 2 * spaceBetweenStaffLines +
+  upperStaffLowerMargin +
+  lowerStaffUpperMargin;
 const taskHeight = spaceBetweenStaffLines * 2.5;
 const doubleGrandStaffHeight =
-    upperStaffUpperMargin +
-    upperStaffLowerMargin +
-    lowerStaffLowerMargin +
-    lowerStaffUpperMargin +
-    2 * 4 * spaceBetweenStaffLines +
-    taskHeight; //margins + both lines + task height
+  upperStaffUpperMargin +
+  upperStaffLowerMargin +
+  lowerStaffLowerMargin +
+  lowerStaffUpperMargin +
+  2 * 4 * spaceBetweenStaffLines +
+  taskHeight; //margins + both lines + task height
+const dotDiameter = 0.5 * spaceBetweenStaffLines;
