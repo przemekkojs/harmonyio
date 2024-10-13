@@ -127,7 +127,7 @@ class Note {
     }
   }
 
-  drawSimple(x, y) {
+  draw(x, y) {
     this.drawNote(x, y);
 
     if (this.hasDot) {

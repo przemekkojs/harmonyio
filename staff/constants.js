@@ -24,3 +24,5 @@ const doubleGrandStaffHeight =
   2 * 4 * spaceBetweenStaffLines +
   taskHeight; //margins + both lines + task height
 const dotDiameter = 0.5 * spaceBetweenStaffLines;
+const keyOffset = braceWidth + 0.2 * spaceBetweenStaffLines;
+const bemolOffset = -0.5 * spaceBetweenStaffLines;

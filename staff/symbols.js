@@ -12,6 +12,9 @@ const symbolPaths = {
   noteHeadClosed: "/assets/symbols/note-head-closed.png",
   noteHeadOpened: "/assets/symbols/note-head-opened.png",
   noteFlag: "/assets/symbols/note-flag.png",
+  mouse: "/assets/symbols/mouse.png",
+  noteReverse: "/assets/symbols/note-reverse.png",
+  thrashCan: "/assets/symbols/thrash-can.png",
 };
 
 function preloadSymbols() {

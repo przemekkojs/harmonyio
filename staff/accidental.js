@@ -1,11 +1,11 @@
 class Accidental {
   static accidentals = {
-    sharp: "#",
-    doubleSharp: "x",
-    bemol: "b",
-    doubleBemol: "bb",
-    natural: "bq",
-    none: "",
+    sharp: "sharp",
+    doubleSharp: "doubleSharp",
+    bemol: "bemol",
+    doubleBemol: "doubleBemol",
+    natural: "natural",
+    none: "none",
   };
   constructor(name = "none") {
     this.setName(name);
@@ -63,7 +63,7 @@ class Accidental {
     imageMode(CENTER);
     translate(x, y);
     if (this.name === "bemol" || this.name === "doubleBemol") {
-      translate(0, -0.5 * spaceBetweenStaffLines);
+      translate(0, bemolOffset);
     }
 
     image(img, 0, 0);

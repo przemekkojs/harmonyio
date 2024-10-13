@@ -14,9 +14,8 @@ class GrandStaff {
       this.bars.push(new Bar(numberOfVerticalsPerBarList[i], slotsPerBar));
     }
 
-    this.keyOffset = braceWidth + 0.2 * spaceBetweenStaffLines;
     this.keySignatureOffset =
-      this.keyOffset + symbols.violinKey.width + 0.4 * spaceBetweenStaffLines;
+      keyOffset + symbols.violinKey.width + 0.4 * spaceBetweenStaffLines;
     this.metreOffset =
       this.keySignatureOffset +
       this.keySignature.getWidth() +
@@ -126,7 +125,7 @@ class GrandStaff {
       //upper staff
       this.#drawSingleStaffLines(braceWidth, 0, linesWidth);
       this.#drawKey(
-        symbols.violinKey.width / 2 + this.keyOffset,
+        symbols.violinKey.width / 2 + keyOffset,
         2.2 * spaceBetweenStaffLines,
         symbols.violinKey,
         true
@@ -141,7 +140,7 @@ class GrandStaff {
 
       // lower staff
       this.#drawSingleStaffLines(braceWidth, 0, linesWidth);
-      this.#drawKey(this.keyOffset, 0, symbols.bassKey, false);
+      this.#drawKey(keyOffset, 0, symbols.bassKey, false);
       this.keySignature.draw(this.keySignatureOffset, 0, false);
       this.metre.draw(this.metreOffset, 0);
 

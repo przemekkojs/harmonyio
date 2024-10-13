@@ -9,8 +9,7 @@ let canvasWidth;
 let canvasHeight;
 
 let grandStaff;
-let mouseChoice;
-let over;
+let menu;
 
 function setup() {
   canvasWidth = windowWidth * 0.85;
@@ -20,14 +19,15 @@ function setup() {
 
   resizeSymbols();
 
-  const grandStaffWidth = canvasWidth;
-  grandStaff = new GrandStaff(verticalsPerBarList, grandStaffWidth);
-  mouseChoice = new MouseChoice();
+  const menuWidth = 150;
+  grandStaff = new GrandStaff(verticalsPerBarList, canvasWidth - menuWidth);
+  menu = new Menu(canvasWidth - menuWidth, menuWidth);
 }
 
 function draw() {
   background(240);
   grandStaff.drawStaticElements();
+  menu.draw();
 
   elementsUnderMouse = grandStaff.isOver(mouseX, mouseY);
   handleMouseInteraction(elementsUnderMouse);
@@ -35,9 +35,13 @@ function draw() {
   grandStaff.drawDynamicElements();
 }
 
+function mouseClicked() {
+  menu.mouseClicked();
+}
+
 function handleMouseInteraction(elementsUnderMouse) {
   if (
-    mouseChoice.getMouseChoice() === "thrash" &&
+    menu.curAction === Menu.actions.thrash &&
     "vertical" in elementsUnderMouse
   ) {
     const vertical = elementsUnderMouse.vertical;
@@ -52,95 +56,26 @@ function handleMouseInteraction(elementsUnderMouse) {
     } else {
       rect(mouseX, mouseY, 10, 10);
     }
-  } else if (mouseChoice.getMouseChoice() === "note") {
+  } else if (menu.curAction === Menu.actions.note) {
     if ("twoNotes" in elementsUnderMouse) {
       const twoNotes = elementsUnderMouse.twoNotes;
-      if (twoNotes.canAddNote(mouseChoice.note)) {
+      if (twoNotes.canAddNote(menu.note)) {
         const snappingPoint = twoNotes.getClosestSnappingPoint(mouseX, mouseY);
-        mouseChoice.note.drawSimple(snappingPoint.x, snappingPoint.y);
+        menu.note.draw(snappingPoint.x, snappingPoint.y);
 
         if (mouseIsPressed) {
-          twoNotes.addNote(mouseChoice.note, snappingPoint.lineNumber);
+          twoNotes.addNote(menu.note, snappingPoint.lineNumber);
           elementsUnderMouse.bar.updateVerticalPositions();
         }
       } else {
-        mouseChoice.note.drawSimple(mouseX, mouseY);
+        menu.note.draw(mouseX, mouseY);
       }
     } else {
-      mouseChoice.note.drawSimple(mouseX, mouseY);
+      menu.note.draw(mouseX, mouseY);
     }
   }
 }
 
-class MouseChoice {
-  static choices = ["mouse", "thrash", "note"];
-
-  constructor() {
-    this.resetChoice();
-    this.note = new Note(1);
-  }
-
-  resetChoice() {
-    this.currentChoice = "mouse";
-    this.choiceSymbol = null;
-  }
-
-  setNote(noteValue) {
-    this.currentChoice = "note";
-    this.note.setBaseValue(noteValue);
-  }
-  flipNote() {
-    this.note.toggleIsFacingUp();
-  }
-  addDot() {
-    this.note.toggleHasDot();
-  }
-  setAccidental(accidentalName) {
-    this.note.setAccidental(accidentalName);
-  }
-
-  setTrash() {
-    this.currentChoice = "thrash";
-  }
-
-  getMouseChoice() {
-    return this.currentChoice;
-  }
-}
-
 function keyPressed() {
-  if (keyCode === ESCAPE) {
-    mouseChoice.resetChoice();
-  }
-  if (key >= "1" && key <= "5") {
-    let keyInt = parseInt(key);
-    mouseChoice.setNote(2 ** (keyInt - 1));
-  }
-  if (key === "q") {
-    mouseChoice.setAccidental("none");
-  }
-  if (key === "w") {
-    mouseChoice.setAccidental("sharp");
-  }
-  if (key === "e") {
-    mouseChoice.setAccidental("doubleSharp");
-  }
-  if (key === "r") {
-    mouseChoice.setAccidental("bemol");
-  }
-  if (key === "t") {
-    mouseChoice.setAccidental("doubleBemol");
-  }
-  if (key === "y") {
-    mouseChoice.setAccidental("natural");
-  }
-  if (key === "a") {
-    mouseChoice.flipNote();
-  }
-  if (key === "s") {
-    mouseChoice.addDot();
-  }
-  if (key === "d") {
-    mouseChoice.setTrash();
-  }
+  menu.keyPressed();
 }

@@ -189,14 +189,14 @@ class TwoNotes {
     this.#drawBoundingBox();
 
     if (this.note1 !== null) {
-      this.note1.drawSimple(
+      this.note1.draw(
         this.x + this.width / 2,
         this.topLineY + spaceBetweenStaffLines * this.note1.line
       );
     }
 
     if (this.note2 !== null) {
-      this.note2.drawSimple(
+      this.note2.draw(
         this.x + this.width / 2,
         this.topLineY + spaceBetweenStaffLines * this.note2.line
       );
