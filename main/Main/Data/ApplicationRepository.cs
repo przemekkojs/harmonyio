@@ -4,9 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Main.Data;
 
-public class ApplicationRepository(ApplicationDbContext context) : IRepository
+public class ApplicationRepository : IRepository
 {
+    private readonly ApplicationDbContext context;
     public ApplicationDbContext Context => context;
+
+    public ApplicationRepository(ApplicationDbContext context)
+    {
+        this.context = context;
+    }
     
     public async Task<List<T>> GetAllAsync<T>(Func<IQueryable<T>, IQueryable<T>>? modifier = null) where T : class
     {
