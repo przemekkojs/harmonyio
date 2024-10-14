@@ -14,8 +14,8 @@ namespace Main.Models
 		public string CreatorId { get; set; } = null!;
         public ApplicationUser Creator { get; set; } = null!;
 
-		public ICollection<ApplicationUser> Participants = new List<ApplicationUser>();
         public ICollection<Excersise> Excersises = new List<Excersise>();
+        public ICollection<ApplicationUser> Participants = new List<ApplicationUser>();
 		public ICollection<QuizResult> QuizResults = new List<QuizResult>();
     }
 }
