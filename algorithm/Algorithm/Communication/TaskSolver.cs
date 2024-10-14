@@ -5,7 +5,7 @@ namespace Algorithm.Communication
 {
     public sealed class TaskSolver
     {        
-        private readonly Music.Tonation tonation;
+        private readonly Tonation tonation;
         private readonly List<UserBar> bars;
 
         public TaskSolver(Tonation tonation)

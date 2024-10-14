@@ -71,14 +71,14 @@ namespace Algorithm.Communication
         }
     }
 
-    public class ParseResult
+    public class NoteParseResult
     {
         public RhytmicValue RhytmicValue { get; private set; }
         public Note Note { get; private set; }
         public int Bar { get; private set; }
         public int Stack { get; private set; }
 
-        public ParseResult(Note note, RhytmicValue value, int bar, int stack)
+        public NoteParseResult(Note note, RhytmicValue value, int bar, int stack)
         {
             RhytmicValue = value;
             Note = note;
@@ -89,7 +89,7 @@ namespace Algorithm.Communication
 
     public static class NoteParser
     {
-        public static ParseResult ParseJsonToNote(string jsonString)
+        public static NoteParseResult ParseJsonToNote(string jsonString)
         {
             ParsedNote? parsedNote = JsonConvert.DeserializeObject<ParsedNote>(jsonString) ?? throw new ArgumentException("Parse error.");
 
@@ -114,7 +114,7 @@ namespace Algorithm.Communication
 
             RhytmicValue rhytmResult = RhytmicValue.GetRhytmicValueByDuration(parsedNote.Duration);
 
-            return new ParseResult(noteResult, rhytmResult, parsedNote.Bar, parsedNote.Stack);
+            return new NoteParseResult(noteResult, rhytmResult, parsedNote.Bar, parsedNote.Stack);
         }
 
         public static string ParseNoteToJson(Note? note, RhytmicValue rhytmicValue, int bar, int stackInBar)

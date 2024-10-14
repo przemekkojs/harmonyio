@@ -16,6 +16,9 @@ namespace Algorithm.Communication
         public List<string> Alterations { get; set; }
         public List<string> Added { get; set; }
 
+        public int BarIndex { get; set; }
+        public int CorrespondingStackIndex { get; set; }
+
         public ParsedFunction(Function function)
         {
             Symbol = function.Symbol.FunctionSymbol.ToString();
