@@ -14,6 +14,14 @@ namespace Algorithm.Communication
             bars = [];
         }
 
+        public bool CanBeSolved
+        {
+            get => bars
+                .All(userBar => userBar.UserStacks
+                    .All(userStack => userStack
+                        .AllNotesValid()));
+        }
+
         public void CreateUserStack(int bar, int beat)
         {
             if (GetUserStack(bar, beat) == null)
@@ -48,7 +56,21 @@ namespace Algorithm.Communication
                 return matching[0];
         }
 
-        public static void AddNote(UserStack userStack, Note note, RhytmicValue value)
+        public void SetNote(string noteJson)
+        {
+            var parseInfo = NoteParser.ParseJsonToNote(noteJson);
+            var note = parseInfo.Note;
+            var rhytmicValue = parseInfo.RhytmicValue;
+            var barIndex = parseInfo.Bar;
+            var stackIndex = parseInfo.Stack;
+
+            var bar = bars[barIndex];
+            var stack = bar.UserStacks[stackIndex];
+
+            SetNote(stack, note, rhytmicValue);
+        }
+
+        public static void SetNote(UserStack userStack, Note note, RhytmicValue value)
         {
             switch (note.Voice)
             {
@@ -67,11 +89,6 @@ namespace Algorithm.Communication
                 default:
                     throw new ArgumentException("Something went wrong...");
             }
-        }
-
-        public static void EditNote(UserStack userStack, Note newNote, RhytmicValue newRhytmicValue)
-        {
-            AddNote(userStack, newNote, newRhytmicValue);
         }
 
         public static void DeleteNote(UserStack userStack, Voice voice)

@@ -1,5 +1,6 @@
 ﻿using Algorithm.Music;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Algorithm.Communication
 {
@@ -11,6 +12,8 @@ namespace Algorithm.Communication
         public int Bar { get; private set; }
         public int Stack { get; private set; }
         public int Staff { get; private set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
         public Voice Voice { get; private set; }
         public bool Neutralized { get; private set; }
 
@@ -33,16 +36,62 @@ namespace Algorithm.Communication
                 _ => throw new ArgumentException("Invalid voice")
             };
         }
+
+        public ParsedNote(string name, int octave, int duration, int bar, int stack, int staff, string voice, bool neutralized)
+        {
+            Name = name;
+            Duration = duration;
+            Octave = octave;
+            Bar = bar;
+            Stack = stack;
+            Staff = staff;
+            Neutralized = neutralized;
+
+            Voice = voice switch
+            {
+                "SOPRANO" => Voice.SOPRANO,
+                "ALTO" => Voice.ALTO,
+                "TENORE" => Voice.TENORE,
+                "BASS" => Voice.BASS,
+                _ => throw new ArgumentException("Invalid voice")
+            };
+        }
+
+        [JsonConstructor]
+        public ParsedNote(string name, int octave, int duration, int bar, int stack, int staff, Voice voice, bool neutralized)
+        {
+            Name = name;
+            Duration = duration;
+            Octave = octave;
+            Bar = bar;
+            Stack = stack;
+            Staff = staff;
+            Neutralized = neutralized;
+            Voice = voice;
+        }
+    }
+
+    public class ParseResult
+    {
+        public RhytmicValue RhytmicValue { get; private set; }
+        public Note Note { get; private set; }
+        public int Bar { get; private set; }
+        public int Stack { get; private set; }
+
+        public ParseResult(Note note, RhytmicValue value, int bar, int stack)
+        {
+            RhytmicValue = value;
+            Note = note;
+            Bar = bar;
+            Stack = stack;
+        }
     }
 
     public static class NoteParser
     {
-        public static (Note, RhytmicValue) ParseJsonToNote(string jsonString)
+        public static ParseResult ParseJsonToNote(string jsonString)
         {
-            object? parsed = JsonConvert.DeserializeObject(jsonString) ?? throw new ArgumentException("Parse error.");
-
-            if (parsed is not ParsedNote parsedNote)
-                throw new ArgumentException("Parse error.");
+            ParsedNote? parsedNote = JsonConvert.DeserializeObject<ParsedNote>(jsonString) ?? throw new ArgumentException("Parse error.");
 
             Accidental accidental = parsedNote.Name[1..].ToLower() switch
             {
@@ -65,7 +114,7 @@ namespace Algorithm.Communication
 
             RhytmicValue rhytmResult = RhytmicValue.GetRhytmicValueByDuration(parsedNote.Duration);
 
-            return (noteResult, rhytmResult);
+            return new ParseResult(noteResult, rhytmResult, parsedNote.Bar, parsedNote.Stack);
         }
 
         public static string ParseNoteToJson(Note? note, RhytmicValue rhytmicValue, int bar, int stackInBar)
@@ -80,15 +129,6 @@ namespace Algorithm.Communication
                 _ => throw new ArgumentException("Invalid staff.")
             };
 
-            int voice = note.Voice switch
-            {
-                Voice.SOPRANO => 0,
-                Voice.ALTO => 1,
-                Voice.TENORE => 2,
-                Voice.BASS => 3,
-                _ => throw new ArgumentException("Invalid voice.")
-            };
-
             ParsedNote toParse = new(
                 name: note.Name,
                 octave: note.Octave,
@@ -96,7 +136,7 @@ namespace Algorithm.Communication
                 bar: bar,
                 stack: stackInBar,
                 staff: staff,
-                voice: voice,
+                voice: note.Voice.ToString(),
                 neutralized: note.Accidental == Accidental.NEUTRAL
             );
 
