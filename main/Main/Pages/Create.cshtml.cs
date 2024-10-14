@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Main.Data;
 using Main.Models;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +13,17 @@ namespace Main.Pages
         private readonly ApplicationRepository _repository;
 
         [BindProperty]
-        public Quiz Quiz { get; set; } = null!;
+        [Display(Name = "Quiz Name")]
+        [Required(ErrorMessage = "Quiz name is required.")]
+        public string QuizName { get; set; } = null!;
+        [BindProperty]
+        [Display(Name = "Open Date")]
+        [Required(ErrorMessage = "Open date is required.")]
+        public DateTime? OpenDate { get; set; } = null;
+        [BindProperty]
+        [Display(Name = "Close Date")]
+        [Required(ErrorMessage = "Close date is required.")]
+        public DateTime? CloseDate { get; set; } = null;
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
 
@@ -29,33 +40,52 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            //TODO: REMOVE THIS
-            var toRemove = await _repository.GetAllAsync<Quiz>();
-            foreach (var quiz in toRemove)
-                _repository.Delete(quiz);
-            await _repository.SaveChangesAsync();
+            if (CloseDate <= OpenDate)
+            {
+                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");;
+            }
+            if (CloseDate <= DateTime.Now)
+            {
+                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than current date."); ;
+            }
+
+            if (Questions == null || Questions.Count == 0)
+            {
+                ModelState.AddModelError(nameof(Questions), "At least one excersise is required.");
+            }
+            else if (Questions.Any(q => q == null || q == ""))
+            {
+                ModelState.AddModelError(nameof(Questions), "No excersise can be empty.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             //TODO: POPUALTE WITH REAL USER
             var currentUser = await GetTestUser();
-            Quiz.CreatorId = currentUser.Id;
 
-            _repository.Add(Quiz);
+            var quiz = new Quiz()
+            {
+                Name = QuizName,
+                OpenDate = (DateTime)OpenDate!,
+                CloseDate = (DateTime)CloseDate!,
+                CreatorId = currentUser.Id,
+            };
+
+            _repository.Add(quiz);
             await _repository.SaveChangesAsync();
 
-            foreach (string question in Questions)
+            foreach (string question in Questions!)
             {
                 _repository.Add(new Excersise()
                 {
                     Question = question,
-                    QuizId = Quiz.Id,
+                    QuizId = quiz.Id,
                 });
             }
             await _repository.SaveChangesAsync();
-
-            //
-
-            var allExcersises = _repository.GetAllAsync<Excersise>();
-            var allQuizes = _repository.GetAllAsync<Quiz>();
 
             return RedirectToPage("Index");
         }

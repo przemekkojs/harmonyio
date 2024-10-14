@@ -10,25 +10,36 @@
         <div class="flex-grow-1 d-flex overflow-auto">
             <div class="left-panel">
                 <div class="mb-3">
-                    <label asp-for="Quiz.Name" class="form-label"></label>
-                    <input asp-for="Quiz.Name" class="form-control">
+                    <label asp-for="QuizName" class="form-label"></label>
+                    <input asp-for="QuizName" class="form-control">
+                    <span asp-validation-for="QuizName" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Quiz.OpenDate" class="form-label"></label>
-                    <input asp-for="Quiz.OpenDate" class="form-control">
+                    <label asp-for="OpenDate" class="form-label"></label>
+                    <input asp-for="OpenDate" class="form-control">
+                    <span asp-validation-for="OpenDate" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Quiz.CloseDate" class="form-label"></label>
-                    <input asp-for="Quiz.CloseDate" class="form-control">
+                    <label asp-for="CloseDate" class="form-label"></label>
+                    <input asp-for="CloseDate" class="form-control">
+                    <span asp-validation-for="CloseDate" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="vr mx-3"></div>
 
-            <div id="excersise-container" class="flex-grow-1 d-flex flex-column overflow-auto">
-                @* EXCERSISES ARE FILLED WITH JS SCRIPT *@
+            <div class="flex-grow-1 d-flex flex-column overflow-auto">
+                <span asp-validation-for="Questions" id="questions-validation-error" class="text-danger mb-1"></span>
+
+                <div id="excersise-container" class="d-flex flex-column">
+                    @* EXCERSISES ARE FILLED WITH JS SCRIPT *@
+                </div>
+                <div class="task task-add d-flex justify-content-center align-items-center" onclick="addExcersise()">
+                    <span class="plus">+</span>
+                    <span>Dodaj nowe zadanie</span>
+                </div>
             </div>
         </div>
 
@@ -43,9 +54,11 @@
 
 
 <script>
-    let excersises = [];
+    let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
 
     function addExcersise() {
+        document.getElementById('questions-validation-error').innerText = '';
+
         excersises.push("");
         renderExcersises();
     }
@@ -79,13 +92,13 @@
                     </div>
                 </div>`;
         });
-
-        excersiseContainer.innerHTML += `
-            <div class="task task-add d-flex justify-content-center align-items-center" onclick="addExcersise()">
-                <span class="plus">+</span>
-                <span>Dodaj nowe zadanie</span>
-            </div>`;
     }
 
     renderExcersises();
 </script>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
