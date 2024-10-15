@@ -1,0 +1,107 @@
+﻿@page
+@model Main.Pages.CreateModel
+
+<head>
+    <link rel="stylesheet" href="~/css/create-style.css" />
+</head>
+
+<form method="post" class="h-100 w-100">
+    <div class="h-100 w-100 d-flex flex-column">
+        <div class="flex-grow-1 d-flex overflow-auto">
+            <div class="left-panel">
+                <div class="mb-3">
+                    <label asp-for="QuizName" class="form-label"></label>
+                    <input asp-for="QuizName" class="form-control">
+                    <span asp-validation-for="QuizName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="OpenDate" class="form-label"></label>
+                    <input asp-for="OpenDate" class="form-control">
+                    <span asp-validation-for="OpenDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CloseDate" class="form-label"></label>
+                    <input asp-for="CloseDate" class="form-control">
+                    <span asp-validation-for="CloseDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="vr mx-3"></div>
+
+            <div class="flex-grow-1 d-flex flex-column overflow-auto">
+                <span asp-validation-for="Questions" id="questions-validation-error" class="text-danger mb-1"></span>
+
+                <div id="excersise-container" class="d-flex flex-column">
+                    @* EXCERSISES ARE FILLED WITH JS SCRIPT *@
+                </div>
+                <div class="task task-add d-flex justify-content-center align-items-center" onclick="addExcersise()">
+                    <span class="plus">+</span>
+                    <span>Dodaj nowe zadanie</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="hr">
+
+        <div class="bottom-bar d-flex align-items-center">
+            <a asp-page="Index" class="btn btn-danger btn-std-width">Powrót</a>
+            <button type="submit" class="btn btn-primary btn-std-width ms-auto">Opublikuj</button>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
+
+    function addExcersise() {
+        excersises.push("");
+        renderExcersises();
+
+        document.getElementById('questions-validation-error').innerText = '';
+    }
+
+    function updateExcersise(index, value) {
+        excersises[index] = value;
+
+        document.getElementById('questions-validation-error').innerText = '';
+    }
+
+    function removeExcersise(index) {
+        excersises.splice(index, 1);
+        renderExcersises();
+    }
+
+    function renderExcersises() {
+        const excersiseContainer = document.getElementById('excersise-container');
+        excersiseContainer.innerHTML = '';
+
+        excersises.forEach((excersise, index) => {
+            excersiseContainer.innerHTML += `
+                <div class="task task-creator p-0 overflow-hidden">
+                    <div class="d-flex h-100 align-items-center bg-secondary">
+                        <div class="task-number text-white">${index + 1}</div>
+                        <div class="vr"></div>
+                    </div>
+                    <div class="task-content w-100 p-3">
+                        <span class="mb-1">Kreator funkcji</span>
+                        <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)">
+                    </div>
+                    <div class="d-flex h-100 align-items-center">
+                        <div class="vr"></div>
+                        <button class="delete-btn" onclick="removeExcersise(${index})">🗑️</button>
+                    </div>
+                </div>`;
+        });
+    }
+
+    renderExcersises();
+</script>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

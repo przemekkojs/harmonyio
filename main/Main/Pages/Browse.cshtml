@@ -1,0 +1,132 @@
+﻿@page
+@model Main.Pages.BrowseModel
+@{
+}
+
+
+<head>
+    <link rel="stylesheet" href="~/css/browse-style.css" />
+</head>
+
+<div class="h-100 w-100 d-flex flex-column">
+    <div class="top-bar w-100 d-flex justify-content-between align-items-center">
+        <div class="fw-bold fs-4">
+            Kartkówka 2A
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="fw-bold me-2">Wynik</span>
+            <div class="border border-dark rounded px-2 py-1 me-2">51 / 128</div>
+            <div class="border border-dark rounded px-2 py-1 me-4">40%</div>
+            <span class="fw-bold me-2">Ocena</span>
+            <div class="border border-dark rounded px-2 py-1">2+</div>
+        </div>
+    </div>
+
+    <hr class="hr mt-3">
+
+    <div class="flex-grow-1 w-100 d-flex flex-column overflow-auto">
+        <div class="d-flex flex-row align-items-start question-area mt-3">
+            <div class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
+                <div class="fs-1 fw-bold">5</div>
+            </div>
+
+            <div class="flex-grow-1">
+                <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+            </div>
+        </div>
+
+        <div class="music-staff flex-grow-1 mt-3 w-100 d-flex flex-row justify-content-center align-items-center">
+            <div class="music-staff-grade-area h-100 d-flex flex-column">
+                <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+                    <span class="fw-bold">Punkty</span>
+                    <span>15</span>
+                </div>
+                <hr class="hr">
+                <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+                    <span class="fw-bold">Max</span>
+                    <span>32</span>
+                </div>
+                <hr class="hr">
+                <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+                    <span class="fw-bold">Wynik</span>
+                    <span>47%</span>
+                </div>
+            </div>
+            <div class="vr"></div>
+            <div class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+                Pięciolinia
+            </div>
+        </div>
+
+        @if (true)
+        {
+            <span class="fw-bold mt-3">Komentarz oceniającego</span>
+            <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        }
+        else
+        {
+            <span class="fw-bold mt-3">Oceniający nie zamieścił komentarza</span>
+        }
+
+        <div class="mb-3"></div>
+    </div>
+
+    <hr class="hr">
+
+    <div class="bottom-bar d-flex align-items-center">
+        <button class="btn btn-danger btn-std-width me-3">Powrót</button>
+        <button class="btn btn-secondary btn-std-width ms-auto me-3">Poprzednie</button>
+
+        @for (int i = 0; i < 9; i++)
+        {
+            <button class="btn @(i==4 ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") btn-tiny-width p-1 @(i != 0 ? "ms-2" : "")">@(i + 1)</button>
+        }
+
+        @*JEŻELI W POWYŻSZYM FOR NIE WYGENEROWALIŚMY KAFELKA OSTATNIEGO ZADANIA, POKAŻ GO PO 3 KROPKACH*@
+        @if (true)
+        {
+            <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
+            <button class="btn btn-outline-secondary btn-tiny-width p-1 ms-2">20</button>
+        }
+
+        <button class="btn btn-secondary btn-std-width ms-3">Następne</button>
+    </div>
+</div>
+
+
+
+<script>
+    window.onload = function () {
+        const bottomBar = document.querySelector('.bottom-bar');
+        const current = document.querySelector('.btn-current');
+        const hidable = document.querySelectorAll('.btn-hidable');
+
+        function isOverflow() {
+            return bottomBar.scrollWidth != bottomBar.clientWidth
+        }
+        function checkOverflow() {
+            if (isOverflow()) {
+                current.classList.remove('ms-2');
+                hidable.forEach(function (button) {
+                    button.classList.add('d-none');
+                });
+            }
+            else {
+                current.classList.add('ms-2');
+                hidable.forEach(function (button) {
+                    button.classList.remove('d-none');
+                });
+
+                if (isOverflow()) {
+                    current.classList.remove('ms-2');
+                    hidable.forEach(function (button) {
+                        button.classList.add('d-none');
+                    });
+                }
+            }
+        }
+
+        checkOverflow();
+        window.addEventListener('resize', checkOverflow);
+    };
+</script>
