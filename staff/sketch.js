@@ -7,6 +7,7 @@ let canvasHeight;
 let grandStaff;
 let menu;
 let curClicked;
+let isMouseClickedHelper;
 
 function preload() {
   preloadSymbols();
@@ -25,6 +26,7 @@ function setup() {
   menu = new Menu(canvasWidth - menuWidth, menuWidth);
 
   curClicked = null;
+  isMouseClickedHelper = false;
 }
 
 function draw() {
@@ -47,7 +49,6 @@ function handleMouseInteraction(grandStaff) {
 }
 
 function handleDragNoteInteraction(elementsUnderMouse) {
-  console.log(elementsUnderMouse);
   if (!mouseIsPressed) {
     curClicked = null;
     return;
@@ -96,7 +97,12 @@ function handleNoteInteraction(elementsUnderMouse, note) {
       note.draw(snappingPoint.x, snappingPoint.y);
 
       if (mouseIsPressed) {
-        twoNotes.addNote(note, snappingPoint.lineNumber);
+        if(!isMouseClickedHelper) {
+          twoNotes.addNote(note, snappingPoint.lineNumber);
+        }
+        isMouseClickedHelper = true;
+      } else {
+        isMouseClickedHelper = false;
       }
     } else {
       note.draw(mouseX, mouseY);
