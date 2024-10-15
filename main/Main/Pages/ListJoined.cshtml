@@ -35,7 +35,7 @@
                         @quiz.CloseDate
                     </div>
                     <div class="col-6 text-end">
-                        <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                        <a href="/solve?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                         @quiz.QuizResults.Where(qr => qr.User == Model.AppUser).Select(qr => qr.Grade.HasValue ? qr.Grade.ToString() : "nie ocenione").First()
                     </div>
                     <div class="col-3 text-end">
-                        <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                        <a href="/browse?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
                     </div>
                 </div>
             </div>
