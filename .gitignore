@@ -6,5 +6,6 @@
 /algorithm/AlgorithmTests/obj
 /algorithm/AlgorithmTests/.vs
 *.drawio
+/mockups
 
 /main
