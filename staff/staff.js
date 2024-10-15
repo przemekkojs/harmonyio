@@ -25,6 +25,19 @@ class GrandStaff {
     this.setWidth(width);
   }
 
+  toJson() {
+    let json = [];
+    for (let i = 0; i < this.bars.length; i++) {
+      let barJson = this.bars[i].toJson();
+
+      for (let j = 0; j < barJson.length; j++) {
+        barJson[j].barIndex = i;
+      }
+      json.push(...barJson);
+    }
+    return JSON.stringify(json);
+  }
+
   setWidth(width) {
     this.width = width;
     this.staffWorkspaceWidth = this.width - this.dynamicElementsOffset;

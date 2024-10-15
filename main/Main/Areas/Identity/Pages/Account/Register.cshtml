@@ -1,4 +1,5 @@
 ﻿@page
+@using Main.Utils
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -12,6 +13,26 @@
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Input.FirstName">First Name</label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Input.LastName">Last Name</label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            
+            <div class="form-floating mb-3">
+                 <select asp-for="Input.Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com">
+                     <option selected="selected" value="">Please select</option>
+                 </select>
+                 <label asp-for="Input.Role">Role</label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="Input.Email">Email</label>

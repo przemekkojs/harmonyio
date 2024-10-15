@@ -37,63 +37,28 @@
                     </div>
                 </div>
             </div>
-            @* data block *@
-            <div class="row mb-3">
-                <div class="card p-3 bg-light">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            Kartkówka
-                        </div>
-                        <div class="col-3">
-                            Nie otwarte
-                        </div>
-                        <div class="col-3">
-                            dd/mm/yyyy
-                        </div>
-                        <div class="col-3 text-end">
-                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @* end of data block *@
-            <div class="row mb-3">
-                <div class="card p-3 bg-light">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            do domu
-                        </div>
-                        <div class="col-3">
-                            Otwarte
-                        </div>
-                        <div class="col-3">
-                            dd/mm/yyyy
-                        </div>
-                        <div class="col-3 text-end">
-                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
+            @foreach (var quiz in Model.Created.Where(q => q.IsCreated))
+            {
+                <div class="row mb-3">
+                    <div class="card p-3 bg-light">
+                        <div class="row align-items-center">
+                            <div class="col-3">
+                                @quiz.Name
+                            </div>
+                            <div class="col-3">
+                                @quiz.State
+                            </div>
+                            <div class="col-3">
+                                @quiz.CloseDate
+                            </div>
+                            <div class="col-3 text-end">
+                                <a href="/browse?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
 
-            <div class="row mb-3">
-                <div class="card p-3 bg-light">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            kart. 3
-                        </div>
-                        <div class="col-3">
-                            Zakończone
-                        </div>
-                        <div class="col-3">
-                            dd/mm/yyyy
-                        </div>
-                        <div class="col-3 text-end">
-                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="col-1">
 
@@ -116,57 +81,21 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <div class="card p-3 bg-light">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            Kartkówka
-                        </div>
-                        <div class="col-6 text-end">
-                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="card p-3 bg-light">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            do domu
-                        </div>
-                        <div class="col-6 text-end">
-                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
+            @foreach (var quiz in Model.Created.Where(q => !q.IsCreated))
+            {
+                <div class="row mb-3">
+                    <div class="card p-3 bg-light">
+                        <div class="row align-items-center">
+                            <div class="col-3">
+                                @quiz.Name
+                            </div>
+                            <div class="col-3 text-end">
+                                <a href="/create?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="card p-3 bg-light">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            kart. 3
-                        </div>
-                        <div class="col-6 text-end">
-                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="card p-3 bg-light">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            Zad 4
-                        </div>
-                        <div class="col-6 text-end">
-                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 

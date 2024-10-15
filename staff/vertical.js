@@ -12,6 +12,20 @@ class Vertical {
     this.lowerStaff = lowerStaff;
   }
 
+  toJson(){
+
+    const upperJson = this.upperStaff.toJson();
+    const lowerJson = this.lowerStaff.toJson();
+
+    const concatenated = upperJson.concat(lowerJson);
+
+    for(let i=0; i<concatenated.length;i++) {
+      concatenated[i].verticalIndex = this.index;
+    }
+
+    return concatenated;
+  }
+
   getSlotsTaken() {
     return max(
       this.upperStaff.getSlotsTaken(),

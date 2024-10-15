@@ -12,3 +12,6 @@
 
 /mockups
 *.drawio
+
+app.db
+.DS_Store
