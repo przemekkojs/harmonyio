@@ -31,7 +31,7 @@ class Bar {
       verticalIndex > 0 &&
       this.verticals[verticalIndex - 1].getSlotsTaken() == 0
     ) {
-      console.log("left is empty");
+      //console.log("left is empty");
       return false;
     }
 
@@ -42,7 +42,7 @@ class Bar {
 
     // cant add note to bar if there is less slots than note needs
     if (slotsAvailable < noteSlots) {
-      console.log("no slots left");
+      //console.log("no slots left");
       return false;
     }
 

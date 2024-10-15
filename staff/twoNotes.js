@@ -46,19 +46,19 @@ class TwoNotes {
   canAddNote(note) {
     // need to check vertical and/or whole bar to determine if can add if twoNote is empty
     if (this.isEmpty()) {
-      console.log("need to check vertical");
+      //console.log("need to check vertical");
       return this.parent.canAddNote(note, this.isUpperStaff);
     }
 
     //cant add if there are already two notes on the staff
     if (!this.hasEmptyNote()) {
-      console.log("no empty note");
+      //console.log("no empty note");
       return false;
     }
 
     // cant add if notes has different value
     if (!this.note1.hasSameValue(note)) {
-      console.log("different value");
+      //console.log("different value");
       return false;
     }
 
@@ -68,7 +68,7 @@ class TwoNotes {
       !this.note1.hasOppositeDirection(note) &&
       this.note1.getBaseValue() !== 1
     ) {
-      console.log("same direction");
+      //console.log("same direction");
       return false;
     }
 
@@ -88,7 +88,7 @@ class TwoNotes {
         note.getAccidentalName()
       );
       this.note1.setLine(line);
-
+      this.parent.parent.updateVerticalPositions();
       return true;
     }
 
@@ -109,6 +109,7 @@ class TwoNotes {
           note.getAccidentalName()
         );
         this.note2.setLine(line);
+        this.parent.parent.updateVerticalPositions();
 
         return true;
       }
@@ -128,10 +129,6 @@ class TwoNotes {
   updatePosition(x, y) {
     this.x = x;
     this.y = y;
-
-    this.topLineY = this.isUpperStaff
-      ? this.y + upperStaffUpperMargin
-      : this.y + lowerStaffUpperMargin;
   }
 
   // works like a charm
@@ -139,8 +136,10 @@ class TwoNotes {
     const center = this.x + this.width / 2;
 
     // above highest line
-    const highestAvailableSnappingPointY =
-      this.topLineY - this.availableLinesAbove * spaceBetweenStaffLines;
+    const highestAvailableSnappingPointY = this.getLineY(
+      -this.availableLinesAbove
+    );
+    this.getTopLineY() - this.availableLinesAbove * spaceBetweenStaffLines;
     if (y < highestAvailableSnappingPointY) {
       return {
         x: center,
@@ -150,10 +149,9 @@ class TwoNotes {
     }
 
     // below lowest line
-    const lowestAvailableSnappingPointY =
-      this.topLineY +
-      4 * spaceBetweenStaffLines +
-      this.availableLinesBelow * spaceBetweenStaffLines;
+    const lowestAvailableSnappingPointY = this.getLineY(
+      4 + this.availableLinesBelow
+    );
     if (y > lowestAvailableSnappingPointY) {
       return {
         x: center,
@@ -162,14 +160,25 @@ class TwoNotes {
       };
     }
 
-    const firstSnappingPointTop = this.topLineY - spaceBetweenStaffLines * 0.25;
+    const firstSnappingPointTop =
+      this.getTopLineY() - spaceBetweenStaffLines * 0.25;
     const diff = y - firstSnappingPointTop;
     const lineNumber = Math.floor(diff / (spaceBetweenStaffLines * 0.5)) * 0.5;
     return {
       x: center,
-      y: this.topLineY + lineNumber * spaceBetweenStaffLines,
+      y: this.getLineY(lineNumber),
       lineNumber: lineNumber,
     };
+  }
+
+  getTopLineY() {
+    return this.isUpperStaff
+      ? this.y + upperStaffUpperMargin
+      : this.y + lowerStaffUpperMargin;
+  }
+
+  getLineY(lineNumber) {
+    return this.getTopLineY() + GrandStaff.getLineOffset(lineNumber);
   }
 
   isOver(x, y) {
@@ -182,24 +191,40 @@ class TwoNotes {
       return {};
     }
 
+    const note1Distance = this.#getDistance(this.note1, y);
+    const note2Distance = this.#getDistance(this.note2, y);
+
+    if (
+      this.note2 &&
+      note2Distance < note1Distance &&
+      note2Distance <= spaceBetweenStaffLines / 2
+    ) {
+      return { twoNotes: this, note: this.note2 };
+    }
+
+    if (this.note1 && note1Distance <= spaceBetweenStaffLines / 2) {
+      return { twoNotes: this, note: this.note1 };
+    }
+
     return { twoNotes: this };
+  }
+
+  #getDistance(note, y) {
+    if (!note) return Infinity;
+
+    const noteY = this.getLineY(note.line);
+    return Math.abs(y - noteY);
   }
 
   draw() {
     this.#drawBoundingBox();
 
     if (this.note1 !== null) {
-      this.note1.draw(
-        this.x + this.width / 2,
-        this.topLineY + spaceBetweenStaffLines * this.note1.line
-      );
+      this.note1.draw(this.x + this.width / 2, this.getLineY(this.note1.line));
     }
 
     if (this.note2 !== null) {
-      this.note2.draw(
-        this.x + this.width / 2,
-        this.topLineY + spaceBetweenStaffLines * this.note2.line
-      );
+      this.note2.draw(this.x + this.width / 2, this.getLineY(this.note2.line));
     }
   }
 

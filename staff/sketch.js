@@ -1,15 +1,16 @@
 const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 
-function preload() {
-  preloadSymbols();
-}
-
 let canvas;
 let canvasWidth;
 let canvasHeight;
 
 let grandStaff;
 let menu;
+let curClicked;
+
+function preload() {
+  preloadSymbols();
+}
 
 function setup() {
   canvasWidth = windowWidth * 0.85;
@@ -22,60 +23,93 @@ function setup() {
   const menuWidth = 150;
   grandStaff = new GrandStaff(verticalsPerBarList, canvasWidth - menuWidth);
   menu = new Menu(canvasWidth - menuWidth, menuWidth);
+
+  curClicked = null;
 }
 
 function draw() {
   background(240);
-  grandStaff.drawStaticElements();
+  grandStaff.draw();
   menu.draw();
 
-  elementsUnderMouse = grandStaff.isOver(mouseX, mouseY);
-  handleMouseInteraction(elementsUnderMouse);
-
-  grandStaff.drawDynamicElements();
+  handleMouseInteraction(grandStaff);
 }
 
-function mouseClicked() {
-  menu.mouseClicked();
-}
-
-function handleMouseInteraction(elementsUnderMouse) {
-  if (
-    menu.curAction === Menu.actions.thrash &&
-    "vertical" in elementsUnderMouse
-  ) {
-    const vertical = elementsUnderMouse.vertical;
-    vertical.drawArea();
-
-    if (vertical.canClear()) {
-      circle(mouseX, mouseY, 10);
-      if (mouseIsPressed) {
-        vertical.clear();
-        elementsUnderMouse.bar.updateVerticalPositions();
-      }
-    } else {
-      rect(mouseX, mouseY, 10, 10);
-    }
+function handleMouseInteraction(grandStaff) {
+  const elementsUnderMouse = grandStaff.isOver(mouseX, mouseY);
+  if (menu.curAction === Menu.actions.thrash) {
+    handleThrashInteraction(elementsUnderMouse);
   } else if (menu.curAction === Menu.actions.note) {
-    if ("twoNotes" in elementsUnderMouse) {
-      const twoNotes = elementsUnderMouse.twoNotes;
-      if (twoNotes.canAddNote(menu.note)) {
-        const snappingPoint = twoNotes.getClosestSnappingPoint(mouseX, mouseY);
-        menu.note.draw(snappingPoint.x, snappingPoint.y);
+    handleNoteInteraction(elementsUnderMouse, menu.note);
+  } else if (menu.curAction === Menu.actions.none) {
+    handleDragNoteInteraction(elementsUnderMouse);
+  }
+}
 
-        if (mouseIsPressed) {
-          twoNotes.addNote(menu.note, snappingPoint.lineNumber);
-          elementsUnderMouse.bar.updateVerticalPositions();
-        }
-      } else {
-        menu.note.draw(mouseX, mouseY);
+function handleDragNoteInteraction(elementsUnderMouse) {
+  console.log(elementsUnderMouse);
+  if (!mouseIsPressed) {
+    curClicked = null;
+    return;
+  }
+
+  if (curClicked !== null) {
+    // has already chosen some note
+    const snappingPoint = curClicked.twoNotes.getClosestSnappingPoint(
+      mouseX,
+      mouseY
+    );
+
+    curClicked.note.setLine(snappingPoint.lineNumber);
+  } else if ("note" in elementsUnderMouse) {
+    curClicked = {
+      note: elementsUnderMouse.note,
+      twoNotes: elementsUnderMouse.twoNotes,
+    };
+  }
+}
+
+function handleThrashInteraction(elementsUnderMouse) {
+  if (!("vertical" in elementsUnderMouse)) {
+    return;
+  }
+
+  const vertical = elementsUnderMouse.vertical;
+  vertical.drawArea();
+
+  if (vertical.canClear()) {
+    circle(mouseX, mouseY, 10);
+
+    if (mouseIsPressed) {
+      vertical.clear();
+    }
+  } else {
+    rect(mouseX, mouseY, 10, 10);
+  }
+}
+
+function handleNoteInteraction(elementsUnderMouse, note) {
+  if ("twoNotes" in elementsUnderMouse) {
+    const twoNotes = elementsUnderMouse.twoNotes;
+    if (twoNotes.canAddNote(note)) {
+      const snappingPoint = twoNotes.getClosestSnappingPoint(mouseX, mouseY);
+      note.draw(snappingPoint.x, snappingPoint.y);
+
+      if (mouseIsPressed) {
+        twoNotes.addNote(note, snappingPoint.lineNumber);
       }
     } else {
-      menu.note.draw(mouseX, mouseY);
+      note.draw(mouseX, mouseY);
     }
+  } else {
+    note.draw(mouseX, mouseY);
   }
 }
 
 function keyPressed() {
   menu.keyPressed();
+}
+
+function mouseClicked() {
+  menu.mouseClicked();
 }

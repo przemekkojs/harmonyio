@@ -33,9 +33,8 @@ class Vertical {
     } else {
       otherStaffHasSameValue = this.upperStaff.hasSameValue(note);
     }
-
     if (otherStaffHasSameValue) {
-      console.log("other has same value");
+      //console.log("other has same value");
       return true;
     }
 
@@ -52,6 +51,8 @@ class Vertical {
     if (this.canClear()) {
       this.upperStaff = new TwoNotes(this, true);
       this.lowerStaff = new TwoNotes(this, false);
+
+      this.parent.updateVerticalPositions();
     }
   }
 

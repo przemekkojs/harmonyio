@@ -2,9 +2,12 @@ class Button {
   constructor(x, y, width, height, symbol, shortcut, onClick, checkIfIsActive) {
     this.x = x;
     this.y = y;
+    this.setOffset(0, 0);
+
     this.width = width;
     this.height = height;
     this.symbol = symbol;
+    this.setDrawBehavior();
     this.shortcut = shortcut;
     this.onClick = onClick;
     this.checkIfIsActive = checkIfIsActive;
@@ -12,12 +15,30 @@ class Button {
     this.isActive = false;
   }
 
+  setDrawBehavior() {
+    if (this.symbol instanceof Note) {
+      this.symbolDrawBehavior = this.#noteDrawBehavior;
+    } else if (this.symbol instanceof Accidental) {
+      this.symbolDrawBehavior = this.#accidentalDrawBehavior;
+    } else if (this.symbol instanceof p5.Image) {
+      this.symbolDrawBehavior = this.#p5ImageDrawBehavior;
+    } else if (this.symbol === "dot") {
+      this.symbolDrawBehavior = this.#dotDrawBehavior;
+    }
+  }
+
+  // allows to draw buttons with position absolute relative to page
+  setOffset(xOffset, yOffset) {
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
+  }
+
   isMouseOver() {
     return (
-      mouseX > this.x &&
-      mouseX < this.x + this.width &&
-      mouseY > this.y &&
-      mouseY < this.y + this.height
+      mouseX > this.x + this.xOffset &&
+      mouseX < this.x + this.xOffset + this.width &&
+      mouseY > this.y + this.yOffset &&
+      mouseY < this.y + this.yOffset + this.height
     );
   }
 
@@ -41,11 +62,24 @@ class Button {
     this.isActive = this.checkIfIsActive();
   }
 
-  draw(xOffset, yOffset) {
+  draw() {
     push();
-    translate(xOffset, yOffset);
+    // position absolute
+    translate(this.xOffset, this.yOffset);
+    this.#drawBorder();
+    this.#drawSymbol();
+    this.#drawShortcut();
+    pop();
+  }
 
-    // make border wider if chosen
+  #drawSymbol() {
+    this.symbolDrawBehavior();
+  }
+
+  #drawBorder() {
+    push();
+
+    // make border wider if active
     if (this.isActive) {
       strokeWeight(5);
     }
@@ -56,57 +90,12 @@ class Button {
     } else {
       noFill();
     }
+
     rect(this.x, this.y, this.width, this.height, 10, 10, 10, 10);
     pop();
+  }
 
-    if (this.symbol instanceof Note) {
-      if (this.symbol.getBaseValue() === 1) {
-        this.symbol.drawNote(
-          this.x + this.width * 0.5,
-          this.y + this.height * 0.6
-        );
-      } else {
-        this.symbol.drawNote(
-          this.x + this.width * 0.45,
-          this.y + this.height * 0.6
-        );
-      }
-    } else if (this.symbol instanceof Accidental) {
-      const symbolName = this.symbol.getName();
-      let symbolYOffset = 0;
-      if (
-        symbolName === Accidental.accidentals.bemol ||
-        symbolName === Accidental.accidentals.doubleBemol
-      ) {
-        symbolYOffset = -bemolOffset;
-      }
-
-      this.symbol.draw(
-        this.x + this.width * 0.5,
-        this.y + this.height * 0.4 + symbolYOffset
-      );
-    } else if (this.symbol instanceof p5.Image) {
-      push();
-      imageMode(CORNER);
-      image(
-        this.symbol,
-        this.x + 5,
-        this.y + 5,
-        this.width - 10,
-        this.height - 25
-      );
-      pop();
-    } else if (this.symbol === "dot") {
-      push();
-      fill(0);
-      circle(
-        this.x + this.width * 0.5,
-        this.y + this.height * 0.5,
-        dotDiameter
-      );
-      pop();
-    }
-
+  #drawShortcut() {
     push();
     textAlign(CENTER);
     textSize(13);
@@ -115,6 +104,51 @@ class Button {
       this.x + this.width * 0.5,
       this.y + this.height - 7
     );
+    pop();
+  }
+
+  #noteDrawBehavior() {
+    const widthScaler = this.symbol.getBaseValue() === 1 ? 0.5 : 0.45;
+
+    this.symbol.drawNote(
+      this.x + this.width * widthScaler,
+      this.y + this.height * 0.6
+    );
+  }
+
+  #accidentalDrawBehavior() {
+    const symbolName = this.symbol.getName();
+    let symbolYOffset = 0;
+    if (
+      symbolName === Accidental.accidentals.bemol ||
+      symbolName === Accidental.accidentals.doubleBemol
+    ) {
+      symbolYOffset = -bemolOffset;
+    }
+
+    this.symbol.draw(
+      this.x + this.width * 0.5,
+      this.y + this.height * 0.4 + symbolYOffset
+    );
+  }
+
+  #p5ImageDrawBehavior() {
+    push();
+    imageMode(CORNER);
+    image(
+      this.symbol,
+      this.x + 5,
+      this.y + 5,
+      this.width - 10,
+      this.height - 25
+    );
+    pop();
+  }
+
+  #dotDrawBehavior() {
+    push();
+    fill(0);
+    circle(this.x + this.width * 0.5, this.y + this.height * 0.5, dotDiameter);
     pop();
   }
 }
@@ -348,7 +382,9 @@ class Menu {
 
   calculateYOffset() {
     const clientRect = canvas.elt.getBoundingClientRect();
-    console.log(canvas.elt.getBoundingClientRect());
+    const y = clientRect.y;
+
+    return y > 0 ? 0 : -y;
   }
 
   mouseClicked() {
@@ -368,10 +404,11 @@ class Menu {
   }
 
   draw() {
+    const yOffset = this.calculateYOffset();
+
     for (let i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].draw(0, 0);
+      this.buttons[i].setOffset(0, yOffset);
+      this.buttons[i].draw();
     }
   }
 }
-
-// canvas.elt.getBoundingClientRect();
