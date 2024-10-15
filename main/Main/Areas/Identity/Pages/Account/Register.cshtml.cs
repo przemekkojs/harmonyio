@@ -4,15 +4,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Models;
+using Main.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Main.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -71,6 +73,18 @@ namespace Main.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+            
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+            
+            [Required]
+            [Display(Name = "Role")]
+            public Role Role { get; set; }
+            
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -115,6 +129,9 @@ namespace Main.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -124,6 +141,9 @@ namespace Main.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+
+                    var roleResult = await _userManager.AddToRoleAsync(user, Roles.GetRoleName(Input.Role));
+                    
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

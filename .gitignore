@@ -6,3 +6,6 @@
 /main/Main/.vs
 /main/Main/bin
 /main/Main/obj
+
+app.db
+.DS_Store
