@@ -28,7 +28,7 @@ namespace Algorithm.Communication
             {
                 var currentBar = bars[bar - 1];
                 var barFunctionIndex = currentBar.LastEmptyStack;
-                var function = currentBar.BaseBar.Functions[barFunctionIndex];
+                var function = currentBar.UserStacks[barFunctionIndex].BaseFunction;
 
                 currentBar.AddStack(new UserStack(function, tonation, beat));
             }
@@ -43,8 +43,8 @@ namespace Algorithm.Communication
 
             var chosenBar = bars[bar - 1];
 
-            if (beat >= chosenBar.BaseBar.Length)
-                throw new ArgumentException("Invalid beat.");
+            if (beat >= chosenBar.Length)
+                return null;
 
             var matching = chosenBar.UserStacks
                 .Where(x => x.Beat == beat)

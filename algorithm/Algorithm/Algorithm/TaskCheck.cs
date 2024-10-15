@@ -20,7 +20,7 @@ namespace Algorithm.Algorithm
         public List<Mistake> Check()
         {
             List<Function> userFunctions = userSolution
-                .Select(x => x.BaseChord)
+                .Select(x => x.BaseFunction)
                 .ToList();
 
             List<Function> taskFunctions = task.Bars

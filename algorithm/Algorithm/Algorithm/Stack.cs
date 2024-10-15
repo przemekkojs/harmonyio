@@ -12,8 +12,10 @@ namespace Algorithm.Algorithm
 
         public int Duration { get; set; }
         public int Beat { get; private set; }
-        public Function BaseChord { get => baseFunction; }
+        public Function BaseFunction { get => baseFunction; }
         public Tonation Tonation { get => tonation; }
+
+        public List<Note?> Notes { get => [soprano, alto, tenore, bass]; }
 
         protected readonly Function baseFunction;
         protected readonly Tonation tonation;

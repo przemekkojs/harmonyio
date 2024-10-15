@@ -10,25 +10,19 @@ namespace Algorithm.Algorithm
     public class UserBar
     {
         public List<UserStack> UserStacks { get => userStacks; }
-        public Bar BaseBar { get => baseBar; }
         public int LastEmptyStack { get; private set; }
+        public int Length { get => userStacks.Count; }
 
-        private readonly Bar baseBar;
         private readonly List<UserStack> userStacks;
 
-        public UserBar(Bar baseBar)
+        public UserBar()
         {
-            this.baseBar = baseBar;
             this.userStacks = [];
-
             LastEmptyStack = 1;
         }
 
         public void AddStack(UserStack userStack)
-        {
-            if (LastEmptyStack >= baseBar.Functions.Count)
-                return;
-
+        {            
             userStacks.Add(userStack);
             LastEmptyStack++;
         }
