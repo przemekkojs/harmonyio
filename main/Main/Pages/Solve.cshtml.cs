@@ -14,6 +14,11 @@ namespace Main.Pages
 
         public Quiz Quiz { get; set; } = null!;
 
+        [BindProperty]
+        public int QuizId { get; set; }
+        [BindProperty]
+        public List<string> Answers { get; set; } = null!;
+
         public SolveModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
@@ -26,12 +31,38 @@ namespace Main.Pages
             var allQuizes = await _repository.GetAllAsync<Quiz>();
             if (allQuizes.Count == 0)
                 throw new InvalidOperationException("No quizes found in the repository. Go to /create page and create a quiz for testing purposes.");
-            int id = allQuizes[2].Id;
+            int id = allQuizes[0].Id;
 
             Quiz = (await _repository.GetAsync<Quiz>(
                 q => q.Id == id,
                 query => query.Include(q => q.Excersises)
             ))!;
+        }
+
+        public async Task<IActionResult> OnPost()
+        {
+            //TODO: POPUALTE WITH REAL USER
+            var currentUser = await GetTestUser();
+
+            var quiz = (await _repository.GetAsync<Quiz>(
+                q => q.Id == QuizId,
+                query => query.Include(q => q.Excersises)
+            ))!;
+
+            var excersises = (List<Excersise>)quiz.Excersises;
+            for (int i = 0; i < excersises.Count; i++)
+            {
+                var solution = new ExcersiseSolution()
+                {
+                    ExcersiseId = excersises[i].Id,
+                    Answer = Answers[i] ?? "",
+                    UserId = currentUser.Id,
+                };
+                _repository.Add(solution);
+            }
+            await _repository.SaveChangesAsync();
+
+            return RedirectToPage("Index");
         }
 
 

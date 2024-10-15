@@ -6,63 +6,77 @@
     <link rel="stylesheet" href="~/css/solve-style.css" />
 </head>
 
-<div class="h-100 w-100 d-flex flex-column">
-    <div class="top-bar w-100 d-flex justify-content-between align-items-center">
-        <div class="fw-bold fs-4">
-            @Model.Quiz.Name
+<form method="post" class="h-100 w-100">
+    <div class="h-100 w-100 d-flex flex-column">
+        <div class="top-bar w-100 d-flex justify-content-between align-items-center">
+            <div class="fw-bold fs-4">
+                @Model.Quiz.Name
+            </div>
+            <div class="d-flex align-items-center">
+                <img src="~/images/timer.png" alt="Timer" class="me-2 timer-img">
+                <span id="timer">10h 13min</span>
+            </div>
         </div>
-        <div class="d-flex align-items-center">
-            <img src="~/images/timer.png" alt="Timer" class="me-2 timer-img">
-            <span id="timer">10h 13min</span>
+
+        <hr class="hr my-3">
+
+        <div class="flex-grow-1 w-100 d-flex flex-column">
+            <div class="d-flex flex-row align-items-start question-area">
+                <div class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
+                    <div id="excersise-number" class="fs-1 fw-bold">1</div>
+                </div>
+
+                <div class="flex-grow-1">
+                    <p id="excersise-question" class="m-0"></p>
+                </div>
+            </div>
+
+            <div class="flex-grow-1 d-flex flex-row mt-3">
+                <div class="music-staff h-100 flex-grow-1 d-flex justify-content-center align-items-center me-3">
+                    <span class="me-2">Pięciolinia</span>
+                    <input type="text" id="answer-input" class="form-control task-input" oninput="changeAnswer(this.value)">
+
+                    <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
+                    @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
+                    {
+                        <input type="hidden" asp-for="Answers[@i]" value="" />
+                    }
+                </div>
+
+                <div class="toolbox h-100 d-flex justify-content-center align-items-center">
+                    Toolbox
+                </div>
+            </div>
+        </div>
+
+        <hr class="hr mt-3">
+
+        <div class="bottom-bar d-flex align-items-center">
+            <a asp-page="Index" class="btn btn-danger btn-std-width me-auto">Powrót</a>
+            <button id="btn-prev" type="button" onclick="prevQuestion()" class="btn btn-secondary btn-std-width mx-3">Poprzednie</button>
+
+            <div id="excersises-buttons" class="d-flex align-items-center">
+                @*EXCERSISES ARE FILLED WITH JS SCRIPT*@
+            </div>
+            <div id="div-last-ex">
+                <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
+                <button id="btn-last-ex" type="button" onclick="lastQuestion()" class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+            </div>
+
+            <button id="btn-next" type="button" onclick="nextQuestion()" class="btn btn-secondary btn-std-width ms-3">Następne</button>
+            <button id="btn-finish" type="submit" class="btn btn-primary btn-std-width ms-3">Zakończ</button>
         </div>
     </div>
-
-    <hr class="hr my-3">
-
-    <div class="flex-grow-1 w-100 d-flex flex-column">
-        <div class="d-flex flex-row align-items-start question-area">
-            <div class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
-                <div id="excersise-number" class="fs-1 fw-bold">1</div>
-            </div>
-
-            <div class="flex-grow-1">
-                <p id="excersise-question" class="m-0"></p>
-            </div>
-        </div>
-
-        <div class="flex-grow-1 d-flex flex-row mt-3">
-            <div class="music-staff h-100 flex-grow-1 d-flex justify-content-center align-items-center me-3">
-                Pięciolinia
-            </div>
-
-            <div class="toolbox h-100 d-flex justify-content-center align-items-center">
-                Toolbox
-            </div>
-        </div>
-    </div>
-
-    <hr class="hr mt-3">
-
-    <div class="bottom-bar d-flex align-items-center">
-        <a asp-page="Index" class="btn btn-danger btn-std-width me-auto">Powrót</a>
-        <button id="btn-prev" onclick="prevQuestion()" class="btn btn-secondary btn-std-width mx-3">Poprzednie</button>
-
-        <div id="excersises-buttons" class="d-flex align-items-center">
-            @*EXCERSISES ARE FILLED WITH JS SCRIPT*@
-        </div>
-        <div id="div-last-ex">
-            <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-            <button id="btn-last-ex" onclick="lastQuestion()" class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
-        </div>
-
-        <button id="btn-next" onclick="nextQuestion()" class="btn btn-secondary btn-std-width ms-3">Następne</button>
-        <button id="btn-finish" class="btn btn-primary btn-std-width ms-3">Zakończ</button>
-    </div>
-</div>
+</form>
 
 <script>
     var excersises = @Json.Serialize(Model.Quiz.Excersises);
     var currentIndex = 0;
+
+    function changeAnswer(value) {
+        var hiddenInput = document.querySelector(`input[name="Answers[${currentIndex}]"]`);
+        hiddenInput.value = value;
+    }
 
     function loadQuestion(index) {
         if (index >= 0 && index < excersises.length) {
@@ -71,6 +85,8 @@
 
             document.getElementById("btn-next").style.display = index === excersises.length - 1 ? 'none' : 'inline-block';
             document.getElementById("btn-finish").style.display = index === excersises.length - 1 ? 'inline-block' : 'none';
+
+            document.getElementById("answer-input").value = document.querySelector(`input[name="Answers[${currentIndex}]"]`).value;
 
             generateButtons(index);
         }
@@ -181,33 +197,34 @@
 
 
 <script>
-    window.onload = function () {
-        const bottomBar = document.querySelector('.bottom-bar');
-        const current = document.querySelector('.btn-current');
-        const hidable = document.querySelectorAll('.btn-hidable');
+    //window.onload = function () {
+    //    const bottomBar = document.querySelector('.bottom-bar');
+    //    const current = document.querySelector('.btn-current');
+    //    const hidable = document.querySelectorAll('.btn-hidable');
 
-        function isOverflow() {
-            return bottomBar.scrollWidth != bottomBar.clientWidth
-        }
-        function checkOverflow() {
-            if (isOverflow()) {
-                hidable.forEach(function (button) {
-                    button.classList.add('d-none');
-                });
-            }
-            else {
-                hidable.forEach(function (button) {
-                    button.classList.remove('d-none');
-                });
+    //    function isOverflow() {
+    //        return bottomBar.scrollWidth != bottomBar.clientWidth
+    //    }
+    //    function checkOverflow() {
+    //        if (isOverflow()) {
+    //            hidable.forEach(function (button) {
+    //                button.classList.add('d-none');
+    //            });
+    //        }
+    //        else {
+    //            hidable.forEach(function (button) {
+    //                button.classList.remove('d-none');
+    //            });
 
-                if (isOverflow()) {
-                    hidable.forEach(function (button) {
-                        button.classList.add('d-none');
-                    });
-                }
-            }
-        }
+    //            if (isOverflow()) {
+    //                hidable.forEach(function (button) {
+    //                    button.classList.add('d-none');
+    //                });
+    //            }
+    //        }
+    //    }
 
-        checkOverflow();
-        window.addEventListener('resize', checkOverflow);
-    };</script>
+    //    checkOverflow();
+    //    window.addEventListener('resize', checkOverflow);
+    //};
+</script>
