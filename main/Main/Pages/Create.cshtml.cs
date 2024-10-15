@@ -90,7 +90,8 @@ namespace Main.Pages
             return RedirectToPage("Index");
         }
 
-        public async Task<ApplicationUser> GetTestUser()
+
+        private async Task<ApplicationUser> GetTestUser()
         {
             var userId = "testUser";
             var user = await _userManager.FindByIdAsync(userId);

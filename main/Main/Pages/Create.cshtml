@@ -46,7 +46,7 @@
         <hr class="hr">
 
         <div class="bottom-bar d-flex align-items-center">
-            <button class="btn btn-danger btn-std-width">Powrót</button>
+            <a asp-page="Index" class="btn btn-danger btn-std-width">Powrót</a>
             <button type="submit" class="btn btn-primary btn-std-width ms-auto">Opublikuj</button>
         </div>
     </div>
@@ -57,14 +57,16 @@
     let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
 
     function addExcersise() {
-        document.getElementById('questions-validation-error').innerText = '';
-
         excersises.push("");
         renderExcersises();
+
+        document.getElementById('questions-validation-error').innerText = '';
     }
 
     function updateExcersise(index, value) {
         excersises[index] = value;
+
+        document.getElementById('questions-validation-error').innerText = '';
     }
 
     function removeExcersise(index) {
@@ -84,6 +86,7 @@
                         <div class="vr"></div>
                     </div>
                     <div class="task-content w-100 p-3">
+                        <span class="mb-1">Kreator funkcji</span>
                         <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)">
                     </div>
                     <div class="d-flex h-100 align-items-center">
