@@ -23,5 +23,21 @@
 
             length = newLength;
         }
+
+        public void AddBar(Bar bar)
+        {
+            if (bars.Count < length)
+                bars.Add(bar);
+            else
+                throw new ArgumentException("Cannot add more bars");
+        }
+
+        public void AddBarsRange(IEnumerable<Bar> bars)
+        {
+            foreach(Bar bar in bars)
+            {
+                AddBar(bar);
+            }    
+        }
     }
 }
