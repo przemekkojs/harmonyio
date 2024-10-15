@@ -2,7 +2,13 @@
 /algorithm/Algorithm/bin
 /algorithm/Algorithm/obj
 /algorithm/Algorithm/.vs
+/algorithm/AlgorithmTests/.vs
+/algorithm/AlgorithmTests/bin
+/algorithm/AlgorithmTests/obj
 
 /main/Main/.vs
 /main/Main/bin
 /main/Main/obj
+
+/mockups
+*.drawio

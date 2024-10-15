@@ -4,70 +4,24 @@ using Newtonsoft.Json.Converters;
 
 namespace Algorithm.Communication
 {
-    public class ParsedNote
+    public class JsonNote
     {
-        public string Name { get; private set; }
-        public int Duration { get; private set; }
-        public int Octave { get; private set; }
-        public int Bar { get; private set; }
-        public int Stack { get; private set; }
-        public int Staff { get; private set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Voice Voice { get; private set; }
-        public bool Neutralized { get; private set; }
-
-        public ParsedNote(string name, int octave, int duration, int bar, int stack, int staff, int voice, bool neutralized)
-        {
-            Name = name;
-            Duration = duration;
-            Octave = octave;
-            Bar = bar;
-            Stack = stack;
-            Staff = staff;
-            Neutralized = neutralized;
-
-            Voice = voice switch
-            {
-                0 => Voice.SOPRANO,
-                1 => Voice.ALTO,
-                2 => Voice.TENORE,
-                3 => Voice.BASS,
-                _ => throw new ArgumentException("Invalid voice")
-            };
-        }
-
-        public ParsedNote(string name, int octave, int duration, int bar, int stack, int staff, string voice, bool neutralized)
-        {
-            Name = name;
-            Duration = duration;
-            Octave = octave;
-            Bar = bar;
-            Stack = stack;
-            Staff = staff;
-            Neutralized = neutralized;
-
-            Voice = voice switch
-            {
-                "SOPRANO" => Voice.SOPRANO,
-                "ALTO" => Voice.ALTO,
-                "TENORE" => Voice.TENORE,
-                "BASS" => Voice.BASS,
-                _ => throw new ArgumentException("Invalid voice")
-            };
-        }
+        public float Line { get; set; }
+        public string AccidentalName { get; set; }
+        public string Voice { get; set; }
+        public int Value { get; set; }
+        public int BarIndex { get; set; }
+        public int VerticalIndex { get; set; }
 
         [JsonConstructor]
-        public ParsedNote(string name, int octave, int duration, int bar, int stack, int staff, Voice voice, bool neutralized)
+        public JsonNote(float line, string accidentalName, string voice, int value, int barIndex, int verticalIndex)
         {
-            Name = name;
-            Duration = duration;
-            Octave = octave;
-            Bar = bar;
-            Stack = stack;
-            Staff = staff;
-            Neutralized = neutralized;
+            Line = line;
+            AccidentalName = accidentalName;
             Voice = voice;
+            Value = value;
+            BarIndex = barIndex;
+            VerticalIndex = verticalIndex;
         }
     }
 
@@ -91,30 +45,47 @@ namespace Algorithm.Communication
     {
         public static NoteParseResult ParseJsonToNote(string jsonString)
         {
-            ParsedNote? parsedNote = JsonConvert.DeserializeObject<ParsedNote>(jsonString) ?? throw new ArgumentException("Parse error.");
+            JsonNote? parsedNote = JsonConvert.DeserializeObject<JsonNote>(jsonString) ?? throw new ArgumentException("Parse error.");
 
-            Accidental accidental = parsedNote.Name[1..].ToLower() switch
+            Accidental accidental;
+
+            if (parsedNote.AccidentalName == null || parsedNote.AccidentalName.Length == 0)
+                accidental = Accidental.NONE;
+            else
             {
-                "" => Accidental.NONE,
-                "#" => Accidental.SHARP,
-                "x" => Accidental.DOUBLE_SHARP,
-                "b" => Accidental.FLAT,
-                "bb" => Accidental.DOUBLE_FLAT,
-                "bq" => Accidental.NEUTRAL,
-                _ => throw new ArgumentException("Invalid accidental.")
+                accidental = parsedNote.AccidentalName[1..] switch
+                {
+                    "#" => Accidental.SHARP,
+                    "x" => Accidental.DOUBLE_SHARP,
+                    "b" => Accidental.FLAT,
+                    "bb" => Accidental.DOUBLE_FLAT,
+                    "bq" => Accidental.NEUTRAL,
+                    _ => Accidental.NONE
+                };
+            }           
+
+            var (name, octave) = Constants.Constants.NoteMappings[(parsedNote.Line, parsedNote.Voice)];
+
+            Voice voice = parsedNote.Voice switch
+            {
+                Constants.Constants.SOPRANO => Voice.SOPRANO,
+                Constants.Constants.ALTO => Voice.ALTO,
+                Constants.Constants.TENORE => Voice.TENORE,
+                Constants.Constants.BASS => Voice.BASS,
+                _ => throw new ArgumentException("Invalid voice.")
             };
 
             Note noteResult = new(
-                name: parsedNote.Name,
-                octave: parsedNote.Octave,
-                voice: parsedNote.Voice,
+                name: name,
+                octave: octave,
+                voice: voice,
                 accidental: accidental,
-                neutralized: parsedNote.Neutralized
+                neutralized: accidental == Accidental.NEUTRAL
             );
 
-            RhytmicValue rhytmResult = RhytmicValue.GetRhytmicValueByDuration(parsedNote.Duration);
+            RhytmicValue rhytmResult = RhytmicValue.GetRhytmicValueByDuration(parsedNote.Value);
 
-            return new NoteParseResult(noteResult, rhytmResult, parsedNote.Bar, parsedNote.Stack);
+            return new NoteParseResult(noteResult, rhytmResult, parsedNote.BarIndex, parsedNote.VerticalIndex);
         }
 
         public static string ParseNoteToJson(Note? note, RhytmicValue rhytmicValue, int bar, int stackInBar)
@@ -129,15 +100,28 @@ namespace Algorithm.Communication
                 _ => throw new ArgumentException("Invalid staff.")
             };
 
-            ParsedNote toParse = new(
-                name: note.Name,
-                octave: note.Octave,
-                duration: rhytmicValue.RealDuration,
-                bar: bar,
-                stack: stackInBar,
-                staff: staff,
+            var matchingNotes = Constants.Constants.NoteMappings
+                .Where(kv => kv.Value == (note.Name[0].ToString(), note.Octave))
+                .Select(kv => kv.Key)
+                .ToList();
+
+            var index = 0;
+
+            while(index < matchingNotes.Count && !matchingNotes[index].Item2.Equals(note.Voice.ToString()))
+                index++;
+
+            if (index >= matchingNotes.Count)
+                throw new ArgumentException("Invalid voice");
+
+            var line = matchingNotes[index].Item1;
+
+            JsonNote toParse = new(
+                line: line,
+                accidentalName: note.Name[1..],
                 voice: note.Voice.ToString(),
-                neutralized: note.Accidental == Accidental.NEUTRAL
+                value: rhytmicValue.RealDuration,
+                barIndex: bar,
+                verticalIndex: stackInBar
             );
 
             var parsed = JsonConvert.SerializeObject(toParse);

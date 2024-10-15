@@ -1,10 +1,5 @@
 ﻿using Algorithm.Communication;
 using Algorithm.Music;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlgorithmTests
 {
@@ -33,8 +28,8 @@ namespace AlgorithmTests
 
         [Fact]
         public void ParseFromNoteToJsonTest()
-        {
-            string testString = "{\"Name\":\"C\",\"Duration\":4,\"Octave\":4,\"Bar\":1,\"Stack\":1,\"Staff\":1,\"Voice\":\"SOPRANO\",\"Neutralized\":false}";
+        {            
+            string testString = "{\"Line\":5.0,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1}";
             string parsedString = NoteParser.ParseNoteToJson(new Note(name: "C", octave: 4, voice: Voice.SOPRANO), RhytmicValue.QUARTER_NOTE, 1, 1);
 
             Assert.Equal(testString, parsedString);
@@ -42,9 +37,9 @@ namespace AlgorithmTests
 
         [Fact]
         public void ParseFromJsonToNoteTest()
-        {
-            string testString = "{\"Name\":\"C\",\"Duration\":4,\"Octave\":4,\"Bar\":1,\"Stack\":1,\"Staff\":1,\"Voice\":\"SOPRANO\",\"Neutralized\":false}";
+        {            
             Note testNote = new Note("C", 4, Voice.SOPRANO);
+            string testString = "{\"Line\":5.0,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1}";
             Note parsedNote = NoteParser.ParseJsonToNote(testString).Note;
 
             Assert.Equal(testNote, parsedNote);
