@@ -8,6 +8,12 @@ class Bar {
     }
   }
 
+  toJson(){
+    return this.verticals
+  .map(vertical => vertical.toJson())
+  .flat();
+  }
+
   getSlotsTaken() {
     return this.verticals.reduce(
       (sum, vertical) => sum + vertical.getSlotsTaken(),

@@ -2,8 +2,16 @@
 /algorithm/Algorithm/bin
 /algorithm/Algorithm/obj
 /algorithm/Algorithm/.vs
+/algorithm/AlgorithmTests/.vs
+/algorithm/AlgorithmTests/bin
+/algorithm/AlgorithmTests/obj
 
-/algorithm
 /main/Main/.vs
 /main/Main/bin
 /main/Main/obj
+
+/mockups
+*.drawio
+
+app.db
+.DS_Store

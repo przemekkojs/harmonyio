@@ -2,7 +2,7 @@ class KeySignature {
   static sharpOffsets = [0, 1.5, -0.5, 1, 2.5, 0.5, 2];
   static bemolOffsets = [2, 0.5, 2.5, 1, 3, 1.5, 3.5];
 
-  constructor(count = 0, accidental = new Accidental("bemol")) {
+  constructor(count = 0, accidental = new Accidental(Accidental.accidentals.bemol)) {
     this.count = count;
     this.accidental = accidental;
   }
@@ -16,7 +16,7 @@ class KeySignature {
     const accidentalWidth = this.accidental.getWidth();
     const additionalOffset = isUpperStaff ? 0 : 1;
     const offsets =
-      accidentalName === "sharp"
+      accidentalName === Accidental.accidentals.sharp
         ? KeySignature.sharpOffsets
         : KeySignature.bemolOffsets;
 
