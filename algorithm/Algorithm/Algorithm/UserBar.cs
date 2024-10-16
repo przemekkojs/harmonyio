@@ -18,7 +18,7 @@ namespace Algorithm.Algorithm
         public UserBar()
         {
             this.userStacks = [];
-            LastEmptyStack = 1;
+            LastEmptyStack = 0;
         }
 
         public void AddStack(UserStack userStack)

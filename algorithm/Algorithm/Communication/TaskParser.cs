@@ -7,12 +7,14 @@ namespace Algorithm.Communication
 {
     public class JsonTask
     {
+        [JsonProperty("jsonNotes")]
         public List<JsonNote> Notes { get; set; }
         public int SharpsCount { get; set; }
         public int FlatsCount { get; set; }
         public int MeterCount { get; set; }
         public int MeterValue { get; set; }
 
+        [JsonConstructor]
         public JsonTask(List<JsonNote> notes, int sharpsCount, int flatsCount, int meterCount, int meterValue)
         {
             Notes = notes;
@@ -47,53 +49,36 @@ namespace Algorithm.Communication
             var meter = Meter.GetMeter(parsedTask.MeterValue, parsedTask.MeterCount);
 
             var bars = new List<UserBar>();
-            var currentBar = new UserBar();
-            UserStack userStack = new (baseTask.Bars[0].Functions[0], tonation, 0);
-            var lastBarIndex = 0;
-            var currentBeat = 0;
-            var lastStackIndex = -1;
 
-            // TODO: Bars
-            foreach (var jsonNote in parsedTask.Notes)
-            {
-                if (jsonNote.BarIndex > lastBarIndex)
-                {
-                    bars.Add(currentBar);
-                    currentBar = new UserBar();
-                    lastStackIndex = -1;
-                    currentBeat = 0;
-                }
+            /* 
+             * 1. Add Bars
+             * foreach (note in parsed.Notes)
+             *      look for barIndex - add that many bars how many barIndex-es
+             * 
+             * 2. Add stacks
+             * foreach (note in parsed.Notes)
+             *      look for verticalIndex - add that many bars...
+             *      
+             * 3. Add notes to stacks
+             * foreach (note in parsed.Notes)
+             *      bar[note.barIndex].Stacks[bar.stackIndex].Set<Voice>(...)
+             */
 
-                if (jsonNote.VerticalIndex > lastStackIndex)
-                {
-                    userStack = new UserStack(
-                        baseFunction: baseTask.Bars[jsonNote.BarIndex].Functions[jsonNote.VerticalIndex],
-                        tonation: tonation,
-                        startBeat: currentBeat
-                    );
-
-                    currentBeat += jsonNote.Value;
-                    lastStackIndex = jsonNote.VerticalIndex;
-                }
-
-                var parseResult = NoteParser.ParseJsonNoteToNote(jsonNote);
-                
-                switch (parseResult.Note.Voice)
-                {
-                    case Voice.SOPRANO:
-                        userStack.SetSoprano(parseResult.Note, parseResult.RhytmicValue);
-                        break;
-                    case Voice.ALTO:
-                        userStack.SetAlto(parseResult.Note, parseResult.RhytmicValue);
-                        break;
-                    case Voice.TENORE:
-                        userStack.SetTenore(parseResult.Note, parseResult.RhytmicValue);
-                        break;
-                    default:
-                        userStack.SetBass(parseResult.Note, parseResult.RhytmicValue);
-                        break;
-                }
-            }
+            //switch (parseResult.Note.Voice)
+            //{
+            //    case Voice.SOPRANO:
+            //        userStack.SetSoprano(parseResult.Note, parseResult.RhytmicValue);
+            //        break;
+            //    case Voice.ALTO:
+            //        userStack.SetAlto(parseResult.Note, parseResult.RhytmicValue);
+            //        break;
+            //    case Voice.TENORE:
+            //        userStack.SetTenore(parseResult.Note, parseResult.RhytmicValue);
+            //        break;
+            //    default:
+            //        userStack.SetBass(parseResult.Note, parseResult.RhytmicValue);
+            //        break;
+            //}
 
             return new TaskParseResult(tonation, meter, bars);
         }
