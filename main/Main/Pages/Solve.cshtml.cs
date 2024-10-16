@@ -31,7 +31,7 @@ namespace Main.Pages
             var allQuizes = await _repository.GetAllAsync<Quiz>();
             if (allQuizes.Count == 0)
                 throw new InvalidOperationException("No quizes found in the repository. Go to /create page and create a quiz for testing purposes.");
-            int id = allQuizes[2].Id;
+            int id = allQuizes[0].Id;
 
             Quiz = (await _repository.GetAsync<Quiz>(
                 q => q.Id == id,
