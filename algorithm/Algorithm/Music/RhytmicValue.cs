@@ -12,11 +12,14 @@
         private readonly string name;
         private readonly bool dotted;
 
-        private const string WHOLE_NOTE_NAME = "Whole note";
-        private const string HALF_NOTE_NAME = "Half note";
-        private const string QUARTER_NOTE_NAME = "Quarter note";
-        private const string EIGHTH_NOTE_NAME = "Eighth note";
-        private const string SIXTEENTH_NOTE_NAME = "Sixteentx note";
+        public static readonly RhytmicValue WHOLE_NOTE = new(16);
+        public static readonly RhytmicValue HALF_NOTE_DOTTED = new(12);
+        public static readonly RhytmicValue HALF_NOTE = new(8);
+        public static readonly RhytmicValue QUARTER_NOTE_DOTTED = new(6);
+        public static readonly RhytmicValue QUARTER_NOTE = new(4);
+        public static readonly RhytmicValue EIGHTH_NOTE_DOTTED = new(3);
+        public static readonly RhytmicValue EIGHTH_NOTE = new(2);
+        public static readonly RhytmicValue SIXTEENTH_NOTE = new(1);
 
         /*
          DLA KUBY:
@@ -51,49 +54,49 @@
             switch (realDuration)
             {
                 case 16:
-                    name = WHOLE_NOTE_NAME;
+                    name = Constants.Constants.WHOLE_NOTE_NAME;
                     dotted = false;
                     duration = 16;
                     break;
 
                 case 12:
-                    name = HALF_NOTE_NAME;
+                    name = Constants.Constants.HALF_NOTE_NAME;
                     dotted = true;
                     duration = 8;
                     break;
 
                 case 8:
-                    name = HALF_NOTE_NAME;
+                    name = Constants.Constants.HALF_NOTE_NAME;
                     dotted = false;
                     duration = 8;
                     break;
 
                 case 6:
-                    name = QUARTER_NOTE_NAME;
+                    name = Constants.Constants.QUARTER_NOTE_NAME;
                     dotted = true;
                     duration = 4;
                     break;
 
                 case 4:
-                    name = QUARTER_NOTE_NAME;
+                    name = Constants.Constants.QUARTER_NOTE_NAME;
                     dotted = false;
                     duration = 4;
                     break;
 
                 case 3:
-                    name = EIGHTH_NOTE_NAME;
+                    name =  Constants.Constants.EIGHTH_NOTE_NAME;
                     dotted = true;
                     duration = 2;
                     break;
 
                 case 2:
-                    name = EIGHTH_NOTE_NAME;
+                    name = Constants.Constants.EIGHTH_NOTE_NAME;
                     dotted = false;
                     duration = 2;
                     break;
 
                 case 1:
-                    name = SIXTEENTH_NOTE_NAME;
+                    name = Constants.Constants.SIXTEENTH_NOTE_NAME;
                     dotted = false;
                     duration = 1;
                     break;
@@ -102,16 +105,7 @@
             }
 
             return new RhytmicValue(duration, realDuration, name, dotted);
-        }
-
-        public static readonly RhytmicValue WHOLE_NOTE = new(16);
-        public static readonly RhytmicValue HALF_NOTE_DOTTED = new(12);
-        public static readonly RhytmicValue HALF_NOTE = new(8);
-        public static readonly RhytmicValue QUARTER_NOTE_DOTTED = new(6);
-        public static readonly RhytmicValue QUARTER_NOTE = new(4);
-        public static readonly RhytmicValue EIGHTH_NOTE_DOTTED = new(3);
-        public static readonly RhytmicValue EIGHTH_NOTE = new(2);
-        public static readonly RhytmicValue SIXTEENTH_NOTE = new(1);
+        }       
 
         public static RhytmicValue GetRhytmicValueByDuration(int duration)
         {

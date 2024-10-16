@@ -11,6 +11,39 @@ class TwoNotes {
     this.width = slotWidth;
   }
 
+  toJson() {
+    let jsonResult = [];
+
+    let note1Json;
+    if (this.note1 !== null) {
+      note1Json = this.note1.toJson();
+      note1Json.voice = this.#determineVoice(this.note1);
+      jsonResult.push(note1Json);
+    }
+
+    let note2Json;
+    if (this.note2 !== null) {
+      note2Json = this.note2.toJson();
+      note2Json.voice = this.#determineVoice(this.note2);
+      jsonResult.push(note2Json);
+    } else {
+    }
+
+    return jsonResult;
+  }
+
+  #determineVoice(note) {
+    if (note.isFacingUp && this.isUpperStaff) {
+      return "SOPRANO";
+    } else if (!note.isFacingUp && this.isUpperStaff) {
+      return "ALTO";
+    } else if (note.isFacingUp && !this.isUpperStaff) {
+      return "TENORE";
+    } else {
+      return "BASS";
+    }
+  }
+
   getSlotsTaken() {
     if (this.note1 === null) {
       return 0;
@@ -92,27 +125,17 @@ class TwoNotes {
       return true;
     }
 
-    // handle adding whole note
-    if (note.getBaseValue() === 1) {
-      // cant add two notes on same line (TODO check if true)
-      if (line === this.note1.line) {
-        console.log("whole note already there");
-        return false;
-      }
+    // handle adding whole note, need to have opposite direction
+    if (note.getBaseValue() === 1 && !this.note1.hasOppositeDirection(note)) {
+      this.note2 = new Note(
+        note.getBaseValue(),
+        note.hasDot,
+        !note.isFacingUp,
+        note.getAccidentalName()
+      );
+      this.note2.setLine(line);
 
-      // need to have opposite direction
-      if (!this.note1.hasOppositeDirection(note)) {
-        this.note2 = new Note(
-          note.getBaseValue(),
-          note.hasDot,
-          !note.isFacingUp,
-          note.getAccidentalName()
-        );
-        this.note2.setLine(line);
-        this.parent.parent.updateVerticalPositions();
-
-        return true;
-      }
+      return true;
     }
 
     this.note2 = new Note(

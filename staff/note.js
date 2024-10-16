@@ -5,7 +5,7 @@ class Note {
     value = 1,
     hasDot = false,
     isFacingUp = true,
-    accidentalName = "none"
+    accidentalName = Accidental.accidentals.none
   ) {
     this.headSymbolMapping = {
       1: symbols.fullNote, // Full note image
@@ -19,6 +19,14 @@ class Note {
     this.setBaseValue(value);
     this.isFacingUp = isFacingUp;
     this.accidental = new Accidental(accidentalName);
+  }
+
+  toJson() {
+    return {
+      value: this.getSlotsTaken(),
+      accidentalName: this.accidental.getChar(),
+      line: this.line
+    }
   }
 
   hasSameValue(other) {

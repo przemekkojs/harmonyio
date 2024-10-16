@@ -11,6 +11,7 @@ namespace Algorithm.Music
         public Tonation Tonation { get => tonation; }
         public Meter Meter { get => meter; }
         public List<Function> Functions { get => functions; }
+        public int Length { get => meter.Count * meter.Value; }
 
         private readonly Tonation tonation;
         private readonly Meter meter;
@@ -21,21 +22,10 @@ namespace Algorithm.Music
             this.tonation = tonation;
             this.meter = meter;
 
-            this.functions = new List<Function>();
+            this.functions = [];
         }
 
-        public bool AddFunction(Function function)
-        {
-            int length = functions.Sum(x => x.Duration);
-            int lengthAfter = length + function.Duration;
-
-            if (lengthAfter > meter.Count * meter.Value)
-                return false;
-
-            functions.Add(function);
-
-            return true;
-        }
+        public void AddFunction(Function function) => functions.Add(function);
 
         public void AddFunctionsRange(List<Function> functions)
         {

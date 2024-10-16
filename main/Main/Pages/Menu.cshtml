@@ -1,5 +1,5 @@
 @page
-@model Main.Pages.Menu
+@model Main.Pages.MenuModel
 @{
 }
 
@@ -28,34 +28,39 @@
 
 <div class="container">
     <div class="row justify-content-center align-items-center min-vh-100">
-        
-        <!-- Create -->
-        <div class="col-4 mb-4">
-            <a href="/create"
-               class="tile d-flex align-items-center justify-content-center flex-column p-4"
-               style="background-color: gray; color: white">
+        @if (Model.User.IsInRole("Creator"))
+        {
+            <!-- Create -->
+            <div class="col-4 mb-4">
+                <a href="/create"
+                   class="tile d-flex align-items-center justify-content-center flex-column p-4"
+                   style="background-color: gray; color: white">
 
-                <h3 class="mb-2">Create</h3>
-                
-                <img src="img/tmp.png" alt="test"/>
-            </a>
-        </div>
+                    <h3 class="mb-2">Create</h3>
 
-        <!-- Join -->
-        <div class="col-4 mb-4">
-            <a href="/join"
-               class="tile d-flex align-items-center justify-content-center flex-column p-4"
-               style="background-color: darkgray; color: white">
+                    <img src="img/tmp.png" alt="test"/>
+                </a>
+            </div>
+        }
+        else
+        {
+            <!-- Join -->
+            <div class="col-4 mb-4">
+                <form method='get' action="/solve"
+                   class="tile d-flex align-items-center justify-content-center flex-column p-4"
+                   style="background-color: darkgray; color: white">
 
-                 <h3 class="mb-2">Join</h3>
-                
-                <img src="img/tmp.png" alt="test"/>
-            </a>
-        </div>
-
+                    <h3 class="mb-2">Join</h3>
+                    
+                    <input id="code" name="id" type="text" placeholder="Quiz code" required/>
+                    
+                    <button type="submit" class="btn btn-light m-2">Join</button>
+                </form>
+            </div>
+        }
         <!-- List -->
         <div class="col-4 mb-4">
-            <a href="/list"
+            <a href="@(Model.User.IsInRole("Creator") ? "/listcreate" : "/listjoined")"
                class="tile d-flex align-items-center justify-content-center flex-column p-4"
                style="background-color: dimgray; color: white">
 

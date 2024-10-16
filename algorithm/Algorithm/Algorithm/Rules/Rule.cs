@@ -1,23 +1,20 @@
-﻿using Algorithm.Music;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Algorithm.Algorithm.Rules
+﻿namespace Algorithm.Algorithm.Rules
 {
     public abstract class Rule
     {
+        public int ExpectedParametersCount { get => expectedParametersCount; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }
 
-        protected Rule(string name, string description="")
+        protected readonly int expectedParametersCount;
+
+        protected Rule(string name, string description = "", int expectedParametersCount = 2)
         {
             this.Name = name;
             this.Description = description;
+            this.expectedParametersCount = expectedParametersCount;
         }
 
-        public abstract bool IsSatisfied(params Function[] functions);
+        public abstract bool IsSatisfied(params Stack[] stacks);
     }
 }

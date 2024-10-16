@@ -7,7 +7,7 @@ namespace Main.Models
 	{
 		public int Id { get; set; }
 
-		public Grade Grade { get; set; }
+		public Grade? Grade { get; set; }
 
 		//FOREIGN KEYS
 		public int QuizId { get; set; }
