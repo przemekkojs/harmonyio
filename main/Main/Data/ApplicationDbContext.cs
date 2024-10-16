@@ -73,5 +73,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(u => u.QuizResults)
             .HasForeignKey(qr => qr.UserId)
             .OnDelete(DeleteBehavior.Cascade); // Usuń wyniki przy usunięciu użytkownika
+
+        // Relacja jeden-do-wielu między QuizResult a ExcersiseResult
+        modelBuilder.Entity<ExcersiseResult>()
+            .HasOne(er => er.QuizResult)
+            .WithMany(qr => qr.ExcersiseResults)
+            .HasForeignKey(er => er.QuizResultId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

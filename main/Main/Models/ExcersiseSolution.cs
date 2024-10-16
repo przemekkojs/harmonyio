@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+
 namespace Main.Models
 {
 	public class ExcersiseSolution
@@ -17,7 +19,8 @@ namespace Main.Models
 		public ApplicationUser User { get; set; } = null!;
 
 		public int ExcersiseResultId { get; set; }
-		public ExcersiseResult? ExcersiseResult { get; set; }
+        [JsonIgnore]    //looping dependency, json converter goes crazy without it
+        public ExcersiseResult? ExcersiseResult { get; set; }
     }
 }
 
