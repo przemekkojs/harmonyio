@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+
 namespace Main.Models
 {
 	public class ExcersiseResult
@@ -12,6 +14,7 @@ namespace Main.Models
 		//FOREIGN KEYS
 
 		public int ExcersiseSolutionId { get; set; }
+		[JsonIgnore]	//looping dependency, json converter goes crazy without it
         public ExcersiseSolution ExcersiseSolution { get; set; } = null!;
 
         public int QuizResultId { get; set; }

@@ -1,8 +1,12 @@
 ﻿@page
 @model Main.Pages.BrowseModel
+@using Main.Enumerations;
+@using JsonConvert = Newtonsoft.Json.JsonConvert;
 @{
+    var totalPoints = Model.QuizResult.ExcersiseResults.Sum(er => er.Points);
+    var totalMax = Model.QuizResult.ExcersiseResults.Sum(er => er.MaxPoints);
+    var percent = Math.Round((totalPoints / (float)totalMax) * 100);
 }
-
 
 <head>
     <link rel="stylesheet" href="~/css/browse-style.css" />
@@ -11,14 +15,20 @@
 <div class="h-100 w-100 d-flex flex-column">
     <div class="top-bar w-100 d-flex justify-content-between align-items-center">
         <div class="fw-bold fs-4">
-            Kartkówka 2A
+            @Model.QuizResult.Quiz.Name
         </div>
         <div class="d-flex align-items-center">
             <span class="fw-bold me-2">Wynik</span>
-            <div class="border border-dark rounded px-2 py-1 me-2">51 / 128</div>
-            <div class="border border-dark rounded px-2 py-1 me-4">40%</div>
+            <div class="border border-dark rounded px-2 py-1 me-2">
+                @totalPoints / @totalMax
+            </div>
+            <div class="border border-dark rounded px-2 py-1 me-4">
+                @(percent)%
+            </div>
             <span class="fw-bold me-2">Ocena</span>
-            <div class="border border-dark rounded px-2 py-1">2+</div>
+            <div class="border border-dark rounded px-2 py-1">
+                @Model.QuizResult.Grade.AsString()
+            </div>
         </div>
     </div>
 
@@ -27,11 +37,15 @@
     <div class="flex-grow-1 w-100 d-flex flex-column overflow-auto">
         <div class="d-flex flex-row align-items-start question-area mt-3">
             <div class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
-                <div class="fs-1 fw-bold">5</div>
+                <div id="excersise-number" class="fs-1 fw-bold">
+                    @*SET VIA JS*@
+                </div>
             </div>
 
             <div class="flex-grow-1">
-                <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+                <p id="excersise-question" class="m-0">
+                    @*SET VIA JS*@
+                </p>
             </div>
         </div>
 
@@ -39,34 +53,43 @@
             <div class="music-staff-grade-area h-100 d-flex flex-column">
                 <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
                     <span class="fw-bold">Punkty</span>
-                    <span>15</span>
+                    <span id="points-text">
+                        @*SET VIA JS*@
+                    </span>
                 </div>
                 <hr class="hr">
                 <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
                     <span class="fw-bold">Max</span>
-                    <span>32</span>
+                    <span id="max-text">
+                        @*SET VIA JS*@
+                    </span>
                 </div>
                 <hr class="hr">
                 <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
                     <span class="fw-bold">Wynik</span>
-                    <span>47%</span>
+                    <span id="percent-text">
+                        @*SET VIA JS*@
+                    </span>
                 </div>
             </div>
             <div class="vr"></div>
             <div class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
-                Pięciolinia
+                <span class="me-2">Rozwiązanie (Pięciolinia):</span>
+                <span id="answer">
+                    @*SET VIA JS*@
+                </span>
             </div>
         </div>
 
-        @if (true)
-        {
-            <span class="fw-bold mt-3">Komentarz oceniającego</span>
-            <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        }
-        else
-        {
-            <span class="fw-bold mt-3">Oceniający nie zamieścił komentarza</span>
-        }
+        <div id="comment-div" class="mt-3">
+            <span class="fw-bold">Komentarz oceniającego</span>
+            <p id="comment-text" class="m-0">
+                @*SET VIA JS*@
+            </p>
+        </div>
+        <div id="no-comment-div" class="mt-3">
+            <span class="fw-bold">Oceniający nie zamieścił komentarza</span>
+        </div>
 
         <div class="mb-3"></div>
     </div>
@@ -74,59 +97,150 @@
     <hr class="hr">
 
     <div class="bottom-bar d-flex align-items-center">
-        <button class="btn btn-danger btn-std-width me-3">Powrót</button>
-        <button class="btn btn-secondary btn-std-width ms-auto me-3">Poprzednie</button>
+        <a asp-page="Index" class="btn btn-danger btn-std-width me-3">Powrót</a>
+        <button onclick="prevQuestion()" class="btn btn-secondary btn-std-width ms-auto me-3">Poprzednie</button>
 
-        @for (int i = 0; i < 9; i++)
-        {
-            <button class="btn @(i==4 ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") btn-tiny-width p-1 @(i != 0 ? "ms-2" : "")">@(i + 1)</button>
-        }
-
-        @*JEŻELI W POWYŻSZYM FOR NIE WYGENEROWALIŚMY KAFELKA OSTATNIEGO ZADANIA, POKAŻ GO PO 3 KROPKACH*@
-        @if (true)
-        {
+        <div id="excersises-buttons" class="d-flex align-items-center">
+            @*EXCERSISES ARE FILLED WITH JS SCRIPT*@
+        </div>
+        <div id="div-last-ex">
             <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-            <button class="btn btn-outline-secondary btn-tiny-width p-1 ms-2">20</button>
-        }
+            <button id="btn-last-ex" type="button" onclick="lastQuestion()" class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+        </div>
 
-        <button class="btn btn-secondary btn-std-width ms-3">Następne</button>
+        <button onclick="nextQuestion()" class="btn btn-secondary btn-std-width ms-3">Następne</button>
     </div>
 </div>
 
-
-
 <script>
-    window.onload = function () {
-        const bottomBar = document.querySelector('.bottom-bar');
-        const current = document.querySelector('.btn-current');
-        const hidable = document.querySelectorAll('.btn-hidable');
+    const questions = @Html.Raw(JsonConvert.SerializeObject(Model.QuizResult.Quiz.Excersises.Select(e => e.Question)));
+    const answers = @Html.Raw(JsonConvert.SerializeObject(Model.QuizResult.ExcersiseResults.Select(r => r.ExcersiseSolution.Answer)));
+    const results = @Json.Serialize(Model.QuizResult.ExcersiseResults);
 
-        function isOverflow() {
-            return bottomBar.scrollWidth != bottomBar.clientWidth
+    var currentIndex = 0;
+
+    function loadQuestion(index) {
+        if (index >= 0 && index < questions.length) {
+            document.getElementById("excersise-number").innerText = index + 1;
+            document.getElementById("excersise-question").innerText = questions[index];
+
+            document.getElementById("answer").innerText = answers[index];
+            document.getElementById("points-text").innerText = results[index].points;
+            document.getElementById("max-text").innerText = results[index].maxPoints;
+            document.getElementById("percent-text").innerText = Math.round((results[index].points / results[index].maxPoints) * 100) + "%";
+
+            var isComment = results[index].comment != '';
+            document.getElementById("comment-div").style.display = isComment ? "inline-block" : "none";
+            document.getElementById("no-comment-div").style.display = isComment ? "none" : "inline-block";
+            document.getElementById("comment-text").innerText = results[index].comment;
+
+            generateButtons(index);
         }
-        function checkOverflow() {
-            if (isOverflow()) {
-                current.classList.remove('ms-2');
-                hidable.forEach(function (button) {
-                    button.classList.add('d-none');
-                });
-            }
-            else {
-                current.classList.add('ms-2');
-                hidable.forEach(function (button) {
-                    button.classList.remove('d-none');
-                });
+    }
 
-                if (isOverflow()) {
-                    current.classList.remove('ms-2');
-                    hidable.forEach(function (button) {
-                        button.classList.add('d-none');
-                    });
-                }
+    const maxVisibleButtons = 9;
+    const targetVisibleOneSide = Math.floor(maxVisibleButtons / 2)
+    function generateButtons(index) {
+        var questionButtonsContainer = document.getElementById("excersises-buttons");
+        questionButtonsContainer.innerHTML = '';
+
+        var start = Math.max(index - targetVisibleOneSide, 0);
+        var end = Math.min(index + targetVisibleOneSide, questions.length - 1);
+
+        var missingStart = start - (index - targetVisibleOneSide);
+        var missingEnd = (index + targetVisibleOneSide) - end;
+
+        if (missingStart > 0 && missingEnd == 0) {
+            end = Math.min(end + missingStart, questions.length - 1);
+        }
+        else if (missingEnd > 0 && missingStart == 0) {
+            start = Math.max(start - missingEnd, 0);
+        }
+
+        if (end == questions.length - 2) {
+            end++;
+        }
+
+        for (var i = start; i <= end; i++) {
+            var button = document.createElement("button");
+            button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") + " btn-tiny-width p-1";
+            button.innerText = i + 1;
+
+            button.onclick = (function (i) {
+                return function () {
+                    currentIndex = i;
+                    loadQuestion(currentIndex);
+                };
+            })(i);
+
+            questionButtonsContainer.appendChild(button);
+
+            if (i !== start) {
+                button.classList.add("ms-2");
             }
         }
 
-        checkOverflow();
-        window.addEventListener('resize', checkOverflow);
-    };
+        document.getElementById("btn-last-ex").innerText = questions.length;
+        document.getElementById("div-last-ex").style.display = end < questions.length - 1 ? 'inline-block' : 'none';
+    }
+
+    function prevQuestion() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            loadQuestion(currentIndex);
+        }
+    }
+
+    function nextQuestion() {
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            loadQuestion(currentIndex);
+        }
+    }
+
+    function lastQuestion() {
+        if (currentIndex < questions.length - 1) {
+            currentIndex = questions.length - 1;
+            loadQuestion(currentIndex);
+        }
+    }
+
+    loadQuestion(currentIndex);
+
 </script>
+
+
+
+<script>//window.onload = function () {
+    //    const bottomBar = document.querySelector('.bottom-bar');
+    //    const current = document.querySelector('.btn-current');
+    //    const hidable = document.querySelectorAll('.btn-hidable');
+
+    //    function isOverflow() {
+    //        return bottomBar.scrollWidth != bottomBar.clientWidth
+    //    }
+    //    function checkOverflow() {
+    //        if (isOverflow()) {
+    //            current.classList.remove('ms-2');
+    //            hidable.forEach(function (button) {
+    //                button.classList.add('d-none');
+    //            });
+    //        }
+    //        else {
+    //            current.classList.add('ms-2');
+    //            hidable.forEach(function (button) {
+    //                button.classList.remove('d-none');
+    //            });
+
+    //            if (isOverflow()) {
+    //                current.classList.remove('ms-2');
+    //                hidable.forEach(function (button) {
+    //                    button.classList.add('d-none');
+    //                });
+    //            }
+    //        }
+    //    }
+
+    //    checkOverflow();
+    //    window.addEventListener('resize', checkOverflow);
+    //};</script>

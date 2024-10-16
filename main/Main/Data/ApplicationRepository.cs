@@ -25,6 +25,8 @@ public class ApplicationRepository : IRepository
     {
         var set = context.Set<T>();
         var modifiedSet = modifier is null ? set : modifier(set);
+
+
         return await modifiedSet.FirstOrDefaultAsync(filter);
     }
 
