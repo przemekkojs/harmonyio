@@ -11,6 +11,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
     <Folder Include="Enumerations\" />
+    <Folder Include="Algorithm\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
@@ -39,5 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Enumerations\" />
+    <None Remove="Algorithm\" />
   </ItemGroup>
 </Project>

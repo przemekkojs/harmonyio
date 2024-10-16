@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Main.Data;
 using Main.Models;
 using Main.Utils;
+using Main.Algorithm;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(Roles.GetRoleName(Role.Standard), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Standard)));
 
 builder.Services.AddScoped<ApplicationRepository>();
+builder.Services.AddSingleton<IGradingAlgorithm, TestGradingAlgorithm>();
 
 var app = builder.Build();
 

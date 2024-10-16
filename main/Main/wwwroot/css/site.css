@@ -88,3 +88,15 @@ body {
     width: 11px;
     height: 11px;
 }
+
+
+/*This should be in grade-style.css, button it doesnt work there for some reason*/
+
+.focused-student .student-div {
+    background-color: #6c757d; /* Kolor tła bg-secondary z Bootstrap */
+}
+
+.focused-student .student-text {
+    color: white;
+}
+
