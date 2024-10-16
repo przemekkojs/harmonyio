@@ -26,16 +26,32 @@ class GrandStaff {
   }
 
   toJson() {
-    let json = [];
-    for (let i = 0; i < this.bars.length; i++) {
-      let barJson = this.bars[i].toJson();
+    let notesList = [];
 
-      for (let j = 0; j < barJson.length; j++) {
-        barJson[j].barIndex = i;
-      }
-      json.push(...barJson);
-    }
-    return JSON.stringify(json);
+    this.bars.forEach((bar, i) => {
+      const barJson = bar.toJson();
+
+      barJson.forEach((note) => {
+        note.barIndex = i;
+      });
+
+      notesList.push(...barJson);
+    });
+
+    const signatureCount = this.keySignature.count;
+    const signatureSymbol = this.keySignature.accidental.getName();
+    const sharpsCount =
+      signatureSymbol === Accidental.accidentals.sharp ? signatureCount : 0;
+    const flatsCount =
+      signatureSymbol === Accidental.accidentals.bemol ? signatureCount : 0;
+
+    return JSON.stringify({
+      notes: notesList,
+      sharpsCount: sharpsCount,
+      flatsCount: flatsCount,
+      meterCount: this.metre.count,
+      meterValue: this.metre.count,
+    });
   }
 
   setWidth(width) {
