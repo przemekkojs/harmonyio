@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace Main.Models;
@@ -18,4 +19,9 @@ public class ApplicationUser : IdentityUser
 
     public ICollection<ExcersiseSolution> ExcersiseSolutions = new List<ExcersiseSolution>();
     public ICollection<QuizResult> QuizResults = new List<QuizResult>();
+
+    //NOT MAPPED
+
+    [NotMapped]
+    public string FullName => $"{FirstName} {LastName}";
 }
