@@ -21,7 +21,11 @@ namespace Main.Pages
         public Dictionary<ApplicationUser, List<(int, int)>> UsersToGradings { get; set; } = null!;
 
         [BindProperty]
-        public Grade? Grade { get; set; } = null!;
+        public List<Grade> Grades { get; set; } = null!;
+        [BindProperty]
+        public List<List<int>> Points { get; set; } = null!;
+        [BindProperty]
+        public List<List<int>> Maxes { get; set; } = null!;
 
         public GradeModel(
             ApplicationRepository repository,
@@ -74,6 +78,12 @@ namespace Main.Pages
 
                 UsersToGradings.Add(user, gradings);
             }
+        }
+
+        public async Task<IActionResult> OnPost()
+        {
+
+            return RedirectToPage("Index");
         }
     }
 }
