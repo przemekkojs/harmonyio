@@ -2,7 +2,7 @@ class GrandStaff {
   constructor(
     numberOfVerticalsPerBarList,
     width,
-    metre = new Metre(4, 4),
+    metre = new Metre(3, 4),
     keySignature = new KeySignature(7)
   ) {
     this.keySignature = keySignature;
@@ -50,7 +50,7 @@ class GrandStaff {
       sharpsCount: sharpsCount,
       flatsCount: flatsCount,
       meterCount: this.metre.count,
-      meterValue: this.metre.count,
+      meterValue: this.metre.value,
     });
   }
 
