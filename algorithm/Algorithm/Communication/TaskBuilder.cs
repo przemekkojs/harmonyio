@@ -19,11 +19,11 @@ namespace Algorithm.Communication
             task = [];
         }
 
-        public bool AddBar(Bar baseBar)
+        public bool AddBar()
         {
             if (task.Count < MaxLength)
             {
-                Task.Add(new UserBar(baseBar));
+                Task.Add(new UserBar());
                 return true;
             }
 

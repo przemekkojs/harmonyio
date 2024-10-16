@@ -47,6 +47,11 @@ namespace Algorithm.Communication
         {
             JsonNote? parsedNote = JsonConvert.DeserializeObject<JsonNote>(jsonString) ?? throw new ArgumentException("Parse error.");
 
+            return ParseJsonNoteToNote(parsedNote);
+        }
+
+        public static NoteParseResult ParseJsonNoteToNote(JsonNote parsedNote)
+        {
             Accidental accidental;
 
             if (parsedNote.AccidentalName == null || parsedNote.AccidentalName.Length == 0)
@@ -62,7 +67,7 @@ namespace Algorithm.Communication
                     "bq" => Accidental.NEUTRAL,
                     _ => Accidental.NONE
                 };
-            }           
+            }
 
             var (name, octave) = Constants.Constants.NoteMappings[(parsedNote.Line, parsedNote.Voice)];
 
@@ -88,7 +93,7 @@ namespace Algorithm.Communication
             return new NoteParseResult(noteResult, rhytmResult, parsedNote.BarIndex, parsedNote.VerticalIndex);
         }
 
-        public static string ParseNoteToJson(Note? note, RhytmicValue rhytmicValue, int bar, int stackInBar)
+        public static JsonNote ParseNoteToJsonNote(Note? note, RhytmicValue rhytmicValue, int bar, int stackInBar)
         {
             if (note == null || rhytmicValue == null)
                 throw new ArgumentException("Arguments cannot be null.");
@@ -107,7 +112,7 @@ namespace Algorithm.Communication
 
             var index = 0;
 
-            while(index < matchingNotes.Count && !matchingNotes[index].Item2.Equals(note.Voice.ToString()))
+            while (index < matchingNotes.Count && !matchingNotes[index].Item2.Equals(note.Voice.ToString()))
                 index++;
 
             if (index >= matchingNotes.Count)
@@ -115,7 +120,7 @@ namespace Algorithm.Communication
 
             var line = matchingNotes[index].Item1;
 
-            JsonNote toParse = new(
+            JsonNote result = new(
                 line: line,
                 accidentalName: note.Name[1..],
                 voice: note.Voice.ToString(),
@@ -124,7 +129,12 @@ namespace Algorithm.Communication
                 verticalIndex: stackInBar
             );
 
-            var parsed = JsonConvert.SerializeObject(toParse);
+            return result;
+        }
+
+        public static string ParseNoteToJson(Note? note, RhytmicValue rhytmicValue, int bar, int stackInBar)
+        {
+            var parsed = JsonConvert.SerializeObject(ParseNoteToJson(note, rhytmicValue, bar, stackInBar));
             return parsed.ToString();
         }
     }

@@ -100,6 +100,23 @@ namespace Algorithm.Music
             return tonations.FirstOrDefault(t => t.Name == name && t.Mode == realMode) ?? throw new ArgumentException("Tonation not found");
         }
 
+        public static Tonation GetTonation(int sharpsCount, int flatsCount)
+        {
+            List<Tonation> tonations = new List<Tonation>
+            {
+                CFlatMajor, CMajor, CMinor, CSharpMajor, CSharpMinor,
+                DFlatMajor, DMajor, DMinor, DSharpMinor, EFlatMajor,
+                EFlatMinor, EMajor, EMinor, FMajor, FMinor, FSharpMajor,
+                FSHarpMinor, GFlatMajor, GMajor, GMinor, GSharpMinor,
+                AFlatMajor, AFlatMinor, AMajor, AMinor, ASharpMinor,
+                BFlatMajor, BFlatMinor, BMajor, BMinor
+            };
+
+            return tonations
+                .FirstOrDefault(t => t.NumberOfFlats == flatsCount && t.NumberOfSharps == sharpsCount) ??
+                throw new ArgumentException("Invalid number of accidentals.");
+        }
+
         public static readonly Tonation CFlatMajor = new("Cb", Mode.MAJOR, 7, 0);
         public static readonly Tonation CMajor = new("C", Mode.MAJOR, 0, 0);
         public static readonly Tonation CMinor = new("C", Mode.MINOR, 3, 0);

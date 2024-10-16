@@ -13,9 +13,6 @@ namespace Algorithm.Algorithm
 
         private bool SetNote(ref Note? note, Note? newValue, RhytmicValue? rhytmicValue)
         {
-            if (note == null)
-                return true;
-
             if (newValue == null && rhytmicValue != null)
                 throw new ArgumentException("Cannot assigne rhytmic value to an empty note.");
             else if (newValue == null && rhytmicValue == null)
@@ -23,23 +20,19 @@ namespace Algorithm.Algorithm
             else if (newValue != null && rhytmicValue == null)
                 throw new ArgumentException("Cannot assigne no rhytm to a note.");
 
-            if (rhytmicValue.Duration == Duration)
-            {
-                note = newValue;
-                SetDuration(rhytmicValue);
-                ValidateDuration();
+            if (Duration != 0 && rhytmicValue.Duration != Duration)
+                return false;
 
-                return true;
-            }
+            note = newValue;
+            SetDuration(rhytmicValue);
+            ValidateDuration();
 
-            return false;
+            return true;
         }
 
         private void SetDuration(RhytmicValue rhytmicValue)
         {
-            List<Note?> all = [Soprano, Alto, Tenore, Bass];
-
-            foreach (var note in all)
+            foreach (var note in Notes)
             {
                 if (note != null)
                 {

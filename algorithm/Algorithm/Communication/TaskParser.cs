@@ -1,22 +1,23 @@
 ﻿using Algorithm.Algorithm;
 using Algorithm.Music;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace Algorithm.Communication
 {
-    public class ParsedTask
+    public class JsonTask
     {
-        public List<ParsedFunction> Functions { get; set; }
-        public string TonationName { get; set; }
-        public string TonationMode { get; set; }
+        public List<JsonNote> Notes { get; set; }
+        public int SharpsCount { get; set; }
+        public int FlatsCount { get; set; }
         public int MeterCount { get; set; }
         public int MeterValue { get; set; }
 
-        public ParsedTask(List<ParsedFunction> functions, string tonationName, string tonationMode, int meterCount, int meterValue)
+        public JsonTask(List<JsonNote> notes, int sharpsCount, int flatsCount, int meterCount, int meterValue)
         {
-            Functions = functions;
-            TonationName = tonationName;
-            TonationMode = tonationMode;
+            Notes = notes;
+            SharpsCount = sharpsCount;
+            FlatsCount = flatsCount;
             MeterCount = meterCount;
             MeterValue = meterValue;
         }
@@ -38,25 +39,108 @@ namespace Algorithm.Communication
 
     public static class TaskParser
     {
-        public static TaskParseResult ParseJsonToTask(string jsonString)
+        public static TaskParseResult ParseJsonToTask(string jsonString, Music.Task baseTask)
         {
-            ParsedTask? parsedTask = JsonConvert.DeserializeObject<ParsedTask>(jsonString) ?? throw new ArgumentException("Invalid JSON string.");
+            JsonTask? parsedTask = JsonConvert.DeserializeObject<JsonTask>(jsonString) ?? throw new ArgumentException("Invalid JSON string.");
 
-            var tonation = Tonation.GetTonation(parsedTask.TonationName, parsedTask.TonationMode);
+            var tonation = Tonation.GetTonation(parsedTask.SharpsCount, parsedTask.FlatsCount);
             var meter = Meter.GetMeter(parsedTask.MeterValue, parsedTask.MeterCount);
 
             var bars = new List<UserBar>();
+            var currentBar = new UserBar();
+            UserStack userStack = new (baseTask.Bars[0].Functions[0], tonation, 0);
+            var lastBarIndex = 0;
+            var currentBeat = 0;
+            var lastStackIndex = -1;
 
             // TODO: Bars
+            foreach (var jsonNote in parsedTask.Notes)
+            {
+                if (jsonNote.BarIndex > lastBarIndex)
+                {
+                    bars.Add(currentBar);
+                    currentBar = new UserBar();
+                    lastStackIndex = -1;
+                    currentBeat = 0;
+                }
+
+                if (jsonNote.VerticalIndex > lastStackIndex)
+                {
+                    userStack = new UserStack(
+                        baseFunction: baseTask.Bars[jsonNote.BarIndex].Functions[jsonNote.VerticalIndex],
+                        tonation: tonation,
+                        startBeat: currentBeat
+                    );
+
+                    currentBeat += jsonNote.Value;
+                    lastStackIndex = jsonNote.VerticalIndex;
+                }
+
+                var parseResult = NoteParser.ParseJsonNoteToNote(jsonNote);
+                
+                switch (parseResult.Note.Voice)
+                {
+                    case Voice.SOPRANO:
+                        userStack.SetSoprano(parseResult.Note, parseResult.RhytmicValue);
+                        break;
+                    case Voice.ALTO:
+                        userStack.SetAlto(parseResult.Note, parseResult.RhytmicValue);
+                        break;
+                    case Voice.TENORE:
+                        userStack.SetTenore(parseResult.Note, parseResult.RhytmicValue);
+                        break;
+                    default:
+                        userStack.SetBass(parseResult.Note, parseResult.RhytmicValue);
+                        break;
+                }
+            }
 
             return new TaskParseResult(tonation, meter, bars);
         }
 
-        public static string ParseTaskToJson (List<UserBar> task)
+        public static string ParseTaskToJson (List<UserBar> task, Tonation tonation, Meter meter)
         {
-            // TODO: Parsing into ParsedTask logic
+            int meterValue = meter.Value;
+            int meterCount = meter.Count;
 
-            string parsed = JsonConvert.SerializeObject(task);
+            int sharpsCount = tonation.NumberOfSharps;
+            int flatsCount = tonation.NumberOfFlats;
+
+            List<JsonNote> jsonNotes = [];
+
+            int barIndex = 0;
+            int stackIndex = 0;
+
+            foreach (var userBar in task)
+            {
+                foreach (var userStack in userBar.UserStacks)
+                {
+                    foreach (var note in userStack.Notes)
+                    {
+                        if (note == null)
+                            continue;
+
+                        var rhytmicValue = RhytmicValue.GetRhytmicValueByDuration(userStack.Duration);
+                        var toAdd = NoteParser.ParseNoteToJsonNote(note, rhytmicValue, barIndex, stackIndex);
+                        jsonNotes.Add(toAdd);
+                    }
+
+                    stackIndex++;
+                }
+
+                barIndex++;
+                stackIndex = 0;
+            }
+
+            object toParse = new {
+                meterValue,
+                meterCount,
+                sharpsCount,
+                flatsCount,
+                jsonNotes
+            };
+
+            string parsed = JsonConvert.SerializeObject(toParse);
             return parsed;
         }
     }

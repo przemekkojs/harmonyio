@@ -1,5 +1,5 @@
 ﻿using Algorithm.Music;
-using System;
+
 namespace Algorithm.Algorithm.Rules
 {
     public sealed class VoiceDistance : Rule
