@@ -25,8 +25,8 @@ class Note {
     return {
       value: this.getSlotsTaken(),
       accidentalName: this.accidental.getChar(),
-      line: this.line
-    }
+      line: this.line,
+    };
   }
 
   hasSameValue(other) {
@@ -43,17 +43,6 @@ class Note {
 
   getAccidentalName() {
     return this.accidental.getName();
-  }
-
-  // 16-th note cant have dot
-  toggleHasDot() {
-    // dont allow to have dot while being last possible note (16)
-    const lastAvailableBaseValueIndex = Note.availableBaseValues.length - 1;
-    const lastAvailableBaseValue =
-      Note.availableBaseValues[lastAvailableBaseValueIndex];
-    if (this.baseValue !== lastAvailableBaseValue) {
-      this.hasDot = !this.hasDot;
-    }
   }
 
   setLine(line) {
@@ -117,6 +106,17 @@ class Note {
     this.isFacingUp = !this.isFacingUp;
   }
 
+  // 16-th note cant have dot
+  toggleHasDot() {
+    // dont allow to have dot while being last possible note (16)
+    const lastAvailableBaseValueIndex = Note.availableBaseValues.length - 1;
+    const lastAvailableBaseValue =
+      Note.availableBaseValues[lastAvailableBaseValueIndex];
+    if (this.baseValue !== lastAvailableBaseValue) {
+      this.hasDot = !this.hasDot;
+    }
+  }
+
   #getHeadSymbol() {
     return this.headSymbolMapping[this.baseValue];
   }
@@ -152,6 +152,14 @@ class Note {
 
   drawAccidental(x, y) {
     this.accidental.draw(x, y);
+  }
+
+  getNoteWidth(addFlagWidth = true) {
+    if (this.isFacingUp && this.#howManyFlags() > 0 && addFlagWidth) {
+      return this.#getHeadSymbol().width + symbols.noteFlag.width;
+    } else {
+      return this.#getHeadSymbol().width;
+    }
   }
 
   drawNote(x, y) {

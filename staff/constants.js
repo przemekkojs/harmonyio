@@ -26,3 +26,12 @@ const doubleGrandStaffHeight =
 const dotDiameter = 0.5 * spaceBetweenStaffLines;
 const keyOffset = braceWidth + 0.2 * spaceBetweenStaffLines;
 const bemolOffset = -0.5 * spaceBetweenStaffLines;
+const spaceBetweenNoteAndAccidental = 5;
+
+function getVerticalWidth() {
+  return (
+    2 * symbols.fullNote.width +
+    spaceBetweenNoteAndAccidental +
+    2 * symbols.bemol.width
+  );
+}

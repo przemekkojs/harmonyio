@@ -1,5 +1,6 @@
 class Bar {
-  constructor(numberOfVerticals, slotsPerBar) {
+  constructor(parent, numberOfVerticals, slotsPerBar) {
+    this.parent = parent;
     this.verticals = [];
     this.slotsPerBar = slotsPerBar;
 
@@ -8,10 +9,8 @@ class Bar {
     }
   }
 
-  toJson(){
-    return this.verticals
-  .map(vertical => vertical.toJson())
-  .flat();
+  toJson() {
+    return this.verticals.map((vertical) => vertical.toJson()).flat();
   }
 
   getSlotsTaken() {
@@ -75,8 +74,13 @@ class Bar {
     );
   }
 
-  static calculateBarWidth(metre) {
-    return 2 * barMargin + metre.slotsPerBar() * slotWidth;
+  calculateBarWidth() {
+    const verticalsWidth = this.verticals.reduce(
+      (sum, vertical) => sum + vertical.getWidth(),
+      0
+    );
+
+    return 2 * barMargin + verticalsWidth;
   }
 
   updatePosition(x, y, width, height) {
@@ -92,6 +96,10 @@ class Bar {
     for (let i = 0; i < this.verticals.length; i++) {
       const previousVertical = i > 0 ? this.verticals[i - 1] : null;
       this.verticals[i].updatePosition(previousVertical);
+    }
+
+    if (this.calculateBarWidth() !== this.width) {
+      this.parent.calculateBarPositions();
     }
   }
 

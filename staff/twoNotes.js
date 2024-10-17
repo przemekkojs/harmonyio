@@ -8,7 +8,7 @@ class TwoNotes {
     this.height = isUpperStaff ? upperStaffHeight : lowerStaffHeight;
     this.availableLinesAbove = isUpperStaff ? 2 : 3;
     this.availableLinesBelow = isUpperStaff ? 2.5 : 2;
-    this.width = slotWidth;
+    this.width = getVerticalWidth();
   }
 
   toJson() {
@@ -152,6 +152,54 @@ class TwoNotes {
   updatePosition(x, y) {
     this.x = x;
     this.y = y;
+  }
+
+  isNoteFacingUpAboveNoteFacingDown() {
+    if (this.hasEmptyNote()) {
+      return true;
+    }
+
+    if (this.note1.isFacingUp) {
+      return this.note1.line <= this.note2.line;
+    } else {
+      return this.note2.line <= this.note1.line;
+    }
+  }
+
+  notesOverlap() {
+    if (this.hasEmptyNote()) {
+      return false;
+    }
+
+    if (this.isNoteFacingUpAboveNoteFacingDown()) {
+      if (this.note1.isFacingUp) {
+        return this.note1.line + 0.5 === this.note2.line;
+      } else {
+        return this.note2.line + 0.5 === this.note1.line;
+      }
+    } else {
+      if (this.note1.isFacingUp) {
+        return this.note2.line - this.note1.line <= stemHeight;
+      } else {
+        return this.note1.line - this.note2.line <= stemHeight;
+      }
+    }
+  }
+
+  getNotesWidth() {
+    const minWidth = new Note(16).getNoteWidth(true);
+    if (this.notesOverlap()) {
+      if (this.isEmpty()) {
+        return minWidth;
+      } else {
+      }
+    } else {
+    }
+  }
+
+  #getNotesCenterLine() {
+    // TODO
+    return 10;
   }
 
   // works like a charm

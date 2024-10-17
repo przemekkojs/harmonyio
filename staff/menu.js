@@ -1,8 +1,18 @@
 class Button {
-  constructor(x, y, width, height, symbol, shortcut, onClick, checkIfIsActive) {
-    this.x = x;
-    this.y = y;
-    this.setOffset(0, 0);
+  constructor(
+    parent,
+    xOffset,
+    yOffset,
+    width,
+    height,
+    symbol,
+    shortcut,
+    onClick,
+    checkIfIsActive
+  ) {
+    this.parent = parent;
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
 
     this.width = width;
     this.height = height;
@@ -27,18 +37,12 @@ class Button {
     }
   }
 
-  // allows to draw buttons with position absolute relative to page
-  setOffset(xOffset, yOffset) {
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
-  }
-
   isMouseOver() {
     return (
-      mouseX > this.x + this.xOffset &&
-      mouseX < this.x + this.xOffset + this.width &&
-      mouseY > this.y + this.yOffset &&
-      mouseY < this.y + this.yOffset + this.height
+      mouseX > this.parent.x + this.xOffset &&
+      mouseX < this.parent.x + this.xOffset + this.width &&
+      mouseY > this.parent.y + this.yOffset &&
+      mouseY < this.parent.y + this.yOffset + this.height
     );
   }
 
@@ -65,7 +69,7 @@ class Button {
   draw() {
     push();
     // position absolute
-    translate(this.xOffset, this.yOffset);
+    translate(this.parent.x + this.xOffset, this.parent.y + this.yOffset);
     this.#drawBorder();
     this.#drawSymbol();
     this.#drawShortcut();
@@ -91,7 +95,7 @@ class Button {
       noFill();
     }
 
-    rect(this.x, this.y, this.width, this.height, 10, 10, 10, 10);
+    rect(0, 0, this.width, this.height, 10, 10, 10, 10);
     pop();
   }
 
@@ -99,21 +103,14 @@ class Button {
     push();
     textAlign(CENTER);
     textSize(13);
-    text(
-      "(" + this.shortcut + ")",
-      this.x + this.width * 0.5,
-      this.y + this.height - 7
-    );
+    text("(" + this.shortcut + ")", this.width * 0.5, this.height - 7);
     pop();
   }
 
   #noteDrawBehavior() {
     const widthScaler = this.symbol.getBaseValue() === 1 ? 0.5 : 0.45;
 
-    this.symbol.drawNote(
-      this.x + this.width * widthScaler,
-      this.y + this.height * 0.6
-    );
+    this.symbol.drawNote(this.width * widthScaler, this.height * 0.6);
   }
 
   #accidentalDrawBehavior() {
@@ -126,29 +123,20 @@ class Button {
       symbolYOffset = -bemolOffset;
     }
 
-    this.symbol.draw(
-      this.x + this.width * 0.5,
-      this.y + this.height * 0.4 + symbolYOffset
-    );
+    this.symbol.draw(this.width * 0.5, this.height * 0.4 + symbolYOffset);
   }
 
   #p5ImageDrawBehavior() {
     push();
     imageMode(CORNER);
-    image(
-      this.symbol,
-      this.x + 5,
-      this.y + 5,
-      this.width - 10,
-      this.height - 25
-    );
+    image(this.symbol, 5, 5, this.width - 10, this.height - 25);
     pop();
   }
 
   #dotDrawBehavior() {
     push();
     fill(0);
-    circle(this.x + this.width * 0.5, this.y + this.height * 0.5, dotDiameter);
+    circle(this.width * 0.5, this.height * 0.5, dotDiameter);
     pop();
   }
 }
@@ -160,22 +148,30 @@ class Menu {
     thrash: "thrash",
   };
 
-  constructor(x, width) {
-    this.curAction = Menu.actions.none;
+  constructor(x, y, width) {
     this.x = x;
+    this.y = y;
     this.width = width;
-    this.yOffset = this.calculateYOffset();
 
+    this.curAction = Menu.actions.none;
     this.note = new Note();
 
     this.#createButtons();
     this.updateActiveButtons();
   }
 
-  #createNoteButton(x, y, width, height, noteValue, shortcut) {
+  getHeight() {
+    return (
+      this.buttons[this.buttons.length - 1].yOffset +
+      this.buttons[this.buttons.length - 1].height
+    );
+  }
+
+  #createNoteButton(xOffset, yOffset, width, height, noteValue, shortcut) {
     return new Button(
-      x,
-      y,
+      this,
+      xOffset,
+      yOffset,
       width,
       height,
       new Note(noteValue),
@@ -194,10 +190,18 @@ class Menu {
     );
   }
 
-  #createAccidentalButton(x, y, width, height, accidental, shortcut) {
+  #createAccidentalButton(
+    xOffset,
+    yOffset,
+    width,
+    height,
+    accidental,
+    shortcut
+  ) {
     return new Button(
-      x,
-      y,
+      this,
+      xOffset,
+      yOffset,
       width,
       height,
       new Accidental(accidental),
@@ -226,7 +230,8 @@ class Menu {
     // MOUSE BUTTON
     this.buttons.push(
       new Button(
-        this.x + 20,
+        this,
+        20,
         15,
         50,
         60,
@@ -247,7 +252,8 @@ class Menu {
     // THRASH BUTTON
     this.buttons.push(
       new Button(
-        this.x + 85,
+        this,
+        85,
         15,
         50,
         60,
@@ -268,11 +274,11 @@ class Menu {
     // NOTE BUTTONS
     const noteButtonsYOffset = 90;
     const noteButtonConfig = [
-      { x: this.x + 20, y: 15, noteValue: 1, label: "1" },
-      { x: this.x + 85, y: 15, noteValue: 2, label: "2" },
-      { x: this.x + 20, y: 110, noteValue: 4, label: "3" },
-      { x: this.x + 85, y: 110, noteValue: 8, label: "4" },
-      { x: this.x + 20, y: 205, noteValue: 16, label: "5" },
+      { x: 20, y: 15, noteValue: 1, label: "1" },
+      { x: 85, y: 15, noteValue: 2, label: "2" },
+      { x: 20, y: 110, noteValue: 4, label: "3" },
+      { x: 85, y: 110, noteValue: 8, label: "4" },
+      { x: 20, y: 205, noteValue: 16, label: "5" },
     ];
     for (let config of noteButtonConfig) {
       this.buttons.push(
@@ -290,7 +296,8 @@ class Menu {
     // REVERSE NOTE BUTTON
     this.buttons.push(
       new Button(
-        this.x + 20,
+        this,
+        20,
         405,
         50,
         60,
@@ -309,7 +316,8 @@ class Menu {
     // TOGGLE DOT BUTTON
     this.buttons.push(
       new Button(
-        this.x + 85,
+        this,
+        85,
         405,
         50,
         60,
@@ -330,31 +338,31 @@ class Menu {
     const accidentalButtonsYOffset = 485;
     const accidentalButtonConfig = [
       {
-        x: this.x + 20,
+        x: 20,
         y: 15,
         accidental: Accidental.accidentals.sharp,
         label: "q",
       },
       {
-        x: this.x + 85,
+        x: 85,
         y: 15,
         accidental: Accidental.accidentals.doubleSharp,
         label: "w",
       },
       {
-        x: this.x + 20,
+        x: 20,
         y: 100,
         accidental: Accidental.accidentals.bemol,
         label: "e",
       },
       {
-        x: this.x + 85,
+        x: 85,
         y: 100,
         accidental: Accidental.accidentals.doubleBemol,
         label: "r",
       },
       {
-        x: this.x + 20,
+        x: 20,
         y: 185,
         accidental: Accidental.accidentals.natural,
         label: "t",
@@ -403,11 +411,15 @@ class Menu {
     }
   }
 
+  setX(x) {
+    this.x = x;
+  }
+
   draw() {
     const yOffset = this.calculateYOffset();
+    this.y = yOffset;
 
     for (let i = 0; i < this.buttons.length; i++) {
-      this.buttons[i].setOffset(0, yOffset);
       this.buttons[i].draw();
     }
   }
