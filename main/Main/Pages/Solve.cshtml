@@ -43,7 +43,11 @@
                     <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
                     @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
                     {
-                        <input type="hidden" asp-for="Answers[@i]" value="" />
+                        <input type="hidden" asp-for="Model.Answers[@i]" value="" />
+                    }
+                    @foreach (var a in Model.Answers)
+                    {
+                        <input type="hidden" asp-for="@a" value="" />
                     }
                 </div>
 

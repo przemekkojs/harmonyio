@@ -20,17 +20,17 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async void OnGet()
+        public async void OnGet(int id)
         {
             //TODO: POPUALTE WITH REAL USER
-            var currentUser = await GetTestUser();
+            // var currentUser = await GetTestUser();
 
             //TODO: REMOVE THIS, THE ID SHOULD BE A PARAMETER OF ONGET
-            var allQuizResults = await _repository.GetAllAsync<QuizResult>();
-            var allUsersResults = allQuizResults.Where(qr => qr.UserId == currentUser.Id).ToList();
-            if (allUsersResults.Count == 0)
-                throw new InvalidOperationException("No quiz results found in the repository. Go to /grade page and grade a quiz for testing purposes");
-            int id = allUsersResults[0].Id;
+            // var allQuizResults = await _repository.GetAllAsync<QuizResult>();
+            // var allUsersResults = allQuizResults.Where(qr => qr.UserId == currentUser.Id).ToList();
+            // if (allUsersResults.Count == 0)
+            //     throw new InvalidOperationException("No quiz results found in the repository. Go to /grade page and grade a quiz for testing purposes");
+            // int id = allUsersResults[0].Id;
 
             QuizResult = (await _repository.GetAsync<QuizResult>(
                 qr => qr.Id == id,

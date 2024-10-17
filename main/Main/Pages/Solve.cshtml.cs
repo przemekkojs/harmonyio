@@ -25,13 +25,13 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async void OnGet() //int id
+        public async void OnGet(int id)
         {
-            //TODO: REMOVE THIS, THE ID SHOULD BE A PARAMETER OF ONGET
-            var allQuizes = await _repository.GetAllAsync<Quiz>();
-            if (allQuizes.Count == 0)
-                throw new InvalidOperationException("No quizes found in the repository. Go to /create page and create a quiz for testing purposes.");
-            int id = allQuizes[0].Id;
+            // //TODO: REMOVE THIS, THE ID SHOULD BE A PARAMETER OF ONGET
+            // var allQuizes = await _repository.GetAllAsync<Quiz>();
+            // if (allQuizes.Count == 0)
+            //     throw new InvalidOperationException("No quizes found in the repository. Go to /create page and create a quiz for testing purposes.");
+            // int id = allQuizes[0].Id;
 
             Quiz = (await _repository.GetAsync<Quiz>(
                 q => q.Id == id,
