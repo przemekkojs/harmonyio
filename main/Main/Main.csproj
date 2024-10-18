@@ -42,4 +42,7 @@
     <None Remove="Enumerations\" />
     <None Remove="Algorithm\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\algorithm\Algorithm\Algorithm.csproj" />
+  </ItemGroup>
 </Project>
