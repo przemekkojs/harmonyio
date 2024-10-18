@@ -2,7 +2,7 @@ class GrandStaff {
   constructor(
     numberOfVerticalsPerBarList,
     minWidth,
-    metre = new Metre(4, 4),
+    metre = new Metre(2, 4),
     keySignature = new KeySignature(7)
   ) {
     this.keySignature = keySignature;
@@ -135,8 +135,9 @@ class GrandStaff {
   }
 
   drawDynamicElements() {
-    for (let i = 0; i < this.bars.length; i++) {
-      this.bars[i].draw();
+    const barsLength = this.bars.length;
+    for (let i = 0; i < barsLength; i++) {
+      this.bars[i].draw(i === barsLength - 1);
     }
   }
 
@@ -234,7 +235,7 @@ class GrandStaff {
     }
     pop();
   }
-
+  
   #drawKey(x, y, keySymbol, centerSymbol = false) {
     push();
     translate(x, y);

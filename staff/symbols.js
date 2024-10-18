@@ -15,6 +15,7 @@ const symbolPaths = {
   mouse: "/assets/symbols/mouse.png",
   noteReverse: "/assets/symbols/note-reverse.png",
   thrashCan: "/assets/symbols/thrash-can.png",
+  thrashCanCrossed: "/assets/symbols/thrash-can-crossed.png"
 };
 
 function preloadSymbols() {

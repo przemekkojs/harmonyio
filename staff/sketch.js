@@ -99,16 +99,18 @@ function handleThrashInteraction(elementsUnderMouse) {
   }
 
   const vertical = elementsUnderMouse.vertical;
-  vertical.drawArea();
-
+  
   if (vertical.canClear()) {
-    circle(mouseX, mouseY, 10);
+    vertical.drawArea();
 
     if (mouseIsPressed) {
       vertical.clear();
     }
   } else {
-    rect(mouseX, mouseY, 10, 10);
+    push();
+    imageMode(CENTER);
+    image(symbols.thrashCanCrossed, mouseX + 20, mouseY - 20, 30, 30);
+    pop();
   }
 }
 
@@ -117,6 +119,7 @@ function handleNoteInteraction(elementsUnderMouse, note) {
     const twoNotes = elementsUnderMouse.twoNotes;
     if (twoNotes.canAddNote(note)) {
       const snappingPoint = twoNotes.getClosestSnappingPoint(mouseX, mouseY);
+      twoNotes.drawAdditionalLinesOnAdding(snappingPoint.lineNumber, note.getNoteWidth(false));
       note.draw(snappingPoint.x, snappingPoint.y);
 
       if (mouseIsPressed) {

@@ -122,8 +122,12 @@ class Bar {
     return { bar: this };
   }
 
-  draw() {
-    this.#drawBarLine();
+  draw(isLast = false) {
+    if(isLast){
+      this.#drawLastBarLine();
+    } else {
+      this.#drawBarLine();
+    }
     this.#drawBoundingBox();
 
     for (let i = 0; i < this.verticals.length; i++) {
@@ -136,6 +140,18 @@ class Bar {
     strokeWeight(2);
     translate(this.x + this.width, this.y + upperStaffUpperMargin);
     line(0, 0, 0, braceHeight);
+    pop();
+  }
+
+  #drawLastBarLine() {
+    push();
+    translate(this.x + this.width, this.y + upperStaffUpperMargin);
+    noStroke();
+    fill(0);
+    rect(-3, 0, 6, braceHeight);
+    strokeWeight(2);
+    stroke(0);
+    line(-8, 0, -8, braceHeight);
     pop();
   }
 

@@ -1,6 +1,6 @@
 const spaceBetweenStaffLines = 16; // everything is dependent on this, it scales the canvas (minimum=12, try svg graphics or using font for images later)
 const slotWidth = spaceBetweenStaffLines * 3;
-const barMargin = 0.5 * spaceBetweenStaffLines;
+const barMargin = spaceBetweenStaffLines;
 const stemHeight = spaceBetweenStaffLines * 2.5;
 const upperStaffUpperMargin = 2 * spaceBetweenStaffLines + stemHeight + 10;
 const upperStaffLowerMargin = 2.5 * spaceBetweenStaffLines + stemHeight + 10;
