@@ -2,12 +2,15 @@ using System.Collections;
 using System.Security.Claims;
 using Main.Data;
 using Main.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace Main.Pages;
 
+[Authorize]
 public class ListCreate : PageModel
 {
     
@@ -21,8 +24,11 @@ public class ListCreate : PageModel
 
     public ICollection<Quiz> Created { get; set; } = new List<Quiz>();
     
-    public async void OnGetAsync()
+    public async Task OnGetAsync()
     {
-        Created = (await _userManager.GetUserAsync(User)).CreatedQuizes;
+        var appUser = await _userManager.GetUserAsync(User);
+        
+        Created = (await _repository.GetAsync<ApplicationUser>(q => q.Id == appUser!.Id,
+            q => q.Include(u => u.ParticipatedQuizes)))!.ParticipatedQuizes;
     }
 }
