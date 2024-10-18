@@ -1,8 +1,8 @@
 class GrandStaff {
   constructor(
     numberOfVerticalsPerBarList,
-    width,
-    metre = new Metre(3, 4),
+    minWidth,
+    metre = new Metre(2, 4),
     keySignature = new KeySignature(7)
   ) {
     this.keySignature = keySignature;
@@ -11,7 +11,9 @@ class GrandStaff {
     const slotsPerBar = this.metre.slotsPerBar();
     this.bars = [];
     for (let i = 0; i < numberOfVerticalsPerBarList.length; i++) {
-      this.bars.push(new Bar(numberOfVerticalsPerBarList[i], slotsPerBar));
+      this.bars.push(
+        new Bar(this, numberOfVerticalsPerBarList[i], slotsPerBar)
+      );
     }
 
     this.keySignatureOffset =
@@ -22,7 +24,12 @@ class GrandStaff {
       0.2 * spaceBetweenStaffLines;
     this.dynamicElementsOffset = this.metreOffset + this.metre.getMetreWidth();
 
-    this.setWidth(width);
+    this.minWidth = minWidth;
+  }
+
+  init() {
+    this.setWidth(this.minWidth);
+    this.calculateBarPositions();
   }
 
   toJson() {
@@ -55,47 +62,55 @@ class GrandStaff {
   }
 
   setWidth(width) {
-    this.width = width;
+    if (width < this.minWidth) {
+      this.width = this.minWidth;
+    } else {
+      this.width = width;
+    }
+
     this.staffWorkspaceWidth = this.width - this.dynamicElementsOffset;
-    this.calculateBarPositions();
+    resizeCanvasHorizontally();
   }
 
   calculateBarPositions() {
     let barX;
     let barY;
-    const barWidth = Bar.calculateBarWidth(this.metre);
+    let curXOffset = 0;
+
     const barHeight = doubleGrandStaffHeight;
 
     let curStaffVertically = 0;
     let curBarHorizontally = 0;
-    for (let i = 0; i < this.bars.length; i++) {
-      if (
-        curStaffVertically === 0 &&
-        curBarHorizontally === 0 &&
-        this.staffWorkspaceWidth - (curBarHorizontally + 1) * barWidth < 0
-      ) {
-        //TODO canvas is too small to draw
-        console.log("canvas too small!");
-      }
 
-      // need to go to next line
-      if (this.staffWorkspaceWidth - (curBarHorizontally + 1) * barWidth < 0) {
+    const barWidths = this.bars.map((bar) => bar.calculateBarWidth());
+    const maxBarWidth = Math.max(...barWidths);
+
+    if (this.staffWorkspaceWidth < maxBarWidth) {
+      this.setWidth(maxBarWidth + this.dynamicElementsOffset);
+    }
+
+    for (let i = 0; i < this.bars.length; i++) {
+      const barWidth = barWidths[i];
+
+      if (this.staffWorkspaceWidth - (curXOffset + barWidth) < 0) {
         curStaffVertically += 1;
         curBarHorizontally = 0;
+        curXOffset = 0;
       }
 
-      barX = this.dynamicElementsOffset + curBarHorizontally * barWidth;
+      barX = this.dynamicElementsOffset + curXOffset;
       barY = curStaffVertically * barHeight;
       this.bars[i].updatePosition(barX, barY, barWidth, barHeight);
 
       curBarHorizontally += 1;
+      curXOffset += barWidth;
     }
 
-    this.numberOfStaffs = curStaffVertically + 1;
-    resizeCanvas(
-      canvasWidth,
-      this.numberOfStaffs * doubleGrandStaffHeight + 50
-    );
+    if (this.numberOfStaffs !== curStaffVertically + 1) {
+      this.numberOfStaffs = curStaffVertically + 1;
+
+      resizeCanvasVertically();
+    }
   }
 
   static getLineOffset(lineNumber) {
@@ -120,15 +135,16 @@ class GrandStaff {
   }
 
   drawDynamicElements() {
-    for (let i = 0; i < this.bars.length; i++) {
-      this.bars[i].draw();
+    const barsLength = this.bars.length;
+    for (let i = 0; i < barsLength; i++) {
+      this.bars[i].draw(i === barsLength - 1);
     }
   }
 
   drawStaticElements() {
     const linesWidth = this.width - braceWidth;
 
-    // draw lines n times
+    // draw needed staffs (vertically)
     for (let i = 0; i < this.numberOfStaffs; i++) {
       push();
       translate(0, i * doubleGrandStaffHeight);
@@ -219,7 +235,7 @@ class GrandStaff {
     }
     pop();
   }
-
+  
   #drawKey(x, y, keySymbol, centerSymbol = false) {
     push();
     translate(x, y);

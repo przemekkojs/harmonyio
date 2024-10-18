@@ -15,6 +15,7 @@ const symbolPaths = {
   mouse: "/assets/symbols/mouse.png",
   noteReverse: "/assets/symbols/note-reverse.png",
   thrashCan: "/assets/symbols/thrash-can.png",
+  thrashCanCrossed: "/assets/symbols/thrash-can-crossed.png"
 };
 
 function preloadSymbols() {
@@ -30,11 +31,11 @@ function resizeSymbols() {
   );
   symbols.violinKey.resize(symbols.bassKey.width, 0);
 
-  symbols.bemol.resize(0, spaceBetweenStaffLines * 2.3);
-  symbols.doubleBemol.resize(symbols.bemol.width, spaceBetweenStaffLines * 2.5);
-  symbols.sharp.resize(symbols.bemol.width, spaceBetweenStaffLines * 2.5);
+  symbols.bemol.resize(0, accidentalsHeight);
+  symbols.doubleBemol.resize(symbols.bemol.width, accidentalsHeight);
+  symbols.sharp.resize(symbols.bemol.width, accidentalsHeight);
   symbols.doubleSharp.resize(symbols.bemol.width, 0);
-  symbols.natural.resize(symbols.bemol.width, spaceBetweenStaffLines * 2.7);
+  symbols.natural.resize(symbols.bemol.width, accidentalsHeight);
 
   symbols.fullNote.resize(0, spaceBetweenStaffLines);
   symbols.noteHeadOpened.resize(0, spaceBetweenStaffLines);

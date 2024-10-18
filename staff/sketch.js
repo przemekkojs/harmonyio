@@ -1,5 +1,7 @@
 const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 
+const menuWidth = 150;
+
 let canvas;
 let canvasWidth;
 let canvasHeight;
@@ -8,6 +10,26 @@ let grandStaff;
 let menu;
 let curClicked;
 let isMouseClickedHelper;
+
+function resizeCanvasHorizontally() {
+  if (menu) {
+    canvasWidth = grandStaff.width + menu.width;
+    const menuX = canvasWidth - menuWidth;
+    menu.setX(menuX);
+  } else {
+    canvasWidth = grandStaff.width + 5;
+  }
+  resizeCanvas(canvasWidth, canvasHeight);
+}
+
+function resizeCanvasVertically() {
+  if (menu && grandStaff.numberOfStaffs === 1) {
+    canvasHeight = menu.getHeight() + 10;
+  } else {
+    canvasHeight = grandStaff.numberOfStaffs * doubleGrandStaffHeight + 50;
+  }
+  resizeCanvas(canvasWidth, canvasHeight);
+}
 
 function preload() {
   preloadSymbols();
@@ -21,9 +43,10 @@ function setup() {
 
   resizeSymbols();
 
-  const menuWidth = 150;
+  menu = new Menu(canvasWidth - menuWidth, 0, menuWidth);
+
   grandStaff = new GrandStaff(verticalsPerBarList, canvasWidth - menuWidth);
-  menu = new Menu(canvasWidth - menuWidth, menuWidth);
+  grandStaff.init();
 
   curClicked = null;
   isMouseClickedHelper = false;
@@ -76,16 +99,18 @@ function handleThrashInteraction(elementsUnderMouse) {
   }
 
   const vertical = elementsUnderMouse.vertical;
-  vertical.drawArea();
-
+  
   if (vertical.canClear()) {
-    circle(mouseX, mouseY, 10);
+    vertical.drawArea();
 
     if (mouseIsPressed) {
       vertical.clear();
     }
   } else {
-    rect(mouseX, mouseY, 10, 10);
+    push();
+    imageMode(CENTER);
+    image(symbols.thrashCanCrossed, mouseX + 20, mouseY - 20, 30, 30);
+    pop();
   }
 }
 
@@ -94,10 +119,11 @@ function handleNoteInteraction(elementsUnderMouse, note) {
     const twoNotes = elementsUnderMouse.twoNotes;
     if (twoNotes.canAddNote(note)) {
       const snappingPoint = twoNotes.getClosestSnappingPoint(mouseX, mouseY);
+      twoNotes.drawAdditionalLinesOnAdding(snappingPoint.lineNumber, note.getNoteWidth(false));
       note.draw(snappingPoint.x, snappingPoint.y);
 
       if (mouseIsPressed) {
-        if(!isMouseClickedHelper) {
+        if (!isMouseClickedHelper) {
           twoNotes.addNote(note, snappingPoint.lineNumber);
         }
         isMouseClickedHelper = true;

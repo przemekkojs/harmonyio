@@ -10,16 +10,17 @@ class Vertical {
 
     this.upperStaff = upperStaff;
     this.lowerStaff = lowerStaff;
+
+    this.verticalWidth = getVerticalWidth();
   }
 
-  toJson(){
-
+  toJson() {
     const upperJson = this.upperStaff.toJson();
     const lowerJson = this.lowerStaff.toJson();
 
     const concatenated = upperJson.concat(lowerJson);
 
-    for(let i=0; i<concatenated.length;i++) {
+    for (let i = 0; i < concatenated.length; i++) {
       concatenated[i].verticalIndex = this.index;
     }
 
@@ -30,6 +31,12 @@ class Vertical {
     return max(
       this.upperStaff.getSlotsTaken(),
       this.lowerStaff.getSlotsTaken()
+    );
+  }
+
+  getNotesCenterLineX() {
+    return (
+      this.getX() + this.verticalWidth * 0.75 - spaceBetweenNoteAndAccidental
     );
   }
 
@@ -81,14 +88,29 @@ class Vertical {
   getWidth() {
     const slotsTaken = this.getSlotsTaken();
     if (slotsTaken === 0) {
-      let barSlotsAvailable = this.parent.getSlotsAvailable();
-      let emptyVerticals = this.parent.countEmptyVerticals();
-      let slotsPerVertical = barSlotsAvailable / emptyVerticals;
+      const barSlotsAvailableCount = this.parent.getSlotsAvailable();
+      const emptyVerticalsCount = this.parent.countEmptyVerticals();
 
-      return slotsPerVertical * slotWidth;
+      const widthOfEmptyVerticals = emptyVerticalsCount * this.verticalWidth;
+      const widthOfEmptySlots = barSlotsAvailableCount * slotWidth;
+
+      if (widthOfEmptySlots - widthOfEmptyVerticals >= 0) {
+        return widthOfEmptySlots / emptyVerticalsCount;
+      } else {
+        return this.verticalWidth;
+      }
     }
 
-    return this.getSlotsTaken() * slotWidth;
+    const slotsWidthNeeded = slotsTaken * slotWidth;
+    if (slotsWidthNeeded - this.verticalWidth >= 0) {
+      return slotsWidthNeeded;
+    } else {
+      const verticalWidthToSlotWidthRatio = this.verticalWidth / slotWidth;
+      return (
+        this.verticalWidth +
+        max(slotsTaken - verticalWidthToSlotWidthRatio, 0) * slotWidth
+      );
+    }
   }
 
   getHeight() {
@@ -111,7 +133,7 @@ class Vertical {
   isOver(x, y) {
     const isOverCheck =
       x > this.getX() &&
-      x < this.getX() + this.upperStaff.width &&
+      x < this.getX() + this.verticalWidth &&
       y > this.getY() &&
       y < this.getY() + this.upperStaff.height + this.lowerStaff.height;
     if (!isOverCheck) {
@@ -149,7 +171,7 @@ class Vertical {
     push();
     fill(255, 153, 153, 50);
     noStroke();
-    rect(this.getX(), this.getY(), slotWidth, this.getHeight());
+    rect(this.getX(), this.getY(), this.verticalWidth, this.getHeight());
     pop();
   }
 }
