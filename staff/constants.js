@@ -28,6 +28,7 @@ const keyOffset = braceWidth + 0.2 * spaceBetweenStaffLines;
 const bemolOffset = -0.5 * spaceBetweenStaffLines;
 const spaceBetweenNoteAndAccidental = 5;
 const accidentalsHeight = spaceBetweenStaffLines * 2.5;
+const menuWidth = 150;
 
 function getVerticalWidth() {
   return (

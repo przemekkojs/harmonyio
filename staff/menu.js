@@ -424,3 +424,92 @@ class Menu {
     }
   }
 }
+
+let curClicked = null;
+let isMouseClickedHelper = false;
+
+function handleMouseInteraction(grandStaff) {
+  const elementsUnderMouse = grandStaff.isOver(mouseX, mouseY);
+  if (menu.curAction === Menu.actions.thrash) {
+    handleThrashInteraction(elementsUnderMouse);
+  } else if (menu.curAction === Menu.actions.note) {
+    handleNoteInteraction(elementsUnderMouse, menu.note);
+  } else if (menu.curAction === Menu.actions.none) {
+    handleDragNoteInteraction(elementsUnderMouse);
+  }
+}
+
+function handleDragNoteInteraction(elementsUnderMouse) {
+  if (!mouseIsPressed) {
+    curClicked = null;
+    return;
+  }
+
+  if (curClicked !== null) {
+    // has already chosen some note
+    const snappingPoint = curClicked.twoNotes.getClosestSnappingPoint(
+      mouseX,
+      mouseY
+    );
+
+    curClicked.note.setLine(snappingPoint.lineNumber);
+  } else if ("note" in elementsUnderMouse) {
+    curClicked = {
+      note: elementsUnderMouse.note,
+      twoNotes: elementsUnderMouse.twoNotes,
+    };
+  }
+}
+
+function handleThrashInteraction(elementsUnderMouse) {
+  if (!("vertical" in elementsUnderMouse)) {
+    return;
+  }
+
+  const vertical = elementsUnderMouse.vertical;
+  
+  if (vertical.canClear()) {
+    vertical.drawArea();
+
+    if (mouseIsPressed) {
+      vertical.clear();
+    }
+  } else {
+    push();
+    imageMode(CENTER);
+    image(symbols.thrashCanCrossed, mouseX + 20, mouseY - 20, 30, 30);
+    pop();
+  }
+}
+
+function handleNoteInteraction(elementsUnderMouse, note) {
+  if ("twoNotes" in elementsUnderMouse) {
+    const twoNotes = elementsUnderMouse.twoNotes;
+    if (twoNotes.canAddNote(note)) {
+      const snappingPoint = twoNotes.getClosestSnappingPoint(mouseX, mouseY);
+      twoNotes.drawAdditionalLinesOnAdding(snappingPoint.lineNumber, note.getNoteWidth(false));
+      note.draw(snappingPoint.x, snappingPoint.y);
+
+      if (mouseIsPressed) {
+        if (!isMouseClickedHelper) {
+          twoNotes.addNote(note, snappingPoint.lineNumber);
+        }
+        isMouseClickedHelper = true;
+      } else {
+        isMouseClickedHelper = false;
+      }
+    } else {
+      note.draw(mouseX, mouseY);
+    }
+  } else {
+    note.draw(mouseX, mouseY);
+  }
+}
+
+function keyPressed() {
+  menu.keyPressed();
+}
+
+function mouseClicked() {
+  menu.mouseClicked();
+}
