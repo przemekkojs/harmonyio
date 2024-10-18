@@ -43,5 +43,7 @@ namespace Algorithm.Algorithm
 
             Duration = 0;
         }
+
+        public override string ToString() => $"{Soprano?.Name}{Alto?.Name}{Tenore?.Name}{Bass?.Name}";
     }
 }

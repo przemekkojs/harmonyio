@@ -7,7 +7,143 @@ namespace AlgorithmTests
 {
     public class TaskParserTests
     {
-        private const string TASK_STRING = "{\"meterValue\":4,\"meterCount\":3,\"sharpsCount\":0,\"flatsCount\":0,\"jsonNotes\":[{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":4.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":3.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":3.5,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":1.0,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":3.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":2.0,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":2},{\"Line\":4.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":2},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":2},{\"Line\":3.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":2},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":12,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":4.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":12,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":12,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":3.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":12,\"BarIndex\":1,\"VerticalIndex\":0}]}";
+        private const string TASK_STRING = @"
+            {
+            ""meterValue"": 4,
+            ""meterCount"": 3,
+            ""sharpsCount"": 0,
+            ""flatsCount"": 0,
+            ""jsonNotes"": [
+                {
+                    ""Line"": 1.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""SOPRANO"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 0
+                },
+                {
+                    ""Line"": 4.0,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""ALTO"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 0
+                },
+                {
+                    ""Line"": 0.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""TENORE"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 0
+                },
+                {
+                    ""Line"": 2.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""BASS"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 0
+                },
+                {
+                    ""Line"": 1.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""SOPRANO"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 1
+                },
+                {
+                    ""Line"": 3.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""ALTO"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 1
+                },
+                {
+                    ""Line"": 0.0,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""TENORE"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 1
+                },
+                {
+                    ""Line"": 2.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""BASS"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 1
+                },
+                {
+                    ""Line"": 2.0,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""SOPRANO"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 2
+                },
+                {
+                    ""Line"": 3.0,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""ALTO"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 2
+                },
+                {
+                    ""Line"": 0.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""TENORE"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 2
+                },
+                {
+                    ""Line"": 2.0,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""BASS"",
+                    ""Value"": 4,
+                    ""BarIndex"": 0,
+                    ""VerticalIndex"": 2
+                },
+                {
+                    ""Line"": 1.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""SOPRANO"",
+                    ""Value"": 12,
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
+                },
+                {
+                    ""Line"": 4.0,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""ALTO"",
+                    ""Value"": 12,
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
+                },
+                {
+                    ""Line"": 0.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""TENORE"",
+                    ""Value"": 12,
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
+                },
+                {
+                    ""Line"": 2.5,
+                    ""AccidentalName"": """",
+                    ""Voice"": ""BASS"",
+                    ""Value"": 12,
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
+                }
+            ]
+        }";
 
         [Fact]
         public void TSDTValidTest()
@@ -34,9 +170,9 @@ namespace AlgorithmTests
             Note C_2_B = new("C", 3, Voice.BASS);
 
             Note B_3_S = new("B", 4, Voice.SOPRANO);
-            Note G_3_A = new("E", 4, Voice.ALTO);
+            Note G_3_A = new("G", 4, Voice.ALTO);
             Note G_3_T = new("G", 3, Voice.TENORE);
-            Note D_3_B = new("C", 3, Voice.BASS);
+            Note D_3_B = new("D", 3, Voice.BASS);
 
             Note C_4_S = new("C", 5, Voice.SOPRANO);
             Note E_4_A = new("E", 4, Voice.ALTO);
@@ -135,9 +271,9 @@ namespace AlgorithmTests
             Note C_2_B = new("C", 3, Voice.BASS);
 
             Note B_3_S = new("B", 4, Voice.SOPRANO);
-            Note G_3_A = new("E", 4, Voice.ALTO);
+            Note G_3_A = new("G", 4, Voice.ALTO);
             Note G_3_T = new("G", 3, Voice.TENORE);
-            Note D_3_B = new("C", 3, Voice.BASS);
+            Note D_3_B = new("D", 3, Voice.BASS);
 
             Note C_4_S = new("C", 5, Voice.SOPRANO);
             Note E_4_A = new("E", 4, Voice.ALTO);
@@ -230,9 +366,9 @@ namespace AlgorithmTests
             Note C_2_B = new("C", 3, Voice.BASS);
 
             Note B_3_S = new("B", 4, Voice.SOPRANO);
-            Note G_3_A = new("E", 4, Voice.ALTO);
+            Note G_3_A = new("G", 4, Voice.ALTO);
             Note G_3_T = new("G", 3, Voice.TENORE);
-            Note D_3_B = new("C", 3, Voice.BASS);
+            Note D_3_B = new("D", 3, Voice.BASS);
 
             Note C_4_S = new("C", 5, Voice.SOPRANO);
             Note E_4_A = new("E", 4, Voice.ALTO);
@@ -324,9 +460,9 @@ namespace AlgorithmTests
             Note C_2_B = new("C", 3, Voice.BASS);
 
             Note B_3_S = new("B", 4, Voice.SOPRANO);
-            Note G_3_A = new("E", 4, Voice.ALTO);
+            Note G_3_A = new("G", 4, Voice.ALTO);
             Note G_3_T = new("G", 3, Voice.TENORE);
-            Note D_3_B = new("C", 3, Voice.BASS);
+            Note D_3_B = new("D", 3, Voice.BASS);
 
             Note C_4_S = new("C", 5, Voice.SOPRANO);
             Note E_4_A = new("E", 4, Voice.ALTO);
@@ -336,11 +472,12 @@ namespace AlgorithmTests
             Symbol T = new(minor: false, functionSymbol: FunctionSymbol.T);
             Symbol S = new(minor: false, functionSymbol: FunctionSymbol.T);
             Symbol D = new(minor: false, functionSymbol: FunctionSymbol.T);
+            Symbol T2 = new(minor: false, functionSymbol: FunctionSymbol.T);
 
             Function function1 = new(symbol: T, isMain: true);
             Function function2 = new(symbol: S, isMain: true);
             Function function3 = new(symbol: D, isMain: true);
-            Function function4 = new(symbol: T, isMain: true);
+            Function function4 = new(symbol: T2, isMain: true);
 
             UserStack stack1 = new(function1, tonation, 0);
             UserStack stack2 = new(function2, tonation, 4);
@@ -403,7 +540,10 @@ namespace AlgorithmTests
 
             for (int index = 0; index < parsedList.Count; index++)
             {
-                if (!testList[index].Equals(parsedList[index]))
+                var testFunction = testList[index];
+                var parsedFunction = parsedList[index];
+
+                if (!testFunction.Equals(parsedFunction))
                 {
                     functionsEqual = false;
                     break;
