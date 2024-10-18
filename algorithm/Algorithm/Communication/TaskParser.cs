@@ -7,12 +7,14 @@ namespace Algorithm.Communication
 {
     public class JsonTask
     {
+        [JsonProperty("jsonNotes")]
         public List<JsonNote> Notes { get; set; }
         public int SharpsCount { get; set; }
         public int FlatsCount { get; set; }
         public int MeterCount { get; set; }
         public int MeterValue { get; set; }
 
+        [JsonConstructor]
         public JsonTask(List<JsonNote> notes, int sharpsCount, int flatsCount, int meterCount, int meterValue)
         {
             Notes = notes;
@@ -47,50 +49,70 @@ namespace Algorithm.Communication
             var meter = Meter.GetMeter(parsedTask.MeterValue, parsedTask.MeterCount);
 
             var bars = new List<UserBar>();
-            var currentBar = new UserBar();
-            UserStack userStack = new (baseTask.Bars[0].Functions[0], tonation, 0);
-            var lastBarIndex = 0;
-            var currentBeat = 0;
-            var lastStackIndex = -1;
 
-            // TODO: Bars
-            foreach (var jsonNote in parsedTask.Notes)
+            Dictionary<(int, int), int> beatMappings = [];
+
+            /* 
+             * 1. Add Bars
+             * foreach (note in parsed.Notes)
+             *      look for barIndex - add that many bars how many barIndex-es
+             * 
+             * 2. Add stacks
+             * foreach (note in parsed.Notes)
+             *      look for verticalIndex - add that many stacks to each bar...
+             *      
+             * 3. Add notes to stacks
+             * foreach (note in parsed.Notes)
+             *      bar[note.barIndex].Stacks[bar.stackIndex].Set<Voice>(...)
+             */
+
+            foreach (var note in parsedTask.Notes)
             {
-                if (jsonNote.BarIndex > lastBarIndex)
+                if (note.BarIndex >= bars.Count)
+                    bars.Add(new UserBar());
+
+                if (beatMappings.TryGetValue((note.BarIndex, note.VerticalIndex - 1), out int toSet))
+                    toSet = 0;
+
+                beatMappings[(note.BarIndex, note.VerticalIndex)] = toSet;
+            }
+
+            var functionsInBars = baseTask.Bars
+                .Select(x => x.Functions)
+                .ToList();
+
+            for(int barIndex = 0; barIndex < functionsInBars.Count; barIndex++)
+            {
+                for (int verticalIndex = 0; verticalIndex < functionsInBars[barIndex].Count; verticalIndex++)
                 {
-                    bars.Add(currentBar);
-                    currentBar = new UserBar();
-                    lastStackIndex = -1;
-                    currentBeat = 0;
+                    bars[barIndex].AddStack(new UserStack(
+                            functionsInBars[barIndex][verticalIndex],
+                            tonation,
+                            beatMappings[(barIndex, verticalIndex)]
+                    ));
                 }
+            }
 
-                if (jsonNote.VerticalIndex > lastStackIndex)
-                {
-                    userStack = new UserStack(
-                        baseFunction: baseTask.Bars[jsonNote.BarIndex].Functions[jsonNote.VerticalIndex],
-                        tonation: tonation,
-                        startBeat: currentBeat
-                    );
+            foreach (var note in parsedTask.Notes)
+            {
+                var barIndex = note.BarIndex;
+                var verticalIndex = note.VerticalIndex;
+                var toAdd = NoteParser.ParseJsonNoteToNote(note);
+                var userStack = bars[barIndex].UserStacks[verticalIndex];
 
-                    currentBeat += jsonNote.Value;
-                    lastStackIndex = jsonNote.VerticalIndex;
-                }
-
-                var parseResult = NoteParser.ParseJsonNoteToNote(jsonNote);
-                
-                switch (parseResult.Note.Voice)
+                switch (toAdd.Note.Voice)
                 {
                     case Voice.SOPRANO:
-                        userStack.SetSoprano(parseResult.Note, parseResult.RhytmicValue);
+                        userStack.SetSoprano(toAdd.Note, toAdd.RhytmicValue);
                         break;
                     case Voice.ALTO:
-                        userStack.SetAlto(parseResult.Note, parseResult.RhytmicValue);
+                        userStack.SetAlto(toAdd.Note, toAdd.RhytmicValue);
                         break;
                     case Voice.TENORE:
-                        userStack.SetTenore(parseResult.Note, parseResult.RhytmicValue);
+                        userStack.SetTenore(toAdd.Note, toAdd.RhytmicValue);
                         break;
                     default:
-                        userStack.SetBass(parseResult.Note, parseResult.RhytmicValue);
+                        userStack.SetBass(toAdd.Note, toAdd.RhytmicValue);
                         break;
                 }
             }

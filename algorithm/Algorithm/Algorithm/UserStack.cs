@@ -20,7 +20,7 @@ namespace Algorithm.Algorithm
             else if (newValue != null && rhytmicValue == null)
                 throw new ArgumentException("Cannot assigne no rhytm to a note.");
 
-            if (Duration != 0 && rhytmicValue.Duration != Duration)
+            if (Duration != 0 && rhytmicValue.RealDuration != Duration)
                 return false;
 
             note = newValue;
@@ -43,5 +43,7 @@ namespace Algorithm.Algorithm
 
             Duration = 0;
         }
+
+        public override string ToString() => $"{Soprano?.Name}{Alto?.Name}{Tenore?.Name}{Bass?.Name}";
     }
 }

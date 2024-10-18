@@ -53,8 +53,8 @@ namespace Algorithm.Algorithm
                 .ToList();
 
             List<Note?> notesToCheck = [soprano, alto, tenore, bass];
-            
-            foreach(var note in notesToCheck)
+
+            foreach (var note in notesToCheck)
             {
                 if (note == null)
                     return false;
@@ -100,6 +100,24 @@ namespace Algorithm.Algorithm
         {
             if (Beat < 0)
                 throw new ArgumentException("Invalid beat.");
+        }
+
+        // TODO: Poprawić!!!!!!!!!!!!!!!!!!!!!!!
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is not Stack parsed)
+                return false;
+
+            if (parsed == null)
+                return false;
+
+            return parsed.Soprano.Equals(Soprano) &&
+                parsed.Alto.Equals(Alto) &&
+                parsed.Tenore.Equals(Tenore) &&
+                parsed.Bass.Equals(Bass);
         }
     }
 }

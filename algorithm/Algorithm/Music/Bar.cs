@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Algorithm.Music
+﻿namespace Algorithm.Music
 {
     public class Bar
     {
@@ -27,12 +21,6 @@ namespace Algorithm.Music
 
         public void AddFunction(Function function) => functions.Add(function);
 
-        public void AddFunctionsRange(List<Function> functions)
-        {
-            foreach(Function function in functions)
-            {
-                AddFunction(function);
-            }
-        }
+        public void AddFunctionsRange(List<Function> functions) => functions.ForEach(AddFunction);
     }
 }
