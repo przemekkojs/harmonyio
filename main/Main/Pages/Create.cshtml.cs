@@ -91,9 +91,6 @@ namespace Main.Pages
                 return Page();
             }
 
-            // //TODO: POPUALTE WITH REAL USER
-            // var currentUser = await GetTestUser();
-
             var currentUser = (await _userManager.GetUserAsync(User))!;
 
             if (_quiz == null)

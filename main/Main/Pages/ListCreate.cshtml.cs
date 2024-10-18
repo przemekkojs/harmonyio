@@ -2,6 +2,7 @@ using System.Collections;
 using System.Security.Claims;
 using Main.Data;
 using Main.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Main.Pages;
 
+[Authorize]
 public class ListCreate : PageModel
 {
     
@@ -24,14 +26,9 @@ public class ListCreate : PageModel
     
     public async Task OnGetAsync()
     {
-        // var AppUser = await _userManager.GetUserAsync(User);
-        // if (AppUser == null)
-        // {
-        //     Forbid();
-        // }
-        //
-        // Created = (await _repository.GetAsync<ApplicationUser>(q => q.Id == AppUser!.Id,
-        //     q => q.Include(u => u.CreatedQuizes)))!.CreatedQuizes;
-        Created = await _repository.GetAllAsync<Quiz>();
+        var appUser = await _userManager.GetUserAsync(User);
+        
+        Created = (await _repository.GetAsync<ApplicationUser>(q => q.Id == appUser!.Id,
+            q => q.Include(u => u.ParticipatedQuizes)))!.ParticipatedQuizes;
     }
 }
