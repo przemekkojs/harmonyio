@@ -117,21 +117,11 @@ class Note {
     }
   }
 
-  #getHeadSymbol() {
-    return this.headSymbolMapping[this.baseValue];
-  }
-
-  #hasStem() {
-    return this.baseValue !== 1;
-  }
-
-  #howManyFlags() {
-    if (this.baseValue === 8) {
-      return 1;
-    } else if (this.baseValue === 16) {
-      return 2;
+  getNoteWidth(addFlagWidth = true) {
+    if (addFlagWidth && this.isFacingUp && this.#howManyFlags() > 0) {
+      return this.#getHeadSymbol().width + symbols.noteFlag.width;
     } else {
-      return 0;
+      return this.#getHeadSymbol().width;
     }
   }
 
@@ -139,26 +129,23 @@ class Note {
     this.drawNote(x, y);
 
     if (this.hasDot) {
-      const dotOffset = this.#getHeadSymbol().width / 2 + dotDiameter;
-      this.drawDot(x + dotOffset, y);
+      const dotX = x + this.#getHeadSymbol().width / 2 + dotDiameter + 2;
+      if (this.line && Math.floor(this.line) === this.line) {
+        const dotY = this.isFacingUp
+          ? y - spaceBetweenStaffLines / 2
+          : y + spaceBetweenStaffLines / 2;
+        this.drawDot(dotX, dotY);
+      } else {
+        this.drawDot(dotX, y);
+      }
     }
 
     if (this.hasAccidental()) {
       const accidentalOffset =
-        this.#getHeadSymbol().width / 2 + this.accidental.getWidth() / 2 + 5;
+        this.#getHeadSymbol().width / 2 +
+        this.accidental.getWidth() / 2 +
+        spaceBetweenNoteAndAccidental;
       this.drawAccidental(x - accidentalOffset, y);
-    }
-  }
-
-  drawAccidental(x, y) {
-    this.accidental.draw(x, y);
-  }
-
-  getNoteWidth(addFlagWidth = true) {
-    if (this.isFacingUp && this.#howManyFlags() > 0 && addFlagWidth) {
-      return this.#getHeadSymbol().width + symbols.noteFlag.width;
-    } else {
-      return this.#getHeadSymbol().width;
     }
   }
 
@@ -199,6 +186,10 @@ class Note {
     pop();
   }
 
+  drawAccidental(x, y) {
+    this.accidental.draw(x, y);
+  }
+
   #drawFlags(stemX, stemY) {
     const numOfFlags = this.#howManyFlags();
     if (numOfFlags === 0) return;
@@ -214,6 +205,24 @@ class Note {
 
       image(symbols.noteFlag, 0, 0);
       pop();
+    }
+  }
+
+  #getHeadSymbol() {
+    return this.headSymbolMapping[this.baseValue];
+  }
+
+  #hasStem() {
+    return this.baseValue !== 1;
+  }
+
+  #howManyFlags() {
+    if (this.baseValue === 8) {
+      return 1;
+    } else if (this.baseValue === 16) {
+      return 2;
+    } else {
+      return 0;
     }
   }
 }

@@ -142,7 +142,7 @@ class Bar {
   #drawBoundingBox() {
     push();
     noFill();
-    rect(this.x + 2, this.y + 2, this.width - 4, this.height - 4);
+    rect(this.x, this.y, this.width, this.height);
     pop();
   }
 }

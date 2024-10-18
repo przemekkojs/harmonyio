@@ -34,6 +34,12 @@ class Vertical {
     );
   }
 
+  getNotesCenterLineX() {
+    return (
+      this.getX() + this.verticalWidth * 0.75 - spaceBetweenNoteAndAccidental
+    );
+  }
+
   isEmpty() {
     return this.upperStaff.isEmpty() && this.lowerStaff.isEmpty();
   }
@@ -89,14 +95,10 @@ class Vertical {
       const widthOfEmptySlots = barSlotsAvailableCount * slotWidth;
 
       if (widthOfEmptySlots - widthOfEmptyVerticals >= 0) {
-        const slotsPerVertical = barSlotsAvailableCount / emptyVerticalsCount;
         return widthOfEmptySlots / emptyVerticalsCount;
-        //return slotsPerVertical * slotWidth;
       } else {
         return this.verticalWidth;
       }
-
-      //return this.verticalWidth + (slotsPerVertical - 1) * slotWidth;
     }
 
     const slotsWidthNeeded = slotsTaken * slotWidth;
@@ -109,12 +111,6 @@ class Vertical {
         max(slotsTaken - verticalWidthToSlotWidthRatio, 0) * slotWidth
       );
     }
-
-    if (slotsTaken === 1) {
-      return this.verticalWidth;
-    }
-
-    return this.verticalWidth + (this.getSlotsTaken() - 1) * slotWidth;
   }
 
   getHeight() {
@@ -137,7 +133,7 @@ class Vertical {
   isOver(x, y) {
     const isOverCheck =
       x > this.getX() &&
-      x < this.getX() + this.upperStaff.width &&
+      x < this.getX() + this.verticalWidth &&
       y > this.getY() &&
       y < this.getY() + this.upperStaff.height + this.lowerStaff.height;
     if (!isOverCheck) {

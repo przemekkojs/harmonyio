@@ -2,7 +2,7 @@ class GrandStaff {
   constructor(
     numberOfVerticalsPerBarList,
     minWidth,
-    metre = new Metre(2, 4),
+    metre = new Metre(4, 4),
     keySignature = new KeySignature(7)
   ) {
     this.keySignature = keySignature;
@@ -106,8 +106,11 @@ class GrandStaff {
       curXOffset += barWidth;
     }
 
-    this.numberOfStaffs = curStaffVertically + 1;
-    resizeCanvasVertically();
+    if (this.numberOfStaffs !== curStaffVertically + 1) {
+      this.numberOfStaffs = curStaffVertically + 1;
+
+      resizeCanvasVertically();
+    }
   }
 
   static getLineOffset(lineNumber) {
