@@ -27,8 +27,8 @@ namespace Main.Models
 		//NOT MAPPED 
 
 		[NotMapped]
-        public QuizState State => CloseDate < DateTime.Now ? QuizState.Closed :
-			OpenDate > DateTime.Now ? QuizState.NotStarted : QuizState.Open;
+        public QuizState State => !IsCreated || OpenDate > DateTime.Now ? QuizState.NotStarted :
+			CloseDate < DateTime.Now ? QuizState.Closed : QuizState.Open;
 	}
 }
 

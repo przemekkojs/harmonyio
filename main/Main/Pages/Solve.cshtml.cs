@@ -47,8 +47,8 @@ namespace Main.Pages
 
             Quiz = quiz;
             Answers = Quiz.Excersises
-                .Select(e => e.ExcersiseSolutions).First(e => e.First().UserId == appUser.Id)
-                .Select(e => e.Answer).ToList();
+                .Select(e => e.ExcersiseSolutions.FirstOrDefault(es => es.UserId == appUser.Id))
+                .Select(es => es?.Answer ?? "").ToList();
 
             return Page();
         }

@@ -95,7 +95,7 @@
                     </div>
                     <div class="task-content w-100 p-3">
                         <span class="mb-1">Kreator funkcji</span>
-                        <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)" readonly="@Model.BrowseOnly">
+                        <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>
                     </div>
                     @if (!Model.BrowseOnly)
                     {

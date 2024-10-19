@@ -68,6 +68,8 @@ namespace Main.Pages
 
             Quiz = quiz;
 
+            await FillMissingExcersiseSolutions();
+
             UsersToSolutions = Quiz.Excersises
                 .SelectMany(e => e.ExcersiseSolutions)
                 .GroupBy(es => es.User)
@@ -156,6 +158,31 @@ namespace Main.Pages
             await _repository.SaveChangesAsync();
 
             return RedirectToPage("Index");
+        }
+
+        private async Task FillMissingExcersiseSolutions()
+        {
+            bool changedAnything = false;
+            foreach (var excersise in Quiz.Excersises)
+            {
+                var participantsAnswered = excersise.ExcersiseSolutions.Select(es => es.UserId).ToHashSet();
+                var participantsNotAnswered = Quiz.Participants.Where(p => !participantsAnswered.Contains(p.Id));
+
+                foreach (var participant in participantsNotAnswered)
+                {
+                    var solution = new ExcersiseSolution()
+                    {
+                        ExcersiseId = excersise.Id,
+                        Answer = "",
+                        UserId = participant.Id,
+                    };
+                    _repository.Add(solution);
+                    changedAnything = true;
+                }
+            }
+
+            if (changedAnything)
+                await _repository.SaveChangesAsync();
         }
     }
 }

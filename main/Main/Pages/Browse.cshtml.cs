@@ -24,7 +24,7 @@ namespace Main.Pages
         {
             var currentUser = await _userManager.GetUserAsync(User);
             var quizResult = await _repository.GetAsync<QuizResult>(
-                qr => qr.Id == id,
+                qr => qr.QuizId == id,
                 query => query
                     .Include(qr => qr.ExcersiseResults)
                     .ThenInclude(er => er.ExcersiseSolution)

@@ -104,7 +104,10 @@ namespace Main.Pages
                     Name = QuizName,
                     OpenDate = (DateTime)OpenDate!,
                     CloseDate = (DateTime)CloseDate!,
-                    CreatorId = currentUser.Id
+                    CreatorId = currentUser.Id,
+
+                    //TODO: TESTING PURPOSES ONLY, REMOVE THIS
+                    //Participants = new List<ApplicationUser>() { currentUser }
                 };
                 
                 _repository.Add(quiz);
