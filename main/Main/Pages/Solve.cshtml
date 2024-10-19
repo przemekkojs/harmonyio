@@ -22,7 +22,8 @@
 
         <div class="flex-grow-1 w-100 d-flex flex-column">
             <div class="d-flex flex-row align-items-start question-area">
-                <div class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
+                <div
+                    class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
                     <div id="excersise-number" class="fs-1 fw-bold">
                         @*SET VIA JS*@
                     </div>
@@ -35,10 +36,11 @@
                 </div>
             </div>
 
+            <input type="text" id="answer-input" class="form-control task-input" oninput="changeAnswer(this.value)">
+
             <div class="flex-grow-1 d-flex flex-row mt-3">
-                <div class="music-staff h-100 flex-grow-1 d-flex justify-content-center align-items-center me-3">
-                    <span class="me-2">Pięciolinia</span>
-                    <input type="text" id="answer-input" class="form-control task-input" oninput="changeAnswer(this.value)">
+                <div id="music-staff-div"
+                    class="music-staff flex-grow-1 d-flex justify-content-center align-items-center me-3">
 
                     <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
                     @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
@@ -46,32 +48,91 @@
                         <input type="hidden" asp-for="Answers[@i]" value="" />
                     }
                 </div>
-
-                <div class="toolbox h-100 d-flex justify-content-center align-items-center">
-                    Toolbox
-                </div>
             </div>
+            @* <div class="flex-grow-1 d-flex flex-row mt-3">
+            <div class="music-staff h-100 flex-grow-1 d-flex justify-content-center align-items-center me-3">
+            <span class="me-2">Pięciolinia</span>
+            <input type="text" id="answer-input" class="form-control task-input"
+            oninput="changeAnswer(this.value)">
+
+            <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
+            @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
+            {
+            <input type="hidden" asp-for="Answers[@i]" value="" />
+            }
+            </div>
+
+            <div class="toolbox h-100 d-flex justify-content-center align-items-center">
+            Toolbox
+            </div>
+            </div> *@
         </div>
 
         <hr class="hr mt-3">
 
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Index" class="btn btn-danger btn-std-width me-auto">Powrót</a>
-            <button id="btn-prev" type="button" onclick="prevQuestion()" class="btn btn-secondary btn-std-width mx-3">Poprzednie</button>
+            <button id="btn-prev" type="button" onclick="prevQuestion()"
+                class="btn btn-secondary btn-std-width mx-3">Poprzednie</button>
 
             <div id="excersises-buttons" class="d-flex align-items-center">
                 @*EXCERSISES ARE FILLED WITH JS SCRIPT*@
             </div>
             <div id="div-last-ex">
                 <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-                <button id="btn-last-ex" type="button" onclick="lastQuestion()" class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+                <button id="btn-last-ex" type="button" onclick="lastQuestion()"
+                    class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
             </div>
 
-            <button id="btn-next" type="button" onclick="nextQuestion()" class="btn btn-secondary btn-std-width ms-3">Następne</button>
+            <button id="btn-next" type="button" onclick="nextQuestion()"
+                class="btn btn-secondary btn-std-width ms-3">Następne</button>
             <button id="btn-finish" type="submit" class="btn btn-primary btn-std-width ms-3">Zakończ</button>
         </div>
     </div>
 </form>
+
+<script>
+    // needed to allow overflow from canvas div, but now navbar is hiding
+    // TODO try fix this
+    var mainContainer = document.getElementById('layout-main-container');
+    if (mainContainer) {
+        mainContainer.classList.remove('overflow-auto');
+        mainContainer.style.overflow = 'visible';
+    }
+
+    const symbolPaths = {
+        curlyBrace: '@Url.Content("~/images/staff-symbols/curly-brace.png")',
+        bassKey: '@Url.Content("~/images/staff-symbols/bass-key.png")',
+        violinKey: '@Url.Content("~/images/staff-symbols/violin-key.png")',
+        bemol: '@Url.Content("~/images/staff-symbols/bemol.png")',
+        doubleBemol: '@Url.Content("~/images/staff-symbols/double-bemol.png")',
+        sharp: '@Url.Content("~/images/staff-symbols/sharp.png")',
+        doubleSharp: '@Url.Content("~/images/staff-symbols/double-sharp.png")',
+        natural: '@Url.Content("~/images/staff-symbols/natural.png")',
+        fullNote: '@Url.Content("~/images/staff-symbols/full-note.png")',
+        noteHeadClosed: '@Url.Content("~/images/staff-symbols/note-head-closed.png")',
+        noteHeadOpened: '@Url.Content("~/images/staff-symbols/note-head-opened.png")',
+        noteFlag: '@Url.Content("~/images/staff-symbols/note-flag.png")',
+        mouse: '@Url.Content("~/images/staff-symbols/mouse.png")',
+        noteReverse: '@Url.Content("~/images/staff-symbols/note-reverse.png")',
+        thrashCan: '@Url.Content("~/images/staff-symbols/thrash-can.png")',
+        thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
+    };
+</script>
+
+<script src="~/lib/p5/p5.min.js"></script>
+<script src="~/js/staff-scripts/constants.js"></script>
+<script src="~/js/staff-scripts/symbols.js"></script>
+<script src="~/js/staff-scripts/bar.js"></script>
+<script src="~/js/staff-scripts/vertical.js"></script>
+<script src="~/js/staff-scripts/twoNotes.js"></script>
+<script src="~/js/staff-scripts/note.js"></script>
+<script src="~/js/staff-scripts/keySignature.js"></script>
+<script src="~/js/staff-scripts/metre.js"></script>
+<script src="~/js/staff-scripts/accidental.js"></script>
+<script src="~/js/staff-scripts/staff.js"></script>
+<script src="~/js/staff-scripts/menu.js"></script>
+<script src="~/js/staff-scripts/sketchSolving.js"></script>
 
 <script>
     var excersises = @Json.Serialize(Model.Quiz.Excersises);
