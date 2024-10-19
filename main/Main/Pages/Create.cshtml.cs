@@ -27,8 +27,10 @@ namespace Main.Pages
         public DateTime? CloseDate { get; set; } = null;
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
+        [BindProperty]
+        public int? EditedQuizId { get; set; } = null;
 
-        private Quiz? _quiz = null;
+        public bool BrowseOnly { get; set; } = false;
 
         public CreateModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
@@ -38,32 +40,32 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            //create new quiz
             if (id == null)
             {
                 return Page();
             }
-            var quiz = await _repository.GetAsync<Quiz>(q => q.Id == id,
-                q => q.Include(r => r.Excersises)
+
+            var appUser = await _userManager.GetUserAsync(User);
+            var quiz = await _repository.GetAsync<Quiz>(
+                filter: q => q.Id == id,
+                modifier: q => q.Include(r => r.Excersises)
             );
-            if (quiz == null)
+
+            if (quiz == null || appUser == null || appUser.Id != quiz.CreatorId)
             {
                 return Forbid();
             }
 
-            var appUser = (await _userManager.GetUserAsync(User))!;
-            if (appUser.Id != quiz.CreatorId)
-            {
-                return Forbid();
-            }
+            BrowseOnly = quiz.IsCreated;
 
-            _quiz = quiz;
+            EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
             CloseDate = quiz.CloseDate;
             OpenDate = quiz.OpenDate;
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
 
             return Page();
-
         }
 
         public async Task<IActionResult> OnPost()
@@ -91,16 +93,21 @@ namespace Main.Pages
                 return Page();
             }
 
-            var currentUser = (await _userManager.GetUserAsync(User))!;
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+                return RedirectToPage("Error");
 
-            if (_quiz == null)
+            if (EditedQuizId == null)
             {
                 var quiz = new Quiz()
                 {
                     Name = QuizName,
                     OpenDate = (DateTime)OpenDate!,
                     CloseDate = (DateTime)CloseDate!,
-                    CreatorId = currentUser.Id
+                    CreatorId = currentUser.Id,
+
+                    //TODO: TESTING PURPOSES ONLY, REMOVE THIS
+                    //Participants = new List<ApplicationUser>() { currentUser }
                 };
                 
                 _repository.Add(quiz);
@@ -118,15 +125,23 @@ namespace Main.Pages
             }
             else
             {
-                _quiz.Name = QuizName;
-                _quiz.OpenDate = (DateTime)OpenDate!;
-                _quiz.CloseDate = (DateTime)CloseDate!;
+                var editedQuiz = await _repository.GetAsync<Quiz>(
+                    filter: q => q.Id == EditedQuizId,
+                    modifier: q => q.Include(r => r.Excersises)
+                );
+
+                if (editedQuiz == null)
+                    return RedirectToPage("Error");
+
+                editedQuiz.Name = QuizName;
+                editedQuiz.OpenDate = (DateTime)OpenDate!;
+                editedQuiz.CloseDate = (DateTime)CloseDate!;
                 
-                _repository.Update(_quiz);
+                _repository.Update(editedQuiz);
                 
                 await _repository.SaveChangesAsync();
 
-                foreach (var question in _quiz.Excersises)
+                foreach (var question in editedQuiz.Excersises)
                 {
                     _repository.Delete(question);
                 }
@@ -136,13 +151,11 @@ namespace Main.Pages
                     _repository.Add(new Excersise()
                     {
                         Question = question,
-                        QuizId = _quiz.Id,
+                        QuizId = editedQuiz.Id,
                     });
                 }
             }
 
-            
-            
             await _repository.SaveChangesAsync();
 
             return RedirectToPage("Index");

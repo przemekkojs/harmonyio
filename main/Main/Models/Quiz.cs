@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Main.Enumerations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Main.Models
@@ -22,9 +24,11 @@ namespace Main.Models
         public ICollection<ApplicationUser> Participants = new List<ApplicationUser>();
 		public ICollection<QuizResult> QuizResults = new List<QuizResult>();
 
-		[ValidateNever]
-		public string State => CloseDate < DateTime.Now ? "Zakończone" :
-			OpenDate > DateTime.Now ? "Nie rozpoczęte" : "Otwarte";
+		//NOT MAPPED 
+
+		[NotMapped]
+        public QuizState State => !IsCreated || OpenDate > DateTime.Now ? QuizState.NotStarted :
+			CloseDate < DateTime.Now ? QuizState.Closed : QuizState.Open;
 	}
 }
 
