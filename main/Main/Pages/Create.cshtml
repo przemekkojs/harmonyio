@@ -45,9 +45,10 @@
 
         <hr class="hr">
 
+        <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Index" class="btn btn-danger btn-std-width">Powrót</a>
-            <button type="submit" class="btn btn-primary btn-std-width ms-auto">Opublikuj</button>
+            <button type="submit" class="btn btn-primary btn-std-width ms-auto">@(Model.EditedQuizId == null ? "Utwórz" : "Zapisz")</button>
         </div>
     </div>
 </form>

@@ -45,6 +45,16 @@ public class ApplicationRepository : IRepository
         context.Set<T>().Remove(value);
     }
 
+    public void Clear()
+    {
+        context.ExcersiseResults.RemoveRange(context.ExcersiseResults);
+        context.ExcersiseSolutions.RemoveRange(context.ExcersiseSolutions);
+        context.Excersises.RemoveRange(context.Excersises);
+        context.QuizResults.RemoveRange(context.QuizResults);
+        context.Quizes.RemoveRange(context.Quizes);
+        context.Users.RemoveRange(context.Users);
+    }
+
     public async Task SaveChangesAsync()
     {
         await context.SaveChangesAsync();

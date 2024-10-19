@@ -30,7 +30,7 @@ public class ListJoined : PageModel
         AppUser = await _userManager.GetUserAsync(User);
         
         Joined = (await _repository.GetAsync<ApplicationUser>(q => q.Id == AppUser!.Id,
-            q => q.Include(u => u.CreatedQuizes)))!.CreatedQuizes;
+            q => q.Include(u => u.ParticipatedQuizes)))!.ParticipatedQuizes;
 
         return Page();
     }

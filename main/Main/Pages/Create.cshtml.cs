@@ -27,8 +27,8 @@ namespace Main.Pages
         public DateTime? CloseDate { get; set; } = null;
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
-
-        private Quiz? _quiz = null;
+        [BindProperty]
+        public int? EditedQuizId { get; set; } = null;
 
         public CreateModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
@@ -38,13 +38,16 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            //create new quiz
             if (id == null)
             {
                 return Page();
             }
+
             var quiz = await _repository.GetAsync<Quiz>(q => q.Id == id,
                 q => q.Include(r => r.Excersises)
             );
+
             if (quiz == null)
             {
                 return Forbid();
@@ -56,14 +59,13 @@ namespace Main.Pages
                 return Forbid();
             }
 
-            _quiz = quiz;
+            EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
             CloseDate = quiz.CloseDate;
             OpenDate = quiz.OpenDate;
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
 
             return Page();
-
         }
 
         public async Task<IActionResult> OnPost()
@@ -93,7 +95,7 @@ namespace Main.Pages
 
             var currentUser = (await _userManager.GetUserAsync(User))!;
 
-            if (_quiz == null)
+            if (EditedQuizId == null)
             {
                 var quiz = new Quiz()
                 {
@@ -118,15 +120,20 @@ namespace Main.Pages
             }
             else
             {
-                _quiz.Name = QuizName;
-                _quiz.OpenDate = (DateTime)OpenDate!;
-                _quiz.CloseDate = (DateTime)CloseDate!;
+                var editedQuiz = (await _repository.GetAsync<Quiz>(
+                    filter: q => q.Id == EditedQuizId,
+                    modifier: q => q.Include(r => r.Excersises)
+                ))!;
+
+                editedQuiz.Name = QuizName;
+                editedQuiz.OpenDate = (DateTime)OpenDate!;
+                editedQuiz.CloseDate = (DateTime)CloseDate!;
                 
-                _repository.Update(_quiz);
+                _repository.Update(editedQuiz);
                 
                 await _repository.SaveChangesAsync();
 
-                foreach (var question in _quiz.Excersises)
+                foreach (var question in editedQuiz.Excersises)
                 {
                     _repository.Delete(question);
                 }
@@ -136,13 +143,12 @@ namespace Main.Pages
                     _repository.Add(new Excersise()
                     {
                         Question = question,
-                        QuizId = _quiz.Id,
+                        QuizId = editedQuiz.Id,
                     });
                 }
             }
 
-            
-            
+               
             await _repository.SaveChangesAsync();
 
             return RedirectToPage("Index");

@@ -1,3 +1,5 @@
+using Main.Data;
+using Main.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,7 +16,6 @@ namespace Main.Pages
 
         public void OnGet()
         {
-
         }
     }
 }

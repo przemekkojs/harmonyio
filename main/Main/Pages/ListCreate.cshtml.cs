@@ -12,10 +12,10 @@ namespace Main.Pages;
 
 [Authorize]
 public class ListCreate : PageModel
-{
-    
+{   
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationRepository _repository;
+
     public ListCreate(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
@@ -29,6 +29,6 @@ public class ListCreate : PageModel
         var appUser = await _userManager.GetUserAsync(User);
         
         Created = (await _repository.GetAsync<ApplicationUser>(q => q.Id == appUser!.Id,
-            q => q.Include(u => u.ParticipatedQuizes)))!.ParticipatedQuizes;
+            q => q.Include(u => u.CreatedQuizes)))!.CreatedQuizes;
     }
 }
