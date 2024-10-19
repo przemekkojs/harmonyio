@@ -1,7 +1,6 @@
 @page
 @model Main.Pages.ListCreate
-@{
-}
+@using Main.Enumerations;
 
 <div class="container mt-5">
     <div class="row">
@@ -46,13 +45,13 @@
                                 @quiz.Name
                             </div>
                             <div class="col-3">
-                                @quiz.State
+                                @quiz.State.AsString()
                             </div>
                             <div class="col-3">
                                 @quiz.CloseDate
                             </div>
                             <div class="col-3 text-end">
-                                <a href="/browse?id=@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                                <a href="/create?id=@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
                             </div>
                         </div>
                     </div>
@@ -91,6 +90,12 @@
                             </div>
                             <div class="col-3 text-end">
                                 <a href="/create?id=@quiz.Id" class="btn btn-outline-primary btn-sm">Edytuj</a>
+                            </div>
+                            <div class="col-3 text-end">
+                                <form method="post">
+                                    <input type="hidden" asp-for="PublishedQuizId" value="@quiz.Id" />
+                                    <button type="submit" class="btn btn-outline-primary btn-sm">Opublikuj</button>
+                                </form>
                             </div>
                         </div>
                     </div>

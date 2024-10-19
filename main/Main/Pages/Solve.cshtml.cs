@@ -25,31 +25,44 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async void OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            Quiz = (await _repository.GetAsync<Quiz>(
+            var appUser = (await _userManager.GetUserAsync(User))!;
+            var quiz = (await _repository.GetAsync<Quiz>(
                 q => q.Id == id,
                 query => query
+                    .Include(q => q.Participants)
+                    .Include(q => q.QuizResults)
                     .Include(q => q.Excersises)
                     .ThenInclude(q => q.ExcersiseSolutions)
             ))!;
-            
-            var appUser = (await _userManager.GetUserAsync(User))!;
 
+            if (quiz == null || appUser == null ||
+                quiz.State != Enumerations.QuizState.Open ||
+                !quiz.Participants.Any(u => u.Id == appUser.Id) ||
+                quiz.QuizResults.Any(qr => qr.UserId == appUser.Id))
+            {
+                return Forbid();
+            }
+
+            Quiz = quiz;
             Answers = Quiz.Excersises
                 .Select(e => e.ExcersiseSolutions).First(e => e.First().UserId == appUser.Id)
                 .Select(e => e.Answer).ToList();
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            //TODO: POPUALTE WITH REAL USER
-            var currentUser = await GetTestUser();
-
-            var quiz = (await _repository.GetAsync<Quiz>(
+            var currentUser = await _userManager.GetUserAsync(User);
+            var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == QuizId,
                 query => query.Include(q => q.Excersises)
-            ))!;
+            );
+
+            if (currentUser == null || quiz == null)
+                return RedirectToPage("Error");
 
             var excersises = (List<Excersise>)quiz.Excersises;
             for (int i = 0; i < excersises.Count; i++)

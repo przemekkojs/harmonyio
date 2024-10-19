@@ -30,6 +30,8 @@ namespace Main.Pages
         [BindProperty]
         public int? EditedQuizId { get; set; } = null;
 
+        public bool BrowseOnly { get; set; } = false;
+
         public CreateModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
@@ -44,20 +46,18 @@ namespace Main.Pages
                 return Page();
             }
 
-            var quiz = await _repository.GetAsync<Quiz>(q => q.Id == id,
-                q => q.Include(r => r.Excersises)
+            var appUser = await _userManager.GetUserAsync(User);
+            var quiz = await _repository.GetAsync<Quiz>(
+                filter: q => q.Id == id,
+                modifier: q => q.Include(r => r.Excersises)
             );
 
-            if (quiz == null)
+            if (quiz == null || appUser == null || appUser.Id != quiz.CreatorId)
             {
                 return Forbid();
             }
 
-            var appUser = (await _userManager.GetUserAsync(User))!;
-            if (appUser.Id != quiz.CreatorId)
-            {
-                return Forbid();
-            }
+            BrowseOnly = quiz.IsCreated;
 
             EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
@@ -93,7 +93,9 @@ namespace Main.Pages
                 return Page();
             }
 
-            var currentUser = (await _userManager.GetUserAsync(User))!;
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+                return RedirectToPage("Error");
 
             if (EditedQuizId == null)
             {
@@ -120,10 +122,13 @@ namespace Main.Pages
             }
             else
             {
-                var editedQuiz = (await _repository.GetAsync<Quiz>(
+                var editedQuiz = await _repository.GetAsync<Quiz>(
                     filter: q => q.Id == EditedQuizId,
                     modifier: q => q.Include(r => r.Excersises)
-                ))!;
+                );
+
+                if (editedQuiz == null)
+                    return RedirectToPage("Error");
 
                 editedQuiz.Name = QuizName;
                 editedQuiz.OpenDate = (DateTime)OpenDate!;
@@ -148,7 +153,6 @@ namespace Main.Pages
                 }
             }
 
-               
             await _repository.SaveChangesAsync();
 
             return RedirectToPage("Index");

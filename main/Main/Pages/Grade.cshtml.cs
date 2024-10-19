@@ -12,6 +12,7 @@ namespace Main.Pages
 {
     public class GradeModel : PageModel
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
         private readonly IGradingAlgorithm _algorithm;
 
@@ -34,21 +35,38 @@ namespace Main.Pages
         [BindProperty]
         public List<List<string>> Comments { get; set; } = null!;
 
-        public GradeModel(ApplicationRepository repository, IGradingAlgorithm algorithm)
+        public GradeModel(
+            ApplicationRepository repository,
+            UserManager<ApplicationUser> userManager,
+            IGradingAlgorithm algorithm)
         {
+            _userManager = userManager;
             _repository = repository;
             _algorithm = algorithm;
         }
 
-        private async Task Init(int quizId)
+        private async Task<bool> Init(int quizId)
         {
-            Quiz = (await _repository.GetAsync<Quiz>(
+            var currentUser = await _userManager.GetUserAsync(User);
+            var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == quizId,
                 query => query
+                    .Include(q => q.Participants)
+                    .Include(q => q.QuizResults)
                     .Include(q => q.Excersises)
                     .ThenInclude(e => e.ExcersiseSolutions)
                     .ThenInclude(es => es.User)
-            ))!;
+            );
+
+            if (quiz == null || currentUser == null ||
+                quiz.CreatorId != currentUser.Id ||
+                quiz.QuizResults.Count > 0 ||
+                (quiz.State == QuizState.Open && quiz.Excersises.First().ExcersiseSolutions.Count < quiz.Participants.Count))
+            {
+                return false;
+            }
+
+            Quiz = quiz;
 
             UsersToSolutions = Quiz.Excersises
                 .SelectMany(e => e.ExcersiseSolutions)
@@ -72,22 +90,28 @@ namespace Main.Pages
 
             Users = UsersToSolutions.Keys.ToList();
             Excersises = Quiz.Excersises.ToList();
+
+            return true;
         }
 
-        public async void OnGet() //int id
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            //TODO: REMOVE THIS, THE ID SHOULD BE A PARAMETER OF ONGET
-            var allQuizes = await _repository.GetAllAsync<Quiz>();
-            if (allQuizes.Count == 0)
-                throw new InvalidOperationException("No quizes found in the repository. Go to /create page and create a quiz for testing purposes.");
-            int id = allQuizes[0].Id;
+            bool success = await Init(id);
+            if (!success)
+            {
+                return Forbid();
+            }
 
-            await Init(id);
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            await Init(QuizId);
+            bool success = await Init(QuizId);
+            if (!success)
+            {
+                return RedirectToPage("Error");
+            }
 
             if (Grades.Any(g => g == null))
             {
