@@ -1,8 +1,14 @@
 class Note {
   static availableBaseValues = [1, 2, 4, 8, 16];
+  static noteVoices = {
+    soprano: "SOPRANO",
+    alto: "ALTO",
+    tenore: "TENORE",
+    bass: "BASS",
+  };
 
   constructor(
-    value = 1,
+    baseValue = 1,
     hasDot = false,
     isFacingUp = true,
     accidentalName = Accidental.accidentals.none
@@ -16,7 +22,7 @@ class Note {
     };
 
     this.hasDot = hasDot;
-    this.setBaseValue(value);
+    this.setBaseValue(baseValue);
     this.isFacingUp = isFacingUp;
     this.accidental = new Accidental(accidentalName);
   }
@@ -27,6 +33,24 @@ class Note {
       accidentalName: this.accidental.getChar(),
       line: this.line,
     };
+  }
+
+  static fromJson(noteJson) {
+    const slots = noteJson.value;
+    const { baseValue, hasDot } = Note.slotsToBaseValueAndDot(slots);
+
+    const accidentalChar = noteJson.accidentalName;
+    const accidentalName = Accidental.charToAccidentalName(accidentalChar);
+
+    const voice = noteJson.voice;
+    const isFacingUp =
+      voice === Note.noteVoices.soprano || voice === Note.noteVoices.tenore;
+
+    const line = noteJson.line;
+
+    let note = new Note(baseValue, hasDot, isFacingUp, accidentalName);
+    note.setLine(line);
+    return note;
   }
 
   hasSameValue(other) {
@@ -100,6 +124,27 @@ class Note {
     // 8 -> 2
     // 16 -> 1
     return 16 / baseValue;
+  }
+
+  static slotsToBaseValueAndDot(slots) {
+    for (let i = 0; i < Note.availableBaseValues.length; i++) {
+      const calculatedSlots = Note.baseValueToSlots(
+        Note.availableBaseValues[i]
+      );
+      if (calculatedSlots === slots) {
+        const baseValue = Note.availableBaseValues[i];
+        const hasDot = false;
+        return { baseValue, hasDot };
+      } else if (calculatedSlots < slots) {
+        const baseValue = Note.availableBaseValues[i];
+        const hasDot = true;
+        return { baseValue, hasDot };
+      }
+    }
+
+    const baseValue = 16;
+    const hasDot = false;
+    return { baseValue, hasDot };
   }
 
   toggleIsFacingUp() {

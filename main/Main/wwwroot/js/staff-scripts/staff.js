@@ -1,30 +1,31 @@
 class GrandStaff {
   constructor(
-    numberOfVerticalsPerBarList,
-    minWidth,
-    metre = new Metre(4, 4),
-    keySignature = new KeySignature(7)
+    // numberOfVerticalsPerBarList,
+    minWidth
+    // metre = new Metre(4, 4),
+    // keySignature = new KeySignature(7)
   ) {
-    this.keySignature = keySignature;
-    this.metre = metre;
+    // this.keySignature = keySignature;
+    // this.metre = metre;
 
-    const slotsPerBar = this.metre.slotsPerBar();
-    this.bars = [];
-    for (let i = 0; i < numberOfVerticalsPerBarList.length; i++) {
-      this.bars.push(
-        new Bar(this, numberOfVerticalsPerBarList[i], slotsPerBar)
-      );
-    }
+    // const slotsPerBar = this.metre.slotsPerBar();
+    // this.bars = [];
+    // for (let i = 0; i < numberOfVerticalsPerBarList.length; i++) {
+    //   this.bars.push(
+    //     new Bar(this, numberOfVerticalsPerBarList[i], slotsPerBar)
+    //   );
+    // }
 
     this.keySignatureOffset =
       keyOffset + symbols.violinKey.width + 0.4 * spaceBetweenStaffLines;
-    this.metreOffset =
-      this.keySignatureOffset +
-      this.keySignature.getWidth() +
-      0.2 * spaceBetweenStaffLines;
-    this.dynamicElementsOffset = this.metreOffset + this.metre.getMetreWidth();
+    // this.metreOffset =
+    //   this.keySignatureOffset +
+    //   this.keySignature.getWidth() +
+    //   0.2 * spaceBetweenStaffLines;
+    // this.dynamicElementsOffset = this.metreOffset + this.metre.getMetreWidth();
 
     this.minWidth = minWidth;
+    this.isLoaded = false;
   }
 
   init() {
@@ -59,6 +60,65 @@ class GrandStaff {
       meterCount: this.metre.count,
       meterValue: this.metre.value,
     });
+  }
+
+  #loadTaskFromJson(taskJsonString) {
+    // task mock, for now only how many verticals per bar, metre and key signature
+    const taskJson = {
+      meterCount: 3,
+      meterValue: 4,
+      sharpsCount: 0,
+      flatsCount: 7,
+      verticalsPerBar: verticalsPerBarList,
+    };
+
+    this.keySignature =
+      taskJson.sharpsCount > 0
+        ? new KeySignature(
+            taskJson.sharpsCount,
+            new Accidental(Accidental.accidentals.sharp)
+          )
+        : new KeySignature(
+            taskJson.flatsCount,
+            new Accidental(Accidental.accidentals.bemol)
+          );
+
+    this.metre = new Metre(taskJson.meterCount, taskJson.meterValue);
+
+    const slotsPerBar = this.metre.slotsPerBar();
+    this.bars = [];
+    for (let i = 0; i < taskJson.verticalsPerBar.length; i++) {
+      this.bars.push(new Bar(this, taskJson.verticalsPerBar[i], slotsPerBar));
+    }
+
+    this.metreOffset =
+      this.keySignatureOffset +
+      this.keySignature.getWidth() +
+      0.2 * spaceBetweenStaffLines;
+    this.dynamicElementsOffset = this.metreOffset + this.metre.getMetreWidth();
+  }
+
+  #loadNotesFromJson(jsonString) {
+    // json string is empty, empty staff
+    if (jsonString === "") {
+      return;
+    }
+
+    const json = JSON.parse(jsonString);
+    const jsonNotes = json.notes;
+    for (let i = 0; i < jsonNotes.length; i++) {
+      const curNote = jsonNotes[i];
+      const barIndex = curNote.barIndex;
+      this.bars[barIndex].loadNoteFromJson(curNote);
+    }
+  }
+
+  loadFromJson(taskJsonString, notesJsonString) {
+    this.isLoaded = false;
+    this.#loadTaskFromJson(taskJsonString);
+    this.#loadNotesFromJson(notesJsonString);
+    this.init();
+    this.isLoaded = true;
   }
 
   setWidth(width) {

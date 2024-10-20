@@ -31,15 +31,23 @@ class TwoNotes {
     return jsonResult;
   }
 
+  loadNote(note) {
+    if (this.note1 === null) {
+      this.note1 = note;
+    } else {
+      this.note2 = note;
+    }
+  }
+
   #determineVoice(note) {
     if (note.isFacingUp && this.isUpperStaff) {
-      return "SOPRANO";
+      return Note.noteVoices.soprano;
     } else if (!note.isFacingUp && this.isUpperStaff) {
-      return "ALTO";
+      return Note.noteVoices.alto;
     } else if (note.isFacingUp && !this.isUpperStaff) {
-      return "TENORE";
+      return Note.noteVoices.tenore;
     } else {
-      return "BASS";
+      return Note.noteVoices.bass;
     }
   }
 
@@ -78,19 +86,16 @@ class TwoNotes {
   canAddNote(note) {
     // need to check vertical and/or whole bar to determine if can add if twoNote is empty
     if (this.isEmpty()) {
-      //console.log("need to check vertical");
       return this.parent.canAddNote(note, this.isUpperStaff);
     }
 
     //cant add if there are already two notes on the staff
     if (!this.hasEmptyNote()) {
-      //console.log("no empty note");
       return false;
     }
 
     // cant add if notes has different value
     if (!this.note1.hasSameValue(note)) {
-      //console.log("different value");
       return false;
     }
 
@@ -100,7 +105,6 @@ class TwoNotes {
       !this.note1.hasOppositeDirection(note) &&
       this.note1.getBaseValue() !== 1
     ) {
-      //console.log("same direction");
       return false;
     }
 
@@ -268,7 +272,10 @@ class TwoNotes {
     // note1 to draw, normal draw, no overlapping
     if (this.hasEmptyNote()) {
       this.note1.draw(notesCenterLineX, note1Y);
-      this.#drawAdditionalLines(notesCenterLineX, this.note1.getNoteWidth(false) * 2);
+      this.#drawAdditionalLines(
+        notesCenterLineX,
+        this.note1.getNoteWidth(false) * 2
+      );
       return;
     }
 
@@ -285,7 +292,8 @@ class TwoNotes {
       noteHeadWidth
     );
 
-    const additionalLineWidth = notesXOffset === 0 ? noteHeadWidth * 2 : noteHeadWidth * 3;
+    const additionalLineWidth =
+      notesXOffset === 0 ? noteHeadWidth * 2 : noteHeadWidth * 3;
     this.#drawAdditionalLines(notesCenterLineX, additionalLineWidth);
 
     const accidentalsXOffset =
@@ -305,38 +313,38 @@ class TwoNotes {
 
     const note1Line = this.note1 ? this.note1.line : 0;
 
-    for(let i = Math.min(note1Line - 1, -1); i >= lineNumber; i--) {
+    for (let i = Math.min(note1Line - 1, -1); i >= lineNumber; i--) {
       const lineY = this.getLineY(i);
       line(lineX0, lineY, lineX1, lineY);
     }
 
-    for(let i = Math.max(note1Line + 1, 5); i <= lineNumber; i++) {
+    for (let i = Math.max(note1Line + 1, 5); i <= lineNumber; i++) {
       const lineY = this.getLineY(i);
       line(lineX0, lineY, lineX1, lineY);
     }
   }
 
-  #drawAdditionalLines(additionalLineCenterX, additionalLineWidth){
+  #drawAdditionalLines(additionalLineCenterX, additionalLineWidth) {
     let minLine = 0;
     let maxLine = 4;
     if (this.note1) {
       minLine = Math.min(this.note1.line, minLine);
       maxLine = Math.max(this.note1.line, maxLine);
     }
-    if(this.note2) {
+    if (this.note2) {
       minLine = Math.min(this.note2.line, minLine);
       maxLine = Math.max(this.note2.line, maxLine);
     }
 
     const additionalLineX0 = additionalLineCenterX - additionalLineWidth / 2;
     const additionalLineX1 = additionalLineCenterX + additionalLineWidth / 2;
-    
-    for(let i = -1; i >= minLine; i--) {
+
+    for (let i = -1; i >= minLine; i--) {
       const lineY = this.getLineY(i);
       line(additionalLineX0, lineY, additionalLineX1, lineY);
     }
 
-    for(let i = 5; i <= maxLine; i++) {
+    for (let i = 5; i <= maxLine; i++) {
       const lineY = this.getLineY(i);
       line(additionalLineX0, lineY, additionalLineX1, lineY);
     }

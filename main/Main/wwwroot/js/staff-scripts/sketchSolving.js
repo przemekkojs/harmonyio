@@ -1,8 +1,8 @@
 const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 
 let canvas;
-let canvasWidth;
-let canvasHeight;
+let canvasWidth = 1288;
+let canvasHeight = 800;
 
 let grandStaff;
 let menu;
@@ -32,23 +32,24 @@ function preload() {
 }
 
 function setup() {
-  canvasWidth = 1240;
-  canvasHeight = 800;
   canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent("#music-staff-div");
 
   resizeSymbols();
 
   menu = new Menu(canvasWidth - menuWidth, 0, menuWidth);
-
-  grandStaff = new GrandStaff(verticalsPerBarList, canvasWidth - menuWidth);
-  grandStaff.init();
+  grandStaff = new GrandStaff(canvasWidth - menuWidth);
+  grandStaff.loadFromJson(
+    "",
+    document.querySelector(`input[name="Answers[0]"]`).value
+  );
 }
 
 function draw() {
   background(240);
-  grandStaff.draw();
-  menu.draw();
-
-  handleMouseInteraction(grandStaff);
+  if (grandStaff.isLoaded) {
+    grandStaff.draw();
+    menu.draw();
+    handleMouseInteraction(grandStaff);
+  }
 }

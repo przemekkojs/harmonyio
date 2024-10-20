@@ -14,8 +14,8 @@ class Accidental {
     bemol: "b",
     doubleBemol: "bb",
     natural: "bq",
-    none: ""
-  }
+    none: "",
+  };
 
   constructor(name = Accidental.accidentals.none) {
     this.setName(name);
@@ -33,8 +33,24 @@ class Accidental {
     }
   }
 
-  getChar(){
+  getChar() {
     return Accidental.accidentalChar[this.name];
+  }
+
+  static charToAccidentalName(char) {
+    if (char === Accidental.accidentalChar.sharp) {
+      return Accidental.accidentals.sharp;
+    } else if (char === Accidental.accidentalChar.doubleSharp) {
+      return Accidental.accidentals.doubleSharp;
+    } else if (char === Accidental.accidentalChar.bemol) {
+      return Accidental.accidentals.bemol;
+    } else if (char === Accidental.accidentalChar.doubleBemol) {
+      return Accidental.accidentals.doubleBemol;
+    } else if (char === Accidental.accidentalChar.natural) {
+      return Accidental.accidentals.natural;
+    } else {
+      return Accidental.accidentals.none;
+    }
   }
 
   getName() {
@@ -76,7 +92,10 @@ class Accidental {
     push();
     imageMode(CENTER);
     translate(x, y);
-    if (this.name === Accidental.accidentals.bemol || this.name === Accidental.accidentals.doubleBemol) {
+    if (
+      this.name === Accidental.accidentals.bemol ||
+      this.name === Accidental.accidentals.doubleBemol
+    ) {
       translate(0, bemolOffset);
     }
 

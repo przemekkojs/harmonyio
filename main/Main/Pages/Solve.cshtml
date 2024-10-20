@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="~/css/solve-style.css" />
 </head>
 
-<form method="post" class="h-100 w-100">
+<form id="solve-form" method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
         <div class="top-bar w-100 d-flex justify-content-between align-items-center">
             <div class="fw-bold fs-4">
@@ -36,11 +36,12 @@
                 </div>
             </div>
 
-            <input type="text" id="answer-input" class="form-control task-input" oninput="changeAnswer(this.value)">
+            @* TODO remove this input *@
+            <input type="text" id="answer-input" class="form-control task-input">
 
             <div class="flex-grow-1 d-flex flex-row mt-3">
                 <div id="music-staff-div"
-                    class="music-staff flex-grow-1 d-flex justify-content-center align-items-center me-3">
+                    class="music-staff flex-grow-1 d-flex justify-content-center align-items-center">
 
                     <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
                     @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
@@ -49,23 +50,6 @@
                     }
                 </div>
             </div>
-            @* <div class="flex-grow-1 d-flex flex-row mt-3">
-            <div class="music-staff h-100 flex-grow-1 d-flex justify-content-center align-items-center me-3">
-            <span class="me-2">Pięciolinia</span>
-            <input type="text" id="answer-input" class="form-control task-input"
-            oninput="changeAnswer(this.value)">
-
-            <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
-            @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
-            {
-            <input type="hidden" asp-for="Answers[@i]" value="" />
-            }
-            </div>
-
-            <div class="toolbox h-100 d-flex justify-content-center align-items-center">
-            Toolbox
-            </div>
-            </div> *@
         </div>
 
         <hr class="hr mt-3">
@@ -86,7 +70,8 @@
 
             <button id="btn-next" type="button" onclick="nextQuestion()"
                 class="btn btn-secondary btn-std-width ms-3">Następne</button>
-            <button id="btn-finish" type="submit" class="btn btn-primary btn-std-width ms-3">Zakończ</button>
+            <button id="btn-finish" onclick="submitFormClicked()"
+                class="btn btn-primary btn-std-width ms-3">Zakończ</button>
         </div>
     </div>
 </form>
@@ -139,11 +124,11 @@
     var currentIndex = 0;
 
     function changeAnswer(value) {
-        var hiddenInput = document.querySelector(`input[name="Answers[${currentIndex}]"]`);
+        let hiddenInput = document.querySelector(`input[name="Answers[${currentIndex}]"]`);
         hiddenInput.value = value;
     }
 
-    function loadQuestion(index) {
+    function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < excersises.length) {
             document.getElementById("excersise-number").innerText = index + 1;
             document.getElementById("excersise-question").innerText = excersises[index].question;
@@ -152,10 +137,20 @@
             document.getElementById("btn-finish").style.display = index === excersises.length - 1 ? 'inline-block' : 'none';
 
             document.getElementById("answer-input").value = document.querySelector(`input[name="Answers[${currentIndex}]"]`).value;
+            if (loadToGrandStaff) {
+                grandStaff.loadFromJson("", document.querySelector(`input[name="Answers[${currentIndex}]"]`).value);
+            }
 
             generateButtons(index);
         }
     }
+
+    function safeStaffAnswer() {
+        let hiddenInput = document.querySelector(`input[name="Answers[${currentIndex}]"]`);
+        const staffJson = grandStaff.toJson();
+        hiddenInput.value = staffJson;
+    }
+
 
     const maxVisibleButtons = 9;
     const targetVisibleOneSide = Math.floor(maxVisibleButtons / 2)
@@ -187,6 +182,7 @@
 
             button.onclick = (function (i) {
                 return function () {
+                    safeStaffAnswer();
                     currentIndex = i;
                     loadQuestion(currentIndex);
                 };
@@ -203,8 +199,10 @@
         document.getElementById("div-last-ex").style.display = end < excersises.length - 1 ? 'inline-block' : 'none';
     }
 
+
     function prevQuestion() {
         if (currentIndex > 0) {
+            safeStaffAnswer();
             currentIndex--;
             loadQuestion(currentIndex);
         }
@@ -212,6 +210,7 @@
 
     function nextQuestion() {
         if (currentIndex < excersises.length - 1) {
+            safeStaffAnswer();
             currentIndex++;
             loadQuestion(currentIndex);
         }
@@ -219,14 +218,18 @@
 
     function lastQuestion() {
         if (currentIndex < excersises.length - 1) {
+            safeStaffAnswer();
             currentIndex = excersises.length - 1;
             loadQuestion(currentIndex);
         }
     }
 
-    loadQuestion(currentIndex);
+    function submitFormClicked() {
+        safeStaffAnswer();
+        document.getElementById("solve-form").submit();
+    }
 
-
+    loadQuestion(currentIndex, false);
 
     var closeDate = new Date("@Model.Quiz.CloseDate.ToString("o")");
     function updateTimer() {

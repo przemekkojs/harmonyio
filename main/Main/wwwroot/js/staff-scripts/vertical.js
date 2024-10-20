@@ -27,6 +27,15 @@ class Vertical {
     return concatenated;
   }
 
+  loadNoteFromJson(noteJson) {
+    const voice = noteJson.voice;
+    if (voice === Note.noteVoices.soprano || voice === Note.noteVoices.alto) {
+      this.upperStaff.loadNote(Note.fromJson(noteJson));
+    } else {
+      this.lowerStaff.loadNote(Note.fromJson(noteJson));
+    }
+  }
+
   getSlotsTaken() {
     return max(
       this.upperStaff.getSlotsTaken(),
@@ -55,7 +64,6 @@ class Vertical {
       otherStaffHasSameValue = this.upperStaff.hasSameValue(note);
     }
     if (otherStaffHasSameValue) {
-      //console.log("other has same value");
       return true;
     }
 
