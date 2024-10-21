@@ -37,13 +37,13 @@ namespace Main.Pages
                     .ThenInclude(q => q.ExcersiseSolutions)
             ))!;
 
-            if (quiz == null || appUser == null ||
-                quiz.State != Enumerations.QuizState.Open ||
-                !quiz.Participants.Any(u => u.Id == appUser.Id) ||
-                quiz.QuizResults.Any(qr => qr.UserId == appUser.Id))
-            {
-                return Forbid();
-            }
+            // if (quiz == null || appUser == null ||
+            //     quiz.State != Enumerations.QuizState.Open ||
+            //     !quiz.Participants.Any(u => u.Id == appUser.Id) ||
+            //     quiz.QuizResults.Any(qr => qr.UserId == appUser.Id))
+            // {
+            //     return Forbid();
+            // }
 
             Quiz = quiz;
             Answers = Quiz.Excersises
