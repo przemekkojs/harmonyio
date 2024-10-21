@@ -2,106 +2,284 @@
 @model Main.Pages.ListCreate
 @using Main.Enumerations;
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-7">
+<head>
+    <link rel="stylesheet" href="~/css/created-style.css" />
+</head>
 
-            <div class="row mb-3">
-                <h2>Utworzone</h2>
-            </div>
-            <div class="row mb-3">
-                <div class="p-2">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            <strong>Nazwa</strong>
-                        </div>
-                        <div class="col-3">
-                            <div class="d-flex flex-row align-items-center">
-                                <strong>Stan</strong>
-                                <select class="form-select form-select-sm" aria-label="Filtruj">
-                                    <option selected>Filtruj</option>
-                                    <option value="1">Nie otwarte</option>
-                                    <option value="2">Otwarte</option>
-                                    <option value="3">Zakończone</option>
-                                </select>
-                            </div>
+<div class="h-100 w-100 d-flex flex-row overflow-auto">
+    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column pe-3">
+        @*QUIZY Z PODZIAŁEM NA SEKCJE. JEŻELI W DANEJ SEKCJI NIE MA ŻADNYCH QUIZÓW, TO POWINNA SIĘ ONA NIE WYŚWIETLAĆ, WŁĄCZNIE Z NAGŁÓWKIEM*@
 
-                        </div>
-                        <div class="col-3">
-                            <strong>Data zakończenia</strong>
-                        </div>
-                        <div class="col-3 text-end">
+        <div class="fw-bold fs-4 mb-3">Do Oceny</div>
+        @for (int i = 0; i < 1; i++)
+        {
+            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                <div class="flex-grow-1 d-flex flex-column">
+                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
 
-                        </div>
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Otwarcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zamknięcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fas fa-user-group icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Wypełniono:</span>
+                        <span>25/25</span>
                     </div>
                 </div>
-            </div>
-            @foreach (var quiz in Model.Created.Where(q => q.IsCreated))
-            {
-                <div class="row mb-3">
-                    <div class="card p-3 bg-light">
-                        <div class="row align-items-center">
-                            <div class="col-3">
-                                @quiz.Name
-                            </div>
-                            <div class="col-3">
-                                @quiz.State.AsString()
-                            </div>
-                            <div class="col-3">
-                                @quiz.CloseDate
-                            </div>
-                            <div class="col-3 text-end">
-                                <a href="/create?id=@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
 
-        </div>
-        <div class="col-1">
-
-        </div>
-        <div class="col-4">
-
-            <div class="row mb-3">
-                <h2>Szkice</h2>
-            </div>
-            <div class="row mb-3">
-                <div class="p-2">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <strong>Nazwa</strong>
-                        </div>
-                        <div class="col-6 text-end">
-
-                        </div>
-                    </div>
+                <div class="d-flex flex-column h-100">
+                    <button class="btn btn-primary ms-auto mt-auto">Oceń</button>
                 </div>
             </div>
+        }
 
-            @foreach (var quiz in Model.Created.Where(q => !q.IsCreated))
-            {
-                <div class="row mb-3">
-                    <div class="card p-3 bg-light">
-                        <div class="row align-items-center">
-                            <div class="col-3">
-                                @quiz.Name
-                            </div>
-                            <div class="col-3 text-end">
-                                <a href="/create?id=@quiz.Id" class="btn btn-outline-primary btn-sm">Edytuj</a>
-                            </div>
-                            <div class="col-3 text-end">
-                                <form method="post">
-                                    <input type="hidden" asp-for="PublishedQuizId" value="@quiz.Id" />
-                                    <button type="submit" class="btn btn-outline-primary btn-sm">Opublikuj</button>
-                                </form>
-                            </div>
-                        </div>
+        <div class="fw-bold fs-4 mb-3">Opublikowane</div>
+        @for (int i = 0; i < 1; i++)
+        {
+            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                <div class="flex-grow-1 d-flex flex-column">
+                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Otwarcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zamknięcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fas fa-user-group icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Wypełniono:</span>
+                        <span>5/25</span>
                     </div>
                 </div>
-            }
-        </div>
+
+                <div class="d-flex flex-column h-100">
+                    <div class="d-flex flex-row">
+                        <button class="btn-icon ms-auto">
+                            <i class="fas fa-magnifying-glass icon-sm"></i>
+                        </button>
+                    </div>
+
+                    <div class="mx-auto mb-1 mt-auto d-flex flex-row">
+                        <span class="fw-bold me-1">Pin:</span>
+                        <span>256 631</span>
+                    </div>
+                    <button class="btn btn-primary mx-auto">Kopiuj link</button>
+                </div>
+            </div>
+        }
+
+        <div class="fw-bold fs-4 mb-3">Zamknięte</div>
+        @for (int i = 0; i < 1; i++)
+        {
+            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                <div class="flex-grow-1 d-flex flex-column">
+                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Otwarcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zamknięcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fas fa-user-group icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Wypełniono:</span>
+                        <span>25/25</span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column h-100">
+                    <button class="btn btn-primary ms-auto mt-auto">Edytuj oceny</button>
+                </div>
+            </div>
+        }
+
+        @*PONIŻSZE ELEMENTY WYŚWIETLAMY, JEŻELI WSZYSTKIE POWYŻSZE ELEMENTY SĄ PUSTE*@
+
+        @*<div class="fw-bold fs-4 mb-3">Opublikowane</div>
+        <p>Nie masz jeszcze żadnych opublikowanych quizów... Utwórz szkic oraz go opublikuj, a pojawi się on tutaj!</p>*@
+
     </div>
 
+    <div class="vr"></div>
+
+    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column ps-3">
+        <div class="fw-bold fs-4 mb-3">Szkice</div>
+        @for (int i = 0; i < 1; i++)
+        {
+            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                <div class="flex-grow-1 d-flex flex-column">
+                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Otwarcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zamknięcie:</span>
+                        <span>15.10.2024 10:00</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fas fa-music icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zadania:</span>
+                        <span>5</span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column h-100">
+                    <div class="d-flex flex-row">
+                        <button class="btn-icon me-3 ms-auto">
+                            <i class="fas fa-pencil icon-sm"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="far fa-trash-can icon-sm"></i>
+                        </button>
+                    </div>
+
+                    <button class="btn btn-primary ms-auto mt-auto">Opublikuj</button>
+                </div>
+            </div>
+        }
+
+        <div class="quiz quiz-add d-flex justify-content-center align-items-center">
+            <span class="plus me-1">+</span>
+            <span>Utwórz nowy quiz</span>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*OLD UI*@
+
+@*<div class="container mt-5">
+        <div class="row">
+            <div class="col-7">
+
+                <div class="row mb-3">
+                    <h2>Utworzone</h2>
+                </div>
+                <div class="row mb-3">
+                    <div class="p-2">
+                        <div class="row align-items-center">
+                            <div class="col-3">
+                                <strong>Nazwa</strong>
+                            </div>
+                            <div class="col-3">
+                                <div class="d-flex flex-row align-items-center">
+                                    <strong>Stan</strong>
+                                    <select class="form-select form-select-sm" aria-label="Filtruj">
+                                        <option selected>Filtruj</option>
+                                        <option value="1">Nie otwarte</option>
+                                        <option value="2">Otwarte</option>
+                                        <option value="3">Zakończone</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-3">
+                                <strong>Data zakończenia</strong>
+                            </div>
+                            <div class="col-3 text-end">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var quiz in Model.Created.Where(q => q.IsCreated))
+                {
+                    <div class="row mb-3">
+                        <div class="card p-3 bg-light">
+                            <div class="row align-items-center">
+                                <div class="col-3">
+                                    @quiz.Name
+                                </div>
+                                <div class="col-3">
+                                    @quiz.State.AsString()
+                                </div>
+                                <div class="col-3">
+                                    @quiz.CloseDate
+                                </div>
+                                <div class="col-3 text-end">
+                                    <a href="/create?id=@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="col-1">
+
+            </div>
+            <div class="col-4">
+
+                <div class="row mb-3">
+                    <h2>Szkice</h2>
+                </div>
+                <div class="row mb-3">
+                    <div class="p-2">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <strong>Nazwa</strong>
+                            </div>
+                            <div class="col-6 text-end">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @foreach (var quiz in Model.Created.Where(q => !q.IsCreated))
+                {
+                    <div class="row mb-3">
+                        <div class="card p-3 bg-light">
+                            <div class="row align-items-center">
+                                <div class="col-3">
+                                    @quiz.Name
+                                </div>
+                                <div class="col-3 text-end">
+                                    <a href="/create?id=@quiz.Id" class="btn btn-outline-primary btn-sm">Edytuj</a>
+                                </div>
+                                <div class="col-3 text-end">
+                                    <form method="post">
+                                        <input type="hidden" asp-for="PublishedQuizId" value="@quiz.Id" />
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">Opublikuj</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>*@

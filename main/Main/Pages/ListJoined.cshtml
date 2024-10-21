@@ -4,88 +4,223 @@
 @{
 }
 
-<div class="container mt-5">
-    <div class="row mb-3">
-        <h2>Otwarte</h2>
-    </div>
-    <div class="row mb-3">
-        <div class="p-2">
-            <div class="row align-items-center">
-                <div class="col-3">
-                    <strong>Nazwa</strong>
-                </div>
-                <div class="col-3">
-                    <strong>Termin</strong>
-                </div>
-                <div class="col-6 text-end">
+<head>
+    <link rel="stylesheet" href="~/css/created-style.css" />
+</head>
 
+<div class="h-100 w-100 d-flex flex-row overflow-auto">
+    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column pe-3">
+        @*QUIZY Z PODZIAŁEM NA SEKCJE. JEŻELI W DANEJ SEKCJI NIE MA ŻADNYCH QUIZÓW, TO POWINNA SIĘ ONA NIE WYŚWIETLAĆ, WŁĄCZNIE Z NAGŁÓWKIEM*@
+
+        <div class="fw-bold fs-4 mb-3">Do Rozwiązania</div>
+        @for (int i = 0; i < 1; i++)
+        {
+            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                <div class="flex-grow-1 d-flex flex-column">
+                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Pozostało:</span>
+                        <span>12d 11h 5m 31s</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="fas fa-music icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zadania:</span>
+                        <span>5</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fas fa-user icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Twórca:</span>
+                        <span>Kamil Nowak</span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column h-100">
+                    <button class="btn btn-primary ms-auto mt-auto">Rozwiąż</button>
                 </div>
             </div>
-        </div>
+        }
+
+        <div class="fw-bold fs-4 mb-3">Zaplanowane</div>
+        @for (int i = 0; i < 1; i++)
+        {
+            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                <div class="flex-grow-1 d-flex flex-column">
+                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Dostępne za:</span>
+                        <span>12d 11h 5m 31s</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="fas fa-music icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zadania:</span>
+                        <span>5</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fas fa-user icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Twórca:</span>
+                        <span>Kamil Nowak</span>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @*PONIŻSZE ELEMENTY WYŚWIETLAMY, JEŻELI WSZYSTKIE POWYŻSZE ELEMENTY SĄ PUSTE*@
+
+        @*<div class="fw-bold fs-4 mb-3">Zaplanowane</div>
+        <p>Nie masz aktualnie żadnych zaplanowanych, ani trwających quizów. Po dołączeniu będziesz mógł go rozwiązać tutaj!</p>*@
     </div>
-    @foreach (var quiz in Model.Joined)
-    {
+
+    <div class="vr"></div>
+
+    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column ps-3">
+        <div class="fw-bold fs-4 mb-3">Zakończone</div>
+        @for (int i = 0; i < 1; i++)
+        {
+            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                <div class="flex-grow-1 d-flex flex-column">
+                    <div class="fw-bold fs-5">Kartkówka 2A</div>
+
+                    @*JEŻELI NIE OCENIONE*@
+                    @*<span style="margin-top: -4px;">Oczekuje na ocenę...</span>
+                    <div style="height: 28px;"></div>*@
+
+                    @*JEŻELI OCENIONE*@
+                    <div class="d-flex flex-row align-items-center mt-3 mb-2">
+                        <i class="far fa-clock icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Dostępne za:</span>
+                        <span>12d 11h 5m 31s</span>
+                    </div>
+
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <i class="fas fa-music icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Zadania:</span>
+                        <span>5</span>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="fas fa-user icon-sm me-2"></i>
+                        <span class="fw-bold me-1">Twórca:</span>
+                        <span>Kamil Nowak</span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column h-100">
+                    @*JEŻELI OCENIONE*@
+                    <div class="d-flex flex-row">
+                        <div class="fw-bold fs-5 ms-auto">3-</div>
+                    </div>
+
+                    <button class="btn btn-primary ms-auto mt-auto">Przeglądaj</button>
+                </div>
+            </div>
+        }
+
+        @*PONIŻSZE ELEMENTY WYŚWIETLAMY, JEŻELI WSZYSTKIE POWYŻSZE ELEMENTY SĄ PUSTE*@
+
+        @*<div class="fw-bold fs-4 mb-3">Zakończone</div>
+        <p>Nie masz jeszcze żadnych zakończonych quizów... Dołącz do quizu i rozwiąż go, a wyniki pojawią się tutaj!</p>*@
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="container mt-5">
         <div class="row mb-3">
-            <div class="card p-3 bg-light">
+            <h2>Otwarte</h2>
+        </div>
+        <div class="row mb-3">
+            <div class="p-2">
                 <div class="row align-items-center">
                     <div class="col-3">
-                        @quiz.Name
+                        <strong>Nazwa</strong>
                     </div>
                     <div class="col-3">
-                        @quiz.CloseDate
+                        <strong>Termin</strong>
                     </div>
                     <div class="col-6 text-end">
-                        <a href="/solve?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+
                     </div>
                 </div>
             </div>
         </div>
-    }
-
-</div>
-<hr class="mt-3"/>
-<div class="container mt-3">
-
-    <div class="row mb-3">
-        <h2>Zamknięte</h2>
-    </div>
-    <div class="row mb-3">
-        <div class="p-2">
-            <div class="row align-items-center">
-                <div class="col-3">
-                    <strong>Nazwa</strong>
-                </div>
-                <div class="col-3">
-                    <strong>Data zakończenia</strong>
-                </div>
-                <div class="col-3">
-                    <strong>Ocena</strong>
-                </div>
-                <div class="col-3 text-end">
-
+        @foreach (var quiz in Model.Joined)
+        {
+            <div class="row mb-3">
+                <div class="card p-3 bg-light">
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            @quiz.Name
+                        </div>
+                        <div class="col-3">
+                            @quiz.CloseDate
+                        </div>
+                        <div class="col-6 text-end">
+                            <a href="/solve?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+
     </div>
-    @foreach (var quiz in Model.Joined.Where(q => q.CloseDate < DateTime.Now))
-    {
+    <hr class="mt-3"/>
+    <div class="container mt-3">
+
         <div class="row mb-3">
-            <div class="card p-3 bg-light">
+            <h2>Zamknięte</h2>
+        </div>
+        <div class="row mb-3">
+            <div class="p-2">
                 <div class="row align-items-center">
                     <div class="col-3">
-                        @quiz.Name
+                        <strong>Nazwa</strong>
                     </div>
                     <div class="col-3">
-                        @quiz.CloseDate
+                        <strong>Data zakończenia</strong>
                     </div>
                     <div class="col-3">
-                        @quiz.QuizResults.Where(qr => qr.User == Model.AppUser).Select(qr => qr.Grade.HasValue ? qr.Grade.ToString() : "nie ocenione").First()
+                        <strong>Ocena</strong>
                     </div>
                     <div class="col-3 text-end">
-                        <a href="/solve?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+
                     </div>
                 </div>
             </div>
         </div>
-    }
-</div>
+        @foreach (var quiz in Model.Joined.Where(q => q.CloseDate < DateTime.Now))
+        {
+            <div class="row mb-3">
+                <div class="card p-3 bg-light">
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            @quiz.Name
+                        </div>
+                        <div class="col-3">
+                            @quiz.CloseDate
+                        </div>
+                        <div class="col-3">
+                            @quiz.QuizResults.Where(qr => qr.User == Model.AppUser).Select(qr => qr.Grade.HasValue ? qr.Grade.ToString() : "nie ocenione").First()
+                        </div>
+                        <div class="col-3 text-end">
+                            <a href="/solve?@quiz.Id" class="btn btn-outline-primary btn-sm">Zobacz</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>*@

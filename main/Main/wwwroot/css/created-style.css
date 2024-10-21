@@ -1,0 +1,23 @@
+﻿.quiz {
+    padding: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+    border-width: 1px;
+    border-color: gray;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+.quiz-add {
+    text-align: center;
+    cursor: pointer;
+    color: #666;
+    border-style: dashed;
+    height: 155px;
+    min-height: 155px;
+}
+
+.icon-img {
+    width: 25px;
+    height: 25px;
+}
