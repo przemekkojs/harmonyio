@@ -17,7 +17,7 @@ namespace Main.Pages
         [BindProperty]
         public int QuizId { get; set; }
         [BindProperty]
-        public List<string> Answers { get; set; } = null!;
+        public List<string> Answers { get; set; } = new();
 
         public SolveModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
@@ -27,23 +27,21 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
-            var appUser = (await _userManager.GetUserAsync(User))!;
-            var quiz = (await _repository.GetAsync<Quiz>(
+            var appUser = await _userManager.GetUserAsync(User);
+            var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Code == id,
                 query => query
                     .Include(q => q.Participants)
                     .Include(q => q.QuizResults)
                     .Include(q => q.Excersises)
                     .ThenInclude(q => q.ExcersiseSolutions)
-            ))!;
+            );
 
-            // if (quiz == null || appUser == null ||
-            //     quiz.State != Enumerations.QuizState.Open ||
-            //     !quiz.Participants.Any(u => u.Id == appUser.Id) ||
-            //     quiz.QuizResults.Any(qr => qr.UserId == appUser.Id))
-            // {
-            //     return Forbid();
-            // }
+            if (quiz == null || appUser == null ||
+                quiz.State != Enumerations.QuizState.Open)
+            {
+                return Forbid();
+            }
 
             Quiz = quiz;
             Answers = Quiz.Excersises
@@ -58,13 +56,23 @@ namespace Main.Pages
             var currentUser = await _userManager.GetUserAsync(User);
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == QuizId,
-                query => query.Include(q => q.Excersises)
+                query => query
+                    .Include(q => q.Excersises)
+                    .ThenInclude(e => e.ExcersiseSolutions)
             );
 
             if (currentUser == null || quiz == null)
                 return RedirectToPage("Error");
 
             var excersises = (List<Excersise>)quiz.Excersises;
+            var oldAnswers = quiz.Excersises.SelectMany(e => e.ExcersiseSolutions.Where(es => es.UserId == currentUser.Id));
+            foreach (var solution in oldAnswers)
+            {
+                if (solution != null)
+                {
+                    _repository.Delete(solution);
+                }
+            }
             for (int i = 0; i < excersises.Count; i++)
             {
                 var solution = new ExcersiseSolution()

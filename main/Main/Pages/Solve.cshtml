@@ -37,7 +37,7 @@
             </div>
 
             @* TODO remove this input *@
-            <input type="text" id="answer-input" class="form-control task-input">
+            @* <input type="text" id="answer-input" class="form-control task-input"> *@
 
             <div class="flex-grow-1 d-flex flex-row mt-3">
                 <div id="music-staff-div"
@@ -46,7 +46,7 @@
                     <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
                     @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
                     {
-                        <input type="hidden" asp-for="@Model.Answers[@i]" value="" />
+                        <input type="hidden" asp-for="@Model.Answers[@i]" value="@Model.Answers[@i]" />
                     }
                 </div>
             </div>
