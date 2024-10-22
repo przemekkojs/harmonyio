@@ -1,4 +1,4 @@
-const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
+const verticalsPerBarList = [1, 2, 3, 4, 5, 6];//, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 
 let canvas;
 let canvasWidth = 1288;

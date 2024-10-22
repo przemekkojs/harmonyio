@@ -30,10 +30,10 @@ class FunctionSymbol {
 
   draw(x, y) {
     push();
+    strokeWeight(0);
 
     // draw function letter
     const letterSize = getVerticalWidth() * 0.5;
-    push();
     textAlign(CENTER, BASELINE);
     textSize(letterSize);
 
@@ -44,13 +44,10 @@ class FunctionSymbol {
       this.functionLetterH = functionLetterBbox.h;
     }
     text(this.functionLetter, x, y + this.functionLetterH / 2);
-    pop();
 
     // draw roman letter
-    push();
     textSize(letterSize * 0.3);
     textAlign(LEFT, BASELINE);
-
     const romanLetterX =
       this.functionLetter === "T" ? x + 3 : x + this.functionLetterW / 2 + 2;
     text(
@@ -63,10 +60,8 @@ class FunctionSymbol {
       rommanLetterWidth === 0
         ? x + this.functionLetterW / 2
         : romanLetterX + rommanLetterWidth;
-    pop();
 
     // draw circle if present
-    push();
     if (this.hasCircle) {
       const circleD = letterSize * 0.2;
       strokeWeight(2);
@@ -77,19 +72,18 @@ class FunctionSymbol {
         circleD
       );
     }
-    pop();
+
+    fill(0);
+    strokeWeight(0);
 
     // draw number above and below
-    push();
     const numberAboveBelowSize = letterSize * 0.4;
     textAlign(CENTER, BOTTOM);
     textSize(numberAboveBelowSize);
     text(this.numberAbove, x, y - this.functionLetterH / 2);
     textAlign(CENTER, TOP);
     text(this.numberBelow, x, y + this.functionLetterH / 2);
-    pop();
 
-    push();
     // draw top right numbers
     textAlign(LEFT, BASELINE);
     const rightNumbersSize = letterSize * 0.3;
@@ -139,8 +133,6 @@ class FunctionSymbol {
         );
       }
     }
-    pop();
-
     pop();
   }
 }

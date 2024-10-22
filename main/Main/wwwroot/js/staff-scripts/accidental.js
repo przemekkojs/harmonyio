@@ -26,11 +26,20 @@ class Accidental {
   }
 
   setName(name) {
-    if (!Accidental.accidentals.hasOwnProperty(name)) {
+    if (!Accidental.accidentals.hasOwnProperty(name) || name === Accidental.accidentals.none) {
       this.name = Accidental.accidentals.none;
+      this.img = null;
+      this.width = 0;
+      this.height = 0;
+      this.imgOffset = 0;
     } else {
       this.name = name;
-    }
+      this.img = symbols[name];
+      this.width = this.img.width;
+      this.height = this.img.height;
+      
+      this.imgOffset = this.name === Accidental.accidentals.bemol || this.name === Accidental.accidentals.doubleBemol ? bemolOffset : 0;
+    } 
   }
 
   getChar() {
@@ -58,48 +67,23 @@ class Accidental {
   }
 
   getAccidentalImage() {
-    if (!this.isSet()) {
-      return null;
-    }
-
-    return symbols[this.name];
+    return this.img;
   }
 
   getHeight() {
-    const img = this.getAccidentalImage();
-    if (img === null) {
-      return 0;
-    }
-
-    return img.height;
+    return this.height
   }
 
   getWidth() {
-    const img = this.getAccidentalImage();
-    if (img === null) {
-      return 0;
-    }
-
-    return img.width;
+    return this.width;
   }
 
   draw(x, y) {
-    const img = this.getAccidentalImage();
-    if (img === null) {
+    if (this.img === null) {
       return;
     }
 
-    push();
     imageMode(CENTER);
-    translate(x, y);
-    if (
-      this.name === Accidental.accidentals.bemol ||
-      this.name === Accidental.accidentals.doubleBemol
-    ) {
-      translate(0, bemolOffset);
-    }
-
-    image(img, 0, 0);
-    pop();
+    image(this.img, x, y + this.imgOffset);
   }
 }
