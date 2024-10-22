@@ -10,6 +10,16 @@ class Vertical {
 
     this.upperStaff = upperStaff;
     this.lowerStaff = lowerStaff;
+    this.functionSymbol = new FunctionSymbol(
+      this,
+      "Svii",
+      true,
+      9,
+      7,
+      ["7", "7>", "7<", "7>"],
+      ["1", "5", "1", "5"],
+      ["1", "3>", "5<", "1>"]
+    );
 
     this.verticalWidth = getVerticalWidth();
   }
@@ -165,6 +175,11 @@ class Vertical {
   draw() {
     this.upperStaff.draw();
     this.lowerStaff.draw();
+
+    const functionSymbolX = this.getX() + this.verticalWidth / 2;
+    const functionSymbolY = this.getY() + this.getHeight() + taskHeight / 2;
+
+    this.functionSymbol.draw(functionSymbolX, functionSymbolY);
   }
 
   drawArea() {
