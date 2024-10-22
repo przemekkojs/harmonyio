@@ -18,19 +18,29 @@ public class ListJoined : PageModel
     {
         _userManager = userManager;
         _repository = repository;
-        
     }
-    
+
+    public ApplicationUser AppUser { get; set; } = null!;
     public ICollection<Quiz> Joined { get; set; } = new List<Quiz>();
-    
-    public ApplicationUser AppUser { get; set; }
 
     public async Task<IActionResult> OnGetAsync()
     {
-        AppUser = await _userManager.GetUserAsync(User);
-        
-        Joined = (await _repository.GetAsync<ApplicationUser>(q => q.Id == AppUser!.Id,
-            q => q.Include(u => u.ParticipatedQuizes)))!.ParticipatedQuizes;
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Forbid();
+        }
+
+        AppUser = user;
+        Joined = (await _repository.GetAsync<ApplicationUser>(
+            q => q.Id == AppUser!.Id,
+            q => q
+                .Include(u => u.ParticipatedQuizes)
+                    .ThenInclude(q => q.QuizResults)
+                .Include(u => u.ParticipatedQuizes)
+                    .ThenInclude(q => q.Excersises)
+                        .ThenInclude(e => e.ExcersiseSolutions)
+        ))!.ParticipatedQuizes;
 
         return Page();
     }

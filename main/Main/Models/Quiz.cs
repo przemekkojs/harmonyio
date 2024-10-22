@@ -31,6 +31,6 @@ namespace Main.Models
 		[NotMapped]
         public QuizState State => !IsCreated || OpenDate > DateTime.Now ? QuizState.NotStarted :
 			CloseDate < DateTime.Now ? QuizState.Closed : QuizState.Open;
-	}
+    }
 }
 

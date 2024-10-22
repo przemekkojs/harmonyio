@@ -185,7 +185,7 @@ namespace Main.Pages
                     IsCreated = true,
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
-                    //Participants = new List<ApplicationUser>() { currentUser }
+                    Participants = new List<ApplicationUser>() { currentUser },
                 };
                 
                 _repository.Add(quiz);
@@ -237,33 +237,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("listcreate");
-            
-            // return Page();
-        }
-
-
-        private async Task<ApplicationUser> GetTestUser()
-        {
-            var userId = "testUser";
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                return user;
-            }
-            else
-            {
-                user = new ApplicationUser
-                {
-                    Id = userId,
-                    UserName = userId,
-                    FirstName = "Test",
-                    LastName = "User"
-                };
-
-                var result = await _userManager.CreateAsync(user, "Test123!");
-                return (await _userManager.FindByIdAsync(userId))!;
-            }
+            return RedirectToPage("ListCreate");
         }
     }
 }

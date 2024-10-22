@@ -89,6 +89,25 @@ body {
     height: 11px;
 }
 
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 0;
+    color: black;
+    cursor: pointer;
+}
+.btn-icon:focus {
+    outline: none; 
+}
+
+.icon-sm {
+    font-size: 24px;
+}
+
+.no-style {
+    all: unset;
+    text-decoration: none;
+}
 
 /*This should be in grade-style.css, button it doesnt work there for some reason*/
 
@@ -99,4 +118,3 @@ body {
 .focused-student .student-text {
     color: white;
 }
-
