@@ -1,8 +1,9 @@
-const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
+const verticalsPerBarList = [1, 2, 3, 4, 5, 6];//, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 
 let canvas;
 let canvasWidth = 1288;
 let canvasHeight = 800;
+let sketchFont;
 
 let grandStaff;
 let menu;
@@ -29,12 +30,13 @@ function resizeCanvasVertically() {
 
 function preload() {
   preloadSymbols();
+  sketchFont = loadFont(fontUrl);
 }
 
 function setup() {
   canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.parent("#music-staff-div");
-
+  textFont(sketchFont);
   resizeSymbols();
 
   menu = new Menu(canvasWidth - menuWidth, 0, menuWidth);

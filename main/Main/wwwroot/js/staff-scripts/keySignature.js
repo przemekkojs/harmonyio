@@ -5,6 +5,8 @@ class KeySignature {
   constructor(count = 0, accidental = new Accidental(Accidental.accidentals.bemol)) {
     this.count = count;
     this.accidental = accidental;
+
+    
   }
 
   getWidth() {
@@ -20,13 +22,11 @@ class KeySignature {
         ? KeySignature.sharpOffsets
         : KeySignature.bemolOffsets;
 
-    push();
-    translate(x + accidentalWidth / 2, y);
+    let accidentalX = x + accidentalWidth / 2;
     for (let i = 0; i < this.count; i++) {
       const offset = offsets[i] + additionalOffset;
-      this.accidental.draw(0, GrandStaff.getLineOffset(offset));
-      translate(accidentalWidth, 0);
+      this.accidental.draw(accidentalX,  y + GrandStaff.getLineOffset(offset));
+      accidentalX += accidentalWidth;
     }
-    pop();
   }
 }

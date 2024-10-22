@@ -9,17 +9,14 @@ class Metre {
   }
 
   draw(x, y) {
-    push();
-
-    let size = this.calculateTextSize();
+    const size = this.calculateTextSize();
     textSize(size);
     textAlign(CENTER);
-    translate(size / 2, 0.75 * size);
+    stroke(0);
+    strokeWeight(0);
 
-    text(this.count, x, y); // upper number of metre
-    text(this.value, x, y + 2 * spaceBetweenStaffLines); //lower number of metre
-
-    pop();
+    text(this.count, x + size / 2, y + 0.75 * size); // upper number of metre
+    text(this.value, x + size / 2, y + 0.75 * size + 2 * spaceBetweenStaffLines); //lower number of metre
   }
 
   calculateTextSize() {

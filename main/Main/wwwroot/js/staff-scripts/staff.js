@@ -202,55 +202,50 @@ class GrandStaff {
   }
 
   drawStaticElements() {
+    push();
     const linesWidth = this.width - braceWidth;
-
     // draw needed staffs (vertically)
     for (let i = 0; i < this.numberOfStaffs; i++) {
-      push();
-      translate(0, i * doubleGrandStaffHeight);
+      const y = i * doubleGrandStaffHeight;
+
+      const upperStaffFirstLineY = y + upperStaffUpperMargin;
 
       this.#drawBrace(
         braceWidth / 2,
-        upperStaffUpperMargin + braceHeight / 2,
+        upperStaffFirstLineY + braceHeight / 2,
         braceHeight,
         braceWidth
       );
 
       this.#drawSeparationLines(
         braceWidth,
-        0,
+        y,
         linesWidth,
         upperStaffHeight,
         lowerStaffHeight
       );
 
-      translate(0, upperStaffUpperMargin);
-      this.#drawBarLine(braceWidth, 0, braceHeight);
+      this.#drawBarLine(braceWidth, upperStaffFirstLineY, braceHeight);
 
       //upper staff
-      this.#drawSingleStaffLines(braceWidth, 0, linesWidth);
+      this.#drawSingleStaffLines(braceWidth, upperStaffFirstLineY, linesWidth);
       this.#drawKey(
         symbols.violinKey.width / 2 + keyOffset,
-        2.2 * spaceBetweenStaffLines,
+        upperStaffFirstLineY + 2.2 * spaceBetweenStaffLines,
         symbols.violinKey,
         true
       );
-      this.keySignature.draw(this.keySignatureOffset, 0, true);
-      this.metre.draw(this.metreOffset, 0);
-
-      translate(
-        0,
-        upperStaffHeight + lowerStaffUpperMargin - upperStaffUpperMargin
-      );
+      this.keySignature.draw(this.keySignatureOffset, upperStaffFirstLineY, true);
+      this.metre.draw(this.metreOffset, upperStaffFirstLineY);
 
       // lower staff
-      this.#drawSingleStaffLines(braceWidth, 0, linesWidth);
-      this.#drawKey(keyOffset, 0, symbols.bassKey, false);
-      this.keySignature.draw(this.keySignatureOffset, 0, false);
-      this.metre.draw(this.metreOffset, 0);
-
-      pop();
+      const lowerStaffY = y + upperStaffHeight + lowerStaffUpperMargin;
+      this.#drawSingleStaffLines(braceWidth, lowerStaffY, linesWidth);
+      this.#drawKey(keyOffset, lowerStaffY, symbols.bassKey, false);
+      this.keySignature.draw(this.keySignatureOffset, lowerStaffY, false);
+      this.metre.draw(this.metreOffset, lowerStaffY);
     }
+    pop();
   }
 
   #drawBrace(x, y, height, width) {
@@ -263,48 +258,34 @@ class GrandStaff {
   }
 
   #drawBarLine(x, y, height) {
-    push();
+    stroke(0);
     strokeWeight(2);
-    translate(x, y);
-    line(0, 0, 0, height);
-    pop();
+    line(x, y, x, y + height);
   }
 
   #drawSeparationLines(x, y, width, upperStaffHeight, lowerStaffHeight) {
-    push();
-    translate(x, y);
-
     stroke(150);
     strokeWeight(1);
-
-    line(0, 0, width, 0); // above
-    translate(0, upperStaffHeight);
-    line(0, 0, width, 0); // between
-    translate(0, lowerStaffHeight);
-    line(0, 0, width, 0); // below
-
-    pop();
+    line(x, y, width, y); // above
+    line(x, y + upperStaffHeight, x + width, y + upperStaffHeight); // between
+    line(x, y + upperStaffHeight + lowerStaffHeight, x + width, y + upperStaffHeight + lowerStaffHeight); // below
   }
 
   #drawSingleStaffLines(x, y, width) {
-    push();
-    translate(x, y);
+    stroke(0);
+    strokeWeight(2);
     for (let i = 0; i < 5; i++) {
       const lineOffset = GrandStaff.getLineOffset(i);
-      line(0, 0 + lineOffset, width, 0 + lineOffset);
+      line(x, y + lineOffset, width, y + lineOffset);
     }
-    pop();
   }
 
   #drawKey(x, y, keySymbol, centerSymbol = false) {
-    push();
-    translate(x, y);
     if (centerSymbol) {
       imageMode(CENTER);
     } else {
       imageMode(CORNER);
     }
-    image(keySymbol, 0, 0);
-    pop();
+    image(keySymbol, x, y);
   }
 }

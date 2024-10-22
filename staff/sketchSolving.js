@@ -1,9 +1,9 @@
 const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 
-
 let canvas;
 let canvasWidth;
 let canvasHeight;
+let sketchFont;
 
 let grandStaff;
 let menu;
@@ -30,6 +30,7 @@ function resizeCanvasVertically() {
 
 function preload() {
   preloadSymbols();
+  sketchFont = loadFont("/assets/fonts/Inconsolata.otf");
 }
 
 function setup() {
@@ -37,7 +38,7 @@ function setup() {
   canvasHeight = 800;
   canvas = createCanvas(canvasWidth, canvasHeight);
   canvas.position((windowWidth - canvasWidth) / 2, 100);
-
+  textFont(sketchFont);
   resizeSymbols();
 
   menu = new Menu(canvasWidth - menuWidth, 0, menuWidth);
@@ -53,5 +54,3 @@ function draw() {
 
   handleMouseInteraction(grandStaff);
 }
-
-

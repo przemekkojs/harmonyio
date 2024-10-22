@@ -10,6 +10,8 @@
 /main/Main/bin
 /main/Main/obj
 
+/staff/jsconfig.json
+
 /mockups
 *.drawio
 
