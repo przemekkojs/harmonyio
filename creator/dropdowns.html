@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="style.css">
+
+<div id="">
+    <div class="suspension-popup popup-base" id="suspension-popup">
+        <span class="popup-title">Dodaj opóźnienie</span>
+    
+        <form id="add-suspension-form">
+            <input type="button" name="confirm-button" id="confirm-add-suspension" value="Dodaj" class="confirm-button">
+            <input type="button" name="cancel-button" id="cancel-add-suspension" value="Anuluj" class="cancel-button">
+        </form>
+    </div>
+    
+    <div class="alteration-popup popup-base" id="alteration-popup">
+        <span class="popup-title">Dodaj alterację</span>
+    
+        <form id="add-alteration-form">
+            <div class="component-choice">
+                <input type="radio" name="component" id="prima" value="prima">
+                <label for="prima">1</label>
+                <input type="radio" name="component" id="third" value="third">
+                <label for="third">3</label>
+                <input type="radio" name="component" id="fifth" value="fifth">
+                <label for="fifth">5</label>
+            </div>
+    
+            <div class="radio-buttons">
+                <input type="radio" name="type" id="down" value="down">
+                <label for="down">&darr;</label>
+                <input type="radio" name="type" id="up" value="up">
+                <label for="up">&uarr;</label>
+            </div>
+    
+            <input type="button" name="confirm-button" id="confirm-add-alteration" value="Dodaj" class="confirm-button">
+            <input type="button" name="cancel-button" id="cancel-add-alteration" value="Anuluj" class="cancel-button">
+        </form>
+    </div>
+    
+    <div class="added-popup popup-base" id="added-popup">
+        <span class="popup-title">Dodaj składnik</span>
+    
+        <form id="add-added-form">
+            <input type="button" name="confirm-button" id="confirm-add-added" value="Dodaj" class="confirm-button">
+            <input type="button" name="cancel-button" id="cancel-add-added" value="Anuluj" class="cancel-button">
+        </form>
+    </div>
+    
+    <div class="function-creator">
+        <form id="bar-0-vertical-0">
+            <div class="grid-container">
+                <div class="left-brace"></div>   
+            
+                <div class="minor">
+                    <input type="checkbox" name="minor" id="minor">
+                </div>
+            
+                <div class="symbol">
+                    <select name="symbol" id="symbol"></select>
+                </div>
+            
+                <div class="position">
+                    <select name="position" id="position" class=""></select>
+                </div>
+            
+                <div class="root">
+                    <select name="root" id="root"></select>
+                </div>
+            
+                <div class="added">
+                    <input type="button" name="add-added" id="add-added" value="+">
+                </div>
+            
+                <div class="suspension">
+                    <input type="button" name="add-suspension" id="add-suspension" value="+">
+                </div>
+            
+                <div class="alteration">
+                    <input type="button" name="add-alteration" id="add-alteration" value="+">
+                </div>
+            
+                <div class="removed">
+                    <select name="removed" id="removed"></select>
+                </div>
+            
+                <div class="right-brace"></div>
+            </div>
+        
+            <div id="form-buttons">
+                <input type="button" name="cancel-creator" id="cancel-creator" value="Anuluj">
+                <input type="button" name="reset-creator" id="reset-creator" value="Resetuj">
+                <input type="submit" value="Dodaj">
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="buttons.js"></script>
