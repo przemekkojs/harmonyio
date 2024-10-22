@@ -107,7 +107,7 @@ namespace Main.Pages
                     CreatorId = currentUser.Id,
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
-                    //Participants = new List<ApplicationUser>() { currentUser }
+                    Participants = new List<ApplicationUser>() { currentUser },
                 };
                 
                 _repository.Add(quiz);

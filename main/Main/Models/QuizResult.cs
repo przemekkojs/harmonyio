@@ -8,9 +8,10 @@ namespace Main.Models
 		public int Id { get; set; }
 
 		public Grade? Grade { get; set; }
+        public DateTime GradeDate { get; set; }
 
-		//FOREIGN KEYS
-		public int QuizId { get; set; }
+        //FOREIGN KEYS
+        public int QuizId { get; set; }
 		public Quiz Quiz { get; set; } = null!;
 
 		public string UserId { get; set; } = null!;
