@@ -51,7 +51,7 @@
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
         <div class="bottom-bar d-flex align-items-center">
-            <a asp-page="Index" class="btn btn-danger btn-std-width">Powrót</a>
+            <a asp-page="ListCreate" class="btn btn-danger btn-std-width">Powrót</a>
             @if (!Model.BrowseOnly)
             {
                 <button type="submit" class="btn btn-primary btn-std-width ms-auto">@(Model.EditedQuizId == null ? "Utwórz" : "Zapisz")</button>

@@ -157,7 +157,7 @@ namespace Main.Pages
             }
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("Index");
+            return RedirectToPage("ListCreate");
         }
 
         private async Task FillMissingExcersiseSolutions()

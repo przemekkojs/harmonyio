@@ -1,7 +1,12 @@
 @page
 @model Main.Pages.ListJoined
-
+@using Main.Enumerations
 @{
+    var finished = Model.Joined.Where(q => q.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.AppUser.Id)).ToList();
+    var unfinished = Model.Joined.Except(finished).ToList();
+
+    var toSolve = unfinished.Where(q => q.State == Enumerations.QuizState.Open).ToList();
+    var futureQuizes = unfinished.Except(toSolve).ToList();
 }
 
 <head>
@@ -10,118 +15,137 @@
 
 <div class="h-100 w-100 d-flex flex-row overflow-auto">
     <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column pe-3">
-        @*QUIZY Z PODZIAŁEM NA SEKCJE. JEŻELI W DANEJ SEKCJI NIE MA ŻADNYCH QUIZÓW, TO POWINNA SIĘ ONA NIE WYŚWIETLAĆ, WŁĄCZNIE Z NAGŁÓWKIEM*@
-
-        <div class="fw-bold fs-4 mb-3">Do Rozwiązania</div>
-        @for (int i = 0; i < 1; i++)
+        @if (unfinished.Count > 0)
         {
-            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
-                <div class="flex-grow-1 d-flex flex-column">
-                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+            @if (toSolve.Count > 0)
+            {
+                <div class="fw-bold fs-4 mb-3">Do Rozwiązania</div>
+            }
+            @foreach (var quiz in toSolve)
+            {
+                <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
 
-                    <div class="d-flex flex-row align-items-center mb-2">
-                        <i class="far fa-clock icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Pozostało:</span>
-                        <span>12d 11h 5m 31s</span>
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <i class="far fa-clock icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Pozostało:</span>
+                            <span>do uzupełnienia</span>
+                        </div>
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <i class="fas fa-music icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Zadania:</span>
+                            <span>@quiz.Excersises.Count</span>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                            <i class="fas fa-user icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Twórca:</span>
+                            <span>@quiz.Creator.FullName</span>
+                        </div>
                     </div>
-                    <div class="d-flex flex-row align-items-center mb-2">
-                        <i class="fas fa-music icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Zadania:</span>
-                        <span>5</span>
-                    </div>
-                    <div class="d-flex flex-row align-items-center">
-                        <i class="fas fa-user icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Twórca:</span>
-                        <span>Kamil Nowak</span>
+
+                    <div class="d-flex flex-column h-100">
+                        <a href="/solve?id=@quiz.Id" class="btn btn-outline-primary ms-auto mt-auto">Rozwiąż</a>
                     </div>
                 </div>
+            }
 
-                <div class="d-flex flex-column h-100">
-                    <button class="btn btn-primary ms-auto mt-auto">Rozwiąż</button>
+            @if (futureQuizes.Count > 0)
+            {
+                <div class="fw-bold fs-4 mb-3">Zaplanowane</div>
+            }
+            @foreach (var quiz in futureQuizes)
+            {
+                <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
+
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <i class="far fa-clock icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Dostępne za:</span>
+                            <span>do uzupełnienia</span>
+                        </div>
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <i class="fas fa-music icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Zadania:</span>
+                            <span>@quiz.Excersises.Count</span>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                            <i class="fas fa-user icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Twórca:</span>
+                            <span>@quiz.Creator.FullName</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            }
         }
-
-        <div class="fw-bold fs-4 mb-3">Zaplanowane</div>
-        @for (int i = 0; i < 1; i++)
+        else
         {
-            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
-                <div class="flex-grow-1 d-flex flex-column">
-                    <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
-
-                    <div class="d-flex flex-row align-items-center mb-2">
-                        <i class="far fa-clock icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Dostępne za:</span>
-                        <span>12d 11h 5m 31s</span>
-                    </div>
-                    <div class="d-flex flex-row align-items-center mb-2">
-                        <i class="fas fa-music icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Zadania:</span>
-                        <span>5</span>
-                    </div>
-                    <div class="d-flex flex-row align-items-center">
-                        <i class="fas fa-user icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Twórca:</span>
-                        <span>Kamil Nowak</span>
-                    </div>
-                </div>
-            </div>
+            <div class="fw-bold fs-4 mb-3">Zaplanowane</div>
+            <p>Nie masz aktualnie żadnych zaplanowanych, ani trwających quizów. Po dołączeniu będziesz mógł go rozwiązać tutaj!</p>
         }
-
-        @*PONIŻSZE ELEMENTY WYŚWIETLAMY, JEŻELI WSZYSTKIE POWYŻSZE ELEMENTY SĄ PUSTE*@
-
-        @*<div class="fw-bold fs-4 mb-3">Zaplanowane</div>
-        <p>Nie masz aktualnie żadnych zaplanowanych, ani trwających quizów. Po dołączeniu będziesz mógł go rozwiązać tutaj!</p>*@
-    </div>
+        </div>
 
     <div class="vr"></div>
 
     <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column ps-3">
-        <div class="fw-bold fs-4 mb-3">Zakończone</div>
-        @for (int i = 0; i < 1; i++)
+        @if (finished.Count > 0)
         {
-            <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
-                <div class="flex-grow-1 d-flex flex-column">
-                    <div class="fw-bold fs-5">Kartkówka 2A</div>
+            <div class="fw-bold fs-4 mb-3">Zakończone</div>
+            @foreach (var quiz in finished)
+            {
+                var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == Model.AppUser.Id);
 
-                    @*JEŻELI NIE OCENIONE*@
-                    @*<span style="margin-top: -4px;">Oczekuje na ocenę...</span>
-                    <div style="height: 28px;"></div>*@
+                <div class="quiz p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <div class="fw-bold fs-5">@quiz.Name</div>
 
-                    @*JEŻELI OCENIONE*@
-                    <div class="d-flex flex-row align-items-center mt-3 mb-2">
-                        <i class="far fa-clock icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Dostępne za:</span>
-                        <span>12d 11h 5m 31s</span>
+                        @if (quizResult != null)
+                        {
+                            <div class="d-flex flex-row align-items-center mt-3 mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="fw-bold me-1">Oceniono:</span>
+                                <span>do uzupełnienia</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <span style="margin-top: -4px;">Oczekuje na ocenę...</span>
+                            <div style="height: 28px;"></div>
+                        }
+
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <i class="fas fa-music icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Zadania:</span>
+                            <span>@quiz.Excersises.Count</span>
+                        </div>
+                        <div class="d-flex flex-row align-items-center">
+                            <i class="fas fa-user icon-sm me-2"></i>
+                            <span class="fw-bold me-1">Twórca:</span>
+                            <span>@quiz.Creator.FullName</span>
+                        </div>
                     </div>
 
-                    <div class="d-flex flex-row align-items-center mb-2">
-                        <i class="fas fa-music icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Zadania:</span>
-                        <span>5</span>
-                    </div>
-                    <div class="d-flex flex-row align-items-center">
-                        <i class="fas fa-user icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Twórca:</span>
-                        <span>Kamil Nowak</span>
+                    <div class="d-flex flex-column h-100">
+                        @if (quizResult != null)
+                        {
+                            <div class="d-flex flex-row">
+                                <div class="fw-bold fs-5 ms-auto">
+                                    @(((Grade)(quizResult.Grade!)).AsString())
+                                </div>
+                            </div>
+                        }
+
+                        <a href="/browse?id=@quiz.Id" class="btn btn-outline-primary ms-auto mt-auto">Przeglądaj</a>
                     </div>
                 </div>
-
-                <div class="d-flex flex-column h-100">
-                    @*JEŻELI OCENIONE*@
-                    <div class="d-flex flex-row">
-                        <div class="fw-bold fs-5 ms-auto">3-</div>
-                    </div>
-
-                    <button class="btn btn-primary ms-auto mt-auto">Przeglądaj</button>
-                </div>
-            </div>
+            }
         }
-
-        @*PONIŻSZE ELEMENTY WYŚWIETLAMY, JEŻELI WSZYSTKIE POWYŻSZE ELEMENTY SĄ PUSTE*@
-
-        @*<div class="fw-bold fs-4 mb-3">Zakończone</div>
-        <p>Nie masz jeszcze żadnych zakończonych quizów... Dołącz do quizu i rozwiąż go, a wyniki pojawią się tutaj!</p>*@
+        else
+        {
+            <div class="fw-bold fs-4 mb-3">Zakończone</div>
+            <p>Nie masz jeszcze żadnych zakończonych quizów... Dołącz do quizu i rozwiąż go, a wyniki pojawią się tutaj!</p>
+        }
     </div>
 </div>
 

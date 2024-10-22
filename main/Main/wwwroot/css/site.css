@@ -104,6 +104,11 @@ body {
     font-size: 24px;
 }
 
+.no-style {
+    all: unset;
+    text-decoration: none;
+}
+
 /*This should be in grade-style.css, button it doesnt work there for some reason*/
 
 .focused-student .student-div {
