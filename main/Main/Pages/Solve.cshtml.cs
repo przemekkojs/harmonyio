@@ -25,11 +25,11 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             var appUser = (await _userManager.GetUserAsync(User))!;
             var quiz = (await _repository.GetAsync<Quiz>(
-                q => q.Id == id,
+                q => q.Code == id,
                 query => query
                     .Include(q => q.Participants)
                     .Include(q => q.QuizResults)

@@ -95,12 +95,12 @@ namespace Algorithm.Music
                 {
                     if (symbol.Removed != null)
                     {
-                        if (symbol.Removed.Contains(FunctionComponent.Root))
+                        if (symbol.Removed.Equals(FunctionComponent.Root))
                         {
                             doubled.Remove(FunctionComponent.Root);
                             doubled.Remove(FunctionComponent.Fifth);
                         }
-                        else if (symbol.Removed.Contains(FunctionComponent.Fifth))
+                        else if (symbol.Removed.Equals(FunctionComponent.Fifth))
                         {
                             doubled.Remove(FunctionComponent.Fifth);
                         }
@@ -112,11 +112,11 @@ namespace Algorithm.Music
                 {
                     if (symbol.Removed != null)
                     {
-                        if (symbol.Removed.Contains(FunctionComponent.Root))
+                        if (symbol.Removed.Equals(FunctionComponent.Root))
                         {
                             doubled.Remove(FunctionComponent.Root);
                         }
-                        else if (symbol.Removed.Contains(FunctionComponent.Fifth))
+                        else if (symbol.Removed.Equals(FunctionComponent.Fifth))
                         {
                             doubled.Remove(FunctionComponent.Fifth);
                         }

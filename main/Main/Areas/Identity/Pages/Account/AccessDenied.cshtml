@@ -4,7 +4,17 @@
     ViewData["Title"] = "Access denied";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<head>
+    <link rel="stylesheet" href="~/css/error-style.css" />
+</head>
+
+<div class="h-100 w-100 d-flex justify-content-center align-items-center">
+    <div class="d-flex flex-column p-3 border border-dark rounded bg-white" style="width: 400px; margin-top: -15px;">
+        <div class="alert alert-danger">
+            <h4 class="alert-heading text-center mx-auto mb-3">Brak dostępu!</h4>
+            <p>Nie możesz uzyskać dostępu do tej strony. Sprawdź, czy podany URL jest poprawny.</p>
+        </div>
+
+        <a href="/Index" class="btn btn-primary mx-auto">Przejdź do strony głównej</a>
+    </div>
+</div>

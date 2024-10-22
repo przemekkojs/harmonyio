@@ -15,6 +15,8 @@ namespace Main.Models
 
 		public bool IsCreated { get; set; } = false;
 
+		public string? Code {get; set;}
+
 		//FOREIGN KEYS
 
 		public string CreatorId { get; set; } = null!;
@@ -29,6 +31,6 @@ namespace Main.Models
 		[NotMapped]
         public QuizState State => !IsCreated || OpenDate > DateTime.Now ? QuizState.NotStarted :
 			CloseDate < DateTime.Now ? QuizState.Closed : QuizState.Open;
-	}
+    }
 }
 
