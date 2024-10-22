@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Main.Data;
+using Main.Enumerations;
 using Main.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,9 @@ namespace Main.Pages
         public List<string> Questions { get; set; } = null!;
         [BindProperty]
         public int? EditedQuizId { get; set; } = null;
+
+        [BindProperty]
+        public string? Code { get; set; }
 
         public bool BrowseOnly { get; set; } = false;
 
@@ -63,13 +67,86 @@ namespace Main.Pages
             QuizName = quiz.Name;
             CloseDate = quiz.CloseDate;
             OpenDate = quiz.OpenDate;
+            Code = quiz.Code;
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostSave()
         {
+            
+            var currentUser = (await _userManager.GetUserAsync(User))!;
+            if (currentUser == null)
+                return RedirectToPage("Error");
+
+            if (EditedQuizId == null)
+            {
+                var quiz = new Quiz()
+                {
+                    Name = QuizName,
+                    OpenDate = (DateTime)OpenDate!,
+                    CloseDate = (DateTime)CloseDate!,
+                    CreatorId = currentUser.Id,
+
+                    //TODO: TESTING PURPOSES ONLY, REMOVE THIS
+                    //Participants = new List<ApplicationUser>() { currentUser }
+                };
+                
+                _repository.Add(quiz);
+                
+                await _repository.SaveChangesAsync();
+
+                foreach (string question in Questions!)
+                {
+                    _repository.Add(new Excersise()
+                    {
+                        Question = question,
+                        QuizId = quiz.Id,
+                    });
+                }
+            }
+            else
+            {
+                var editedQuiz = await _repository.GetAsync<Quiz>(
+                    filter: q => q.Id == EditedQuizId,
+                    modifier: q => q.Include(r => r.Excersises)
+                );
+
+                if (editedQuiz == null)
+                    return RedirectToPage("Error");
+
+                editedQuiz.Name = QuizName;
+                editedQuiz.OpenDate = (DateTime)OpenDate!;
+                editedQuiz.CloseDate = (DateTime)CloseDate!;
+                
+                _repository.Update(editedQuiz);
+                
+                await _repository.SaveChangesAsync();
+
+                foreach (var question in editedQuiz.Excersises)
+                {
+                    _repository.Delete(question);
+                }
+
+                foreach (var question in Questions)
+                {
+                    _repository.Add(new Excersise()
+                    {
+                        Question = question,
+                        QuizId = editedQuiz.Id,
+                    });
+                }
+            }
+
+            await _repository.SaveChangesAsync();
+
+            return RedirectToPage("listcreate");
+        }
+
+        public async Task<IActionResult> OnPostSubmit()
+        {           
+    
             if (CloseDate <= OpenDate)
             {
                 ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");;
@@ -92,7 +169,7 @@ namespace Main.Pages
             {
                 return Page();
             }
-
+        
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
                 return RedirectToPage("Error");
@@ -105,6 +182,7 @@ namespace Main.Pages
                     OpenDate = (DateTime)OpenDate!,
                     CloseDate = (DateTime)CloseDate!,
                     CreatorId = currentUser.Id,
+                    IsCreated = true,
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
                     Participants = new List<ApplicationUser>() { currentUser },
@@ -136,6 +214,7 @@ namespace Main.Pages
                 editedQuiz.Name = QuizName;
                 editedQuiz.OpenDate = (DateTime)OpenDate!;
                 editedQuiz.CloseDate = (DateTime)CloseDate!;
+                editedQuiz.IsCreated = true;
                 
                 _repository.Update(editedQuiz);
                 

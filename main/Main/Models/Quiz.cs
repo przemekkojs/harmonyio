@@ -15,6 +15,8 @@ namespace Main.Models
 
 		public bool IsCreated { get; set; } = false;
 
+		public string? Code {get; set;}
+
 		//FOREIGN KEYS
 
 		public string CreatorId { get; set; } = null!;

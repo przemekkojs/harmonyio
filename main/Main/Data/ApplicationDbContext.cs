@@ -81,4 +81,56 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(er => er.QuizResultId)
             .OnDelete(DeleteBehavior.Cascade);
     }
+
+    public override int SaveChanges()
+    {
+        HandleQuizCodes();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        HandleQuizCodes();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        HandleQuizCodes();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+
+    private void HandleQuizCodes()
+    {
+        foreach (var entry in ChangeTracker.Entries<Quiz>())
+        {
+            if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+            {
+                var quiz = entry.Entity;
+
+                var hasCode = quiz.IsCreated && quiz.OpenDate < DateTime.Now && quiz.CloseDate > DateTime.Now;
+
+                if (hasCode && string.IsNullOrEmpty(quiz.Code))
+                {
+                    quiz.Code = CodeGeneration();
+                }
+                else if (!hasCode)
+                {
+                    quiz.Code = null;
+                }
+            }
+            // !IsCreated || OpenDate > DateTime.Now ? QuizState.NotStarted :
+			// CloseDate < DateTime.Now ? QuizState.Closed : QuizState.Open;
+        }
+    }
+
+
+    // Todo: If needed make it secure / filter bad words
+    private string CodeGeneration()
+    {
+        string path = Path.GetRandomFileName();
+        path = path.Replace(".", "");
+        return path[..6];
+    }
 }
