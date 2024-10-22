@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="style.css">
+
+<div id="task-1">
+    <div id="box-task-1" class="box">
+        <form>
+            <div class="params">
+                <label for="metre-select-task-1">Metrum: </label>        
+                <select id="metre-select-task-1">
+                    <option value="2/4">2/4</option>
+                    <option value="3/4">3/4</option>
+                    <option value="4/4">4/4</option>
+                    <option value="3/8">3/8</option>
+                    <option value="6/8">6/8</option>
+                </select>
+                    
+                <label for="tonation-name-select-task-1">Tonacja: </label>
+                <select id="tonation-name-select-task-1">
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="A">A</option>
+                    <option value="H">H</option>
+                </select>
+                
+                <label for="accidental-task-1"></label>
+                <select id="accidental-task-1">
+                    <option value=" "> </option>
+                    <option value="#">#</option>
+                    <option value="b">b</option>
+                </select>
+            </div>
+            
+            <input type="submit" value="Zatwierdź">
+            <input type="button" value="Wyczyść">
+        </form>
+
+        <div id="components-place-1" class="components-place">
+            
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { Task } from "./taskEditor.js";
+    const tasks = [];
+    tasks.push(new Task(1))
+</script>

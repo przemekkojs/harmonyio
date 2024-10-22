@@ -65,24 +65,28 @@ export class Elements {
     
     addAdded(event) {    
         this.togglePopupOn(this.addedPopup, event);
-        this.disableItems(this.allComponents);
+        Elements.disableItems(this.allComponents);
     }
     
     addAlteration(event) {
         this.togglePopupOn(this.alterationPopup, event);
-        this.disableItems(this.allComponents);
+        Elements.disableItems(this.allComponents);
     }
     
     addSuspension(event) {
         this.togglePopupOn(this.suspensionPopup, event);
-        this.disableItems(this.allComponents);
+        Elements.disableItems(this.allComponents);
     }
     
     togglePopupOn(popup, event) {
+        if (popup.style.display === "block")
+            popup.style.display = "none";
+        else
+            popup.style.display = "block";
+
         const button = event.currentTarget;
         const rect = button.getBoundingClientRect();
     
-        popup.style.display = "block";
         popup.style.left = (rect.left - (popup.style.width / 2)) + "px";
         popup.style.top = (rect.top + button.offsetHeight) + "px";
         
@@ -95,30 +99,30 @@ export class Elements {
     
     togglePopupOff(popup) {
         popup.style.display = "none";
-        this.enableItems(this.allComponents);
+        Elements.enableItems(this.allComponents);
     }
     
     addComponent(popup) {
         this.togglePopupOff(popup);
     }
     
-    disableItems(items) {
+    static disableItems(items) {
         items.forEach(item => {
-            this.disableElement(item);
+            Elements.disableElement(item);
         });
     }
     
-    enableItems(items) {
+    static enableItems(items) {
         items.forEach(item => {
-            this.enableElement(item);
+            Elements.enableElement(item);
         });
     }
     
-    enableElement(button) { button.disabled = false; }
-    disableElement(button) { button.disabled = true; }
+    static enableElement(button) { button.disabled = false; }
+    static disableElement(button) { button.disabled = true; }
     
     resetAll() {
-        this.enableItems(this.allComponents);
+        Elements.enableItems(this.allComponents);
     
         [this.positionDropdown, this.symbolDropdown, this.removedDropdown, this.rootDropdown].forEach(component => {
             component.value = ' ';

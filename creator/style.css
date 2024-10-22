@@ -8,10 +8,10 @@
     display: grid;
     grid-template-columns: 15px 15px 25px 15px 25px 15px 15px 15px;
     grid-template-rows: 15px 25px 15px 25px 15px;
-    gap: 5px;
-    border: 1px solid red;
-    margin: 5px;
-    padding: 5px;
+    gap: 1px;
+    /* border: 1px solid red; */
+    margin: 2px;
+    padding: 2px;
 }
 
 .grid-container select,
@@ -27,7 +27,7 @@ select::-ms-expand {
     display: none;
 }
 
-select {
+.grid-container select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -96,17 +96,18 @@ select {
 }
 
 .function-creator {
-    display: inline-block;
+    /* display: inline-block; */
     text-align: center;
     /* position: absolute; */    
-    margin: 10px;
-    padding: 10px;
+    margin: 5px;
+    padding: 5px;
+    border-color: blue;
 }
 
 .popup-base {
     border: 1px solid black;
     border-radius: 5px;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     position: absolute;
     z-index: 1000;
@@ -114,7 +115,7 @@ select {
 }
 
 .popup-title {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: bold;
 }
 
@@ -130,6 +131,30 @@ select {
     display: none;
 }
 
+.what-to-add-popup {
+    display: none;
+}
+
 #form-buttons {
+    margin: 10px;
+}
+
+.box {
+    display: inline;
+}
+
+.task-box {
+    margin: 5px;
+}
+
+.components-place {
+    padding: 10px;
+    display: flex;
+    overflow: auto;
+}
+
+.bars {
+    display: flex;
+    padding: 10px;
     margin: 10px;
 }
