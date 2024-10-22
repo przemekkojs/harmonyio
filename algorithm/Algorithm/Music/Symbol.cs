@@ -23,7 +23,7 @@ namespace Algorithm.Music
         public List<(FunctionComponent, FunctionComponent)> Suspensions { get => suspensions ?? ([]); }
         public List<Alteration> Alterations { get => alterations ?? ([]); }
         public List<FunctionComponent> Added { get => added ?? ([]); }
-        public List<FunctionComponent> Removed { get => removed ?? ([]); }
+        public FunctionComponent? Removed { get => removed; }
         public FunctionComponent? Position { get => position; }
         public FunctionComponent? Root { get => root; }
 
@@ -34,14 +34,14 @@ namespace Algorithm.Music
         private readonly List<(FunctionComponent, FunctionComponent)>? suspensions;
 
         private readonly List<FunctionComponent>? added;
-        private readonly List<FunctionComponent>? removed;
+        private readonly FunctionComponent? removed;
 
         private readonly FunctionComponent? position;
         private readonly FunctionComponent? root;
 
         private readonly bool minor;
 
-        public Symbol(bool minor, FunctionSymbol functionSymbol, FunctionComponent? root=null, FunctionComponent? position=null, List<FunctionComponent>? added=default, List<FunctionComponent>? removed=default, List<(FunctionComponent, FunctionComponent)>? suspensions=default, List<Alteration>? alterations=default)
+        public Symbol(bool minor, FunctionSymbol functionSymbol, FunctionComponent? root=null, FunctionComponent? position=null, List<FunctionComponent>? added=default, FunctionComponent? removed=null, List<(FunctionComponent, FunctionComponent)>? suspensions=default, List<Alteration>? alterations=default)
         {
             this.functionSymbol = functionSymbol;
             this.root = root;
@@ -80,13 +80,17 @@ namespace Algorithm.Music
 
         public void ValidateAdded()
         {
-            if (Added.Count - Removed.Count > 2)
+            int modifier = (Removed != null ? 1 : 0);
+
+            if (Added.Count - modifier > 2)
                 throw new ArgumentException("Too many added components.");
         }
 
         public void ValidateRemoved()
         {
-            if (Removed.Count - Added.Count > 2)
+            int modifier = (Removed != null ? 1 : 0);
+
+            if (modifier - Added.Count > 2)
                 throw new ArgumentException("Too many removed components.");
         }
 
