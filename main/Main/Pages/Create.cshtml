@@ -96,6 +96,8 @@
         excersiseContainer.innerHTML = '';
 
         excersises.forEach((excersise, index) => {
+            // Excercises should be loaded here, so creators also
+
             excersiseContainer.innerHTML += `
                 <div class="task task-creator p-0 overflow-hidden">
                     <div class="d-flex h-100 align-items-center bg-secondary">
@@ -103,7 +105,7 @@
                         <div class="vr"></div>
                     </div>
                     <div class="task-content w-100 p-3">
-                        <span class="mb-1">Kreator funkcji</span>
+                        <span class="mb-1">Kreator funkcji</span> @*Tutaj trzeba dodać kreatory*@
                         <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>
                     </div>
                     @if (!Model.BrowseOnly)
