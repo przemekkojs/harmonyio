@@ -125,15 +125,7 @@ class Bar {
     return { bar: this };
   }
 
-  #shouldDraw() {
-    clientRect = canvas.elt.getBoundingClientRect();
-    
-  }
-
   draw(isLast = false) {
-    if(!this.#shouldDraw()) {
-      return;
-    }
     if (isLast) {
       this.#drawLastBarLine();
     } else {
