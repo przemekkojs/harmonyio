@@ -106,4 +106,5 @@ window.onload = () => {
     createComponent(document.getElementById('task-1'), 0, 0, 0);
     createComponent(document.getElementById('task-2'), 1, 0, 0);
     createComponent(document.getElementById('task-3'), 2, 0, 0);
+    createComponent(document.getElementById('task-2'), 1, 1, 0);
 };
