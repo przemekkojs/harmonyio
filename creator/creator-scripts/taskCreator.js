@@ -59,8 +59,6 @@ export function createTask(parent, id) {
     taskDiv.id = `task-${id}`;
     taskDiv.innerHTML = taskHtml;
 
-    console.log(taskDiv);
-
     parent.appendChild(taskDiv);
 
     let toAppend = new Task(id);    

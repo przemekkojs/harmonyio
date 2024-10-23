@@ -71,8 +71,6 @@ export function createComponent(newId) {
                             <input type="checkbox" name="minor" id="minor-${newId}">
                             <span class="checkmark" title="Moll?"></span>
                         </label>
-
-                        <!-- <input type="checkbox" name="minor" id="minor-${newId}" title="Moll?"> -->
                     </div>
                 
                     <div class="symbol" id="symbol-container-${newId}">
@@ -88,15 +86,15 @@ export function createComponent(newId) {
                     </div>
                 
                     <div class="added" id="added-container-${newId}">
-                        <input type="button" name="add-added" id="add-added-${newId}" value="" title="Dodaj składnik dysonujący">
+                        <input type="button" name="add-added" id="add-added-${newId}" title="Dodaj składnik dysonujący">
                     </div>
                 
                     <div class="suspension" id="suspension-container-${newId}">
-                        <!--<input type="button" name="add-suspension" id="add-suspension-${newId}" value="" title="Dodaj opóźnienie">-->
+                        <!--<input type="button" name="add-suspension" id="add-suspension-${newId}" title="Dodaj opóźnienie">-->
                     </div>
                 
                     <div class="alteration" id="alteration-container-${newId}">
-                        <input type="button" name="add-alteration" id="add-alteration-${newId}" value="" title="Dodaj alterację">
+                        <input type="button" name="add-alteration" id="add-alteration-${newId}" title="Dodaj alterację">
                     </div>
                 
                     <div class="removed" id="removed-container-${newId}">
@@ -106,10 +104,10 @@ export function createComponent(newId) {
                     <div class="right-brace" id="right-brace-container-${newId}"></div>
                 </div>
             
-                <div id="form-buttons-${newId}">
-                    <input type="button" name="cancel-creator" id="cancel-creator-${newId}" value="x" alt="Anuluj" title="Anuluj" style="background-color: #ff5f3c; border: none; border-radius: 2px;">
-                    <input type="button" name="reset-creator" id="reset-creator-${newId}" value="r" alt="Resetuj funkcję" title="Resetuj funkcję" style="background-color: #ffe000; border: none; border-radius: 2px;">
-                    <input type="button" name="submit-creator" id="submit-creator-${newId}" value="y" alt="Dodaj" title="Dodaj funkcję" style="background-color: #20e123; border: none; border-radius: 2px;">
+                <div id="form-buttons-${newId}" class="function-form-buttons">
+                    <input type="button" name="cancel-creator" id="cancel-creator-${newId}" alt="Usuń funkcję" title="Usuń funkcję" class="custom-button trash-button button-small">
+                    <input type="button" name="reset-creator" id="reset-creator-${newId}" alt="Resetuj funkcję" title="Resetuj funkcję" class="custom-button round-arrow-button button-small">
+                    <input type="button" name="submit-creator" id="submit-creator-${newId}" alt="Dodaj funkcję" title="Dodaj funkcję" class="custom-button tick-button button-small">
                 </div>
             </form>
         </div>`;

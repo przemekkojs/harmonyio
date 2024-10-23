@@ -28,7 +28,7 @@ export class Elements {
         this.alterations = [];
         this.added = [];
 
-        this.allComponents = [this.positionDropdown, this.rootDropdown,
+        this.allComponents = [this.minorBox, this.positionDropdown, this.rootDropdown,
             this.symbolDropdown, this.removedDropdown, this.addedButton,
             this.alterationButton];//, this.suspensionButton];
 
@@ -219,6 +219,10 @@ export class Elements {
     
         [this.positionDropdown, this.symbolDropdown, this.removedDropdown, this.rootDropdown].forEach(component => {
             component.value = ' ';
+        });
+
+        this.allComponents.forEach(e => {
+            e.classList.remove('hide-border');
         });
 
         this.added.length = 0;

@@ -41,8 +41,7 @@ class Bar {
 
         this.addFunctionButton = document.createElement('button');
         this.addFunctionButton.id = `add-function-${this.taskId}-${this.index}`;
-        this.addFunctionButton.innerText = "...";
-        this.addFunctionButton.className = "adder-button";
+        this.addFunctionButton.className = "adder-button custom-button button-medium plus-button";
         this.addFunctionButton.title = "Dodaj funkcję";
 
         this.addFunctionButton.addEventListener('click', () => {
@@ -83,8 +82,7 @@ export class Task {
 
         this.adder = document.createElement('button');
         this.adder.id = `add-bar-${this.id}`;
-        this.adder.innerText = '...';
-        this.adder.className = "adder-button";
+        this.adder.className = "adder-button custom-button button-large plus-button";
         this.adder.title = "Dodaj takt";
         this.adder.addEventListener('click', () => {        
             this.addBar(this.bars.length);        
@@ -106,7 +104,7 @@ export class Task {
                     <line x1="5" y1="0" x2="5" y2="110" style="stroke:black;stroke-width:1" />
                 </svg>
                 <form>
-                    <input type="button" value="x" id="delete-bar-${this.id}-${barIndex}" style="background-color: #ff5f3c; border: none; text-align: center; border-radius: 2px;">
+                    <input type="button" id="delete-bar-${this.id}-${barIndex}" class="button-medium custom-button trash-button" title="Usuń takt ${barIndex + 1}">
                 </form>
             </div>`;
 
@@ -177,6 +175,10 @@ export class Task {
         let removed = element.removedDropdown.value;
         let alterations = element.alterations;
         let added = element.added;
+
+        element.allComponents.forEach(e => {
+            e.classList.add('hide-border');
+        });
     
         if (symbol === "") {
             alert('Nie można dodać pustej funkcji!');
@@ -206,6 +208,6 @@ export class Task {
     }
 
     submitTask() {
-        console.log(this.result);
+        return this.result;
     }
 }
