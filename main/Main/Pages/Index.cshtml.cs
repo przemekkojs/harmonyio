@@ -1,21 +1,15 @@
-using Main.Data;
 using Main.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Main.Pages
-{
-    public class IndexModel : PageModel
+namespace Main.Pages;
+
+[Authorize]
+public class IndexModel : PageModel
+{ 
+    public void OnGet()
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
-
-        public void OnGet()
-        {
-        }
+        
     }
 }

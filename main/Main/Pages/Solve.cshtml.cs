@@ -1,5 +1,6 @@
 using Main.Data;
 using Main.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Main.Pages
 {
+    [Authorize]
     public class SolveModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,11 +27,11 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string code)
         {
             var appUser = await _userManager.GetUserAsync(User);
             var quiz = await _repository.GetAsync<Quiz>(
-                q => q.Code == id,
+                q => q.Code == code,
                 query => query
                     .Include(q => q.Participants)
                     .Include(q => q.QuizResults)

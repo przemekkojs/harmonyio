@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Main.Enumerations;
 using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Main.Pages
 {
+    [Authorize]
     public class GradeModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

@@ -14,7 +14,7 @@ using Mono.TextTemplating;
 namespace Main.Pages;
 
 [Authorize] 
-public class ListCreate : PageModel
+public class CreatedModel : PageModel
 {   
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationRepository _repository;
@@ -24,7 +24,7 @@ public class ListCreate : PageModel
     [BindProperty]
     public int QuizId { get; set; }
 
-    public ListCreate(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
+    public CreatedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
         _repository = repository;

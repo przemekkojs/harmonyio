@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Main.Data;
 using Main.Enumerations;
 using Main.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,7 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Main.Pages
 {
-    public class CreateModel : PageModel
+    [Authorize]
+    public class CreatorModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
@@ -36,7 +38,7 @@ namespace Main.Pages
 
         public bool BrowseOnly { get; set; } = false;
 
-        public CreateModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
+        public CreatorModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
             _userManager = userManager;

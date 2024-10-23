@@ -1,5 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+@{
+    var currentPageRoute = ViewContext.RouteData.Values["page"]?.ToString();
+}
 
 <head>
     <meta charset="utf-8" />
@@ -26,16 +29,21 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Index">
-                                <span class="text-primary text-nowrap">Dołącz</span>
-                                <hr class="mb-0 mt-1 bg-primary nav-underline" />
+                                <span class="text-nowrap @(currentPageRoute == "/Index" ? "text-primary" : "")">Strona główna</span>
+                                <hr class="mb-0 mt-1 bg-primary nav-underline @(currentPageRoute == "/Index" ? "visible" : "invisible")" />
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark text-nowrap" asp-area="" asp-page="/Privacy">Moje kartkówki</a>
+                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Assigned">
+                                <span class="text-nowrap @(currentPageRoute == "/Assigned" ? "text-primary" : "")">Przypisane</span>
+                                <hr class="mb-0 mt-1 bg-primary nav-underline @(currentPageRoute == "/Assigned" ? "visible" : "invisible")" />
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark text-nowrap" asp-area="" asp-page="/Privacy">Stworzone
-                                kartkówki</a>
+                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Created">
+                                <span class="text-nowrap @(currentPageRoute == "/Created" ? "text-primary" : "")">Utworzone</span>
+                                <hr class="mb-0 mt-1 bg-primary nav-underline @(currentPageRoute == "/Created" ? "visible" : "invisible")" />
+                            </a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
