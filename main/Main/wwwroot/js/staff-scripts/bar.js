@@ -139,11 +139,10 @@ class Bar {
   }
 
   #drawBarLine() {
-    push();
     strokeWeight(2);
-    translate(this.x + this.width, this.y + upperStaffUpperMargin);
-    line(0, 0, 0, braceHeight);
-    pop();
+    const barLineX = this.x + this.width;
+    const barLineY = this.y + upperStaffUpperMargin;
+    line(barLineX, barLineY, barLineX, barLineY + braceHeight);
   }
 
   #drawLastBarLine() {
@@ -161,6 +160,7 @@ class Bar {
   #drawBoundingBox() {
     push();
     noFill();
+    strokeWeight(1);
     rect(this.x, this.y, this.width, this.height);
     pop();
   }

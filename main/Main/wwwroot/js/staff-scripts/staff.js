@@ -190,23 +190,46 @@ class GrandStaff {
 
   // DRAWING SECTION
   draw() {
-    this.drawStaticElements();
-    this.drawDynamicElements();
+    const windowHeight = $(window).height();
+    const clientRectTop = canvas.elt.getBoundingClientRect().top;
+
+    this.drawStaticElements(windowHeight, clientRectTop);
+    this.drawDynamicElements(windowHeight, clientRectTop);
   }
 
-  drawDynamicElements() {
+  drawDynamicElements(windowHeight, clientRectTop) {
     const barsLength = this.bars.length;
     for (let i = 0; i < barsLength; i++) {
+      // draw only visible bars
+      const barYTop = clientRectTop + this.bars[i].y;
+      const barYBottom = barYTop + this.bars[i].height;
+      if (barYBottom < 0) {
+        continue;
+      }
+      if (barYTop > windowHeight) {
+        break;
+      }
+
       this.bars[i].draw(i === barsLength - 1);
     }
   }
 
-  drawStaticElements() {
+  drawStaticElements(windowHeight, clientRectTop) {
     push();
     const linesWidth = this.width - braceWidth;
     // draw needed staffs (vertically)
     for (let i = 0; i < this.numberOfStaffs; i++) {
       const y = i * doubleGrandStaffHeight;
+
+      // draw only visible staffs
+      const staffYTop = clientRectTop + y;
+      const staffYBottom = staffYTop + doubleGrandStaffHeight;
+      if (staffYBottom < 0) {
+        continue;
+      }
+      if (staffYTop > windowHeight) {
+        break;
+      }
 
       const upperStaffFirstLineY = y + upperStaffUpperMargin;
 
@@ -235,7 +258,11 @@ class GrandStaff {
         symbols.violinKey,
         true
       );
-      this.keySignature.draw(this.keySignatureOffset, upperStaffFirstLineY, true);
+      this.keySignature.draw(
+        this.keySignatureOffset,
+        upperStaffFirstLineY,
+        true
+      );
       this.metre.draw(this.metreOffset, upperStaffFirstLineY);
 
       // lower staff
@@ -267,8 +294,10 @@ class GrandStaff {
     stroke(150);
     strokeWeight(1);
     line(x, y, width, y); // above
-    line(x, y + upperStaffHeight, x + width, y + upperStaffHeight); // between
-    line(x, y + upperStaffHeight + lowerStaffHeight, x + width, y + upperStaffHeight + lowerStaffHeight); // below
+    const betweenY = y + upperStaffHeight;
+    line(x, betweenY, x + width, betweenY); // between
+    const belowY = betweenY + lowerStaffHeight;
+    line(x, belowY, x + width, belowY); // below
   }
 
   #drawSingleStaffLines(x, y, width) {

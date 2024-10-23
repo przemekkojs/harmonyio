@@ -490,6 +490,7 @@ class TwoNotes {
   #drawBoundingBox() {
     push();
     noFill();
+    strokeWeight(1);
     rect(this.x, this.y, this.getWidth(), this.height);
     pop();
   }

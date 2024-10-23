@@ -67,25 +67,23 @@ class Button {
   }
 
   draw() {
-    push();
-    // position absolute
-    translate(this.parent.x + this.xOffset, this.parent.y + this.yOffset);
-    this.#drawBorder();
-    this.#drawSymbol();
-    this.#drawShortcut();
-    pop();
+    const x = this.parent.x + this.xOffset;
+    const y = this.parent.y + this.yOffset;
+    this.#drawBorder(x, y);
+    this.#drawSymbol(x, y);
+    this.#drawShortcut(x, y);
   }
 
-  #drawSymbol() {
-    this.symbolDrawBehavior();
+  #drawSymbol(x, y) {
+    this.symbolDrawBehavior(x, y);
   }
 
-  #drawBorder() {
-    push();
-
+  #drawBorder(x, y) {
     // make border wider if active
     if (this.isActive) {
       strokeWeight(5);
+    } else {
+      strokeWeight(2);
     }
 
     // make background darker if mouseOver
@@ -95,25 +93,34 @@ class Button {
       noFill();
     }
 
-    rect(0, 0, this.width, this.height, 10, 10, 10, 10);
-    pop();
+    rect(x, y, this.width, this.height, 10, 10, 10, 10);
   }
 
-  #drawShortcut() {
-    push();
-    textAlign(CENTER);
-    textSize(13);
-    text("(" + this.shortcut + ")", this.width * 0.5, this.height - 7);
-    pop();
+  #drawShortcut(x, y) {
+    const letterSize = 13;
+    if (!this.shortcutGraphic) {
+      const w = (this.shortcut.length + 3) * letterSize;
+      this.shortcutGraphic = createGraphics(w, letterSize * 2);
+      this.shortcutGraphic.textAlign(CENTER, CENTER);
+      this.shortcutGraphic.textFont(sketchFont);
+      this.shortcutGraphic.textSize(letterSize);
+      this.shortcutGraphic.text("(" + this.shortcut + ")", w / 2, letterSize);
+    }
+    imageMode(CENTER);
+    image(
+      this.shortcutGraphic,
+      x + this.width * 0.5,
+      y + this.height - letterSize
+    );
   }
 
-  #noteDrawBehavior() {
+  #noteDrawBehavior(x, y) {
     const widthScaler = this.symbol.getBaseValue() === 1 ? 0.5 : 0.45;
 
-    this.symbol.drawNote(this.width * widthScaler, this.height * 0.6);
+    this.symbol.drawNote(x + this.width * widthScaler, y + this.height * 0.6);
   }
 
-  #accidentalDrawBehavior() {
+  #accidentalDrawBehavior(x, y) {
     const symbolName = this.symbol.getName();
     let symbolYOffset = 0;
     if (
@@ -123,21 +130,20 @@ class Button {
       symbolYOffset = -bemolOffset;
     }
 
-    this.symbol.draw(this.width * 0.5, this.height * 0.4 + symbolYOffset);
+    this.symbol.draw(
+      x + this.width * 0.5,
+      y + this.height * 0.4 + symbolYOffset
+    );
   }
 
-  #p5ImageDrawBehavior() {
-    push();
+  #p5ImageDrawBehavior(x, y) {
     imageMode(CORNER);
-    image(this.symbol, 5, 5, this.width - 10, this.height - 25);
-    pop();
+    image(this.symbol, x + 5, y + 5, this.width - 10, this.height - 25);
   }
 
-  #dotDrawBehavior() {
-    push();
+  #dotDrawBehavior(x, y) {
     fill(0);
-    circle(this.width * 0.5, this.height * 0.5, dotDiameter);
-    pop();
+    circle(x + this.width * 0.5, y + this.height * 0.5, dotDiameter);
   }
 }
 
@@ -485,10 +491,8 @@ function handleThrashInteraction(elementsUnderMouse) {
       vertical.clear();
     }
   } else {
-    push();
     imageMode(CENTER);
     image(symbols.thrashCanCrossed, mouseX + 20, mouseY - 20, 30, 30);
-    pop();
   }
 }
 
