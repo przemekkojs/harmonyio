@@ -25,6 +25,7 @@
     background-color: white;
     border: 1px solid #222222;
     border-radius: 2px;
+    font-family: inherit;
 }
 
 .adder-button {
@@ -34,10 +35,15 @@
     border-radius: 2px;
     margin: 2px;
     padding: 3px;
+    
+    width: 25px;
+    height: 25px;
+    font-family: inherit;
 }
 
 .grid-container select::-ms-expand {
     display: none;
+    font-family: inherit;
 }
 
 .grid-container select {
@@ -46,6 +52,7 @@
     -moz-appearance: none;
     text-indent: 1px;
     text-overflow: '';
+    font-family: inherit;
 }
 
 /* Nawias lewy */
@@ -165,11 +172,13 @@
 .components-place {
     padding: 10px;
     display: flex;
+    align-items: center;
     overflow: auto;
 }
 
 .bars {
     display: flex;
+    align-items: center;
     padding: 10px;
     margin: 10px;
 }
@@ -179,3 +188,76 @@
     flex-direction: row;
     font-size: 8px;
 }
+
+.params {
+    text-align: center;
+    background-color: #dddddd;
+}
+
+.params select {
+    font-size: 24px;
+    text-align: center;
+    width: 100px;
+    border: none;
+    border-bottom: 1px solid black;
+    background: none;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+
+    font-family: inherit;
+}
+
+.params .smaller-select {
+    width: 25px;
+    font-family: inherit;
+}
+
+.task-submit {
+    text-align: right;
+    background-color: #dddddd;
+    font-family: inherit;
+}
+
+.task-submit input[type="button"] {
+    font-family: inherit;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.custom-checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 13px;
+    width: 13px;
+    border: 1px solid black;
+    border-radius: 2px;
+}
+
+.custom-checkbox input:checked + .checkmark::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url('moll.png');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+  }

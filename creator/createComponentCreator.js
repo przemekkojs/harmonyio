@@ -1,5 +1,4 @@
-export function createComponent(taskIndex, barIndex, verticalIndex) {
-    const newId = `x${taskIndex}-${barIndex}-${verticalIndex}`;
+export function createComponent(newId) {
     const newComponent = `
         <div class="suspension-popup popup-base" id="suspension-popup-${newId}">
             <span class="popup-title">Dodaj opóźnienie</span>
@@ -66,9 +65,14 @@ export function createComponent(taskIndex, barIndex, verticalIndex) {
             <form id="main-${newId}">
                 <div class="grid-container">
                     <div class="left-brace" id="left-brace-container-${newId}"></div>   
-                
+
                     <div class="minor" id="minor-container-${newId}">
-                        <input type="checkbox" name="minor" id="minor-${newId}" title="Moll?">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="minor" id="minor-${newId}">
+                            <span class="checkmark" title="Moll?"></span>
+                        </label>
+
+                        <!-- <input type="checkbox" name="minor" id="minor-${newId}" title="Moll?"> -->
                     </div>
                 
                     <div class="symbol" id="symbol-container-${newId}">
@@ -103,9 +107,9 @@ export function createComponent(taskIndex, barIndex, verticalIndex) {
                 </div>
             
                 <div id="form-buttons-${newId}">
-                    <input type="button" name="cancel-creator" id="cancel-creator-${newId}" value="x" alt="Anuluj" title="Anuluj" style="background-color: red; border: none; border-radius: 2px;">
-                    <input type="button" name="reset-creator" id="reset-creator-${newId}" value="r" alt="Resetuj funkcję" title="Resetuj funkcję" style="background-color: yellow; border: none; border-radius: 2px;">
-                    <input type="button" name="submit-creator" id="submit-creator-${newId}" value="y" alt="Dodaj" title="Dodaj funkcję" style="background-color: green; border: none; border-radius: 2px;">
+                    <input type="button" name="cancel-creator" id="cancel-creator-${newId}" value="x" alt="Anuluj" title="Anuluj" style="background-color: #ff5f3c; border: none; border-radius: 2px;">
+                    <input type="button" name="reset-creator" id="reset-creator-${newId}" value="r" alt="Resetuj funkcję" title="Resetuj funkcję" style="background-color: #ffe000; border: none; border-radius: 2px;">
+                    <input type="button" name="submit-creator" id="submit-creator-${newId}" value="y" alt="Dodaj" title="Dodaj funkcję" style="background-color: #20e123; border: none; border-radius: 2px;">
                 </div>
             </form>
         </div>`;

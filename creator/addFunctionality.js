@@ -118,10 +118,7 @@ export class Elements {
                 }
             });
 
-            if (checkedComponent === "" || checkedOption === "") {
-                console.log("Cannot add empty");                
-            }
-            else {
+            if (checkedComponent !== "" && checkedOption !== "") {
                 if (document.getElementById(`added-container-${this.thisId}`).children.length < 5) {
                     this.createAddedElement(checkedComponent, checkedOption);
                 }
@@ -214,7 +211,6 @@ export class Elements {
     
         this.addedPopup.style.display = "none";
         this.suspensionPopup.style.display = "none";
-        this.alterationPopup.style.display = "none";
-        
+        this.alterationPopup.style.display = "none";        
     }
 }

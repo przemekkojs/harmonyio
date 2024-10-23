@@ -15,7 +15,7 @@
                 </select>
                     
                 <label for="tonation-name-select-task-1">Tonacja: </label>
-                <select id="tonation-name-select-task-1">
+                <select id="tonation-name-select-task-1" class="smaller-select">
                     <option value="C">C</option>
                     <option value="D">D</option>
                     <option value="E">E</option>
@@ -26,20 +26,30 @@
                 </select>
                 
                 <label for="accidental-task-1"></label>
-                <select id="accidental-task-1">
+                <select id="accidental-task-1" class="smaller-select">
                     <option value=" "> </option>
                     <option value="#">#</option>
                     <option value="b">b</option>
                 </select>
+
+                <label for="mode-task-1"></label>
+                <select id="mode-task-1">
+                    <option value="dur">Dur</option>
+                    <option value="moll">moll</option>
+                </select>
             </div>
-            
-            <input type="submit" value="Zatwierdź">
-            <input type="button" value="Wyczyść">
         </form>
 
         <div id="components-place-1" class="components-place">
             
         </div>
+
+        <div class="task-submit">
+            <form>
+                <input type="submit" value="Zatwierdź">
+                <input type="button" value="Wyczyść">
+            </form>
+        </div>        
     </div>
 </div>
 
