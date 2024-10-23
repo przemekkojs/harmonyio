@@ -1,3 +1,5 @@
+import { Function } from "./function.js";
+
 export class Elements {
     constructor(thisId) {
         this.thisId = thisId;
@@ -212,5 +214,9 @@ export class Elements {
         this.addedPopup.style.display = "none";
         this.suspensionPopup.style.display = "none";
         this.alterationPopup.style.display = "none";        
+    }
+
+    addFunction() {
+
     }
 }
