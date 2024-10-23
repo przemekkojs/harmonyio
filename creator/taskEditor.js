@@ -14,6 +14,7 @@ class Bar {
         this.addFunctionButton = document.createElement('button');
         this.addFunctionButton.id = `add-function-${this.taskId}-${this.index}`;
         this.addFunctionButton.innerText = "...";
+        this.addFunctionButton.className = "adder-button";
         this.addFunctionButton.addEventListener('click', () => {
             this.addFunction(this.functions);
         });
@@ -26,21 +27,35 @@ class Bar {
             this.functions++;
 
             let component = document.createElement('div');
-            component.id = `${this.taskId}-${this.index}-${this.functions}`;
+            let newId = `x${this.taskId}-${this.index}-${this.functions}`;
+            component.id = newId;
             component.className = 'task-box';
-            component.innerHTML = createComponent(this.taskId, this.index, this.functions);            
-            
-            // let newFunction = document.createElement('span');
-            // newFunction.innerText = `FUNKCJA ${this.functions}`;
-            // this.bar.insertBefore(newFunction, this.bar.children[this.functions]);
+            component.innerHTML = createComponent(this.taskId, this.index, this.functions);
 
+            let remover = component.querySelector(`#cancel-creator-${newId}`);
+
+            remover.addEventListener('click', () => {
+                this.removeFunction()
+            });
+            
             this.bar.insertBefore(component, this.bar.children[this.functions]);
-            allElements.push(new Elements(`${this.taskId}-${this.index}-${this.functions}`));
+            allElements.push(new Elements(`x${this.taskId}-${this.index}-${this.functions}`));
         }            
     }
 
     removeFunction() {
-        this.functions--;
+        if (this.functions > 0) {
+            let element = null;
+
+            const newId = `#x${this.taskId}-${this.index}-${this.functions}`;
+
+            allElements.forEach(e => {
+                element = this.bar.querySelector(newId);
+            });
+
+            this.functions--;
+            this.bar.removeChild(element);
+        }        
     }
 
     shift(newIndex) {
@@ -60,6 +75,7 @@ export class Task {
         this.adder = document.createElement('button');
         this.adder.id = `add-bar-${this.id}`;
         this.adder.innerText = '...';
+        this.adder.className = "adder-button";
         this.adder.addEventListener('click', () => {        
             this.addBar(this.bars.length);        
         });
@@ -74,9 +90,12 @@ export class Task {
             let newBar = document.createElement('div');
             newBar.id = `bar-${this.id}-${barIndex}`;
             newBar.innerHTML = `
-            <svg height="150" width="10">
-                <line x1="5" y1="0" x2="5" y2="150" style="stroke:black;stroke-width:2" />
-            </svg>`;
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <span style="margin-bottom: 5px; font-style: italic;">${barIndex}</span>
+                <svg height="150" width="10">
+                    <line x1="5" y1="0" x2="5" y2="150" style="stroke:black;stroke-width:1" />
+                </svg>
+            </div>`;
 
             newBar.className = 'bars';
 

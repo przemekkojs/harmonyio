@@ -1,5 +1,6 @@
 export class Elements {
     constructor(thisId) {
+        this.thisId = thisId;
         this.thisDiv = document.getElementById(thisId);
     
         this.positionDropdown = this.thisDiv.querySelector(`#position-${thisId}`);
@@ -10,7 +11,10 @@ export class Elements {
         this.addedButton = this.thisDiv.querySelector(`#add-added-${thisId}`);
         this.alterationButton = this.thisDiv.querySelector(`#add-alteration-${thisId}`);
         this.suspensionButton = this.thisDiv.querySelector(`#add-suspension-${thisId}`);
+
         this.resetButton = this.thisDiv.querySelector(`#reset-creator-${thisId}`);
+        this.cancelButton = this.thisDiv.querySelector(`#cancel-creator-${thisId}`);
+        this.addButton = this.thisDiv.querySelector(`#submit-creator-${thisId}`);
 
         this.addedPopup = this.thisDiv.querySelector(`#added-popup-${thisId}`);
         this.suspensionPopup = this.thisDiv.querySelector(`#suspension-popup-${thisId}`);
@@ -21,7 +25,9 @@ export class Elements {
 
         this.allComponents = [this.positionDropdown, this.rootDropdown,
             this.symbolDropdown, this.removedDropdown, this.addedButton,
-            this.alterationButton, this.suspensionButton];
+            this.alterationButton];//, this.suspensionButton];
+
+        this.controlButtons = [this.resetButton, this.cancelButton, this.addButton];
 
         this.populateDropdowns();
         this.addOnClickEvents();
@@ -58,14 +64,93 @@ export class Elements {
     addOnClickEvents()
     {
         this.addedButton.addEventListener('click', (event) => { this.addAdded(event); });
-        this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
+        // this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
         this.alterationButton.addEventListener('click', (event) => { this.addAlteration(event); });
         this.resetButton.addEventListener('click', () => { this.resetAll(); });
+
+        this.addAddedOnClickEvents();
+    }
+
+    addAddedOnClickEvents() {
+        const components = this.addedPopup
+            .querySelectorAll('div')[0]
+            .querySelectorAll('input[type="radio"]');
+
+        const options = this.addedPopup
+            .querySelectorAll('div')[1]
+            .querySelectorAll('input[type="radio"]');
+        
+        const confirmButton = this.addedPopup.querySelectorAll('input[type="button"]')[0];
+
+        confirmButton.addEventListener('click', () => {
+            let checkedComponent = "";
+            let checkedOption = "";
+
+            components.forEach(c => {
+                if (c.checked) {
+                    switch(c.value) {
+                        case 'sixth':
+                            checkedComponent = '6';
+                            break;
+                        case 'seventh':
+                            checkedComponent = '7';
+                            break;
+                        case 'ninth':
+                            checkedComponent = '9';
+                            break;
+                    }
+                }
+            });
+
+            options.forEach(c => {
+                if (c.checked) {
+                    switch(c.value) {
+                        case 'major':
+                            checkedOption = "<";
+                            break;
+                        case 'neutral':
+                            checkedOption = "-";
+                            break;
+                        case 'minor':
+                            checkedOption = ">";
+                            break;
+                    }
+                }
+            });
+
+            if (checkedComponent === "" || checkedOption === "") {
+                console.log("Cannot add empty");                
+            }
+            else {
+                if (document.getElementById(`added-container-${this.thisId}`).children.length < 5) {
+                    this.createAddedElement(checkedComponent, checkedOption);
+                }
+                
+                this.togglePopupOff(this.addedPopup);
+            }
+        });        
     }
     
     addAdded(event) {    
         this.togglePopupOn(this.addedPopup, event);
         Elements.disableItems(this.allComponents);
+    }
+
+    createAddedElement(component, option) {
+        const container = document.getElementById(`added-container-${this.thisId}`);
+        let element = document.createElement('input');
+        element.type = "button";
+        element.value = `${component}${option}`;
+        // element.id = `remove-added-${this.thisId}-${container.children.length - 1}`;
+        element.className = "added-component";
+
+        element.addEventListener('click', () => {
+            if (container.contains(element)) {
+                container.removeChild(element);
+            }
+        });
+
+        container.appendChild(element);
     }
     
     addAlteration(event) {
@@ -79,10 +164,12 @@ export class Elements {
     }
     
     togglePopupOn(popup, event) {
-        if (popup.style.display === "block")
+        if (popup.style.display === "block") {
             popup.style.display = "none";
-        else
+        }
+        else {
             popup.style.display = "block";
+        }
 
         const button = event.currentTarget;
         const rect = button.getBoundingClientRect();
@@ -90,11 +177,8 @@ export class Elements {
         popup.style.left = (rect.left - (popup.style.width / 2)) + "px";
         popup.style.top = (rect.top + button.offsetHeight) + "px";
         
-        const confirmButton = popup.querySelectorAll('input[type="button"]')[0];
-        const cancelButton = popup.querySelectorAll('input[type="button"]')[1];       
-    
-        confirmButton.addEventListener('click', () => { this.addComponent(popup); });
-        cancelButton.addEventListener('click', () =>{ this.togglePopupOff(popup); });
+        const cancelButton = popup.querySelectorAll('input[type="button"]')[1];   
+        cancelButton.addEventListener('click', () => { this.togglePopupOff(popup); });
     }
     
     togglePopupOff(popup) {
@@ -131,5 +215,6 @@ export class Elements {
         this.addedPopup.style.display = "none";
         this.suspensionPopup.style.display = "none";
         this.alterationPopup.style.display = "none";
+        
     }
 }

@@ -1,5 +1,5 @@
 export function createComponent(taskIndex, barIndex, verticalIndex) {
-    const newId = `${taskIndex}-${barIndex}-${verticalIndex}`;
+    const newId = `x${taskIndex}-${barIndex}-${verticalIndex}`;
     const newComponent = `
         <div class="suspension-popup popup-base" id="suspension-popup-${newId}">
             <span class="popup-title">Dodaj opóźnienie</span>
@@ -15,12 +15,12 @@ export function createComponent(taskIndex, barIndex, verticalIndex) {
         
             <form id="add-alteration-form-${newId}">
                 <div class="component-choice">
-                    <input type="radio" name="component" id="prima-${newId}" value="prima">
-                    <label for="prima-${newId}">1</label>
-                    <input type="radio" name="component" id="third-${newId}" value="third">
-                    <label for="third-${newId}">3</label>
-                    <input type="radio" name="component" id="fifth-${newId}" value="fifth">
-                    <label for="fifth-${newId}">5</label>
+                    <input type="radio" name="component" id="alter-root-${newId}" value="root">
+                    <label for="alter-root-${newId}">1</label>
+                    <input type="radio" name="component" id="alter-third-${newId}" value="third">
+                    <label for="alter-third-${newId}">3</label>
+                    <input type="radio" name="component" id="alter-fifth-${newId}" value="fifth">
+                    <label for="alter-fifth-${newId}">5</label>
                 </div>
         
                 <div class="radio-buttons">
@@ -37,8 +37,26 @@ export function createComponent(taskIndex, barIndex, verticalIndex) {
         
         <div class="added-popup popup-base" id="added-popup-${newId}">
             <span class="popup-title">Dodaj składnik</span>
-        
+
             <form id="add-added-form-${newId}">
+                <div id="add-added-form-${newId}-components">
+                    <input type="radio" name="component" id="add-sixth-${newId}" value="sixth">
+                    <label for"add-sixth-${newId}">6</label>
+                    <input type="radio" name="component" id="add-seventh-${newId}" value="seventh">
+                    <label for"add-seventh-${newId}">7</label>
+                    <input type="radio" name="component" id="add-ninth-${newId}" value="ninth">
+                    <label for"add-ninth-${newId}">9</label>
+                </div>
+                    
+                <div id="add-added-form-${newId}-options">
+                    <input type="radio" name="type" id="major-${newId}" value="major">
+                    <label for="major-${newId}">&lt;</label>
+                    <input type="radio" name="type" id="neutral-${newId}" value="neutral" checked>
+                    <label for="neutral-${newId}">-</label>
+                    <input type="radio" name="type" id="minor-${newId}" value="minor">
+                    <label for="minor-${newId}">&gt;</label>
+                </div>
+
                 <input type="button" name="confirm-button" id="confirm-add-added-${newId}" value="Dodaj" class="confirm-button">
                 <input type="button" name="cancel-button" id="cancel-add-added-${newId}" value="Anuluj" class="cancel-button">
             </form>
@@ -47,47 +65,47 @@ export function createComponent(taskIndex, barIndex, verticalIndex) {
         <div class="function-creator">
             <form id="main-${newId}">
                 <div class="grid-container">
-                    <div class="left-brace"></div>   
+                    <div class="left-brace" id="left-brace-container-${newId}"></div>   
                 
-                    <div class="minor">
-                        <input type="checkbox" name="minor" id="minor-${newId}">
+                    <div class="minor" id="minor-container-${newId}">
+                        <input type="checkbox" name="minor" id="minor-${newId}" title="Moll?">
                     </div>
                 
-                    <div class="symbol">
-                        <select name="symbol" id="symbol-${newId}"></select>
+                    <div class="symbol" id="symbol-container-${newId}">
+                        <select name="symbol" id="symbol-${newId}" title="Wybierz symbol funkcji" style="font-size: 30px; font-weight: bold;"></select>
                     </div>
                 
-                    <div class="position">
-                        <select name="position" id="position-${newId}" class=""></select>
+                    <div class="position" id="position-container-${newId}">
+                        <select name="position" id="position-${newId}" title="Wybierz pozycję"></select>
                     </div>
                 
-                    <div class="root">
-                        <select name="root" id="root-${newId}"></select>
+                    <div class="root" id="root-container-${newId}">
+                        <select name="root" id="root-${newId}" title="Wybierz oparcie"></select>
                     </div>
                 
-                    <div class="added">
-                        <input type="button" name="add-added" id="add-added-${newId}" value="+">
+                    <div class="added" id="added-container-${newId}">
+                        <input type="button" name="add-added" id="add-added-${newId}" value="" title="Dodaj składnik dysonujący">
                     </div>
                 
-                    <div class="suspension">
-                        <input type="button" name="add-suspension" id="add-suspension-${newId}" value="+">
+                    <div class="suspension" id="suspension-container-${newId}">
+                        <!--<input type="button" name="add-suspension" id="add-suspension-${newId}" value="" title="Dodaj opóźnienie">-->
                     </div>
                 
-                    <div class="alteration">
-                        <input type="button" name="add-alteration" id="add-alteration-${newId}" value="+">
+                    <div class="alteration" id="alteration-container-${newId}">
+                        <input type="button" name="add-alteration" id="add-alteration-${newId}" value="" title="Dodaj alterację">
                     </div>
                 
-                    <div class="removed">
-                        <select name="removed" id="removed-${newId}"></select>
+                    <div class="removed" id="removed-container-${newId}">
+                        <select name="removed" id="removed-${newId}" title="Wybierz składnik dodany"></select>
                     </div>
                 
-                    <div class="right-brace"></div>
+                    <div class="right-brace" id="right-brace-container-${newId}"></div>
                 </div>
             
                 <div id="form-buttons-${newId}">
-                    <input type="button" name="cancel-creator" id="cancel-creator-${newId}" value="x">
-                    <input type="button" name="reset-creator" id="reset-creator-${newId}" value="r">
-                    <input type="submit" name="submit-creator" id="submit-creator-${newId}" value="y">
+                    <input type="button" name="cancel-creator" id="cancel-creator-${newId}" value="x" alt="Anuluj" title="Anuluj" style="background-color: red; border: none; border-radius: 2px;">
+                    <input type="button" name="reset-creator" id="reset-creator-${newId}" value="r" alt="Resetuj funkcję" title="Resetuj funkcję" style="background-color: yellow; border: none; border-radius: 2px;">
+                    <input type="button" name="submit-creator" id="submit-creator-${newId}" value="y" alt="Dodaj" title="Dodaj funkcję" style="background-color: green; border: none; border-radius: 2px;">
                 </div>
             </form>
         </div>`;
