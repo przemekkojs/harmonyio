@@ -1,5 +1,5 @@
-export class Function {
-    constructor(minor, symbol, position, root, removed, alterations, added) {
+export class ParsedFunction {
+    constructor(barIndex, verticalIndex, minor, symbol, position, root, removed, alterations, added) {
         this.minor = minor;
         this.symbol = symbol;
         this.position = position;
@@ -7,6 +7,8 @@ export class Function {
         this.removed = removed;
         this.alterations = alterations;
         this.added = added;
+        this.barIndex = barIndex;
+        this.verticalIndex = verticalIndex;
     }
 }
 

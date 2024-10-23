@@ -1,9 +1,8 @@
-import { Function } from "./function.js";
-
 export class Elements {
-    constructor(thisId) {
+    constructor(thisId, task) {
         this.thisId = thisId;
         this.thisDiv = document.getElementById(thisId);
+        this.task = task;
         
         this.minorBox = this.thisDiv.querySelector(`#minor-${thisId}`);
         this.positionDropdown = this.thisDiv.querySelector(`#position-${thisId}`);
@@ -73,7 +72,7 @@ export class Elements {
         // this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
         this.alterationButton.addEventListener('click', (event) => { this.addAlteration(event); });
         this.resetButton.addEventListener('click', () => { this.resetAll(); });
-        this.addButton.addEventListener('click', () => { this.addFunction(); });
+        this.addButton.addEventListener('click', () => { this.task.addFunction(this); });
 
         this.addAddedOnClickEvents();
     }
@@ -146,7 +145,6 @@ export class Elements {
         let val = `${component}${option}`;
         element.type = "button";
         element.value = val;
-        // element.id = `remove-added-${this.thisId}-${container.children.length - 1}`;
         element.className = "added-component";
 
         element.addEventListener('click', () => {
@@ -235,39 +233,5 @@ export class Elements {
         this.addedPopup.style.display = "none";
         this.suspensionPopup.style.display = "none";
         this.alterationPopup.style.display = "none";        
-    }
-
-    addFunction() {
-        this.addedPopup.style.display = "none";
-        this.suspensionPopup.style.display = "none";
-        this.alterationPopup.style.display = "none";
-
-        let minor = this.minorBox.checked;
-        let symbol = this.symbolDropdown.value;
-        let position = this.positionDropdown.value;
-        let root = this.rootDropdown.value;
-        let removed = this.removedDropdown.value;
-        let alterations = this.alterations;
-        let added = this.added;
-
-        if (symbol === "") {
-            alert('Nie można dodać pustej funkcji!');
-            return null;
-        }
-
-        this.disableItems(this.allComponents);
-        this.addButton.disabled = true;
-
-        let result = new Function(
-            minor,
-            symbol,
-            position,
-            root,
-            removed,
-            alterations,
-            added
-        );
-
-        return result;
-    }
+    }    
 }

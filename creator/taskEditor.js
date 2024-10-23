@@ -1,10 +1,11 @@
 import { createComponent } from "./createComponentCreator.js";
 import { Elements } from "./addFunctionality.js";
+import { ParsedFunction } from "./function.js";
 
 let allElements = [];
 
 class Function {
-    constructor(bar, functionIndex) {
+    constructor(task, bar, functionIndex) {
         this.functionIndex = functionIndex;
         this.barIndex = bar.index;
         this.taskId = bar.taskId;
@@ -20,7 +21,7 @@ class Function {
         this.component = component;        
         this.barElement.insertBefore(this.component, this.barElement.children[this.functionIndex + 1]);
 
-        allElements.push(new Elements(newId));
+        allElements.push(new Elements(newId, task));
         let remover = component.querySelector(`#cancel-creator-${newId}`);
 
         remover.addEventListener('click', () => {
@@ -30,12 +31,13 @@ class Function {
 }
 
 class Bar {
-    constructor(taskId, index, maxFunctionsCount) {
+    constructor(task, index, maxFunctionsCount) {
         this.index = index;
-        this.taskId = taskId;
+        this.taskId = task.id;
+        this.task = task;
         this.functions = [];
         this.maxFunctionsCount = maxFunctionsCount;
-        this.bar = document.getElementById(`bar-${taskId}-${index}`);
+        this.bar = document.getElementById(`bar-${this.taskId}-${this.index}`);
 
         this.addFunctionButton = document.createElement('button');
         this.addFunctionButton.id = `add-function-${this.taskId}-${this.index}`;
@@ -52,7 +54,7 @@ class Bar {
 
     addFunction() {
         if (this.functions.length < this.maxFunctionsCount) {
-            this.functions.push(new Function(this, this.functions.length));
+            this.functions.push(new Function(this.task, this, this.functions.length));
         }            
     }
 
@@ -75,6 +77,7 @@ export class Task {
         this.bars = [];
         this.id = id;
         this.limit = limit;
+        this.result = [];
 
         this.componentsPlace = document.getElementById(`components-place-${id}`);
 
@@ -122,7 +125,7 @@ export class Task {
             });
 
             this.componentsPlace.insertBefore(newBar, this.componentsPlace.children[barIndex]);
-            this.bars.splice(barIndex, 0, new Bar(this.id, barIndex, 8));
+            this.bars.splice(barIndex, 0, new Bar(this, barIndex, 8));
         }
     }
 
@@ -160,5 +163,49 @@ export class Task {
             deleteBarButton.parentNode.replaceChild(deleteBarButtonClone, deleteBarButton); 
             deleteBarButtonClone.addEventListener('click', () => this.removeBar(i));
         }
+    }
+
+    addFunction(element) {
+        element.addedPopup.style.display = "none";
+        element.suspensionPopup.style.display = "none";
+        element.alterationPopup.style.display = "none";
+    
+        let minor = element.minorBox.checked;
+        let symbol = element.symbolDropdown.value;
+        let position = element.positionDropdown.value;
+        let root = element.rootDropdown.value;
+        let removed = element.removedDropdown.value;
+        let alterations = element.alterations;
+        let added = element.added;
+    
+        if (symbol === "") {
+            alert('Nie można dodać pustej funkcji!');
+            return null;
+        }
+    
+        element.disableItems(element.allComponents);
+        element.addButton.disabled = true;
+    
+        let splitted = element.thisId.split('-');
+        let barId = splitted[1];
+        let verticalId = splitted[2];
+    
+        let functionResult = new ParsedFunction(
+            barId,
+            verticalId,
+            minor,
+            symbol,
+            position,
+            root,
+            removed,
+            alterations,
+            added
+        );
+    
+        this.result.push(functionResult);
+    }
+
+    submitTask() {
+        console.log(this.result);
     }
 }

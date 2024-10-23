@@ -48,8 +48,8 @@ export function createTask(parent, id) {
 
             <div class="task-submit">
                 <form>
-                    <input type="submit" value="Zatwierdź">
-                    <input type="button" value="Wyczyść">
+                    <input type="button" value="Zatwierdź" id="submit-${id}">
+                    <input type="button" value="Wyczyść" id="clear-${id}">
                 </form>
             </div>        
         </div>
@@ -62,5 +62,13 @@ export function createTask(parent, id) {
     console.log(taskDiv);
 
     parent.appendChild(taskDiv);
-    tasks.push(new Task(id));
+
+    let toAppend = new Task(id);    
+    let taskSubmitButton = document.getElementById(`submit-${id}`);
+
+    taskSubmitButton.addEventListener('click', () => {
+        toAppend.submitTask();
+    });
+    
+    tasks.push(toAppend);
 }
