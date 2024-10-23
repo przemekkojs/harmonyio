@@ -1,0 +1,19 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+	<title>Harmony-Logo</title>
+	<style>
+		.s0 { fill: none;stroke: #000000;stroke-linecap: round;stroke-miterlimit:100;stroke-width: 22 } 
+		.s1 { fill: #000000 } 
+		.s2 { fill: #000000;stroke: #000000;stroke-linecap: round;stroke-miterlimit:100;stroke-width: 2 } 
+	</style>
+	<path id="Warstwa 1" class="s0" d="m131 275l270-60"/>
+	<g id="left note">
+		<path id="Kształt 2" class="s1" d="m152.6 424.6c-27 16.3-57.7 14.8-68.7-3.4-10.9-18.2 2-46.1 28.9-62.4 27-16.3 57.6-14.7 68.6 3.5 11 18.2-1.9 46-28.8 62.3z"/>
+		<path id="note" class="s0" d="m174 109.9v258.1"/>
+		<path id="tail" class="s2" d="m243 211c0 0-3-16.5-17.8-31.7-10.1-10.4-30.4-22.1-40.2-20.3l-1-42.1c0 0 3.2 14.1 15.1 21.9 12.1 7.9 61.5 51.1 43.9 72.2z"/>
+	</g>
+	<g id="right note">
+		<path id="Kształt 2" class="s1" d="m337.6 383.6c-27 16.3-57.7 14.8-68.7-3.4-10.9-18.2 2-46.1 28.9-62.4 27-16.3 57.6-14.7 68.6 3.5 11 18.2-1.9 46-28.8 62.3z"/>
+		<path id="note" class="s0" d="m359 68.9v258.1"/>
+		<path id="tail" class="s2" d="m428 170c0 0-3-16.5-17.8-31.7-10.1-10.4-30.4-22.1-40.2-20.3l-1-42.1c0 0 3.2 14.1 15.1 21.9 12.1 7.9 61.5 51.1 43.9 72.2z"/>
+	</g>
+</svg>

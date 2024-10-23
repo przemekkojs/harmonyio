@@ -1,0 +1,5 @@
+﻿body {
+    background: url('/images/bg-pattern.png') repeat, linear-gradient(#541074, #551bb1);
+    background-size: 512px 512px, cover;
+    background-position: 0 0, center;
+}
