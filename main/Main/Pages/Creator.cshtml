@@ -3,6 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="~/css/creator-style.css" />
+    <link rel="stylesheet" href="~/css/function-creator-styles.css" />
 </head>
 
 <form method="post" class="h-100 w-100">
@@ -69,11 +70,12 @@
     </div>
 </form>
 
+<script type="module">
+    import { createTask } from "./js/creator-scripts/taskCreator.js";
 
-<script>
     let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
 
-    function addExcersise() {
+    window.addExcersise = function () {
         excersises.push("");
         renderExcersises();
 
@@ -104,9 +106,9 @@
                         <div class="task-number text-white">${index + 1}</div>
                         <div class="vr"></div>
                     </div>
-                    <div class="task-content w-100 p-3">
-                        <span class="mb-1">Kreator funkcji</span> @*Tutaj trzeba dodać kreatory*@
-                        <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>
+                    <div class="task-content w-100 p-3" id=task-container-${index}>
+                       
+                        @*<input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>*@
                     </div>
                     @if (!Model.BrowseOnly)
                     {
@@ -116,6 +118,8 @@
                         </div>
                     }
                 </div>`;
+
+            createTask(document.getElementById(`task-container-${index}`), index);
         });
     }
 
