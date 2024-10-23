@@ -1,5 +1,5 @@
 @page
-@model Main.Pages.ListJoined
+@model Main.Pages.AssignedModel
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 @using Main.Enumerations
 @{
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="d-flex flex-column h-100">
-                        <a href="/solve?id=@quiz.Code" class="btn btn-outline-primary ms-auto mt-auto">Rozwiąż</a>
+                        <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-outline-primary ms-auto mt-auto">Rozwiąż</a>
                     </div>
                 </div>
             }
@@ -141,7 +141,7 @@
                             </div>
                         }
 
-                        <a href="/browse?id=@quiz.Id" class="btn btn-outline-primary ms-auto mt-auto">Przeglądaj</a>
+                        <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-outline-primary ms-auto mt-auto">Przeglądaj</a>
                     </div>
                 </div>
             }
@@ -160,14 +160,14 @@
         @foreach (var quiz in toSolve)
         {
             <text>
-            const closeDate = "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")";
+            var closeDate = "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")";
             document.getElementById("to-solve-time-@quiz.Id").innerText = formatTimeDifference(closeDate);
             </text>
         }
         @foreach (var quiz in futureQuizes)
         {
             <text>
-            const openDate = "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")";
+            var openDate = "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")";
             document.getElementById("future-quiz-time-@quiz.Id").innerText = formatTimeDifference(openDate);
             </text>
         }

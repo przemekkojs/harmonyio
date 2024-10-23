@@ -55,7 +55,7 @@
         <hr class="hr mt-3">
 
         <div class="bottom-bar d-flex align-items-center">
-            <a asp-page="Index" class="btn btn-danger btn-std-width me-auto">Powrót</a>
+            <a asp-page="Assigned" class="btn btn-danger btn-std-width me-auto">Powrót</a>
             <button id="btn-prev" type="button" onclick="prevQuestion()"
                 class="btn btn-secondary btn-std-width mx-3">Poprzednie</button>
 
@@ -264,38 +264,4 @@
 
     updateTimer();
     setInterval(updateTimer, 1000);
-</script>
-
-
-<script>
-    //window.onload = function () {
-    //    const bottomBar = document.querySelector('.bottom-bar');
-    //    const current = document.querySelector('.btn-current');
-    //    const hidable = document.querySelectorAll('.btn-hidable');
-
-    //    function isOverflow() {
-    //        return bottomBar.scrollWidth != bottomBar.clientWidth
-    //    }
-    //    function checkOverflow() {
-    //        if (isOverflow()) {
-    //            hidable.forEach(function (button) {
-    //                button.classList.add('d-none');
-    //            });
-    //        }
-    //        else {
-    //            hidable.forEach(function (button) {
-    //                button.classList.remove('d-none');
-    //            });
-
-    //            if (isOverflow()) {
-    //                hidable.forEach(function (button) {
-    //                    button.classList.add('d-none');
-    //                });
-    //            }
-    //        }
-    //    }
-
-    //    checkOverflow();
-    //    window.addEventListener('resize', checkOverflow);
-    //};
 </script>

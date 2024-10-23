@@ -9,12 +9,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Main.Pages;
 
-public class ListJoined : PageModel
+[Authorize]
+public class AssignedModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationRepository _repository;
     
-    public ListJoined(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
+    public AssignedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
         _repository = repository;
