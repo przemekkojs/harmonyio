@@ -127,8 +127,6 @@ export class Task {
     }
 
     removeBar(index) {
-        console.log(index + 1);
-
         let element = document.querySelector(`#bar-${this.id}-${index}`);
         let bar = this.bars[index];
 

@@ -4,7 +4,8 @@ export class Elements {
     constructor(thisId) {
         this.thisId = thisId;
         this.thisDiv = document.getElementById(thisId);
-    
+        
+        this.minorBox = this.thisDiv.querySelector(`#minor-${thisId}`);
         this.positionDropdown = this.thisDiv.querySelector(`#position-${thisId}`);
         this.rootDropdown = this.thisDiv.querySelector(`#root-${thisId}`);
         this.symbolDropdown = this.thisDiv.querySelector(`#symbol-${thisId}`);
@@ -24,6 +25,9 @@ export class Elements {
 
         this.avaiableAlterations = ['up', 'down'];    
         this.minor = 'm';
+
+        this.alterations = [];
+        this.added = [];
 
         this.allComponents = [this.positionDropdown, this.rootDropdown,
             this.symbolDropdown, this.removedDropdown, this.addedButton,
@@ -69,6 +73,7 @@ export class Elements {
         // this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
         this.alterationButton.addEventListener('click', (event) => { this.addAlteration(event); });
         this.resetButton.addEventListener('click', () => { this.resetAll(); });
+        this.addButton.addEventListener('click', () => { this.addFunction(); });
 
         this.addAddedOnClickEvents();
     }
@@ -132,34 +137,37 @@ export class Elements {
     
     addAdded(event) {    
         this.togglePopupOn(this.addedPopup, event);
-        Elements.disableItems(this.allComponents);
+        this.disableItems(this.allComponents);
     }
 
     createAddedElement(component, option) {
         const container = document.getElementById(`added-container-${this.thisId}`);
         let element = document.createElement('input');
+        let val = `${component}${option}`;
         element.type = "button";
-        element.value = `${component}${option}`;
+        element.value = val;
         // element.id = `remove-added-${this.thisId}-${container.children.length - 1}`;
         element.className = "added-component";
 
         element.addEventListener('click', () => {
             if (container.contains(element)) {
                 container.removeChild(element);
+                this.added.pop(val);
             }
         });
 
+        this.added.push(val);
         container.appendChild(element);
     }
     
     addAlteration(event) {
         this.togglePopupOn(this.alterationPopup, event);
-        Elements.disableItems(this.allComponents);
+        this.disableItems(this.allComponents);
     }
     
     addSuspension(event) {
         this.togglePopupOn(this.suspensionPopup, event);
-        Elements.disableItems(this.allComponents);
+        this.disableItems(this.allComponents);
     }
     
     togglePopupOn(popup, event) {
@@ -182,33 +190,46 @@ export class Elements {
     
     togglePopupOff(popup) {
         popup.style.display = "none";
-        Elements.enableItems(this.allComponents);
+        this.enableItems(this.allComponents);
     }
     
     addComponent(popup) {
         this.togglePopupOff(popup);
     }
     
-    static disableItems(items) {
+    disableItems(items) {
+        this.addButton.disabled = true;
+
         items.forEach(item => {
-            Elements.disableElement(item);
+            this.disableElement(item);
         });
     }
     
-    static enableItems(items) {
+    enableItems(items) {
+        this.addButton.disabled = false;
+
         items.forEach(item => {
-            Elements.enableElement(item);
+            this.enableElement(item);
         });
     }
     
-    static enableElement(button) { button.disabled = false; }
-    static disableElement(button) { button.disabled = true; }
+    enableElement(button) { button.disabled = false; }
+    disableElement(button) { button.disabled = true; }
     
     resetAll() {
-        Elements.enableItems(this.allComponents);
+        this.enableItems(this.allComponents);
     
         [this.positionDropdown, this.symbolDropdown, this.removedDropdown, this.rootDropdown].forEach(component => {
             component.value = ' ';
+        });
+
+        this.added.length = 0;
+
+        const container = document.getElementById(`added-container-${this.thisId}`);
+        const items = container.querySelectorAll('.added-component');
+
+        items.forEach(element => {
+            container.removeChild(element);
         });
     
         this.addedPopup.style.display = "none";
@@ -217,6 +238,36 @@ export class Elements {
     }
 
     addFunction() {
+        this.addedPopup.style.display = "none";
+        this.suspensionPopup.style.display = "none";
+        this.alterationPopup.style.display = "none";
 
+        let minor = this.minorBox.checked;
+        let symbol = this.symbolDropdown.value;
+        let position = this.positionDropdown.value;
+        let root = this.rootDropdown.value;
+        let removed = this.removedDropdown.value;
+        let alterations = this.alterations;
+        let added = this.added;
+
+        if (symbol === "") {
+            alert('Nie można dodać pustej funkcji!');
+            return null;
+        }
+
+        this.disableItems(this.allComponents);
+        this.addButton.disabled = true;
+
+        let result = new Function(
+            minor,
+            symbol,
+            position,
+            root,
+            removed,
+            alterations,
+            added
+        );
+
+        return result;
     }
 }
