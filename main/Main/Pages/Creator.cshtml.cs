@@ -241,5 +241,29 @@ namespace Main.Pages
 
             return RedirectToPage("ListCreate");
         }
+
+        private async Task<ApplicationUser> GetTestUser()
+        {
+            var userId = "testUser";
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                return user;
+            }
+            else
+            {
+                user = new ApplicationUser
+                {
+                    Id = userId,
+                    UserName = userId,
+                    FirstName = "Test",
+                    LastName = "User"
+                };
+
+                var result = await _userManager.CreateAsync(user, "Test123!");
+                return (await _userManager.FindByIdAsync(userId))!;
+            }
+		}
     }
 }
