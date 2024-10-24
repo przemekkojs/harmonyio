@@ -205,7 +205,7 @@ namespace Main.Pages
             
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("ListCreate");
+            return RedirectToPage("Created");
         }
 
         private async Task FillMissingExcersiseSolutions()

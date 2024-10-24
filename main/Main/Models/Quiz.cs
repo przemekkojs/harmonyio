@@ -14,8 +14,8 @@ namespace Main.Models
 		public DateTime CloseDate { get; set; } = default;
 
 		public bool IsCreated { get; set; } = false;
-
-		public string? Code {get; set;}
+		
+		public string? Code {get; set;} = CodeGeneration();
 
 		//FOREIGN KEYS
 
@@ -31,6 +31,14 @@ namespace Main.Models
 		[NotMapped]
         public QuizState State => !IsCreated || OpenDate > DateTime.Now ? QuizState.NotStarted :
 			CloseDate < DateTime.Now ? QuizState.Closed : QuizState.Open;
+
+		// Todo: If needed make it secure / filter bad words
+		private static string CodeGeneration()
+		{
+			string path = Path.GetRandomFileName();
+			path = path.Replace(".", "");
+			return path[..6];
+		}
     }
 }
 

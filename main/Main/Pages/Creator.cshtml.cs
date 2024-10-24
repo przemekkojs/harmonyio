@@ -23,11 +23,11 @@ namespace Main.Pages
         [BindProperty]
         [Display(Name = "Open Date")]
         [Required(ErrorMessage = "Open date is required.")]
-        public DateTime? OpenDate { get; set; } = null;
+        public DateTime? OpenDate { get; set; } = DateTime.Now;
         [BindProperty]
         [Display(Name = "Close Date")]
         [Required(ErrorMessage = "Close date is required.")]
-        public DateTime? CloseDate { get; set; } = null;
+        public DateTime? CloseDate { get; set; } = DateTime.Now;
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
         [BindProperty]
@@ -44,7 +44,7 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, bool? triggerSubmit)
         {
             //create new quiz
             if (id == null)
@@ -71,6 +71,11 @@ namespace Main.Pages
             OpenDate = quiz.OpenDate;
             Code = quiz.Code;
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
+
+            if (triggerSubmit ?? false)
+            {
+                return await OnPostSubmit();
+            }
 
             return Page();
         }
@@ -143,7 +148,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("listcreate");
+            return RedirectToPage("Created");
         }
 
         public async Task<IActionResult> OnPostSubmit()
@@ -239,7 +244,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("ListCreate");
+            return RedirectToPage("Created");
         }
 
         private async Task<ApplicationUser> GetTestUser()

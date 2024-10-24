@@ -88,8 +88,7 @@
                         <div class="mx-auto mb-1 mt-auto d-flex flex-row">
                             <span class="fw-bold me-1">Pin:</span>
                             <span>
-                                @*TODO: FILL WITH REAL PIN*@
-                                256 631
+                                @quiz.Code
                             </span>
                         </div>
                         <button class="btn btn-outline-primary mx-auto">Kopiuj link</button>
@@ -196,3 +195,17 @@
         </a>
     </div>
 </div>
+
+@if (Model.QuizHasErrors)
+{
+    <script>
+        window.onload = function () {
+            var result = confirm("Nie można opublikować tego quizu, ponieważ posiada błąd. Czy chcesz go teraz poprawić?");
+            if (result) {
+                window.location.href = "/Creator?id="+@Model.QuizId+"&triggerSubmit=true";
+            } else {
+                // Handle 'No' action: Optionally reset the form or stay on the same page
+            }
+        };
+    </script>
+}

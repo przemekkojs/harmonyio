@@ -24,6 +24,8 @@ public class CreatedModel : PageModel
     [BindProperty]
     public int QuizId { get; set; }
 
+    public bool QuizHasErrors { get; set; } = false;
+
     public CreatedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
@@ -54,7 +56,7 @@ public class CreatedModel : PageModel
         UsersQuizes = user.CreatedQuizes;
         QuizesToUsersCompleted = UsersQuizes.ToDictionary(
             q => q,
-            q => (q.Excersises.First().ExcersiseSolutions.Count, q.Participants.Count)
+            q => (q.Excersises.Any() ? q.Excersises.First().ExcersiseSolutions.Count : 0, q.Participants.Count)
         );
 
         return true;
@@ -76,6 +78,16 @@ public class CreatedModel : PageModel
         if (PostAction == "publish")
         {
             var publishedQuiz = await _repository.GetAsync<Quiz>(q => q.Id == QuizId);
+            if (publishedQuiz.CloseDate <= publishedQuiz.OpenDate || publishedQuiz.CloseDate <= DateTime.Now || publishedQuiz.Excersises.Count == 0 || publishedQuiz.Excersises.Any(e => e.Question == ""))
+            {
+                QuizHasErrors = true;
+                var success_ = await Init();
+                if (!success_)
+                {
+                    return Forbid();
+                }
+                return Page();
+            }
             publishedQuiz!.IsCreated = true;
 
             _repository.Update(publishedQuiz);
