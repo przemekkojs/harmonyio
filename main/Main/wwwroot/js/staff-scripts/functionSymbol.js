@@ -26,40 +26,135 @@ class FunctionSymbol {
     this.numbersTopRight = numbersTopRight;
     this.numbersBottomRight = numbersBottomRight;
     this.numbersCenterRight = numbersCenterRight;
+
+    this.isRendered = false;
+  }
+
+  #renderCenterGraphic(letterSize) {
+    const romanLetterSize = letterSize * 0.3;
+    const numberAboveBelowSize = letterSize * 0.4;
+
+    textSize(letterSize);
+    const functionLetterBbox = sketchFont.textBounds(this.functionLetter, 0, 0);
+
+    textSize(romanLetterSize);
+    const romanLetterWidth = textWidth(this.functionLetterRomanNumber);
+
+    const romanLetterXOffset =
+      this.functionLetter === "T" ? -functionLetterBbox.w / 2 + 3 : 3;
+
+    const graphicW =
+      this.functionLetterRomanNumber === ""
+        ? functionLetterBbox.w + 2
+        : functionLetterBbox.w + romanLetterXOffset + romanLetterWidth + 2;
+
+    const graphicH = functionLetterBbox.h + 2 * numberAboveBelowSize;
+
+    let graphic = createGraphics(graphicW, graphicH);
+    // function letter
+    graphic.textAlign(CENTER, BASELINE);
+    graphic.textFont(sketchFont);
+    graphic.textSize(letterSize);
+    graphic.text(
+      this.functionLetter,
+      functionLetterBbox.w / 2,
+      graphicH / 2 + functionLetterBbox.h / 2
+    );
+
+    // numbers above and below
+    graphic.textSize(numberAboveBelowSize);
+    graphic.text(
+      this.numberAbove,
+      functionLetterBbox.w / 2,
+      graphicH / 2 - functionLetterBbox.h / 2 - 3
+    );
+    graphic.text(this.numberBelow, functionLetterBbox.w / 2, graphicH - 2);
+
+    // roman letter
+    graphic.textAlign(LEFT, BASELINE);
+    graphic.textSize(romanLetterSize);
+    graphic.text(
+      this.functionLetterRomanNumber,
+      functionLetterBbox.w + romanLetterXOffset,
+      graphicH / 2 + functionLetterBbox.h / 2
+    );
+
+    this.centerGraphic = graphic;
+    this.functionLetterH = functionLetterBbox.h;
+    this.centerGraphicYOffset = graphicH / 2;
+    this.centerGraphicXOffset = functionLetterBbox.w / 2;
+    this.centerGraphicW = graphicW;
+  }
+
+  #renderNumbersRightGraphic(letterSize) {
+    textSize(letterSize);
+
+    const yDiff = letterSize * 0.66 + 1;
+    const graphicH = 8 * yDiff + this.functionLetterH / 3 + 3;
+    const graphicW = textWidth("7>") * 2 + 2;
+
+    let numbersRightGraphic = createGraphics(graphicW, graphicH);
+    numbersRightGraphic.textFont(sketchFont);
+    numbersRightGraphic.textSize(letterSize);
+    numbersRightGraphic.textAlign(LEFT, BASELINE);
+
+    let maxWidth = 0;
+
+    let currentY = graphicH / 2 - this.functionLetterH / 6;
+    for (let i = this.numbersTopRight.length - 1; i >= 0; i--) {
+      numbersRightGraphic.text(this.numbersTopRight[i], 0, currentY);
+      maxWidth = Math.max(textWidth(this.numbersTopRight[i]), maxWidth);
+      currentY -= yDiff;
+    }
+
+    currentY = graphicH / 2 + this.functionLetterH / 6 + yDiff - 1;
+    for (let i = 0; i < this.numbersBottomRight.length; i++) {
+      numbersRightGraphic.text(this.numbersBottomRight[i], 0, currentY);
+      maxWidth = Math.max(textWidth(this.numbersBottomRight[i]), maxWidth);
+      currentY += yDiff;
+    }
+
+    currentY =
+      graphicH / 2 - (this.numbersCenterRight.length / 2) * yDiff + yDiff;
+    for (let i = 0; i < this.numbersCenterRight.length; i++) {
+      numbersRightGraphic.text(this.numbersCenterRight[i], maxWidth, currentY);
+      currentY += yDiff;
+    }
+
+    this.numbersRightGraphic = numbersRightGraphic;
+    this.numbersRightYOffset = graphicH / 2;
+  }
+
+  #renderGraphics(letterSize) {
+    this.#renderCenterGraphic(letterSize);
+    this.#renderNumbersRightGraphic(letterSize * 0.3);
+    this.isRendered = true;
   }
 
   draw(x, y) {
-    push();
-    strokeWeight(0);
-
-    // draw function letter
     const letterSize = getVerticalWidth() * 0.5;
-    textAlign(CENTER, BASELINE);
-    textSize(letterSize);
 
-    // this calculates bounds only once since it may be costly
-    if (!this.functionLetterW) {
-      let functionLetterBbox = sketchFont.textBounds(this.functionLetter, x, y);
-      this.functionLetterW = functionLetterBbox.w;
-      this.functionLetterH = functionLetterBbox.h;
+    if (!this.isRendered) {
+      this.#renderGraphics(letterSize);
     }
-    text(this.functionLetter, x, y + this.functionLetterH / 2);
 
-    // draw roman letter
-    textSize(letterSize * 0.3);
-    textAlign(LEFT, BASELINE);
-    const romanLetterX =
-      this.functionLetter === "T" ? x + 3 : x + this.functionLetterW / 2 + 2;
-    text(
-      this.functionLetterRomanNumber,
-      romanLetterX,
-      y + this.functionLetterH / 2
+    imageMode(CORNER);
+
+    // function symbol, numbers above and below, roman number
+    image(
+      this.centerGraphic,
+      x - this.centerGraphicXOffset,
+      y - this.centerGraphicYOffset
     );
-    const rommanLetterWidth = textWidth(this.functionLetterRomanNumber);
-    const rommanLetterEndX =
-      rommanLetterWidth === 0
-        ? x + this.functionLetterW / 2
-        : romanLetterX + rommanLetterWidth;
+
+    const centerGraphicsEndX =
+      x - this.centerGraphicXOffset + this.centerGraphicW;
+    // numbers in top/bottom/center right
+    image(
+      this.numbersRightGraphic,
+      centerGraphicsEndX,
+      y - this.numbersRightYOffset
+    );
 
     // draw circle if present
     if (this.hasCircle) {
@@ -67,72 +162,10 @@ class FunctionSymbol {
       strokeWeight(2);
       noFill();
       circle(
-        x - this.functionLetterW / 2 - circleD / 2 - 3,
+        x - this.centerGraphicXOffset - circleD / 2 - 3,
         y - this.functionLetterH / 2,
         circleD
       );
     }
-
-    fill(0);
-    strokeWeight(0);
-
-    // draw number above and below
-    const numberAboveBelowSize = letterSize * 0.4;
-    textAlign(CENTER, BOTTOM);
-    textSize(numberAboveBelowSize);
-    text(this.numberAbove, x, y - this.functionLetterH / 2);
-    textAlign(CENTER, TOP);
-    text(this.numberBelow, x, y + this.functionLetterH / 2);
-
-    // draw top right numbers
-    textAlign(LEFT, BASELINE);
-    const rightNumbersSize = letterSize * 0.3;
-    textSize(rightNumbersSize);
-    let maxTopRightWidth = 0;
-    let numY = y - this.functionLetterH / 4;
-    for (let i = this.numbersTopRight.length - 1; i >= 0; i--) {
-      text(this.numbersTopRight[i], rommanLetterEndX, numY);
-      maxTopRightWidth = Math.max(
-        textWidth(this.numbersTopRight[i]),
-        maxTopRightWidth
-      );
-      numY -= rightNumbersSize * 0.66 + 1;
-    }
-
-    // draw bottom right numbers
-    let maxBottomRightWidth = 0;
-    textAlign(LEFT, TOP);
-    numY = y + this.functionLetterH / 4;
-    for (let i = this.numbersBottomRight.length - 1; i >= 0; i--) {
-      text(this.numbersBottomRight[i], rommanLetterEndX, numY);
-      maxBottomRightWidth = Math.max(
-        textWidth(this.numbersBottomRight[i]),
-        maxBottomRightWidth
-      );
-      numY += rightNumbersSize * 0.66 + 1;
-    }
-
-    const centerRightX =
-      rommanLetterEndX + Math.max(maxTopRightWidth, maxBottomRightWidth) + 2;
-
-    // draw center right numbers
-    textAlign(LEFT, CENTER);
-    const centerY = y;
-    const centerSpacing = rightNumbersSize * 0.66 + 1;
-
-    if (this.numbersCenterRight.length > 0) {
-      // Calculate the starting Y position based on even or odd count
-      let startY =
-        centerY - ((this.numbersCenterRight.length - 1) * centerSpacing) / 2;
-
-      for (let i = 0; i < this.numbersCenterRight.length; i++) {
-        text(
-          this.numbersCenterRight[i],
-          centerRightX,
-          startY + i * centerSpacing
-        );
-      }
-    }
-    pop();
   }
 }
