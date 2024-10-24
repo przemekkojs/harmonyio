@@ -42,7 +42,7 @@
                 {
                     <div class="task task-add d-flex justify-content-center align-items-center" onclick="addExcersise()">
                         <span class="plus">+</span>
-                        <span>Dodaj nowe zadanie</span>
+                        <span>Dodaj zadanie</span>
                     </div>
                 }
             </div>
@@ -76,60 +76,46 @@
     let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
 
     window.addExcersise = function () {
-        // Tutaj jest dodanie kreatora do zadania. Excercise container jest parent-elementem, w którym kreator sie pojawi,
-        // może być to dowolny div.
-        const excersiseContainer = document.getElementById('excersise-container');
-        createTask(excersiseContainer, excersises.length);
-
         excersises.push("");
+
+        const index = excersises.length - 1;
+        const excersiseContainer = document.getElementById('excersise-container');        
+        const textBox = document.createElement('div');
+
+        textBox.className = "task-content w-100 p-3";
+        textBox.id = `task-container-${index}`;
+        textBox.innerHTML = `
+        <div id="question-task-${index}">
+            <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>
+        </div>`;
+
+        excersiseContainer.appendChild(textBox);
+        createTask(textBox, index);
         
-        // To mi psuje, nwm czemu
-        // renderExcersises();
-
+        const removeButton = document.getElementById(`delete-${index}`);
+        removeButton.addEventListener('click', () => { removeExcersise(`task-container-${index}`); });
+        
         document.getElementById('questions-validation-error').innerText = '';
     }
 
-    function updateExcersise(index, value) {
+    window.updateExcersise = function(index, value) {
         excersises[index] = value;
-
         document.getElementById('questions-validation-error').innerText = '';
     }
 
-    function removeExcersise(index) {
-        excersises.splice(index, 1);
-        // renderExcersises();
-    }
-
-    // Ta funkcja robi Twój element z zadaniem, ale mój kreator całość rozwala. Trzeba by połączyć oba, żeby do moich buttonów podpiąć twoją logikę chyba
-    function renderExcersises() {
+    function removeExcersise(id) {
         const excersiseContainer = document.getElementById('excersise-container');
-        excersiseContainer.innerHTML = '';
+        const taskText = document.getElementById(id);
+        const children = Array.from(excersiseContainer.children);
 
-        excersises.forEach((excersise, index) => {
-            let html = `
-                <div class="task task-creator p-0 overflow-hidden">
-                    <div class="d-flex h-100 align-items-center bg-secondary">
-                        <div class="task-number text-white">${index + 1}</div>
-                        <div class="vr"></div>
-                    </div>
-                    <div class="task-content w-100 p-3" id=task-container-${index}>
-                       
-                        @*<input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>*@
-                    </div>
-                    @if (!Model.BrowseOnly)
-                    {
-                        <div class="d-flex h-100 align-items-center">
-                            <div class="vr"></div>
-                            <button class="delete-btn" onclick="removeExcersise(${index})">🗑️</button>
-                        </div>
-                    }
-                </div>`;
-
-            excersiseContainer.innerHTML += html;
-        });
+        const index = children.indexOf(taskText);
+        const removeButton = document.getElementById(`delete-${index}`);
+        
+        if (taskText) excersiseContainer.removeChild(taskText);
+        if (removeButton) removeButton.onclick = null;
+        
+        excersises.splice(index, 1);
     }
-
-    // renderExcersises();
 </script>
 
 @section Scripts {
