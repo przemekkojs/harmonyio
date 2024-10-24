@@ -78,26 +78,26 @@ public class CreatedModel : PageModel
         if (PostAction == "publish")
         {
             var publishedQuiz = await _repository.GetAsync<Quiz>(q => q.Id == QuizId);
-            if (publishedQuiz.CloseDate <= publishedQuiz.OpenDate || publishedQuiz.CloseDate <= DateTime.Now || publishedQuiz.Excersises.Count == 0 || publishedQuiz.Excersises.Any(e => e.Question == ""))
+            if (publishedQuiz!.CloseDate <= publishedQuiz.OpenDate || publishedQuiz.CloseDate <= DateTime.Now || publishedQuiz.Excersises.Count == 0 || publishedQuiz.Excersises.Any(e => e.Question == ""))
             {
-                QuizHasErrors = true;
-                var success_ = await Init();
-                if (!success_)
-                {
-                    return Forbid();
-                }
-                return Page();
+                return RedirectToPage("/Creator", new { id = QuizId, triggerSubmit = true});
             }
-            publishedQuiz!.IsCreated = true;
-
-            _repository.Update(publishedQuiz);
-            await _repository.SaveChangesAsync();
-
-            var success = await Init();
-            if (!success)
+            else
             {
-                return Forbid();
+                return RedirectToPage("/Publish", new { id = QuizId});
             }
+
+
+            // publishedQuiz.IsCreated = true;
+
+            // _repository.Update(publishedQuiz);
+            // await _repository.SaveChangesAsync();
+
+            // var success = await Init();
+            // if (!success)
+            // {
+            //     return Forbid();
+            // }
         }
         else if (PostAction == "delete")
         {

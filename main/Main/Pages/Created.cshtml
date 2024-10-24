@@ -146,7 +146,7 @@
                 <div class="flex-grow-1 d-flex flex-column">
                     <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
 
-                    <div class="d-flex flex-row align-items-center mb-2">
+                    @* <div class="d-flex flex-row align-items-center mb-2">
                         <i class="far fa-clock icon-sm me-2"></i>
                         <span class="fw-bold me-1">Otwarcie:</span>
                         <span>@quiz.OpenDate</span>
@@ -155,7 +155,7 @@
                         <i class="far fa-clock icon-sm me-2"></i>
                         <span class="fw-bold me-1">Zamknięcie:</span>
                         <span>@quiz.CloseDate</span>
-                    </div>
+                    </div> *@
                     <div class="d-flex flex-row align-items-center">
                         <i class="fas fa-music icon-sm me-2"></i>
                         <span class="fw-bold me-1">Zadania:</span>
@@ -196,7 +196,7 @@
     </div>
 </div>
 
-@if (Model.QuizHasErrors)
+@* @if (Model.QuizHasErrors)
 {
     <script>
         window.onload = function () {
@@ -208,4 +208,4 @@
             }
         };
     </script>
-}
+} *@
