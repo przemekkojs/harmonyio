@@ -7,30 +7,29 @@
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        <div class="flex-grow-1 d-flex overflow-auto">
-            <div class="left-panel">
+        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
+        <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
+            <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
-                    <label asp-for="QuizName" class="form-label"></label>
-                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly">
+                    <label asp-for="QuizName" class="form-label fw-bold"></label>
+                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="OpenDate" class="form-label"></label>
+                    <label asp-for="OpenDate" class="form-label fw-bold"></label>
                     <input asp-for="OpenDate" class="form-control" readonly="@Model.BrowseOnly">
                     <span asp-validation-for="OpenDate" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="CloseDate" class="form-label"></label>
+                    <label asp-for="CloseDate" class="form-label fw-bold"></label>
                     <input asp-for="CloseDate" class="form-control" readonly="@Model.BrowseOnly">
                     <span asp-validation-for="CloseDate" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="vr mx-3"></div>
-
-            <div class="flex-grow-1 d-flex flex-column overflow-auto">
+            <div class="flex-grow-1 bg-white rounded shadow p-3 d-flex flex-column overflow-auto">
                 <span asp-validation-for="Questions" id="questions-validation-error" class="text-danger mb-1"></span>
 
                 <div id="excersise-container" class="d-flex flex-column">
@@ -39,22 +38,20 @@
 
                 @if (!Model.BrowseOnly)
                 {
-                    <div class="task task-add d-flex justify-content-center align-items-center" onclick="addExcersise()">
-                        <span class="plus">+</span>
-                        <span>Dodaj nowe zadanie</span>
+                    <div class="task task-add d-flex rounded text-center justify-content-center align-items-center" onclick="addExcersise()">
+                        <i class="fas fa-plus me-1"></i>
+                        <span class="fw-bold">Dodaj nowe zadanie</span>
                     </div>
                 }
             </div>
         </div>
-
-        <hr class="hr">
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             @if (!Model.BrowseOnly)
             {
-                <button type="submit" asp-page-handler="Save" class="btn btn-primary btn-std-width ms-auto">Zapisz</button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto">Zapisz</button>
                 <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3">Opublikuj</button>
             }
             else
@@ -99,10 +96,9 @@
             // Excercises should be loaded here, so creators also
 
             excersiseContainer.innerHTML += `
-                <div class="task task-creator p-0 overflow-hidden">
-                    <div class="d-flex h-100 align-items-center bg-secondary">
-                        <div class="task-number text-white">${index + 1}</div>
-                        <div class="vr"></div>
+                <div class="task task-creator bg-transparent shadow rounded p-3 mb-3 overflow-hidden">
+                    <div class="d-flex h-100 align-items-center bg-secondary rounded shadow ">
+                        <div class="task-number text-white fw-bold fs-1">${index + 1}</div>
                     </div>
                     <div class="task-content w-100 p-3">
                         <span class="mb-1">Kreator funkcji</span> @*Tutaj trzeba dodać kreatory*@
@@ -111,8 +107,10 @@
                     @if (!Model.BrowseOnly)
                     {
                         <div class="d-flex h-100 align-items-center">
-                            <div class="vr"></div>
-                            <button class="delete-btn" onclick="removeExcersise(${index})">🗑️</button>
+                            <div class="vr me-3"></div>
+                            <a href="#" onclick="removeExcersise(${index})" class="btn-icon ms-auto">
+                                <i class="far fa-trash-can icon-sm"></i>
+                            </a>
                         </div>
                     }
                 </div>`;

@@ -9,18 +9,19 @@
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        <div class="flex-grow-1 d-flex overflow-auto">
-            <div class="left-panel overflow-auto">
-                <div class="fw-bold fs-4 mb-3 me-3">@Model.Quiz.Name</div>
+        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
+        <div class="flex-grow-1 d-flex overflow-auto" style="margin: -20px; padding: 20px">
+            <div class="left-panel overflow-auto bg-white shadow rounded p-3">
+                <div class="fw-bold fs-4 mb-3">@Model.Quiz.Name</div>
                 <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
 
                 @for (int i = 0; i < Model.Users.Count; i++)
                 {
                     <div onclick="selectUser(@i)" class="student-row d-flex flex-row @(i == Model.Users.Count - 1 ? "mb-3" : "mb-2")">
-                        <div class="student-div student-name flex-grow-1 border border-secondary rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                        <div class="student-div student-name shadow flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
                             <div class="student-text student-name">@Model.Users[i].FullName</div>
                         </div>
-                        <div class="student-div student-grade border border-secondary rounded d-flex align-items-center justify-content-center p-2 me-3">
+                        <div class="student-div student-grade shadow rounded d-flex align-items-center justify-content-center p-2">
                             <div id="user-grade-@i" class="student-text">
                                 - @*SET VIA JS*@
                             </div>
@@ -29,24 +30,26 @@
                 }
             </div>
 
-            <div class="vr"></div>
+            <div class="me-3"></div>
 
-            <div class="flex-grow-1 d-flex flex-column overflow-auto">
-                <div class="top-bar d-flex justify-content-between align-items-center ms-3">
+            @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
+            <div class="flex-grow-1 d-flex flex-column overflow-auto" style="margin: -20px; padding: 20px">
+                <div class="bg-white rounded shadow d-flex justify-content-between align-items-center p-3 mb-3">
                     <div id="current-user-text" class="fw-bold fs-4">
                         @*SET VIA JS*@
                     </div>
 
                     <div class="d-flex align-items-center">
                         <span class="fw-bold me-2">Wynik</span>
-                        <div id="points-text" class="border border-dark rounded px-2 py-1 me-2 text-nowrap">
+                        <div id="points-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap">
                             @*SET VIA JS*@
                         </div>
-                        <div id="percentage-text" class="border border-dark rounded px-2 py-1 me-4">
+                        <div id="percentage-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4">
                             @*SET VIA JS*@
                         </div>
                         <span class="fw-bold me-2">Ocena</span>
-                        <select id="grade-select" onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)" class="grade-select form-select border border-dark rounded px-2 py-1" aria-label="Wybierz ocenę">
+                        <select id="grade-select" onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
+                                class="grade-select bg-transparent fw-bold form-select border border-secondary text-secondary rounded px-2 py-1" aria-label="Wybierz ocenę">
                             <option selected disabled>-</option>
                             @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
                             {
@@ -61,14 +64,12 @@
                     </div>
                 </div>
 
-                <hr class="hr mt-3">
-
-                <div class="flex-grow-1 d-flex flex-column ps-3 overflow-auto">
+                <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto">
                     @for (int i = 0; i < Model.Excersises.Count; i++)
                     {
-                        <div class="d-flex flex-row align-items-start question-area mt-3">
-                            <div class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
-                                <div class="fs-1 fw-bold">@(i+1)</div>
+                        <div class="d-flex flex-row align-items-start question-area">
+                            <div class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-3">
+                                <div class="fs-1 text-white fw-bold">@(i+1)</div>
                             </div>
 
                             <div class="flex-grow-1">
@@ -77,26 +78,26 @@
                         </div>
 
                         <div class="music-staff mt-3 d-flex flex-row justify-content-center align-items-center">
-                            <div class="music-staff-grade-area h-100 d-flex flex-column overflow-hidden">
-                                <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center p-1">
-                                    <span class="fw-bold">Sugestia</span>
-                                    <span id="suggestion-@i">
+                            <div class="music-staff-grade-area h-100 d-flex flex-column me-3">
+                                <div class="flex-grow-1 rounded bg-secondary shadow mb-3 d-flex flex-column justify-content-center align-items-center p-1">
+                                    <span class="fw-bold text-white">Sugestia</span>
+                                    <span id="suggestion-@i" class="text-white">
                                         @*SET VIA JS*@
                                     </span>
                                 </div>
 
-                                <hr class="hr">
-                                <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
-                                    <span class="fw-bold mb-1">Wynik</span>
+                                <div class="flex-grow-1 rounded bg-secondary shadow mb-3 d-flex flex-column justify-content-center align-items-center">
+                                    <span class="fw-bold text-white mb-1">Wynik</span>
                                     <input type="number" id="points-@i" onchange="onPointsChange(@i, this.value)"
-                                           onKeyPress="integerKeyPress(event)" class="form-control points-input border border-dark rounded" />
+                                           onKeyPress="integerKeyPress(event)"
+                                           class="form-control points-input bg-white text-dark rounded" />
                                 </div>
 
-                                <hr class="hr">
-                                <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
-                                    <span class="fw-bold mb-1">Max</span>
+                                <div class="flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center">
+                                    <span class="fw-bold text-white mb-1">Max</span>
                                     <input type="number" id="max-@i" onchange="onMaxChange(@i, this.value)"
-                                           onKeyPress="integerKeyPress(event)" class="form-control points-input border border-dark rounded" />
+                                           onKeyPress="integerKeyPress(event)"
+                                           class="form-control points-input bg-white text-dark rounded" />
                                 </div>
 
                                 @for (int j = 0; j < Model.Users.Count; j++)
@@ -106,8 +107,8 @@
                                     <input id="comment-hidden-@i-@j" type="hidden" asp-for="Comments[j][i]" value="" />
                                 }
                             </div>
-                            <div class="vr"></div>
-                            <div class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+
+                            <div class="flex-grow-1 h-100 rounded bg-white shadow d-flex justify-content-center align-items-center">
                                 <span class="me-2">Rozwiązanie (Pięciolinia):</span>
                                 <span id="solution-@i">
                                     @*SET VIA JS*@
@@ -115,24 +116,17 @@
                             </div>
                         </div>
 
-                        <div class="my-3">
+                        <div class="mt-3 @(i < Model.Excersises.Count - 1 ? "mb-4" : "")">
                             <span class="fw-bold">Komentarz</span>
                             <textarea id="comment-@i" rows="1" placeholder="Dodaj komentarz..."
                                       oninput="resizeTextArea(this)"
                                       onchange="onCommentChange(@i, this.value)"
-                                      class="form-control border-dark rounded overflow-hidden mt-2"></textarea>
+                                      class="form-control shadow border-white rounded overflow-hidden mt-2"></textarea>
                         </div>
-
-                        @if (i < Model.Excersises.Count - 1)
-                        {
-                            <hr class="hr" />
-                        }
                     }
                 </div>
             </div>
         </div>
-
-        <hr class="hr">
 
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width me-auto">Powrót</a>

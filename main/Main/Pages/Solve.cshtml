@@ -8,23 +8,20 @@
 
 <form id="solve-form" method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        <div class="top-bar w-100 d-flex justify-content-between align-items-center">
+        <div class="w-100 bg-white rounded shadow p-3 d-flex justify-content-between align-items-center mb-3">
             <div class="fw-bold fs-4">
                 @Model.Quiz.Name
             </div>
             <div class="d-flex align-items-center">
-                <img src="~/images/timer.png" alt="Timer" class="me-2 timer-img">
-                <span id="timer">10h 13min</span>
+                <i class="far fa-clock icon-lg me-2"></i>
+                <span id="timer" class="fw-bold">10h 13min</span>
             </div>
         </div>
 
-        <hr class="hr my-3">
-
         <div class="flex-grow-1 w-100 d-flex flex-column">
             <div class="d-flex flex-row align-items-start question-area">
-                <div
-                    class="question-square border border-secondary d-flex justify-content-center align-items-center me-3">
-                    <div id="excersise-number" class="fs-1 fw-bold">
+                <div class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-3">
+                    <div id="excersise-number" class="fs-1 text-white fw-bold">
                         @*SET VIA JS*@
                     </div>
                 </div>
@@ -41,7 +38,7 @@
 
             <div class="flex-grow-1 d-flex flex-row mt-3">
                 <div id="music-staff-div"
-                    class="music-staff flex-grow-1 d-flex justify-content-center align-items-center">
+                    class="bg-white rounded shadow p-3 flex-grow-1 d-flex justify-content-center align-items-center overflow-auto">
 
                     <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
                     @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
@@ -51,8 +48,6 @@
                 </div>
             </div>
         </div>
-
-        <hr class="hr mt-3">
 
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Assigned" class="btn btn-danger btn-std-width me-auto">Powrót</a>
@@ -79,11 +74,11 @@
 <script>
     // needed to allow overflow from canvas div, but now navbar is hiding
     // TODO try fix this
-    var mainContainer = document.getElementById('layout-main-container');
-    if (mainContainer) {
-        mainContainer.classList.remove('overflow-auto');
-        mainContainer.style.overflow = 'visible';
-    }
+    //var mainContainer = document.getElementById('layout-main-container');
+    //if (mainContainer) {
+    //    mainContainer.classList.remove('overflow-auto');
+    //    mainContainer.style.overflow = 'visible';
+    //}
 
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
 
