@@ -21,7 +21,7 @@
 }
 
 .focused-student .student-div {
-    background-color: #316cf4; /* Kolor tła bg-secondary z Bootstrap #6c757d */
+    background-color: #316cf4;
 }
 
 .focused-student .student-text {
