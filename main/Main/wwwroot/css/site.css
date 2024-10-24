@@ -81,7 +81,6 @@ body {
     width: 75px;
     min-width: 75px;
     height: 75px;
-    border-radius: 10px;
 }
 
 .three-dots-img {
@@ -104,17 +103,73 @@ body {
     font-size: 24px;
 }
 
+.icon-lg {
+    font-size: 30px;
+}
+
 .no-style {
     all: unset;
     text-decoration: none;
 }
 
-/*This should be in grade-style.css, button it doesnt work there for some reason*/
+/*BOOTSTRAP RECOLOR*/
 
-.focused-student .student-div {
-    background-color: #6c757d; /* Kolor tła bg-secondary z Bootstrap */
+body {
+    background-color: #f8f9fa;  /*#f6f8fe;*/
 }
 
-.focused-student .student-text {
-    color: white;
+/*.btn-primary {
+    background-color: #541074;*/ /* czerwony kolor */
+    /*border-color: #541074;*/ /* czerwony border */
+/*}
+
+.btn-outline-primary {
+    color: #541074;
+    border-color: #541074;
 }
+
+.bg-primary {
+    background-color: #541074 !important;
+}
+
+.text-primary {
+    color: #541074 !important;
+}
+
+.btn-secondary {
+    background-color: #541074;
+    border-color: #541074;
+}
+
+.btn-outline-secondary {
+    color: #541074;
+    border-color: #541074;
+}
+
+.bg-secondary {
+    background-color: #541074 !important;
+}
+
+.text-secondary {
+    color: #541074 !important;
+}*/
+
+/*.btn-light {
+    background-color: #f5f5f5;
+    border-color: #f5f5f5;
+}
+
+.btn-outline-light {
+    color: #f5f5f5;
+    border-color: #f5f5f5;
+}
+
+.bg-light {
+    background-color: #f5f5f5 !important;
+}
+
+.text-light {
+    color: #f5f5f5 !important;
+}*/
+
+

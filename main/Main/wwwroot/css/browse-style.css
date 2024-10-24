@@ -1,9 +1,4 @@
 ﻿.music-staff {
-    align-items: center;
-    border-width: 1px;
-    border-color: gray;
-    border-radius: 10px;
-    border-style: solid;
     min-height: 270px;
 }
 

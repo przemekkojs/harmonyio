@@ -2,19 +2,18 @@
     padding: 15px;
     margin-bottom: 20px;
     align-items: center;
-    border-width: 1px;
-    border-color: gray;
     border-radius: 10px;
-    border-style: solid;
+    background-color: white;
 }
 
 .quiz-add {
     text-align: center;
     cursor: pointer;
-    color: #666;
+    color: #6e757c;
     border-style: dashed;
     height: 168px;
     min-height: 168px;
+    background-color: transparent;
 }
 
 .icon-img {

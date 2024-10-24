@@ -6,15 +6,9 @@
     height: 120px;
     min-height: 120px;
     padding: 15px;
-    margin-bottom: 20px;
-    align-items: center;
-    border-width: 1px;
-    border-color: gray;
-    border-radius: 10px;
 }
 
 .task-add {
-    text-align: center;
     cursor: pointer;
     color: #666;
     border-style: dashed;
@@ -23,7 +17,6 @@
 .task-creator {
     justify-content: space-between;
     display: flex;
-    border-style: solid;
 }
 
 .plus {
@@ -33,7 +26,7 @@
 .task-number {
     text-align: center;
     font-size: 1.5em;
-    width: 50px;
+    width: 86px;
 }
 
 .delete-btn {

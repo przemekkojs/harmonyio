@@ -20,6 +20,14 @@
     height: 100%;
 }
 
+.focused-student .student-div {
+    background-color: #316cf4; /* Kolor tła bg-secondary z Bootstrap #6c757d */
+}
+
+.focused-student .student-text {
+    color: white;
+}
+
 .grade-select {
     width: 80px;
     min-width: 80px;
@@ -27,10 +35,6 @@
 
 .music-staff {
     align-items: center;
-    border-width: 1px;
-    border-color: gray;
-    border-radius: 10px;
-    border-style: solid;
     min-height: 260px;
     height: 260px;
 }
