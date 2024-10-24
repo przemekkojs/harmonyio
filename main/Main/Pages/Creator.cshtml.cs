@@ -76,8 +76,7 @@ namespace Main.Pages
         }
 
         public async Task<IActionResult> OnPostSave()
-        {
-            
+        {            
             var currentUser = (await _userManager.GetUserAsync(User))!;
             if (currentUser == null)
                 return RedirectToPage("Error");
@@ -147,8 +146,7 @@ namespace Main.Pages
         }
 
         public async Task<IActionResult> OnPostSubmit()
-        {           
-    
+        {               
             if (CloseDate <= OpenDate)
             {
                 ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");;
@@ -239,7 +237,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("ListCreate");
+            return RedirectToPage("Created");
         }
 
         private async Task<ApplicationUser> GetTestUser()
