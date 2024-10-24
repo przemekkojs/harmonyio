@@ -2,21 +2,37 @@ class Metre {
   constructor(count, value) {
     this.count = count;
     this.value = value;
+
+    this.isRendered = false;
   }
 
   slotsPerBar() {
     return Note.baseValueToSlots(this.value) * this.count;
   }
 
-  draw(x, y) {
-    const size = this.calculateTextSize();
-    textSize(size);
-    textAlign(CENTER);
-    stroke(0);
-    strokeWeight(0);
+  #renderGraphic(letterSize) {
+    textSize(letterSize);
 
-    text(this.count, x + size / 2, y + 0.75 * size); // upper number of metre
-    text(this.value, x + size / 2, y + 0.75 * size + 2 * spaceBetweenStaffLines); //lower number of metre
+    const graphicH = 4 * spaceBetweenStaffLines;
+    const graphicW = Math.max(this.getMetreWidth());
+    let metreGraphic = createGraphics(graphicW, graphicH);
+    metreGraphic.textSize(letterSize);
+    metreGraphic.textAlign(CENTER, BASELINE);
+
+    metreGraphic.text(this.count, graphicW / 2, graphicH / 2 - 3);
+    metreGraphic.text(this.value, graphicW / 2, graphicH - 3);
+
+    this.metreGraphic = metreGraphic;
+    this.isRendered = true;
+  }
+
+  draw(x, y) {
+    if (!this.isRendered) {
+      const letterSize = this.calculateTextSize();
+      this.#renderGraphic(letterSize);
+    }
+    imageMode(CORNER);
+    image(this.metreGraphic, x, y);
   }
 
   calculateTextSize() {

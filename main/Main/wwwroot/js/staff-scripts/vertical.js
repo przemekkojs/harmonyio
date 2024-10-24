@@ -12,7 +12,7 @@ class Vertical {
     this.lowerStaff = lowerStaff;
     this.functionSymbol = new FunctionSymbol(
       this,
-      "Svii",
+      "Dvii",
       true,
       "9",
       "7",
