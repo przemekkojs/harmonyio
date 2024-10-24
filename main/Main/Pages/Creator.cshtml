@@ -68,7 +68,7 @@
 </form>
 
 <script type="module">
-    import { createTask } from "./js/creator-scripts/taskCreator.js";
+    import { tasks, createTask } from "./js/creator-scripts/taskCreator.js";
 
     let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
 
@@ -83,7 +83,7 @@
         textBox.id = `task-container-${index}`;
         textBox.innerHTML = `
         <div id="question-task-${index}">
-            <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>
+            <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" @(Model.BrowseOnly ? "readonly" : "")>
         </div>`;
 
         excersiseContainer.appendChild(textBox);
@@ -91,21 +91,40 @@
         
         const removeButton = document.getElementById(`delete-${index}`);
         removeButton.addEventListener('click', () => { removeExcersise(`task-container-${index}`); });
+
+        const confirmButton = document.getElementById(`submit-${index}`);
+        confirmButton.addEventListener('click', () => { updateExcersise(`task-container-${index}`); });
         
         document.getElementById('questions-validation-error').innerText = '';
     }
 
-    window.updateExcersise = function(index, value) {
-        excersises[index] = value;
+    function updateExcersise(id) {
+        const taskText = document.getElementById(id);
+        const excersiseContainer = document.getElementById('excersise-container');
+
+        const children = Array.from(excersiseContainer.children);
+        const index = children.indexOf(taskText);
+
+        const questionText = document.getElementById(`question-task-${index}`).querySelector('input');
+        const questionValue = questionText.value;
+
+        excersises[index] = JSON.stringify({
+            question: questionValue,
+            task: tasks[index].submitTask()
+        });
+
+        console.log(excersises);
+
         document.getElementById('questions-validation-error').innerText = '';
     }
 
     function removeExcersise(id) {
         const excersiseContainer = document.getElementById('excersise-container');
         const taskText = document.getElementById(id);
-        const children = Array.from(excersiseContainer.children);
 
+        const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
+
         const removeButton = document.getElementById(`delete-${index}`);
         
         if (taskText) excersiseContainer.removeChild(taskText);
@@ -117,6 +136,6 @@
 
 @section Scripts {
     @{
-        <partial name="_ValidationScriptsPartial" />
+                <partial name="_ValidationScriptsPartial" />
     }
 }
