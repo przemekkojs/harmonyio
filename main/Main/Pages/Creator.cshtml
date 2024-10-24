@@ -76,8 +76,15 @@
     let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
 
     window.addExcersise = function () {
+        // Tutaj jest dodanie kreatora do zadania. Excercise container jest parent-elementem, w którym kreator sie pojawi,
+        // może być to dowolny div.
+        const excersiseContainer = document.getElementById('excersise-container');
+        createTask(excersiseContainer, excersises.length);
+
         excersises.push("");
-        renderExcersises();
+        
+        // To mi psuje, nwm czemu
+        // renderExcersises();
 
         document.getElementById('questions-validation-error').innerText = '';
     }
@@ -90,17 +97,16 @@
 
     function removeExcersise(index) {
         excersises.splice(index, 1);
-        renderExcersises();
+        // renderExcersises();
     }
 
+    // Ta funkcja robi Twój element z zadaniem, ale mój kreator całość rozwala. Trzeba by połączyć oba, żeby do moich buttonów podpiąć twoją logikę chyba
     function renderExcersises() {
         const excersiseContainer = document.getElementById('excersise-container');
         excersiseContainer.innerHTML = '';
 
         excersises.forEach((excersise, index) => {
-            // Excercises should be loaded here, so creators also
-
-            excersiseContainer.innerHTML += `
+            let html = `
                 <div class="task task-creator p-0 overflow-hidden">
                     <div class="d-flex h-100 align-items-center bg-secondary">
                         <div class="task-number text-white">${index + 1}</div>
@@ -119,11 +125,11 @@
                     }
                 </div>`;
 
-            createTask(document.getElementById(`task-container-${index}`), index);
+            excersiseContainer.innerHTML += html;
         });
     }
 
-    renderExcersises();
+    // renderExcersises();
 </script>
 
 @section Scripts {

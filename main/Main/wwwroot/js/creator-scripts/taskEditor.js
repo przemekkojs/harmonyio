@@ -39,7 +39,8 @@ class Bar {
         this.maxFunctionsCount = maxFunctionsCount;
         this.bar = document.getElementById(`bar-${this.taskId}-${this.index}`);
 
-        this.addFunctionButton = document.createElement('button');
+        this.addFunctionButton = document.createElement('input');
+        this.addFunctionButton.type = 'button';
         this.addFunctionButton.id = `add-function-${this.taskId}-${this.index}`;
         this.addFunctionButton.className = "adder-button custom-button button-medium plus-button";
         this.addFunctionButton.title = "Dodaj funkcję";
@@ -80,7 +81,8 @@ export class Task {
 
         this.componentsPlace = document.getElementById(`components-place-${id}`);
 
-        this.adder = document.createElement('button');
+        this.adder = document.createElement('input');
+        this.adder.type = 'button';
         this.adder.id = `add-bar-${this.id}`;
         this.adder.className = "adder-button custom-button button-large plus-button";
         this.adder.title = "Dodaj takt";
