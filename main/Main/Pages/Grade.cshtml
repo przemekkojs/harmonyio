@@ -9,7 +9,6 @@
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
         <div class="flex-grow-1 d-flex overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel overflow-auto bg-white shadow rounded p-3">
                 <div class="fw-bold fs-4 mb-3">@Model.Quiz.Name</div>
@@ -18,11 +17,11 @@
                 @for (int i = 0; i < Model.Users.Count; i++)
                 {
                     <div onclick="selectUser(@i)" class="student-row d-flex flex-row @(i == Model.Users.Count - 1 ? "mb-3" : "mb-2")">
-                        <div class="student-div student-name shadow flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
-                            <div class="student-text student-name">@Model.Users[i].FullName</div>
+                        <div class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                            <div class="student-name">@Model.Users[i].FullName</div>
                         </div>
-                        <div class="student-div student-grade shadow rounded d-flex align-items-center justify-content-center p-2">
-                            <div id="user-grade-@i" class="student-text">
+                        <div class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
+                            <div id="user-grade-@i">
                                 - @*SET VIA JS*@
                             </div>
                         </div>
@@ -32,7 +31,6 @@
 
             <div class="me-3"></div>
 
-            @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
             <div class="flex-grow-1 d-flex flex-column overflow-auto" style="margin: -20px; padding: 20px">
                 <div class="bg-white rounded shadow d-flex justify-content-between align-items-center p-3 mb-3">
                     <div id="current-user-text" class="fw-bold fs-4">

@@ -143,7 +143,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("listcreate");
+            return RedirectToPage("Created");
         }
 
         public async Task<IActionResult> OnPostSubmit()
@@ -239,31 +239,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("ListCreate");
+            return RedirectToPage("Created");
         }
-
-        private async Task<ApplicationUser> GetTestUser()
-        {
-            var userId = "testUser";
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user != null)
-            {
-                return user;
-            }
-            else
-            {
-                user = new ApplicationUser
-                {
-                    Id = userId,
-                    UserName = userId,
-                    FirstName = "Test",
-                    LastName = "User"
-                };
-
-                var result = await _userManager.CreateAsync(user, "Test123!");
-                return (await _userManager.FindByIdAsync(userId))!;
-            }
-		}
     }
 }

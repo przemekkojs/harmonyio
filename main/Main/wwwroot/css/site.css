@@ -41,6 +41,14 @@ body {
 
 /*Shared*/
 
+.font-title {
+    font-family: "Domine", serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+}
+
+
 .top-bar {
     height: 40px;
     min-height: 40px;
