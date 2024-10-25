@@ -1,26 +1,31 @@
 /* 7 kolumn */
 .grid-container {
     display: grid;
-    grid-template-columns: 15px 15px 15px 15px 15px 15px 15px 15px;
-    grid-template-rows: 15px 15px 15px 15px 15px;
+    grid-template-columns: 17px 17px 7px 17px 7px 17px 1px 17px;
+    grid-template-rows: 17px 7px 17px 7px 17px;
     gap: 1px;
-    /* border: 1px solid red; */
     margin: 1px;
     padding: 1px;
 }
 
-.grid-container select,
-.grid-container input[type="checkbox"],
-.grid-container input[type="button"] {
+.grid-container > div > select,
+.grid-container > div > input[type="checkbox"],
+.grid-container > div > input[type="button"] {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     text-align: center;
     padding: 0;
     background-color: white;
-    border: 1px dotted #222222;
+    border: 1px dashed #222222;
     border-radius: 2px;
     font-family: inherit;
+    font-size: 8px;
+    box-sizing: border-box;
+}
+
+.grid-container option {
+    font-size: 10px;
 }
 
 .adder-button {
@@ -34,6 +39,7 @@
     width: 25px;
     height: 25px;
     font-family: inherit;
+    box-sizing: border-box;
 }
 
 .grid-container select::-ms-expand {
@@ -46,7 +52,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     text-indent: 1px;
-    text-overflow: '';
+    text-overflow: clip;
     font-family: inherit;
 }
 
@@ -207,7 +213,7 @@
 }
 
 .params select {
-    font-size: 24px;
+    font-size: 25px;
     text-align: center;
     width: 100px;
     border: none;
@@ -250,16 +256,18 @@
     padding-left: 35px;
     cursor: pointer;
     user-select: none;
+    box-sizing: border-box;
 }
 
 .checkmark {
     position: absolute;
     top: 0;
     left: 0;
-    height: 13px;
-    width: 13px;
-    border: 1px dotted black;
+    height: 15px;
+    width: 15px;
+    border: 1px dashed black;
     border-radius: 2px;
+    box-sizing: border-box;
 }
 
 .custom-checkbox input:checked + .checkmark::after {
@@ -288,8 +296,8 @@
 .custom-button:hover {
     transition-duration: 0.3s;
     filter: brightness(120%);
-    animation: shake 2s; /* Duration of shake */
-    animation-iteration-count: infinite; /* Continue shaking */
+    animation: shake 2s;
+    animation-iteration-count: infinite;
 }
 
 .button-small {
@@ -312,10 +320,10 @@
 }
 
 .trash-button {
-    background-image: url('./creator-images/thrash-can-red.png');    
+    background-image: url('./creator-images/thrash-can-red.png');
 }
 
-.round-arrow-button {    
+.round-arrow-button {
     background-image: url('./creator-images/round-arrow.png');
 }
 

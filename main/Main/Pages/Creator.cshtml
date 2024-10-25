@@ -2,13 +2,14 @@
 @model Main.Pages.CreatorModel
 
 <head>
-    <link rel="stylesheet" href="~/css/creator-style.css" />
     <link rel="stylesheet" href="~/css/function-creator-styles.css" />
+    <link rel="stylesheet" href="~/css/creator-style.css" />
 </head>
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
         @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
+        @*Nie no, luzik mordeczko, rozumiemy Cię.*@
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
@@ -34,7 +35,7 @@
                 <span asp-validation-for="Questions" id="questions-validation-error" class="text-danger mb-1"></span>
 
                 <div id="excersise-container" class="d-flex flex-column">
-                    @* EXCERSISES ARE FILLED WITH JS SCRIPT *@
+                    @* EXCERSISES ARE FILLED WITH JAVA SCRIPT *@
                 </div>
 
                 @if (!Model.BrowseOnly)
@@ -70,13 +71,13 @@
 <script type="module">
     import { tasks, createTask } from "./js/creator-scripts/taskCreator.js";
 
-    let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
+    const excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
+    const excersiseContainer = document.getElementById('excersise-container');
+    const questionsValidationError = document.getElementById('questions-validation-error');
 
     window.addExcersise = function () {
         excersises.push("");
-
         const index = excersises.length - 1;
-        const excersiseContainer = document.getElementById('excersise-container');        
         const textBox = document.createElement('div');
 
         textBox.className = "task-content w-100 p-3";
@@ -95,12 +96,11 @@
         const confirmButton = document.getElementById(`submit-${index}`);
         confirmButton.addEventListener('click', () => { updateExcersise(`task-container-${index}`); });
         
-        document.getElementById('questions-validation-error').innerText = '';
+        questionsValidationError.innerText = '';
     }
 
     function updateExcersise(id) {
         const taskText = document.getElementById(id);
-        const excersiseContainer = document.getElementById('excersise-container');
 
         const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
@@ -113,13 +113,10 @@
             task: tasks[index].submitTask()
         });
 
-        console.log(excersises);
-
-        document.getElementById('questions-validation-error').innerText = '';
+        questionsValidationError.innerText = '';
     }
 
     function removeExcersise(id) {
-        const excersiseContainer = document.getElementById('excersise-container');
         const taskText = document.getElementById(id);
 
         const children = Array.from(excersiseContainer.children);
@@ -127,8 +124,11 @@
 
         const removeButton = document.getElementById(`delete-${index}`);
         
-        if (taskText) excersiseContainer.removeChild(taskText);
-        if (removeButton) removeButton.onclick = null;
+        if (taskText)
+            excersiseContainer.removeChild(taskText);
+
+        if (removeButton)
+            removeButton.onclick = null;
         
         excersises.splice(index, 1);
     }
@@ -136,6 +136,6 @@
 
 @section Scripts {
     @{
-                <partial name="_ValidationScriptsPartial" />
+        <partial name="_ValidationScriptsPartial" />
     }
 }
