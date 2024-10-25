@@ -1,6 +1,6 @@
 import { Task } from "./taskEditor.js";
 
-const tasks = [];
+export const tasks = [];
 
 export function createTask(parent, id) {
     let taskHtml = `        

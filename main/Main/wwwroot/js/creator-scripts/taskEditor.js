@@ -105,15 +105,12 @@ export class Task {
                 <svg height="120" width="10">
                     <line x1="5" y1="0" x2="5" y2="110" style="stroke:black;stroke-width:1" />
                 </svg>
-                <form>
-                    <input type="button" id="delete-bar-${this.id}-${barIndex}" class="button-medium custom-button trash-button" title="Usuń takt ${barIndex + 1}">
-                </form>
+                <input type="button" id="delete-bar-${this.id}-${barIndex}" class="button-medium custom-button trash-button" title="Usuń takt ${barIndex + 1}">
             </div>`;
 
             newBar.className = 'bars';
 
             let removeBarButton = newBar
-                .querySelector('form')
                 .querySelector('input');
 
             for (let i = barIndex; i < this.bars.length; i++) {
@@ -210,6 +207,6 @@ export class Task {
     }
 
     submitTask() {
-        return this.result;
+        return JSON.stringify(this.result);
     }
 }
