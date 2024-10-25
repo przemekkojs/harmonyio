@@ -8,10 +8,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Main</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/custom.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Main.styles.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Lakki+Reddy&family=Playpen+Sans:wght@100..800&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Sriracha&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -30,19 +34,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Index">
                                 <span class="text-nowrap @(currentPageRoute == "/Index" ? "text-primary" : "")">Strona główna</span>
-                                <hr class="mb-0 mt-1 bg-primary nav-underline @(currentPageRoute == "/Index" ? "visible" : "invisible")" />
+                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Index" ? "visible" : "invisible")" />
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Assigned">
                                 <span class="text-nowrap @(currentPageRoute == "/Assigned" ? "text-primary" : "")">Przypisane</span>
-                                <hr class="mb-0 mt-1 bg-primary nav-underline @(currentPageRoute == "/Assigned" ? "visible" : "invisible")" />
+                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Assigned" ? "visible" : "invisible")" />
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Created">
                                 <span class="text-nowrap @(currentPageRoute == "/Created" ? "text-primary" : "")">Utworzone</span>
-                                <hr class="mb-0 mt-1 bg-primary nav-underline @(currentPageRoute == "/Created" ? "visible" : "invisible")" />
+                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Created" ? "visible" : "invisible")" />
                             </a>
                         </li>
                     </ul>

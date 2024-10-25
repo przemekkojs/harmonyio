@@ -14,8 +14,9 @@
     <link rel="stylesheet" href="~/css/quiz-lists-style.css" />
 </head>
 
-<div class="h-100 w-100 d-flex flex-row overflow-auto">
-    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column pe-3">
+<div class="h-100 w-100 d-flex flex-row">
+    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column"
+         style="margin: 0px -20px 0px -20px; padding: 0px 20px 0px 20px;">
         @if (unfinished.Count > 0)
         {
             @if (toSolve.Count > 0)
@@ -91,7 +92,10 @@
         }
     </div>
 
-    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column ms-3 pe-3"> 
+    <div class="mx-3"></div>
+
+    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column"
+         style="margin: 0px -10px 0px -20px; padding: 0px 20px 0px 20px;"> 
         @if (finished.Count > 0)
         {
             <div class="fw-bold fs-4 mb-3">Zakończone</div>

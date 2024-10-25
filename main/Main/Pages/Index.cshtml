@@ -22,28 +22,31 @@
 </style>
 
 
-<div class="h-100 w-100 d-flex flex-row overflow-auto justify-content-center align-items-center">
-    <!-- Created -->
-    <a asp-page="Assigned"
-       class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4 me-5">
+<div class="h-100 w-100 d-flex flex-column overflow-auto justify-content-center align-items-center">
+    <span class="text-white font-title display-1">Harmony.io</span>
+    <div class="d-flex flex-row overflow-auto justify-content-center align-items-center p-5">
+        <!-- Created -->
+        <a asp-page="Assigned"
+           class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4 me-5">
 
-        <h3 class="mb-2 text-dark fw-bold">Przypisane<br />Quizy</h3>
-    </a>
+            <h3 class="mb-2 text-dark fw-bold">Przypisane<br />Quizy</h3>
+        </a>
 
-    <!-- Join -->
-    <form method='get' action="/solve"
-          class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4 me-5">
+        <!-- Join -->
+        <form method='get' action="/solve"
+              class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4 me-5">
 
-        <h3 class="mb-3 text-dark fw-bold">Dołącz</h3>
+            <h3 class="mb-3 text-dark fw-bold">Dołącz</h3>
 
-        <input id="code" class="form-control text-center fw-bold mb-1" name="id" type="text" placeholder="Kod quizu" required />
-        <button type="submit" class="btn btn-secondary fw-bold w-100 m-2">Wprowadź</button>
-    </form>
+            <input id="code" class="form-control text-center fw-bold mb-1" name="id" type="text" placeholder="Kod quizu" required />
+            <button type="submit" class="btn btn-secondary fw-bold w-100 m-2">Wprowadź</button>
+        </form>
 
-    <!-- Assigned -->
-    <a asp-page="Created"
-       class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4">
-        
-        <h3 class="mb-2 text-dark fw-bold">Utworzone<br />Quizy</h3>
-    </a>
+        <!-- Assigned -->
+        <a asp-page="Created"
+           class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4">
+
+            <h3 class="mb-2 text-dark fw-bold">Utworzone<br />Quizy</h3>
+        </a>
+    </div>
 </div>
