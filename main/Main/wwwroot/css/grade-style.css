@@ -17,7 +17,22 @@
 
 .student-grade{
     width: 40px;
+    min-width: 40px;
     height: 100%;
+}
+
+.focused-student .student-div {
+    background-color: #0d6efd;
+    color: white;
+}
+.unfocused-student .student-div {
+    background-color: white;
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+}
+.student-row:hover .student-div {
+    background-color: #0d6efd;
+    color: white;
 }
 
 .grade-select {
@@ -27,10 +42,6 @@
 
 .music-staff {
     align-items: center;
-    border-width: 1px;
-    border-color: gray;
-    border-radius: 10px;
-    border-style: solid;
     min-height: 260px;
     height: 260px;
 }

@@ -41,6 +41,14 @@ body {
 
 /*Shared*/
 
+.font-title {
+    font-family: "Domine", serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+}
+
+
 .top-bar {
     height: 40px;
     min-height: 40px;
@@ -81,7 +89,6 @@ body {
     width: 75px;
     min-width: 75px;
     height: 75px;
-    border-radius: 10px;
 }
 
 .three-dots-img {
@@ -104,17 +111,52 @@ body {
     font-size: 24px;
 }
 
+.icon-lg {
+    font-size: 30px;
+}
+
 .no-style {
     all: unset;
     text-decoration: none;
 }
 
-/*This should be in grade-style.css, button it doesnt work there for some reason*/
+/*BOOTSTRAP RECOLOR*/
 
-.focused-student .student-div {
-    background-color: #6c757d; /* Kolor tła bg-secondary z Bootstrap */
+body {
+    background-color: #f8f9fa;
 }
 
-.focused-student .student-text {
-    color: white;
+
+/*
+.btn-primary {
+    background-color: #5b169b !important;
+    border-color: #5b169b !important;
 }
+
+.bg-primary {
+    background-color: #5b169b !important;
+}
+
+.text-primary {
+    color: #5b169b !important;
+}
+
+.btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+.btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+.text-secondary {
+    color: #6c757d !important;
+}*/
+
+

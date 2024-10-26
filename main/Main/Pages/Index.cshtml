@@ -3,71 +3,50 @@
 @{
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/bg-pattern-style.css" />
+</head>
+
 <style>
     .tile {
-        width: 100%;
+        width: 20vw;
+        height: 17vw;
         border-radius: 10px;
-        border-style: solid;
-        border-width: 1px;
-        border-color: black;
         transition: transform 0.2s;
         text-align: center;
         text-decoration: none;
     }
-
     .tile:hover {
         transform: scale(1.05); 
-    }
-
-    .tile h3 {
-        margin: 0;
-        font-weight: bold;
     }
 </style>
 
 
-<div class="container">
-    <div class="row justify-content-center align-items-center min-vh-100">
-        @if (Model.User.IsInRole("Creator"))
-        {
-            <!-- Create -->
-            <div class="col-4 mb-4">
-                <a href="/create"
-                   class="tile d-flex align-items-center justify-content-center flex-column p-4"
-                   style="background-color: gray; color: white">
+<div class="h-100 w-100 d-flex flex-column overflow-auto justify-content-center align-items-center">
+    <span class="text-white font-title display-1">Harmony.io</span>
+    <div class="d-flex flex-row overflow-auto justify-content-center align-items-center p-5">
+        <!-- Created -->
+        <a asp-page="Assigned"
+           class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4 me-5">
 
-                    <h3 class="mb-2">Create</h3>
+            <h3 class="mb-2 text-dark fw-bold">Przypisane<br />Quizy</h3>
+        </a>
 
-                    <img src="img/tmp.png" alt="test"/>
-                </a>
-            </div>
-        }
-        else
-        {
-            <!-- Join -->
-            <div class="col-4 mb-4">
-                <form method='get' action="/solve"
-                   class="tile d-flex align-items-center justify-content-center flex-column p-4"
-                   style="background-color: darkgray; color: white">
+        <!-- Join -->
+        <form method='get' action="/solve"
+              class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4 me-5">
 
-                    <h3 class="mb-2">Join</h3>
-                    
-                    <input id="code" name="id" type="text" placeholder="Quiz code" required/>
-                    
-                    <button type="submit" class="btn btn-light m-2">Join</button>
-                </form>
-            </div>
-        }
-        <!-- List -->
-        <div class="col-4 mb-4">
-            <a href="@(Model.User.IsInRole("Creator") ? "/Created" : "/Assigned")"
-               class="tile d-flex align-items-center justify-content-center flex-column p-4"
-               style="background-color: dimgray; color: white">
+            <h3 class="mb-3 text-dark fw-bold">Dołącz</h3>
 
-                 <h3 class="mb-2">List</h3>
-                
-                <img src="img/tmp.png" alt="test"/>
-            </a>
-        </div>
+            <input id="code" class="form-control text-center fw-bold mb-1" name="id" type="text" placeholder="Kod quizu" required />
+            <button type="submit" class="btn btn-secondary fw-bold w-100 m-2">Wprowadź</button>
+        </form>
+
+        <!-- Assigned -->
+        <a asp-page="Created"
+           class="tile shadow bg-white d-flex align-items-center justify-content-center flex-column p-4">
+
+            <h3 class="mb-2 text-dark fw-bold">Utworzone<br />Quizy</h3>
+        </a>
     </div>
 </div>

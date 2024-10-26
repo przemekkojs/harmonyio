@@ -268,7 +268,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-image: url('./creator-images/moll.png');
+    background-image: url('../images/creator-images/moll.png');
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -288,8 +288,8 @@
 .custom-button:hover {
     transition-duration: 0.3s;
     filter: brightness(120%);
-    animation: shake 2s; /* Duration of shake */
-    animation-iteration-count: infinite; /* Continue shaking */
+    animation: shake 2s;
+    animation-iteration-count: infinite;
 }
 
 .button-small {
@@ -308,19 +308,19 @@
 }
 
 .tick-button {
-    background-image: url('./creator-images/tick.png');
+    background-image: url('../images/creator-images/tick.png');
 }
 
 .trash-button {
-    background-image: url('./creator-images/thrash-can-red.png');    
+    background-image: url('../images/creator-images/thrash-can-red.png');
 }
 
-.round-arrow-button {    
-    background-image: url('./creator-images/round-arrow.png');
+.round-arrow-button {
+    background-image: url('../images/creator-images/round-arrow.png');
 }
 
 .plus-button {
-    background-image: url('./creator-images/plus.png');
+    background-image: url('../images/creator-images/plus.png');
 }
 
 @keyframes shake {

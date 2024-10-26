@@ -20,11 +20,16 @@ namespace Main.Pages
         [Display(Name = "Quiz Name")]
         [Required(ErrorMessage = "Quiz name is required.")]
         public string QuizName { get; set; } = null!;
-        
-        
+        [BindProperty]
+        [Display(Name = "Open Date")]
+        [Required(ErrorMessage = "Open date is required.")]
+        public DateTime? OpenDate { get; set; } = null;
+        [BindProperty]
+        [Display(Name = "Close Date")]
+        [Required(ErrorMessage = "Close date is required.")]
+        public DateTime? CloseDate { get; set; } = null;
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
-        
         [BindProperty]
         public int? EditedQuizId { get; set; } = null;
 
@@ -39,7 +44,7 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> OnGetAsync(int? id, bool? triggerSubmit)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             //create new quiz
             if (id == null)
@@ -62,20 +67,16 @@ namespace Main.Pages
 
             EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
+            CloseDate = quiz.CloseDate;
+            OpenDate = quiz.OpenDate;
             Code = quiz.Code;
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
-
-            if (triggerSubmit ?? false)
-            {
-                return await OnPostSubmit();
-            }
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostSave()
-        {
-            
+        {            
             var currentUser = (await _userManager.GetUserAsync(User))!;
             if (currentUser == null)
                 return RedirectToPage("Error");
@@ -85,6 +86,8 @@ namespace Main.Pages
                 var quiz = new Quiz()
                 {
                     Name = QuizName,
+                    OpenDate = (DateTime)OpenDate!,
+                    CloseDate = (DateTime)CloseDate!,
                     CreatorId = currentUser.Id,
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
@@ -115,6 +118,8 @@ namespace Main.Pages
                     return RedirectToPage("Error");
 
                 editedQuiz.Name = QuizName;
+                editedQuiz.OpenDate = (DateTime)OpenDate!;
+                editedQuiz.CloseDate = (DateTime)CloseDate!;
                 
                 _repository.Update(editedQuiz);
                 
@@ -141,8 +146,16 @@ namespace Main.Pages
         }
 
         public async Task<IActionResult> OnPostSubmit()
-        {           
-    
+        {               
+            if (CloseDate <= OpenDate)
+            {
+                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");;
+            }
+            if (CloseDate <= DateTime.Now)
+            {
+                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than current date."); ;
+            }
+
             if (Questions.Count == 0)
             {
                 ModelState.AddModelError(nameof(Questions), "At least one excersise is required.");
@@ -166,8 +179,13 @@ namespace Main.Pages
                 var quiz = new Quiz()
                 {
                     Name = QuizName,
+                    OpenDate = (DateTime)OpenDate!,
+                    CloseDate = (DateTime)CloseDate!,
                     CreatorId = currentUser.Id,
                     IsCreated = true,
+
+                    //TODO: TESTING PURPOSES ONLY, REMOVE THIS
+                    Participants = new List<ApplicationUser>() { currentUser },
                 };
                 
                 _repository.Add(quiz);
@@ -194,6 +212,9 @@ namespace Main.Pages
                     return RedirectToPage("Error");
 
                 editedQuiz.Name = QuizName;
+                editedQuiz.OpenDate = (DateTime)OpenDate!;
+                editedQuiz.CloseDate = (DateTime)CloseDate!;
+                editedQuiz.IsCreated = true;
                 
                 _repository.Update(editedQuiz);
                 
@@ -216,7 +237,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("Publish", new { id = EditedQuizId});
+            return RedirectToPage("Created");
         }
     }
 }

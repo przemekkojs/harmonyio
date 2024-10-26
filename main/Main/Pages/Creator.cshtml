@@ -3,22 +3,33 @@
 
 <head>
     <link rel="stylesheet" href="~/css/creator-style.css" />
+    <link rel="stylesheet" href="~/css/function-creator-styles.css" />
 </head>
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        <div class="flex-grow-1 d-flex overflow-auto">
-            <div class="left-panel">
+        <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
+            <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
-                    <label asp-for="QuizName" class="form-label"></label>
-                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly">
+                    <label asp-for="QuizName" class="form-label fw-bold"></label>
+                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="OpenDate" class="form-label fw-bold"></label>
+                    <input asp-for="OpenDate" class="form-control" readonly="@Model.BrowseOnly">
+                    <span asp-validation-for="OpenDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CloseDate" class="form-label fw-bold"></label>
+                    <input asp-for="CloseDate" class="form-control" readonly="@Model.BrowseOnly">
+                    <span asp-validation-for="CloseDate" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="vr mx-3"></div>
-
-            <div class="flex-grow-1 d-flex flex-column overflow-auto">
+            <div class="flex-grow-1 bg-white rounded shadow p-3 d-flex flex-column overflow-auto">
                 <span asp-validation-for="Questions" id="questions-validation-error" class="text-danger mb-1"></span>
 
                 <div id="excersise-container" class="d-flex flex-column">
@@ -29,20 +40,18 @@
                 {
                     <div class="task task-add d-flex justify-content-center align-items-center" onclick="addExcersise()">
                         <span class="plus">+</span>
-                        <span>Dodaj nowe zadanie</span>
+                        <span>Dodaj zadanie</span>
                     </div>
                 }
             </div>
         </div>
-
-        <hr class="hr">
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             @if (!Model.BrowseOnly)
             {
-                <button type="submit" asp-page-handler="Save" class="btn btn-primary btn-std-width ms-auto">Zapisz</button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto">Zapisz</button>
                 <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3">Opublikuj</button>
             }
             else
@@ -57,61 +66,75 @@
     </div>
 </form>
 
+<script type="module">
+    import { tasks, createTask } from "./js/creator-scripts/taskCreator.js";
 
-<script>
     let excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
 
-    function addExcersise() {
+    window.addExcersise = function () {
         excersises.push("");
-        renderExcersises();
 
+        const index = excersises.length - 1;
+        const excersiseContainer = document.getElementById('excersise-container');        
+        const textBox = document.createElement('div');
+
+        textBox.className = "task-content w-100 p-3";
+        textBox.id = `task-container-${index}`;
+        textBox.innerHTML = `
+        <div id="question-task-${index}">
+            <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" @(Model.BrowseOnly ? "readonly" : "")>
+        </div>`;
+
+        excersiseContainer.appendChild(textBox);
+        createTask(textBox, index);
+        
+        const removeButton = document.getElementById(`delete-${index}`);
+        removeButton.addEventListener('click', () => { removeExcersise(`task-container-${index}`); });
+
+        const confirmButton = document.getElementById(`submit-${index}`);
+        confirmButton.addEventListener('click', () => { updateExcersise(`task-container-${index}`); });
+        
         document.getElementById('questions-validation-error').innerText = '';
     }
 
-    function updateExcersise(index, value) {
-        excersises[index] = value;
-
-        document.getElementById('questions-validation-error').innerText = '';
-    }
-
-    function removeExcersise(index) {
-        excersises.splice(index, 1);
-        renderExcersises();
-    }
-
-    function renderExcersises() {
+    function updateExcersise(id) {
+        const taskText = document.getElementById(id);
         const excersiseContainer = document.getElementById('excersise-container');
-        excersiseContainer.innerHTML = '';
 
-        excersises.forEach((excersise, index) => {
-            // Excercises should be loaded here, so creators also
+        const children = Array.from(excersiseContainer.children);
+        const index = children.indexOf(taskText);
 
-            excersiseContainer.innerHTML += `
-                <div class="task task-creator p-0 overflow-hidden">
-                    <div class="d-flex h-100 align-items-center bg-secondary">
-                        <div class="task-number text-white">${index + 1}</div>
-                        <div class="vr"></div>
-                    </div>
-                    <div class="task-content w-100 p-3">
-                        <span class="mb-1">Kreator funkcji</span> @*Tutaj trzeba dodać kreatory*@
-                        <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersise}" oninput="updateExcersise(${index}, this.value)" @(Model.BrowseOnly ? "readonly" : "")>
-                    </div>
-                    @if (!Model.BrowseOnly)
-                    {
-                        <div class="d-flex h-100 align-items-center">
-                            <div class="vr"></div>
-                            <button class="delete-btn" onclick="removeExcersise(${index})">🗑️</button>
-                        </div>
-                    }
-                </div>`;
+        const questionText = document.getElementById(`question-task-${index}`).querySelector('input');
+        const questionValue = questionText.value;
+
+        excersises[index] = JSON.stringify({
+            question: questionValue,
+            task: tasks[index].submitTask()
         });
+
+        console.log(excersises);
+
+        document.getElementById('questions-validation-error').innerText = '';
     }
 
-    renderExcersises();
+    function removeExcersise(id) {
+        const excersiseContainer = document.getElementById('excersise-container');
+        const taskText = document.getElementById(id);
+
+        const children = Array.from(excersiseContainer.children);
+        const index = children.indexOf(taskText);
+
+        const removeButton = document.getElementById(`delete-${index}`);
+        
+        if (taskText) excersiseContainer.removeChild(taskText);
+        if (removeButton) removeButton.onclick = null;
+        
+        excersises.splice(index, 1);
+    }
 </script>
 
 @section Scripts {
     @{
-        <partial name="_ValidationScriptsPartial" />
+                <partial name="_ValidationScriptsPartial" />
     }
 }
