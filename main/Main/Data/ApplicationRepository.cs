@@ -53,6 +53,8 @@ public class ApplicationRepository : IRepository
         context.QuizResults.RemoveRange(context.QuizResults);
         context.Quizes.RemoveRange(context.Quizes);
         context.Users.RemoveRange(context.Users);
+        context.UsersGroups.RemoveRange(context.UsersGroups);
+        context.GroupRequests.RemoveRange(context.GroupRequests);
     }
 
     public async Task SaveChangesAsync()

@@ -3,7 +3,7 @@
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 @using Main.Enumerations
 @{
-    var finished = Model.Joined.Where(q => q.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.AppUser.Id)).ToList();
+    var finished = Model.Joined.Where(q => q.Excersises.Any() && q.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.AppUser.Id)).ToList();
     var unfinished = Model.Joined.Except(finished).ToList();
 
     var toSolve = unfinished.Where(q => q.State == Enumerations.QuizState.Open).ToList();
