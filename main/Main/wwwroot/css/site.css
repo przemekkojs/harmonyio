@@ -48,6 +48,16 @@ body {
     font-style: normal;
 }
 
+.bg-pattern-sm {
+    background: url('/images/bg-pattern.png') repeat, linear-gradient(#2d53b2, #426edb);
+    background-size: 256px 256px, cover;
+    background-position: 0 0, center;
+}
+
+.input-error {
+    border: 1px solid #ea3342;
+    background-color: #ffe6e6;
+}
 
 .top-bar {
     height: 40px;
@@ -74,6 +84,10 @@ body {
 
 .btn-std-width {
     width: 150px;
+}
+
+.btn-sm-width {
+    width: 120px;
 }
 
 .btn-tiny-width{
