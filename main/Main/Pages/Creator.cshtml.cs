@@ -44,7 +44,7 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, bool? triggerSubmit)
         {
             //create new quiz
             if (id == null)
@@ -72,6 +72,11 @@ namespace Main.Pages
             Code = quiz.Code;
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
 
+            if (triggerSubmit ?? false)
+            {
+                return await OnPostSubmit();
+            }
+
             return Page();
         }
 
@@ -89,9 +94,6 @@ namespace Main.Pages
                     OpenDate = (DateTime)OpenDate!,
                     CloseDate = (DateTime)CloseDate!,
                     CreatorId = currentUser.Id,
-
-                    //TODO: TESTING PURPOSES ONLY, REMOVE THIS
-                    Participants = new List<ApplicationUser>() { currentUser }
                 };
                 
                 _repository.Add(quiz);
@@ -149,11 +151,11 @@ namespace Main.Pages
         {               
             if (CloseDate <= OpenDate)
             {
-                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");;
+                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");
             }
             if (CloseDate <= DateTime.Now)
             {
-                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than current date."); ;
+                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than current date.");
             }
 
             if (Questions.Count == 0)

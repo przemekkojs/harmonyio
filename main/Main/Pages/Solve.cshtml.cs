@@ -46,6 +46,14 @@ namespace Main.Pages
             }
 
             Quiz = quiz;
+
+            if (!Quiz.Participants.Any(u => u.Id == appUser.Id))
+            {
+                Quiz.Participants.Add(appUser);
+                _repository.Update(Quiz);
+                await _repository.SaveChangesAsync();
+            }
+
             Answers = Quiz.Excersises
                 .Select(e => e.ExcersiseSolutions.FirstOrDefault(es => es.UserId == appUser.Id))
                 .Select(es => es?.Answer ?? "").ToList();
