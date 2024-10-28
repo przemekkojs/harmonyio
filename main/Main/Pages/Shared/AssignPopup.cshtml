@@ -1,0 +1,289 @@
+@*
+ASSIGN MODAL POPUP
+
+ATRYBUTY:
+    - data-quiz-id: Id quizu
+    - data-quiz-name: Nazwa quizu
+    - data-pin: Pin quizu
+    - data-url: URL quizu
+    - data-emails: Emaile użytkowników, przypisanych już do quizu. Będą one nieusuwalne.
+    - data-all-groups: Wszystkie grupy tworzącego quiz. Quiz może być przypisany do tych grup.
+    - data-added-groups: Wszystkie przypisane już do tego quizu grupy. Będą one nieusuwalne.
+    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3 argumenty - quizId, assignedEmails i assignedGroups
+*@
+
+<div class="modal fade" id="assignPopup" tabindex="-1" role="dialog" aria-labelledby="assignPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document"
+         style="width: 850px; min-width: 850px;">
+        <div class="modal-content d-flex flex-row overflow-hidden">
+            <div class="col-3 bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
+                <span class="fw-bold fs-4 mb-1">Udostępnianie</span>
+                <p>Quiz udostepnić możesz za pomocą kodu lub linku, poprzez które użytkownicy dołączyć mogą samodzielnie. Możesz również zaprosić do quizu indywidualnych użytkowników lub  przypisać go do swoich grup. </p>
+            </div>
+
+            <div class="col-9 d-flex flex-column">
+                <div class="d-flex flex-row modal-header">
+                    <span id="assignedQuizName" class="fw-bold fs-4">Kartkówka 2A</span>
+                    <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="d-flex flex-column py-3">
+                    <div class="d-flex flex-row mb-3 mx-3">
+                        <div class="w-50 bg-white rounded shadow p-2 d-flex flex-row me-3">
+                            <div class="d-flex flex-column me-auto">
+                                <span class="fw-bold">PIN</span>
+                                <span id="assignedQuizPin">027 312</span>
+                            </div>
+                            <button type="button" id="copyPinBtn" class="btn btn-secondary my-auto" onclick="copyPin()">Kopiuj</button>
+                        </div>
+
+                        <div class="w-50 bg-white rounded shadow p-2 d-flex flex-row">
+                            <div class="d-flex flex-column me-auto overflow-hidden text-nowrap">
+                                <span class="fw-bold">URL</span>
+                                <span id="assignedQuizUrl" class="text-truncate">https://harmony.io/join?q=021367</span>
+                            </div>
+                            <button type="button" id="copyUrlBtn" class="btn btn-secondary ms-2 my-auto" onclick="copyUrl()">Kopiuj</button>
+                        </div>
+                    </div>
+
+                    <hr class="m-0" style="border: none; border-top: 0.5px solid #ced4da; opacity: 1;" />
+
+                    <div class="d-flex flex-row flex-grow-1 mx-3 mt-3" style="height: 265px; max-height: 265px;">
+                        <div class="h-100 w-50 bg-white rounded shadow border border-light d-flex flex-column me-3 overflow-auto">
+                            <div class="bg-light d-flex flex-row fw-bold p-2">
+                                <span class="ms-auto me-1">Użytkownicy</span>
+                                <span id="emailsNumber" class="me-auto">(2)</span>
+                            </div>
+
+                            <hr class="m-0 border border-1" />
+
+                            <div class="m-2">
+                                <input id="assignEmailInput" class="form-control" type="email" placeholder="Dodaj email użytkownika" required />
+                            </div>
+
+                            <hr class="m-0 border border-1" />
+
+                            <div id="emailListContainer" class="p-2 overflow-auto">
+                                @*FILLED VIA JS*@
+                            </div>
+
+                        </div>
+
+                        <div class="h-100 w-50 bg-white rounded shadow d-flex flex-column me-3 overflow-auto">
+                            <div class="bg-light d-flex flex-row fw-bold p-2">
+                                <span class="ms-auto me-1">Grupy</span>
+                                <span id="groupsNumber" class="me-auto">(1)</span>
+                            </div>
+
+                            <hr class="m-0 border border-1" />
+
+                            <div id="groupListContainer" class="p-2 overflow-auto">
+                                @*FILLED VIA JS*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary ms-auto btn-sm-width" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="button" class="btn btn-primary me-auto btn-sm-width" data-bs-dismiss="modal" id="assignSaveButton">Zapisz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    var assignPopup = document.getElementById('assignPopup');
+    var assignSaveButton = assignPopup.querySelector('#assignSaveButton');
+    let assignModalButton;
+    let assignPinTimeoutId;
+    let assignUrlTimeoutId;
+
+    var assignedEmails = [];
+    var uneditableEmails = [];
+    var allGroups = [];
+    var uneditableGroups = [];
+
+    var emailInput = document.getElementById("assignEmailInput");
+    const emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+
+    emailInput.addEventListener("focusout", addEmail);
+    emailInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            emailInput.blur();
+        }
+    });
+
+    assignPopup.addEventListener('show.bs.modal', function (event) {
+        assignModalButton = event.relatedTarget;
+        var quizName = assignModalButton.getAttribute('data-quiz-name');
+        var quizPin = assignModalButton.getAttribute('data-pin');
+        var quizUrl = assignModalButton.getAttribute('data-url');
+
+        var nameElement = assignPopup.querySelector('#assignedQuizName');
+        var pinElement = assignPopup.querySelector('#assignedQuizPin');
+        var urlElement = assignPopup.querySelector('#assignedQuizUrl');
+
+        nameElement.textContent = quizName;
+        pinElement.textContent = quizPin;
+        quizUrl.textContent = quizUrl;
+
+        assignedEmails = JSON.parse(assignModalButton.getAttribute('data-emails'));
+        uneditableEmails = [...assignedEmails];
+        updateEmailsList();
+
+        allGroups = JSON.parse(assignModalButton.getAttribute('data-all-groups'));
+        uneditableGroups = JSON.parse(assignModalButton.getAttribute('data-added-groups'));
+        initGroups();
+    });
+
+    assignSaveButton.addEventListener('click', function (event) {
+        const checkedCheckboxes = groupListContainer.querySelectorAll('input[type="checkbox"]:checked');
+        const groups = Array.from(checkedCheckboxes).map(checkbox => checkbox.getAttribute('data-group'));
+
+        var callbackName = assignModalButton.getAttribute('data-callback-name');
+        var quizId = assignModalButton.getAttribute('data-quiz-id');
+
+        if (typeof window[callbackName] === 'function') {
+            window[callbackName](quizId, assignedEmails, groups);
+            var closebutton = document.getElementById('publishCancelButton');
+            closebutton.click();
+        } else {
+            console.error("Callback function not found:", callbackName);
+        }
+    });
+
+    function copyPin() {
+        var pinElement = document.getElementById("assignedQuizPin");
+        var copyButton = document.getElementById("copyPinBtn");
+
+        navigator.clipboard.writeText(pinElement.textContent);
+
+        copyButton.classList.remove('btn-secondary');
+        copyButton.classList.add('btn-primary');
+        copyButton.innerText = "Skopiowano";
+
+        clearTimeout(assignPinTimeoutId);
+        assignPinTimeoutId = setTimeout(function () {
+            copyButton.classList.remove('btn-primary');
+            copyButton.classList.add('btn-secondary');
+            copyButton.innerText = "Kopiuj";
+        }, 5000);
+    }
+
+    function copyUrl() {
+        var urlElement = document.getElementById("assignedQuizUrl");
+        var copyButton = document.getElementById("copyUrlBtn");
+
+        navigator.clipboard.writeText(urlElement.textContent);
+
+        copyButton.classList.remove('btn-secondary');
+        copyButton.classList.add('btn-primary');
+        copyButton.innerText = "Skopiowano";
+
+        clearTimeout(assignUrlTimeoutId);
+        assignUrlTimeoutId = setTimeout(function () {
+            copyButton.classList.remove('btn-primary');
+            copyButton.classList.add('btn-secondary');
+            copyButton.innerText = "Kopiuj";
+        }, 5000);
+    }
+
+    function isValidEmail(email) {
+        return emailReg.test(email) && !assignedEmails.includes(email);
+    }
+
+    function addEmail() {
+        const email = emailInput.value;
+
+        if (email === '') {
+            emailInput.classList.remove("input-error");
+            return;
+        }
+
+        if (isValidEmail(email)) {
+            assignedEmails.push(emailInput.value);
+
+            emailInput.value = "";
+            emailInput.classList.remove("input-error");
+
+            updateEmailsList()
+        } else {
+            emailInput.classList.add("input-error");
+        }
+    }
+
+    function updateEmailsList() {
+        const emailListContainer = document.getElementById("emailListContainer");
+        const emailsNumber = document.getElementById("emailsNumber");
+        emailListContainer.innerHTML = "";
+        emailsNumber.innerText = `(${assignedEmails.length})`;
+
+        assignedEmails = assignedEmails.filter(email => !uneditableEmails.includes(email));
+        assignedEmails = assignedEmails.concat(uneditableEmails);
+
+        assignedEmails.forEach((email, index) => {
+            const emailDiv = document.createElement("div");
+            emailDiv.className = `bg-transparent rounded border d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""}`;
+            emailDiv.innerHTML = `
+                <span class="text-truncate me-2">${email}</span>
+            `;
+
+            if (!uneditableEmails.includes(email)) {
+                emailDiv.innerHTML += `
+                    <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+                `;
+
+                emailListContainer.appendChild(emailDiv);
+
+                const deleteButton = emailDiv.querySelector("button");
+                deleteButton.addEventListener("click", function (event) {
+                    event.preventDefault();
+
+                    const indexToRemove = parseInt(deleteButton.getAttribute("data-index"));
+                    assignedEmails.splice(indexToRemove, 1);
+                    updateEmailsList();
+                });
+            }
+
+            emailListContainer.appendChild(emailDiv);
+        });
+    }
+
+    function initGroups() {
+        const groupListContainer = document.getElementById("groupListContainer");
+        groupListContainer.innerHTML = '';
+
+        allGroups.forEach((group, index) => {
+            const groupDiv = document.createElement("div");
+            groupDiv.className = `bg-transparent rounded border d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""}`;
+            groupDiv.innerHTML = `
+                <input data-group="${group}" type="checkbox" onchange="updateGroups()" class="form-check-input me-2" ${uneditableGroups.includes(group) ? "checked disabled" : ""}>
+                <span class="text-truncate">${group}</span>
+            `;
+
+            groupListContainer.appendChild(groupDiv);
+        });
+
+        updateGroups();
+    }
+
+    function updateGroups() {
+        const groupListContainer = document.getElementById("groupListContainer");
+        const groupsNumber = document.getElementById("groupsNumber");
+
+        const checkedCheckboxes = groupListContainer.querySelectorAll('input[type="checkbox"]:checked');
+        groupsNumber.innerText = `(${checkedCheckboxes.length})`;
+    }
+
+</script>
+
+
+@*<div class="bg-transparent rounded border d-flex flex-row p-2">
+    <input type="checkbox" class="form-check-input me-2">
+    <span class="text-truncate">Klasa 2A</span>
+</div>*@
