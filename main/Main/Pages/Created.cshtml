@@ -86,13 +86,16 @@
                             </a>
                         </div>
 
-                        <div class="mx-auto mb-1 mt-auto d-flex flex-row">
-                            <span class="fw-bold me-1">Pin:</span>
-                            <span>
-                                @quiz.Code
-                            </span>
-                        </div>
-                        <button class="btn btn-primary mx-auto">Kopiuj link</button>
+                        <a href="#" class="btn btn-primary ms-auto mt-auto" data-bs-toggle="modal" data-bs-target="#assignPopup"
+                           data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-pin="@quiz.Code"
+                           data-url="jakiś url" @*TODO: URL DO QUIZU*@
+                           data-emails='["email1@example.com", "email2@example.com"]' @*TODO: UŻYTKOWNICY JUŻ DODANI DO QUIZU*@
+                           data-all-groups='["Klasa 2A", "Klasa 3A", "Klasa 1B"]' @*TODO: WSZYSTKIE GRUPY NALEŻĄCE DO WŁAŚCICIELA QUIZU*@
+                           data-added-groups='["Klasa 3A"]' @*TODO: GRUPY JUŻ DODANE DO QUIZU*@
+                           data-callback-name="assign">
+                            Udostępnij
+                        </a>
+
                     </div>
                 </div>
             }
@@ -174,17 +177,18 @@
                         <form method="post" id="deleteFormForQuiz@(quiz.Id)">
                             <input type="hidden" asp-for="PostAction" value="delete" />
                             <input type="hidden" asp-for="QuizId" value="@quiz.Id" />
-                            <a href="#" class="btn-icon" onclick="document.getElementById('deleteFormForQuiz@(quiz.Id)').submit(); return false;">
+
+                            <a href="#" class="btn-icon" data-bs-toggle="modal" data-bs-target="#deleteQuizPopup"
+                               data-quiz-name="@quiz.Name" data-on-delete="deleteQuiz(@quiz.Id)">
                                 <i class="far fa-trash-can icon-sm"></i>
                             </a>
                         </form>
                     </div>
 
-                    <form method="post" class="ms-auto mt-auto">
-                        <input type="hidden" asp-for="PostAction" value="publish" />
-                        <input type="hidden" asp-for="QuizId" value="@quiz.Id" />
-                        <button type="submit" class="btn btn-primary">Opublikuj</button>
-                    </form>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishPopup"
+                       data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-callback-name="publish">
+                        Opublikuj
+                    </a>
                 </div>
             </div>
         }
@@ -195,5 +199,51 @@
                 <span class="fw-bold">Utwórz nowy quiz</span>
             </div>
         </a>
+
+        @*TODO: Remove this*@
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignPopup"
+           data-quiz-id="3" data-quiz-name="Dummy quiz" data-pin="069 420"
+           data-url="https://harmony.io/join?q=069420"
+           data-emails='["email1@example.com", "email2@example.com"]'
+           data-all-groups='["Klasa 2A", "Klasa 3A", "Klasa 1B"]'
+           data-added-groups='["Klasa 3A"]' data-callback-name="assign">
+            Test Assign
+        </a>
+
+        @*TODO: Remove this*@
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishPopup"
+           data-quiz-id="3" data-quiz-name="Dummy quiz" data-callback-name="publish">
+            Test Publish
+        </a>
     </div>
 </div>
+
+<partial name="~/Pages/Shared/DeleteQuizPopup.cshtml" />
+<partial name="~/Pages/Shared/PublishPopup.cshtml" />
+<partial name="~/Pages/Shared/AssignPopup.cshtml" />
+
+<script>
+    function deleteQuiz(quizId) {
+        document.getElementById(`deleteFormForQuiz${quizId}`).submit();
+    }
+
+    function publish(quizId, openDateTime, closeDateTime) {
+        //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
+      
+        console.log("publishing quiz: " + quizId);
+        console.log("open datetime: " + openDateTime);
+        console.log("close datetime: " + closeDateTime);
+
+        //TODO: Po opublikowaniu powinien od razu włączyć się assign popup
+        // (można go włączyć przyciskiem Udostępnij, ale dobrze jakby włączał się też automatycznie)
+    }
+
+    function assign(quizId, assignedEmails, assignedGroups) {
+        //TODO: Assign this quiz to users
+
+        console.log("assigned quiz: " + quizId);
+        console.log("assigned users: " + assignedEmails);
+        console.log("assigned groups: " + assignedGroups);
+    }
+
+</script>
