@@ -24,8 +24,6 @@ public class CreatedModel : PageModel
     [BindProperty]
     public int QuizId { get; set; }
 
-    public bool QuizHasErrors { get; set; } = false;
-
     public CreatedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
@@ -84,7 +82,8 @@ public class CreatedModel : PageModel
             }
             else
             {
-                return RedirectToPage("/Publish", new { id = QuizId});
+                // popup
+                return Page();
             }
 
 

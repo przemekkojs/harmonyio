@@ -197,17 +197,3 @@
         </a>
     </div>
 </div>
-
-@* @if (Model.QuizHasErrors)
-{
-    <script>
-        window.onload = function () {
-            var result = confirm("Nie można opublikować tego quizu, ponieważ posiada błąd. Czy chcesz go teraz poprawić?");
-            if (result) {
-                window.location.href = "/Creator?id="+@Model.QuizId+"&triggerSubmit=true";
-            } else {
-                // Handle 'No' action: Optionally reset the form or stay on the same page
-            }
-        };
-    </script>
-} *@

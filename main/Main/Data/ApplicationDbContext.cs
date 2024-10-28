@@ -14,6 +14,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ExcersiseSolution> ExcersiseSolutions { get; set; }
     public DbSet<Quiz> Quizes { get; set; }
     public DbSet<QuizResult> QuizResults { get; set; }
+    public DbSet<UsersGroup> UsersGroups { get; set; }
+    public DbSet<GroupRequest> GroupRequests { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,6 +83,32 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(qr => qr.ExcersiseResults)
             .HasForeignKey(er => er.QuizResultId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Relacja wiele-do-wielu między UserGroup a ApplicationUser (uczestnicy) [oba]
+        modelBuilder.Entity<ApplicationUser>()
+            .HasMany(q => q.TeacherInGroups)
+            .WithMany(u => u.Teachers)
+            .UsingEntity(j => j.ToTable("GroupLeader"));
+        
+        modelBuilder.Entity<ApplicationUser>()
+            .HasMany(q => q.StudentInGroups)
+            .WithMany(u => u.Students)
+            .UsingEntity(j => j.ToTable("UserGroup"));
+
+        // Relacja jeden-do-wielu między GroupRequest a ApplicationUser
+        modelBuilder.Entity<GroupRequest>()
+            .HasOne(gr => gr.User)
+            .WithMany(u => u.Requests)
+            .HasForeignKey(gr => gr.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Relacja jeden-do-wielu między GroupRequest a GroupReqest
+        modelBuilder.Entity<GroupRequest>()
+            .HasOne(gr => gr.Group)
+            .WithMany(u => u.Requests)
+            .HasForeignKey(gr => gr.GroupId)
+            .OnDelete(DeleteBehavior.Cascade);
+
     }
 
     // public override int SaveChanges()
