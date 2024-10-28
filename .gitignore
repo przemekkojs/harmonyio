@@ -10,11 +10,13 @@
 /main/Main/bin
 /main/Main/obj
 
-/staff/jsconfig.json
+**/jsconfig.json
 
 /mockups
 *.drawio
 
 **/app.db
+**/app.db-shm
+**/app.db-wal
+
 **/.DS_Store
-main/Main/app.db
