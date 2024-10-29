@@ -80,6 +80,8 @@ class Bar {
         const elementIndex = this.functions.indexOf(element);
         this.functions.splice(elementIndex, 1);
 
+        console.log(this.functions);
+
         this.functions.forEach(f => {
             if (f.functionIndex > element.functionIndex) {
                 const oldId = f.id;
@@ -100,7 +102,7 @@ class Bar {
                 f.functionIndex--;
                 f.id = newId;
                 f.component.id = newId;
-                // f.component.innerHTML = createComponent(newId);
+                // f.component.innerHTML = createComponent(newId); // TODO: update ID's of inner components
                 f.element.setId(newId);
             }
         });

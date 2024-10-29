@@ -127,9 +127,18 @@
         const index = children.indexOf(taskText);
 
         const questionText = document.getElementById(`question-task-${index}`);
+        const tonationLetterSelect = document.getElementById(`tonation-name-select-task-${id}`);
+        const accidentalSelect = document.getElementById(`accidental-task-${id}`);
+        const modeSelect = document.getElementById(`mode-task-${id}`);
+        const metreSelect = document.getElementById(`metre-select-task-${id}`);
+        
 
         excersises[index] = {
             question: questionText.value,
+            sharpsCount: 0,
+            flatsCount: 0,
+            metreValue: 3,
+            metreCount: 4,
             task: tasks[index].result
         };
 
@@ -147,15 +156,10 @@
 
         const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
-
-        const removeButton = document.getElementById(`delete-${index}`);
-        
+                
         if (taskText)
             excersiseContainer.removeChild(taskText);
-
-        if (removeButton)
-            removeButton.onclick = null;
-        
+                    
         excersises.splice(index, 1);
 
         questionsValidationError.innerText = '';
