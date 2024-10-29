@@ -9,6 +9,8 @@ export class Elements {
         this.rootDropdown = this.thisDiv.querySelector(`#root-${thisId}`);
         this.symbolDropdown = this.thisDiv.querySelector(`#symbol-${thisId}`);
         this.removedDropdown = this.thisDiv.querySelector(`#removed-${thisId}`);
+        this.leftBraceDropdown = this.thisDiv.querySelector(`#left-brace-${thisId}`);
+        this.rightBraceDropdown = this.thisDiv.querySelector(`#right-brace-${thisId}`);
 
         this.addedButton = this.thisDiv.querySelector(`#add-added-${thisId}`);
         this.alterationButton = this.thisDiv.querySelector(`#add-alteration-${thisId}`);
@@ -29,8 +31,8 @@ export class Elements {
         this.added = [];
 
         this.allComponents = [this.minorBox, this.positionDropdown, this.rootDropdown,
-            this.symbolDropdown, this.removedDropdown, this.addedButton,
-            this.alterationButton];//, this.suspensionButton];
+            this.symbolDropdown, this.removedDropdown, this.addedButton, this.alterationButton,
+            this.suspensionButton, this.leftBraceDropdown, this.rightBraceDropdown];
 
         this.controlButtons = [this.resetButton, this.cancelButton, this.addButton];
 
@@ -69,7 +71,7 @@ export class Elements {
     addOnClickEvents()
     {
         this.addedButton.addEventListener('click', (event) => { this.addAdded(event); });
-        // this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
+        this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
         this.alterationButton.addEventListener('click', (event) => { this.addAlteration(event); });
         this.resetButton.addEventListener('click', () => { this.resetAll(); });
         this.addButton.addEventListener('click', () => { this.task.addFunction(this); return false; });
@@ -201,6 +203,9 @@ export class Elements {
         items.forEach(item => {
             this.disableElement(item);
         });
+
+        let minorSpan = document.getElementById(`minor-span-${this.thisId}`);
+        minorSpan.classList.remove('checkmark-border');
     }
     
     enableItems(items) {
@@ -209,6 +214,9 @@ export class Elements {
         items.forEach(item => {
             this.enableElement(item);
         });
+
+        let minorSpan = document.getElementById(`minor-span-${this.thisId}`);
+        minorSpan.classList.add('checkmark-border');
     }
     
     enableElement(button) { button.disabled = false; }

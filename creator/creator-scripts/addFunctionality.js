@@ -72,7 +72,7 @@ export class Elements {
         // this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
         this.alterationButton.addEventListener('click', (event) => { this.addAlteration(event); });
         this.resetButton.addEventListener('click', () => { this.resetAll(); });
-        this.addButton.addEventListener('click', () => { this.task.addFunction(this); });
+        this.addButton.addEventListener('click', () => { this.task.addFunction(this); return false; });
 
         this.addAddedOnClickEvents();
     }

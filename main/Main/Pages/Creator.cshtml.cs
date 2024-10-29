@@ -158,11 +158,11 @@ namespace Main.Pages
                 ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than current date.");
             }
 
-            if (Questions.Count == 0)
+            if (Questions!.Count == 0)
             {
                 ModelState.AddModelError(nameof(Questions), "At least one excersise is required.");
             }
-            else if (Questions.Any(q => q == ""))
+            else if (Questions.Any(q => (q == "" || q == null)))
             {
                 ModelState.AddModelError(nameof(Questions), "No excersise can be empty.");
             }
