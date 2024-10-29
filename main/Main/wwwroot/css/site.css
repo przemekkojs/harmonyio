@@ -55,18 +55,19 @@ body {
 }
 
 .input-error {
-    border: 1px solid #ea3342;
-    background-color: #ffe6e6;
+    border: 1px solid var(--bs-danger-border-subtle);
+    background-color: var(--bs-danger-bg-subtle);
 }
 
-.top-bar {
-    height: 40px;
-    min-height: 40px;
+.hover-primary:hover{
+    background-color: var(--bs-primary);
+    color: white;
+    border-color: var(--bs-primary);
 }
-
-.bottom-bar {
-    height: 80px;
-    min-height: 80px;
+.hover-primary:focus:active {
+    background-color: #0b5ed7;
+    color: white;
+    border-color: #0b5ed7;
 }
 
 .hr {
@@ -123,10 +124,15 @@ body {
 
 .icon-sm {
     font-size: 24px;
+    text-align: center;
+    justify-content: center;
+    width: 30px;
 }
 
 .icon-lg {
     font-size: 30px;
+    text-align: center;
+    justify-content: center;
 }
 
 .no-style {

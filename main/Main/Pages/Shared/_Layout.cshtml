@@ -52,6 +52,12 @@
                                 <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Created" ? "visible" : "invisible")" />
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Groups/Index">
+                                <span class="text-nowrap @(currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details" ? "text-primary" : "")">Grupy</span>
+                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details" ? "visible" : "invisible")" />
+                            </a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
 
