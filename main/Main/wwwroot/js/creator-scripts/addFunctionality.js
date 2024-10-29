@@ -1,8 +1,11 @@
+import { ParsedFunction } from "./function.js";
+
 export class Elements {
     constructor(thisId, task) {
         this.thisId = thisId;
         this.thisDiv = document.getElementById(thisId);
         this.task = task;
+        this.confirmed = false;
         
         this.minorBox = this.thisDiv.querySelector(`#minor-${thisId}`);
         this.positionDropdown = this.thisDiv.querySelector(`#position-${thisId}`);
@@ -36,8 +39,80 @@ export class Elements {
 
         this.controlButtons = [this.resetButton, this.cancelButton, this.addButton];
 
+        this.allPopups = [this.addedPopup, this.suspensionPopup, this.alterationPopup];
+
         this.populateDropdowns();
         this.addOnClickEvents();
+    }
+
+    setId(newId) {
+        this.thisId = newId;
+        this.thisDiv.id = this.thisId;
+
+        this.minorBox.id = `minor-${this.thisId}`;
+        this.positionDropdown.id = `position-${this.thisId}`;
+        this.rootDropdown.id = `root-${this.thisId}`;
+        this.symbolDropdown.id = `symbol-${this.thisId}`;
+        this.removedDropdown.id = `removed-${this.thisId}`;
+        this.leftBraceDropdown.id = `left-brace-${this.thisId}`;
+        this.rightBraceDropdown.id = `right-brace-${this.thisId}`;
+
+        this.addedButton.id = `add-added-${this.thisId}`;
+        this.alterationButton.id = `add-alteration-${this.thisId}`;
+        this.suspensionButton.id = `add-suspension-${this.thisId}`;
+
+        this.resetButton.id = `reset-creator-${this.thisId}`;
+        this.cancelButton.id = `cancel-creator-${this.thisId}`;
+        this.addButton.id = `submit-creator-${this.thisId}`;
+
+        this.addedPopup.id = `added-popup-${this.thisId}`;
+        this.suspensionPopup.id = `suspension-popup-${this.thisId}`;
+        this.alterationPopup.id = `alteration-popup-${this.thisId}`;
+    }
+
+    confirm() {
+        this.allPopups.forEach(p => {
+            p.style.display = "none";
+        });
+
+        let minor = this.minorBox.checked;
+        let symbol = this.symbolDropdown.value;
+        let position = this.positionDropdown.value;
+        let root = this.rootDropdown.value;
+        let removed = this.removedDropdown.value;
+        let alterations = this.alterations;
+        let added = this.added;
+
+        this.allComponents.forEach(e => {
+            e.classList.add('hide-border');
+        });
+
+        if (symbol === "") {
+            alert('Nie mo¿na dodaæ pustej funkcji!'); // TODO: Daæ jakieœ ³adniejsze coœ XD
+            return null;
+        }
+
+        this.disableItems(this.allComponents);
+        this.addButton.disabled = true;
+        this.confirmed = true;
+
+        let splitted = this.thisId.split('-');
+        let barId = splitted[1];
+        let verticalId = splitted[2];
+
+        let functionResult = new ParsedFunction(
+            barId,
+            verticalId,
+            minor,
+            symbol,
+            position,
+            root,
+            removed,
+            alterations,
+            added
+        );
+
+        return functionResult;
     }
 
     populateDropdowns() {
@@ -74,7 +149,7 @@ export class Elements {
         this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
         this.alterationButton.addEventListener('click', (event) => { this.addAlteration(event); });
         this.resetButton.addEventListener('click', () => { this.resetAll(); });
-        this.addButton.addEventListener('click', () => { this.task.addFunction(this); return false; });
+        this.addButton.addEventListener('click', () => { this.task.confirmFunction(this); return false; });
 
         this.addAddedOnClickEvents();
     }
@@ -224,6 +299,7 @@ export class Elements {
     
     resetAll() {
         this.enableItems(this.allComponents);
+        this.confirmed = false;
     
         [this.positionDropdown, this.symbolDropdown, this.removedDropdown, this.rootDropdown].forEach(component => {
             component.value = ' ';

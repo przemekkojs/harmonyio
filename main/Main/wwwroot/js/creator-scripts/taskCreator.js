@@ -13,7 +13,7 @@ export function createTask(parent, id) {
                 <option value="3/8">3/8</option>
                 <option value="6/8">6/8</option>
             </select>
-                        
+
             <label for="tonation-name-select-task-${id}">Tonacja: </label>
             <select id="tonation-name-select-task-${id}" class="smaller-select">
                 <option value="C">C</option>
@@ -56,11 +56,21 @@ export function createTask(parent, id) {
     parent.appendChild(taskDiv);
 
     let toAppend = new Task(id);    
-    let taskSubmitButton = document.getElementById(`submit-${id}`);
-
-    taskSubmitButton.addEventListener('click', () => {
-        toAppend.submitTask();
-    });
-    
     tasks.push(toAppend);
+}
+
+export function loadTasks(parent, questions) {
+    const parsedQuestions = JSON.parse(questions);
+    const excersises = [];
+    const questionTexts = [];
+
+    parsedQuestions.forEach(x => {
+        const excersise = x.task;
+        const question = x.question;
+
+        excersises.push(excersise);
+        questionTexts.push(question);
+    }); 
+
+    return excersises;
 }

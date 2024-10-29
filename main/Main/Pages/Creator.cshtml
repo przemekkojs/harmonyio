@@ -52,10 +52,11 @@
         <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions"/>
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
+            <input type="button" value="Test" onclick="confirmExcersises()" />
             @if (!Model.BrowseOnly)
             {
-                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto">Zapisz</button>
-                <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3">Opublikuj</button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto" onclick="confirmExcersises()">Zapisz</button>
+                <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3" onclick="confirmExcersises()">Opublikuj</button>
             }
             else
             {
@@ -72,10 +73,28 @@
 <script type="module">
     import { tasks, createTask } from "./js/creator-scripts/taskCreator.js";
 
-    const excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
+    const excersises = @Html.Raw(
+        Json.Serialize(
+            Model.Questions?
+                .Select(q => q ?? "")
+                .ToList() ?? new List<string>()
+        ));
+
     const excersiseContainer = document.getElementById('excersise-container');
     const questionsValidationError = document.getElementById('questions-validation-error');
     const questions = document.getElementById(`questions`);
+
+    function addExisting() {
+        excersises.forEach(x => {
+
+        });
+    }
+
+    window.confirmExcersises = function() {        
+        questions.value = JSON.stringify(excersises);
+        console.log(questions.value);
+        questionsValidationError.innerText = '';
+    }
 
     window.addExcersise = function () {
         excersises.push("");
@@ -108,14 +127,18 @@
         const index = children.indexOf(taskText);
 
         const questionText = document.getElementById(`question-task-${index}`);
-        const questionValue = questionText.value;
 
-        excersises[index] = JSON.stringify({
-            question: questionValue,
-            task: tasks[index].submitTask()
-        });
+        excersises[index] = {
+            question: questionText.value,
+            task: tasks[index].result
+        };
 
-        questions.value = JSON.stringify(excersises);
+        const taskToConfirm = tasks.filter(x => x.id == index)[0];
+        const confirmResult = taskToConfirm.confirmAll();
+
+        if (!confirmResult)
+            return;
+
         questionsValidationError.innerText = '';
     }
 
@@ -134,11 +157,13 @@
             removeButton.onclick = null;
         
         excersises.splice(index, 1);
+
+        questionsValidationError.innerText = '';
     }
 </script>
 
 @section Scripts {
     @{
-        <partial name="_ValidationScriptsPartial" />
+            <partial name="_ValidationScriptsPartial" />
     }
 }

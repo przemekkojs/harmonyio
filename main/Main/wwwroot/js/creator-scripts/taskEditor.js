@@ -1,6 +1,5 @@
 import { createComponent } from "./createComponentCreator.js";
 import { Elements } from "./addFunctionality.js";
-import { ParsedFunction } from "./function.js";
 
 let allElements = [];
 
@@ -10,24 +9,34 @@ class Function {
         this.barIndex = bar.index;
         this.taskId = bar.taskId;
         this.bar = bar;
+        this.id = `x${this.taskId}-${this.barIndex}-${this.functionIndex}`;
         this.barElement = document.getElementById(`bar-${this.taskId}-${this.barIndex}`);
 
-        let component = document.createElement('div');
-        let newId = `x${this.taskId}-${this.barIndex}-${this.functionIndex}`;
-        component.id = newId;
+        const component = document.createElement('div');
+        component.id = this.id;
         component.className = 'task-box';
-        component.innerHTML = createComponent(newId);
+        component.innerHTML = createComponent(this.id);
 
         this.component = component;        
         this.barElement.insertBefore(this.component, this.barElement.children[this.functionIndex + 1]);
 
-        allElements.push(new Elements(newId, task));
-        let remover = component.querySelector(`#cancel-creator-${newId}`);
+        this.element = new Elements(this.id, task);
+        allElements.push(this.element);
 
-        remover.addEventListener('click', () => {
-            this.bar.removeFunction()
-        });
+        this.remover = component.querySelector(`#cancel-creator-${this.id}`);
+        this.remover.addEventListener('click', () => this.handleRemoveClick());
+
+        this.resetter = component.querySelector(`#reset-creator-${this.id}`);
+        this.resetter.addEventListener('click', () => this.handleResetClick());
     }
+
+    handleRemoveClick = () => {
+        this.bar.removeFunction(this.id);
+    };
+
+    handleResetClick = () => {
+        this.bar.resetFunction(this.id);
+    };
 }
 
 class Bar {
@@ -58,17 +67,50 @@ class Bar {
         }            
     }
 
-    removeFunction() {
-        if (this.functions.length > 0) {
-            let element = this.functions.pop();
-            this.bar.removeChild(element.component);
-        }        
+    resetFunction(id) {
+        const element = this.functions.filter(f => f.id == id)[0];
+        const elementIndex = this.functions.indexOf(element);
+        this.functions.splice(elementIndex, 1);
+
+        console.log(this.functions);
+    }
+
+    removeFunction(id) {
+        const element = this.functions.filter(f => f.id == id)[0];
+        const elementIndex = this.functions.indexOf(element);
+        this.functions.splice(elementIndex, 1);
+
+        this.functions.forEach(f => {
+            if (f.functionIndex > element.functionIndex) {
+                const oldId = f.id;
+                const newId = `x${f.taskId}-${f.barIndex}-${f.functionIndex - 1}`;
+
+                f.remover = f.component.querySelector(`#cancel-creator-${oldId}`);
+                f.remover.removeEventListener('click', f.handleRemoveClick)
+                f.remover.addEventListener('click', () => {
+                    f.bar.removeFunction(newId);
+                });
+
+                f.resetter = f.component.querySelector(`#reset-creator-${oldId}`);
+                f.resetter.removeEventListener('click', f.handleResetClick)
+                f.resetter.addEventListener('click', () => {
+                    f.bar.resetFunction(newId);
+                });
+
+                f.functionIndex--;
+                f.id = newId;
+                f.component.id = newId;
+                // f.component.innerHTML = createComponent(newId);
+                f.element.setId(newId);
+            }
+        });
+
+        this.bar.removeChild(element.component);
     }
 
     removeAll() {
-        while (this.functions.length > 0) {
-            this.removeFunction();
-        }
+        this.functions = [];
+        this.bar.replaceChildren();
     }
 }
 
@@ -162,51 +204,33 @@ export class Task {
         }
     }
 
-    addFunction(element) {
-        element.addedPopup.style.display = "none";
-        element.suspensionPopup.style.display = "none";
-        element.alterationPopup.style.display = "none";
-    
-        let minor = element.minorBox.checked;
-        let symbol = element.symbolDropdown.value;
-        let position = element.positionDropdown.value;
-        let root = element.rootDropdown.value;
-        let removed = element.removedDropdown.value;
-        let alterations = element.alterations;
-        let added = element.added;
+    confirmFunction(element) {
+        if (element.confirmed)
+            return true;
 
-        element.allComponents.forEach(e => {
-            e.classList.add('hide-border');
-        });
-    
-        if (symbol === "") {
-            alert('Nie można dodać pustej funkcji!');
-            return null;
+        const confirmResult = element.confirm();    
+
+        if (confirmResult !== null) {
+            this.result.push(confirmResult);
+            return true;
         }
-    
-        element.disableItems(element.allComponents);
-        element.addButton.disabled = true;
-    
-        let splitted = element.thisId.split('-');
-        let barId = splitted[1];
-        let verticalId = splitted[2];
-    
-        let functionResult = new ParsedFunction(
-            barId,
-            verticalId,
-            minor,
-            symbol,
-            position,
-            root,
-            removed,
-            alterations,
-            added
-        );
-    
-        this.result.push(functionResult);
+        else {
+            return false;
+        }   
     }
 
-    submitTask() {
-        return JSON.stringify(this.result);
+    confirmAll() {
+        this.bars.forEach(b => {
+            b.functions.forEach(f => {
+                if (f.taskId === this.id) {
+                    const currentResult = this.confirmFunction(f.element);
+
+                    if (!currentResult)
+                        return false;
+                }
+            });
+        });
+
+        return true;
     }
 }
