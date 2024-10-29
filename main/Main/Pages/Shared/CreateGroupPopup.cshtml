@@ -1,0 +1,64 @@
+@*
+CREATE GROUP MODAL POPUP
+
+ATRYBUTY:
+    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku create, callback musi zawierać 1 argument - nazwę grupy
+*@
+
+<div class="modal fade" id="createGroupPopup" tabindex="-1" role="dialog" aria-labelledby="createPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPopupLongTitle">Utwórz grupę</h5>
+            </div>
+            <div class="modal-body">
+                <label class="form-label fw-bold">Nazwa</label>
+                <input id="groupName" class="form-control" placeholder="Wpisz nazwę grupy..." oninput="updateGroupName(this.value)">
+                <span id="groupNameValidation" class="text-danger"></span>
+            </div>
+            <div class="modal-footer">
+                <button id="createCancelButton" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                <button id="createGroupButton" class="btn btn-primary">Utwórz grupę</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const validation = document.getElementById('groupNameValidation');
+
+    var createGroupModalButton;
+    var groupName = "";
+
+    var createGroupPopup = document.getElementById('createGroupPopup');
+    createGroupPopup.addEventListener('show.bs.modal', function (event) {
+        createGroupModalButton = event.relatedTarget;
+
+        document.getElementById('groupName').value = "";
+        updateGroupName("");
+    });
+
+    var createGroupButton = createGroupPopup.querySelector('#createGroupButton');
+    createGroupButton.addEventListener('click', function (event) {
+        var callbackName = createGroupModalButton.getAttribute('data-callback-name');
+
+        if (groupName === "") {
+            validation.innerText = "Nazwa grupy nie może być pusta!";
+            return;
+        }
+
+        if (typeof window[callbackName] === 'function') {
+            window[callbackName](groupName);
+            var closebutton = document.getElementById('createCancelButton');
+            closebutton.click();
+        } else {
+            console.error("Callback function not found:", callbackName);
+        }
+    });
+
+    function updateGroupName(value) {
+        groupName = value;
+        validation.innerText = "";
+    }
+
+</script>

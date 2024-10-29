@@ -7,9 +7,21 @@ namespace Main.Pages
     {
         public bool IsAdmin { get; set; }
 
-        public void OnGet(int id, bool admin = false)
+        public void OnGet(int id)
         {
-            IsAdmin = admin;
+            IsAdmin = (bool)(TempData["IsAdmin"] ?? false);
+        }
+
+        public IActionResult OnPostRedirectToIndexOwned()
+        {
+            TempData["OwnedShown"] = true;
+            return RedirectToPage("Index");
+        }
+
+        public IActionResult OnPostRedirectToIndexJoined()
+        {
+            TempData["OwnedShown"] = false;
+            return RedirectToPage("Index");
         }
     }
 }

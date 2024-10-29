@@ -26,7 +26,8 @@
                 <input id="searchInput" class="form-control" type="search" placeholder="Search" aria-label="Search" oninput="filterGroups(this.value)">
             </div>
 
-            <button class="ms-auto btn btn-primary fw-bold text-nowrap">
+            <button class="ms-auto btn btn-primary fw-bold text-nowrap" data-bs-toggle="modal"
+                    data-bs-target="#createGroupPopup" data-callback-name="createGroup">
                 Utwórz grupę
             </button>
         </div>
@@ -55,14 +56,17 @@
 
                         <div class="d-flex flex-column h-100">
                             <div class="d-flex flex-row">
-                                <a class="btn-icon ms-auto">
+                                <a class="btn-icon ms-auto" data-bs-toggle="modal" data-bs-target="#deleteGroupPopup"
+                                   data-group-name="Klasa @(i)A" data-on-delete="deleteGroup(@i)">
                                     <i class="far fa-trash-can icon-sm"></i>
                                 </a>
                             </div>
 
-                            <a asp-page="Details" asp-route-id="1" asp-route-admin="true" class="btn btn-primary ms-auto mt-auto">
-                                Szczegóły
-                            </a>
+                            <form method="post" asp-page-handler="RedirectToDetailsAdmin" class="ms-auto mt-auto">
+                                <button type="submit" class="btn btn-primary">
+                                    Szczegóły
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -92,9 +96,11 @@
                         </div>
 
                         <div class="d-flex flex-column h-100">
-                            <a asp-page="Details" asp-route-id="1" class="btn btn-primary ms-auto mt-auto">
-                                Szczegóły
-                            </a>
+                            <form method="post" asp-page-handler="RedirectToDetailsUser" class="ms-auto mt-auto">
+                                <button type="submit" class="btn btn-primary">
+                                    Szczegóły
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -104,7 +110,11 @@
     </div>
 </div>
 
+<partial name="~/Pages/Shared/DeleteGroupPopup.cshtml" />
+<partial name="~/Pages/Shared/CreateGroupPopup.cshtml" />
+
 <script>
+
     const ownedGroupsButton = document.getElementById("ownedGroupsButton");
     const joinedGroupsButton = document.getElementById("joinedGroupsButton");
     const ownedGroupsList = document.getElementById("ownedGroupsList");
@@ -114,14 +124,14 @@
     const ownedGroups = document.getElementsByClassName("owned-groups");
     const joinedGroups = document.getElementsByClassName("joined-groups");
 
-    var ownedGroupsShown = false;
+    var ownedGroupsShown = @((TempData["OwnedShown"] ?? false).ToString()!.ToLower());
 
     function switchTab(selectedButton) {
         if (selectedButton == ownedGroupsButton) {
             ownedGroupsButton.classList.add("btn-primary");
-            ownedGroupsButton.classList.remove("btn-outline-dark", "btn-outline-secondary");
-            joinedGroupsButton.classList.add("btn-outline-secondary");
-            joinedGroupsButton.classList.remove("btn-primary", "btn-outline-dark");
+            ownedGroupsButton.classList.remove("btn-outline-dark", "hover-primary");
+            joinedGroupsButton.classList.add("btn-outline-dark", "hover-primary");
+            joinedGroupsButton.classList.remove("btn-primary");
 
             joinedGroupsList.classList.add("d-none")
             ownedGroupsList.classList.remove("d-none");
@@ -129,9 +139,9 @@
             ownedGroupsShown = true;
         } else {
             joinedGroupsButton.classList.add("btn-primary");
-            joinedGroupsButton.classList.remove("btn-outline-dark", "btn-outline-secondary");
-            ownedGroupsButton.classList.add("btn-outline-secondary");
-            ownedGroupsButton.classList.remove("btn-primary", "btn-outline-dark");
+            joinedGroupsButton.classList.remove("btn-outline-dark", "hover-primary");
+            ownedGroupsButton.classList.add("btn-outline-dark", "hover-primary");
+            ownedGroupsButton.classList.remove("btn-primary");
 
             ownedGroupsList.classList.add("d-none")
             joinedGroupsList.classList.remove("d-none");
@@ -157,6 +167,19 @@
         }
     }
 
-    switchTab(joinedGroupsButton);
+    switchTab(ownedGroupsShown ? ownedGroupsButton : joinedGroupsButton);
+
+
+    function deleteGroup(groupId) {
+        //TODO: Delte group and refresh page
+
+        console.log("deleting group " + groupId);
+    }
+
+    function createGroup(groupName) {
+        //TODO: Create group and go to group details
+
+        console.log("creating group " + groupName);
+    }
 
 </script>
