@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Main.Pages;
 
 [Authorize] 
-public class GroupsModel : PageModel
+public class GroupsBackModel : PageModel
 {   
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationRepository _repository;
@@ -27,14 +27,14 @@ public class GroupsModel : PageModel
     public bool AsTeacher { get; set; }
 
 
-    public ICollection<GroupRequest> Requests { get; set; } = [];
+    public ICollection<GroupRequest> Requests { get; set; } = null!;
 
-    public ICollection<UsersGroup> StudentInGroups { get; set; } = [];
+    public ICollection<UsersGroup> StudentInGroups { get; set; } = null!;
 
-    public ICollection<UsersGroup> TeacherInGroups { get; set; } = [];
+    public ICollection<UsersGroup> TeacherInGroups { get; set; } = null!;
 
 
-    public GroupsModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
+    public GroupsBackModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
         _repository = repository;
@@ -86,7 +86,7 @@ public class GroupsModel : PageModel
 
         var group = new UsersGroup(){
             Name = GroupName,
-            Teachers = [user]
+            Teachers = new List<ApplicationUser>() { user }
         };
 
         _repository.Add(group);

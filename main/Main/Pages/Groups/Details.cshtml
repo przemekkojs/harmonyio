@@ -1,0 +1,216 @@
+﻿@page
+@model Main.Pages.GroupDetailsModel
+@{
+}
+
+<div class="h-100 w-100 d-flex flex-row pb-3">
+    <div class="h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
+        <button class="btn btn-primary d-flex align-items-center justify-content-start p-3 mb-2">
+            <i class="fas fa-user icon-sm me-2"></i>
+            <span>Posiadane grupy</span>
+        </button>
+        <button class="btn btn-outline-dark hover-primary d-flex align-items-center justify-content-start p-3">
+            <i class="fas fa-user-group icon-sm me-2"></i>
+            <span>Dołączone grupy</span>
+        </button>
+    </div>
+
+    <div class="h-100 w-100 flex-group-1 d-flex flex-column p-3 bg-white rounded shadow">
+        <div class="d-flex flex-column mb-3">
+            <span class="fs-3 fw-bold mb-2">Klasa 1A</span>
+            <div class="d-flex flex-row">
+                <button class="btn btn-primary d-flex align-items-center p-3 me-3">
+                    <i class="fas fa-user-group icon-sm me-2"></i>
+                    <span>Uczestnicy</span>
+                </button>
+                <button class="btn btn-outline-dark hover-primary d-flex align-items-center p-3">
+                    <i class="fas fa-music icon-sm me-2"></i>
+                    <span>Quizy</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="h-100 d-flex flex-row overflow-auto d-none" style="margin: -20px; padding: 20px;">
+            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+                <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
+                    <span class="mx-auto">Uczestnicy</span>
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
+                    <div class="d-flex flex-row fw-bold mb-2">
+                        <span class="me-1">Aktywni</span>
+                        <span class="me-auto">(2)</span>
+                    </div>
+
+                    <div class="d-flex flex-column">
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                            <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row fw-bold mb-2">
+                        <span class="me-1">Oczekujący</span>
+                        <span class="me-auto">(2)</span>
+                    </div>
+
+                    <div class="d-flex flex-column">
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="bg-light rounded-bottom d-flex flex-row fw-bold p-2">
+                    <button class="btn btn-primary mx-auto">Dodaj uczestników</button>
+                </div>
+            </div>
+
+            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+                <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
+                    <span class="mx-auto">Administratorzy</span>
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
+                    <div class="d-flex flex-row fw-bold mb-2">
+                        <span class="me-1">Aktywni</span>
+                        <span class="me-auto">(2)</span>
+                    </div>
+
+                    <div class="d-flex flex-column">
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <i class="fas fa-crown icon-sm me-1"></i>
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                        </div>
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                            <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+                        </div>
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                            <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+                        </div>
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                            <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+                        </div>
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                            <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+                        </div>
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                            <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row fw-bold mb-2">
+                        <span class="me-1">Oczekujący</span>
+                        <span class="me-auto">(2)</span>
+                    </div>
+
+                    <div class="d-flex flex-column">
+                        <div class="bg-light rounded-bottom rounded border d-flex flex-row p-2 mb-2">
+                            <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="bg-transparent d-flex flex-row fw-bold p-2">
+                    <button class="btn btn-primary mx-auto">Dodaj administratorów</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="h-100 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px;">
+            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+                <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
+                    <span class="mx-auto">Aktywne</span>
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(i > 0 ? "mt-2" : "")">
+                            <div class="flex-grow-1 d-flex flex-column">
+                                <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="far fa-clock icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Pozostało:</span>
+                                    <span id="to-solve-time-@(i)">
+                                        @*FILLED VIA JS*@
+                                    </span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="fas fa-music icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Zadania:</span>
+                                    <span>12</span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center">
+                                    <i class="fas fa-user icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Twórca:</span>
+                                    <span>Janusz Kowlaski</span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column h-100">
+                                <a class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+                <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
+                    <span class="mx-auto">Zaplanowane</span>
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(i > 0 ? "mt-2" : "")">
+                            <div class="flex-grow-1 d-flex flex-column">
+                                <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div>
+
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="far fa-clock icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Dostępne za:</span>
+                                    <span id="future-quiz-time-@(i)">
+                                        @*FILLED VIA JS*@
+                                    </span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="fas fa-music icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Zadania:</span>
+                                    <span>12</span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center">
+                                    <i class="fas fa-user icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Twórca:</span>
+                                    <span>Janusz Kowalski</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

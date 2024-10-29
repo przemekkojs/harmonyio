@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Main.Pages
 {
     [Authorize]
-    public class GroupDetailsModel : PageModel
+    public class GroupDetailsBackModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
@@ -24,7 +24,7 @@ namespace Main.Pages
         
         
         [BindProperty]
-        public List<string> Emails { get; set; } = [];
+        public List<string> Emails { get; set; } = null!;
         [BindProperty]
         public int? GroupId { get; set; } = null;
         [BindProperty]
@@ -32,15 +32,15 @@ namespace Main.Pages
         [BindProperty]
         public bool ForTeachers { get; set; }
 
-        public List<ApplicationUser> Students { get; set; } = [];
+        public List<ApplicationUser> Students { get; set; } = null!;
 
-        public List<ApplicationUser> Teachers { get; set; } = [];
+        public List<ApplicationUser> Teachers { get; set; } = null!;
 
-        public List<GroupRequest> Requests { get; set; } = [];
+        public List<GroupRequest> Requests { get; set; } = null!;
 
         public int Id { get; set; } = 0;
 
-        public GroupDetailsModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
+        public GroupDetailsBackModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
             _userManager = userManager;

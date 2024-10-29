@@ -1,0 +1,162 @@
+﻿@page
+@model Main.Pages.GroupsIndexModel
+@{
+}
+
+<div class="h-100 w-100 d-flex flex-row pb-3">
+    <div class="h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
+        <button id="ownedGroupsButton" onclick="switchTab(this)"
+                class="btn btn-outline-dark hover-primary d-flex align-items-center justify-content-start p-3 mb-2">
+            <i class="fas fa-user icon-sm me-2"></i>
+            <span>Posiadane grupy</span>
+        </button>
+        <button id="joinedGroupsButton" onclick="switchTab(this)"
+                class="btn btn-primary d-flex align-items-center justify-content-start p-3">
+            <i class="fas fa-user-group icon-sm me-2"></i>
+            <span>Dołączone grupy</span>
+        </button>
+    </div>
+
+    <div class="h-100 w-100 flex-group-1 d-flex flex-column bg-white shadow rounded p-3 overflow-auto">
+        <div class="d-flex flex-row">
+            <div class="input-group me-3">
+                <span class="input-group-text p-3">
+                    <i class="fas fa-search icon-sm"></i>
+                </span>
+                <input id="searchInput" class="form-control" type="search" placeholder="Search" aria-label="Search" oninput="filterGroups(this.value)">
+            </div>
+
+            <button class="ms-auto btn btn-primary fw-bold text-nowrap">
+                Utwórz grupę
+            </button>
+        </div>
+
+        <div class="row px-3 pt-3 pb-1 d-none" id="ownedGroupsList">
+            @for (int i = 0; i < 3; i++)
+            {
+                <div class="owned-groups col-6 p-0 m-0 @(i % 2 == 0 ? "pe-3" : "") @(i > 1 ? "pt-3" : "")"
+                     data-name="Klasa @(i)A">
+                    <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
+                        <div class="flex-grow-1 d-flex flex-column">
+                            <div class="fw-bold fs-5 mb-3">Klasa @(i)A</div>
+
+                            <div class="d-flex flex-row mb-2">
+                                <i class="fas fa-user icon-sm me-2"></i>
+                                <span class="fw-bold me-1">Twórca:</span>
+                                <span>Kamil Nowak</span>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <i class="fas fa-user-group icon-sm me-2"></i>
+                                <span class="fw-bold me-1">Uczniowie:</span>
+                                <span>24</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column h-100">
+                            <div class="d-flex flex-row">
+                                <a class="btn-icon ms-auto">
+                                    <i class="far fa-trash-can icon-sm"></i>
+                                </a>
+                            </div>
+
+                            <a asp-page="Details" asp-route-id="1" asp-route-admin="true" class="btn btn-primary ms-auto mt-auto">
+                                Szczegóły
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="row px-3 pt-3 pb-1" id="joinedGroupsList">
+            @for (int i = 0; i < 3; i++)
+            {
+                <div class="joined-groups col-6 p-0 m-0 @(i % 2 == 0 ? "pe-3" : "") @(i > 1 ? "pt-3" : "")"
+                     data-name="Klasa @(i)B">
+                    <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
+                        <div class="flex-grow-1 d-flex flex-column">
+                            <div class="fw-bold fs-5 mb-3">Klasa @(i)B</div>
+
+                            <div class="d-flex flex-row mb-2">
+                                <i class="fas fa-user icon-sm me-2"></i>
+                                <span class="fw-bold me-1">Twórca:</span>
+                                <span>Kamil Nowak</span>
+                            </div>
+
+                            <div class="d-flex flex-row">
+                                <i class="fas fa-user-group icon-sm me-2"></i>
+                                <span class="fw-bold me-1">Uczniowie:</span>
+                                <span>24</span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column h-100">
+                            <a asp-page="Details" asp-route-id="1" class="btn btn-primary ms-auto mt-auto">
+                                Szczegóły
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const ownedGroupsButton = document.getElementById("ownedGroupsButton");
+    const joinedGroupsButton = document.getElementById("joinedGroupsButton");
+    const ownedGroupsList = document.getElementById("ownedGroupsList");
+    const joinedGroupsList = document.getElementById("joinedGroupsList");
+
+    const searchInput = document.getElementById("searchInput");
+    const ownedGroups = document.getElementsByClassName("owned-groups");
+    const joinedGroups = document.getElementsByClassName("joined-groups");
+
+    var ownedGroupsShown = false;
+
+    function switchTab(selectedButton) {
+        if (selectedButton == ownedGroupsButton) {
+            ownedGroupsButton.classList.add("btn-primary");
+            ownedGroupsButton.classList.remove("btn-outline-dark", "btn-outline-secondary");
+            joinedGroupsButton.classList.add("btn-outline-secondary");
+            joinedGroupsButton.classList.remove("btn-primary", "btn-outline-dark");
+
+            joinedGroupsList.classList.add("d-none")
+            ownedGroupsList.classList.remove("d-none");
+
+            ownedGroupsShown = true;
+        } else {
+            joinedGroupsButton.classList.add("btn-primary");
+            joinedGroupsButton.classList.remove("btn-outline-dark", "btn-outline-secondary");
+            ownedGroupsButton.classList.add("btn-outline-secondary");
+            ownedGroupsButton.classList.remove("btn-primary", "btn-outline-dark");
+
+            ownedGroupsList.classList.add("d-none")
+            joinedGroupsList.classList.remove("d-none");
+
+            ownedGroupsShown = false;
+        }
+
+        searchInput.value = "";
+        filterGroups("");
+    }
+
+    function filterGroups(phrase) {
+        const groups = ownedGroupsShown ? ownedGroups : joinedGroups;
+
+        for (const group of groups) {
+            const nameAttribute = group.getAttribute("data-name");
+
+            if (nameAttribute && nameAttribute.toLowerCase().includes(phrase.toLowerCase())) {
+                group.classList.remove("d-none");
+            } else {
+                group.classList.add("d-none");
+            }
+        }
+    }
+
+    switchTab(joinedGroupsButton);
+
+</script>
