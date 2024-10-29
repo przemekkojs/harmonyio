@@ -49,6 +49,7 @@
         </div>
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
+        <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions"/>
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             @if (!Model.BrowseOnly)
@@ -74,6 +75,7 @@
     const excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
     const excersiseContainer = document.getElementById('excersise-container');
     const questionsValidationError = document.getElementById('questions-validation-error');
+    const questions = document.getElementById(`questions`);
 
     window.addExcersise = function () {
         excersises.push("");
@@ -83,18 +85,18 @@
         textBox.className = "task-content w-100 p-3";
         textBox.id = `task-container-${index}`;
         textBox.innerHTML = `
-        <div id="question-task-${index}">
-            <input type="text" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" @(Model.BrowseOnly ? "readonly" : "")>
-        </div>`;
+            <input type="text" id="question-task-${index}" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" @(Model.BrowseOnly ? "readonly" : "")>            
+        `;
 
         excersiseContainer.appendChild(textBox);
         createTask(textBox, index);
         
+        const id = `task-container-${index}`;
         const removeButton = document.getElementById(`delete-${index}`);
-        removeButton.addEventListener('click', () => { removeExcersise(`task-container-${index}`); });
+        removeButton.addEventListener('click', () => { removeExcersise(id); });
 
         const confirmButton = document.getElementById(`submit-${index}`);
-        confirmButton.addEventListener('click', () => { updateExcersise(`task-container-${index}`); });
+        confirmButton.addEventListener('click', () => { updateExcersise(id); });
         
         questionsValidationError.innerText = '';
     }
@@ -105,7 +107,7 @@
         const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
 
-        const questionText = document.getElementById(`question-task-${index}`).querySelector('input');
+        const questionText = document.getElementById(`question-task-${index}`);
         const questionValue = questionText.value;
 
         excersises[index] = JSON.stringify({
@@ -113,6 +115,7 @@
             task: tasks[index].submitTask()
         });
 
+        questions.value = JSON.stringify(excersises);
         questionsValidationError.innerText = '';
     }
 
