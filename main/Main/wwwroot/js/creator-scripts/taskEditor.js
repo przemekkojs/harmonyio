@@ -71,16 +71,12 @@ class Bar {
         const element = this.functions.filter(f => f.id == id)[0];
         const elementIndex = this.functions.indexOf(element);
         this.functions.splice(elementIndex, 1);
-
-        console.log(this.functions);
     }
 
     removeFunction(id) {
         const element = this.functions.filter(f => f.id == id)[0];
         const elementIndex = this.functions.indexOf(element);
         this.functions.splice(elementIndex, 1);
-
-        console.log(this.functions);
 
         this.functions.forEach(f => {
             if (f.functionIndex > element.functionIndex) {
@@ -222,6 +218,8 @@ export class Task {
     }
 
     confirmAll() {
+        this.result = [];
+
         this.bars.forEach(b => {
             b.functions.forEach(f => {
                 if (f.taskId === this.id) {

@@ -10,6 +10,7 @@
     <div class="h-100 w-100 d-flex flex-column">
         @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
         @*Nie no, luzik mordeczko, rozumiemy Cię.*@
+        @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się czym przejmować*@
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
@@ -72,8 +73,9 @@
 
 <script type="module">
     import { tasks, createTask } from "./js/creator-scripts/taskCreator.js";
+    import { parseTonationToAccidentalsCount } from "./js/utils.js";
 
-    const excersises = @Html.Raw(
+    let excersises = @Html.Raw(
         Json.Serialize(
             Model.Questions?
                 .Select(q => q ?? "")
@@ -92,8 +94,43 @@
 
     window.confirmExcersises = function() {        
         questions.value = JSON.stringify(excersises);
-        console.log(questions.value);
         questionsValidationError.innerText = '';
+
+        excersises = [];
+
+        tasks.forEach(t => {
+            const id = `task-container-${t.id}`;
+            const taskText = document.getElementById(id);
+            const children = Array.from(excersiseContainer.children);
+            const index = children.indexOf(taskText);
+
+            const questionText = document.getElementById(`question-task-${index}`);
+            const tonationLetterSelect = document.getElementById(`tonation-name-select-task-${index}`);
+            const accidentalSelect = document.getElementById(`accidental-task-${index}`);
+            const modeSelect = document.getElementById(`mode-task-${index}`);
+            const metreSelect = document.getElementById(`metre-select-task-${index}`);
+
+            const metreSplitted = metreSelect.value.split('/');
+            const metreCount = metreSplitted[0];
+            const metreValue = metreSplitted[1];
+
+            const tonationString = `${tonationLetterSelect.value}${accidentalSelect.value}${modeSelect.value}`;
+            const tonationParsed = parseTonationToAccidentalsCount(tonationString);
+            const sharpsCount = tonationParsed[0];
+            const flatsCount = tonationParsed[1];
+
+            const task = tasks[index];
+            task.confirmAll();
+
+            excersises.push({
+                question: questionText.value,
+                sharpsCount: sharpsCount,
+                flatsCount: flatsCount,
+                metreValue: metreCount,
+                metreCount: metreValue,
+                task: task.result
+            });
+        });
     }
 
     window.addExcersise = function () {
@@ -126,22 +163,6 @@
         const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
 
-        const questionText = document.getElementById(`question-task-${index}`);
-        const tonationLetterSelect = document.getElementById(`tonation-name-select-task-${id}`);
-        const accidentalSelect = document.getElementById(`accidental-task-${id}`);
-        const modeSelect = document.getElementById(`mode-task-${id}`);
-        const metreSelect = document.getElementById(`metre-select-task-${id}`);
-        
-
-        excersises[index] = {
-            question: questionText.value,
-            sharpsCount: 0,
-            flatsCount: 0,
-            metreValue: 3,
-            metreCount: 4,
-            task: tasks[index].result
-        };
-
         const taskToConfirm = tasks.filter(x => x.id == index)[0];
         const confirmResult = taskToConfirm.confirmAll();
 
@@ -168,6 +189,6 @@
 
 @section Scripts {
     @{
-            <partial name="_ValidationScriptsPartial" />
+                <partial name="_ValidationScriptsPartial" />
     }
 }
