@@ -1,5 +1,3 @@
-const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
-
 let canvas;
 let canvasWidth = 1288;
 let canvasHeight = 800;
@@ -42,7 +40,7 @@ function setup() {
   menu = new Menu(canvasWidth - menuWidth, 0, menuWidth);
   grandStaff = new GrandStaff(canvasWidth - menuWidth);
   grandStaff.loadFromJson(
-    "",
+    questions[0],
     document.querySelector(`input[name="Answers[0]"]`).value
   );
 }

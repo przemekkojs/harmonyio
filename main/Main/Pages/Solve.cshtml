@@ -20,7 +20,8 @@
 
         <div class="flex-grow-1 w-100 d-flex flex-column">
             <div class="d-flex flex-row align-items-start question-area">
-                <div class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-3">
+                <div
+                    class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-3">
                     <div id="excersise-number" class="fs-1 text-white fw-bold">
                         @*SET VIA JS*@
                     </div>
@@ -100,6 +101,9 @@
         thrashCan: '@Url.Content("~/images/staff-symbols/thrash-can.png")',
         thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
     };
+    const excersises = @Json.Serialize(Model.Quiz.Excersises);
+    const questions = excersises.map(e => JSON.parse(e.question));
+
 </script>
 
 <script src="~/lib/p5/p5.min.js"></script>
@@ -118,8 +122,7 @@
 <script src="~/js/staff-scripts/sketchSolving.js"></script>
 
 <script>
-    var excersises = @Json.Serialize(Model.Quiz.Excersises);
-    var currentIndex = 0;
+    let currentIndex = 0;
 
     function changeAnswer(value) {
         let hiddenInput = document.querySelector(`input[name="Answers[${currentIndex}]"]`);
@@ -127,16 +130,15 @@
     }
 
     function loadQuestion(index, loadToGrandStaff = true) {
-        if (index >= 0 && index < excersises.length) {
+        if (index >= 0 && index < questions.length) {
             document.getElementById("excersise-number").innerText = index + 1;
-            document.getElementById("excersise-question").innerText = excersises[index].question;
+            document.getElementById("excersise-question").innerText = questions[index].question;
 
-            document.getElementById("btn-next").style.display = index === excersises.length - 1 ? 'none' : 'inline-block';
-            document.getElementById("btn-finish").style.display = index === excersises.length - 1 ? 'inline-block' : 'none';
+            document.getElementById("btn-next").style.display = index === questions.length - 1 ? 'none' : 'inline-block';
+            document.getElementById("btn-finish").style.display = index === questions.length - 1 ? 'inline-block' : 'none';
 
-            document.getElementById("answer-input").value = document.querySelector(`input[name="Answers[${currentIndex}]"]`).value;
             if (loadToGrandStaff) {
-                grandStaff.loadFromJson("", document.querySelector(`input[name="Answers[${currentIndex}]"]`).value);
+                grandStaff.loadFromJson(questions[index], document.querySelector(`input[name="Answers[${index}]"]`).value);
             }
 
             generateButtons(index);
@@ -153,28 +155,28 @@
     const maxVisibleButtons = 9;
     const targetVisibleOneSide = Math.floor(maxVisibleButtons / 2)
     function generateButtons(index) {
-        var questionButtonsContainer = document.getElementById("excersises-buttons");
+        const questionButtonsContainer = document.getElementById("excersises-buttons");
         questionButtonsContainer.innerHTML = '';
 
-        var start = Math.max(index - targetVisibleOneSide, 0);
-        var end = Math.min(index + targetVisibleOneSide, excersises.length - 1);
+        let start = Math.max(index - targetVisibleOneSide, 0);
+        let end = Math.min(index + targetVisibleOneSide, questions.length - 1);
 
-        var missingStart = start - (index - targetVisibleOneSide);
-        var missingEnd = (index + targetVisibleOneSide) - end;
+        let missingStart = start - (index - targetVisibleOneSide);
+        let missingEnd = (index + targetVisibleOneSide) - end;
 
         if (missingStart > 0 && missingEnd == 0) {
-            end = Math.min(end + missingStart, excersises.length - 1);
+            end = Math.min(end + missingStart, questions.length - 1);
         }
         else if (missingEnd > 0 && missingStart == 0) {
             start = Math.max(start - missingEnd, 0);
         }
 
-        if (end == excersises.length - 2) {
+        if (end == questions.length - 2) {
             end++;
         }
 
-        for (var i = start; i <= end; i++) {
-            var button = document.createElement("button");
+        for (let i = start; i <= end; i++) {
+            let button = document.createElement("button");
             button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") + " btn-tiny-width p-1";
             button.innerText = i + 1;
 
@@ -193,8 +195,8 @@
             }
         }
 
-        document.getElementById("btn-last-ex").innerText = excersises.length;
-        document.getElementById("div-last-ex").style.display = end < excersises.length - 1 ? 'inline-block' : 'none';
+        document.getElementById("btn-last-ex").innerText = questions.length;
+        document.getElementById("div-last-ex").style.display = end < questions.length - 1 ? 'inline-block' : 'none';
     }
 
 
@@ -207,7 +209,7 @@
     }
 
     function nextQuestion() {
-        if (currentIndex < excersises.length - 1) {
+        if (currentIndex < questions.length - 1) {
             safeStaffAnswer();
             currentIndex++;
             loadQuestion(currentIndex);
@@ -215,9 +217,9 @@
     }
 
     function lastQuestion() {
-        if (currentIndex < excersises.length - 1) {
+        if (currentIndex < questions.length - 1) {
             safeStaffAnswer();
-            currentIndex = excersises.length - 1;
+            currentIndex = questions.length - 1;
             loadQuestion(currentIndex);
         }
     }
@@ -229,22 +231,22 @@
 
     loadQuestion(currentIndex, false);
 
-    var closeDate = new Date("@Model.Quiz.CloseDate.ToString("o")");
+    const closeDate = new Date("@Model.Quiz.CloseDate.ToString("o")");
     function updateTimer() {
-        var now = new Date();
-        var timeRemaining = closeDate - now;
+        const now = new Date();
+        const timeRemaining = closeDate - now;
 
         if (timeRemaining <= 0) {
             document.getElementById("countdown").innerText = "0m 0s";
             return;
         }
 
-        var days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-        var displayText = "";
+        let displayText = "";
 
         if (days > 0) {
             displayText = `${days}d ${hours}h`;

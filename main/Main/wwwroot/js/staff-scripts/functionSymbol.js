@@ -30,6 +30,19 @@ class FunctionSymbol {
     this.isRendered = false;
   }
 
+  static fromJson(parent, task) {
+    return new FunctionSymbol(
+      parent,
+      task.symbol,
+      task.minor,
+      task.position,
+      task.root,
+      task.added,
+      [task.removed],
+      task.alterations
+    );
+  }
+
   #renderCenterGraphic(letterSize) {
     const romanLetterSize = letterSize * 0.3;
     const numberAboveBelowSize = letterSize * 0.4;
@@ -100,14 +113,18 @@ class FunctionSymbol {
 
     let maxWidth = 0;
 
-    let currentY = graphicH / 2 - this.functionLetterH / 6;
+    const topRightOffset =
+      this.numbersTopRight.length === 4
+        ? this.functionLetterH / 6
+        : this.functionLetterH / 2;
+    let currentY = graphicH / 2 - topRightOffset;
     for (let i = this.numbersTopRight.length - 1; i >= 0; i--) {
       numbersRightGraphic.text(this.numbersTopRight[i], 0, currentY);
       maxWidth = Math.max(textWidth(this.numbersTopRight[i]), maxWidth);
       currentY -= yDiff;
     }
 
-    currentY = graphicH / 2 + this.functionLetterH / 6 + yDiff - 1;
+    currentY = graphicH / 2 + this.functionLetterH / 2 + yDiff - 1;
     for (let i = 0; i < this.numbersBottomRight.length; i++) {
       numbersRightGraphic.text(this.numbersBottomRight[i], 0, currentY);
       maxWidth = Math.max(textWidth(this.numbersBottomRight[i]), maxWidth);
