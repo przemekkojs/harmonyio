@@ -198,9 +198,6 @@ export class Task {
     }
 
     confirmFunction(element) {
-        if (element.confirmed)
-            return true;
-
         const confirmResult = element.confirm();    
 
         if (confirmResult !== null) {
@@ -226,6 +223,7 @@ export class Task {
             });
         });
 
+        console.log(this.result);
         return true;
     }
 }
