@@ -70,6 +70,16 @@ body {
     border-color: #0b5ed7;
 }
 
+.overflow-md-auto {
+    overflow: auto;
+}
+
+@media (max-width: 768px) { 
+    .overflow-md-auto {
+        overflow: visible;
+    }
+}
+
 .hr {
     height: 1px;
     min-height: 1px;
@@ -143,7 +153,9 @@ body {
 /*BOOTSTRAP RECOLOR*/
 
 body {
-    background-color: #f8f9fa;
+    background: url('/images/bg-pattern.png') repeat, linear-gradient(#2d53b2, #426edb);
+    background-size: 38vw 38vw, cover;
+    background-position: 0 0, center;
 }
 
 

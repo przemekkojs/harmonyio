@@ -1,15 +1,7 @@
-﻿.quiz {
-    padding: 15px;
-    margin-bottom: 20px;
-    align-items: center;
-    border-radius: 10px;
-    background-color: white;
-}
-
-.quiz-add {
+﻿.quiz-add {
     text-align: center;
     cursor: pointer;
-    color: #6e757c;
+    color: var(--bs-gray-600);
     border-style: dashed;
     height: 168px;
     min-height: 168px;
