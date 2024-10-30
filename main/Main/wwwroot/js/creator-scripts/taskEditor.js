@@ -12,31 +12,38 @@ class Function {
         this.id = `x${this.taskId}-${this.barIndex}-${this.functionIndex}`;
         this.barElement = document.getElementById(`bar-${this.taskId}-${this.barIndex}`);
 
-        const component = document.createElement('div');
-        component.id = this.id;
-        component.className = 'task-box';
-        component.innerHTML = createComponent(this.id);
-
-        this.component = component;        
-        this.barElement.insertBefore(this.component, this.barElement.children[this.functionIndex + 1]);
+        this.component = createComponent(this.id);
+        this.barElement.insertBefore(this.component.component, this.barElement.children[this.functionIndex + 1]);
 
         this.element = new Elements(this.id, task);
         allElements.push(this.element);
 
-        this.remover = component.querySelector(`#cancel-creator-${this.id}`);
-        this.remover.addEventListener('click', () => this.handleRemoveClick());
+        this.remover = this.component.cancelCreator;
+        this.resetter = this.component.resetCreator;
 
-        this.resetter = component.querySelector(`#reset-creator-${this.id}`);
-        this.resetter.addEventListener('click', () => this.handleResetClick());
+        this.handleRemoveClick = this.handleRemoveClick.bind(this);
+        this.handleResetClick = this.handleResetClick.bind(this);
+
+        this.addListeners();
     }
 
-    handleRemoveClick = () => {
+    handleRemoveClick() {
         this.bar.removeFunction(this.id);
     };
 
-    handleResetClick = () => {
+    handleResetClick() {
         this.bar.resetFunction(this.id);
     };
+
+    removeListeners() {
+        this.remover.removeEventListener('click', this.handleRemoveClick);
+        this.resetter.removeEventListener('click', this.handleResetClick);
+    }
+
+    addListeners() {
+        this.remover.addEventListener('click', this.handleRemoveClick);
+        this.resetter.addEventListener('click', this.handleResetClick);
+    }
 }
 
 class Bar {
@@ -54,10 +61,7 @@ class Bar {
         this.addFunctionButton.className = "adder-button custom-button button-medium plus-button";
         this.addFunctionButton.title = "Dodaj funkcję";
 
-        this.addFunctionButton.addEventListener('click', () => {
-            this.addFunction();
-        });
-
+        this.addFunctionButton.addEventListener('click', () => this.addFunction());
         this.bar.appendChild(this.addFunctionButton);
     }
 
@@ -71,43 +75,34 @@ class Bar {
         const element = this.functions.filter(f => f.id == id)[0];
         const elementIndex = this.functions.indexOf(element);
         this.functions.splice(elementIndex, 1);
-
-        console.log(this.functions);
     }
 
     removeFunction(id) {
         const element = this.functions.filter(f => f.id == id)[0];
-        const elementIndex = this.functions.indexOf(element);
-        this.functions.splice(elementIndex, 1);
 
-        console.log(this.functions);
+        if (!element)
+            return;
+
+        const elementIndex = this.functions.indexOf(element);
 
         this.functions.forEach(f => {
             if (f.functionIndex > element.functionIndex) {
-                const oldId = f.id;
                 const newId = `x${f.taskId}-${f.barIndex}-${f.functionIndex - 1}`;
 
-                f.remover = f.component.querySelector(`#cancel-creator-${oldId}`);
-                f.remover.removeEventListener('click', f.handleRemoveClick)
-                f.remover.addEventListener('click', () => {
-                    f.bar.removeFunction(newId);
-                });
-
-                f.resetter = f.component.querySelector(`#reset-creator-${oldId}`);
-                f.resetter.removeEventListener('click', f.handleResetClick)
-                f.resetter.addEventListener('click', () => {
-                    f.bar.resetFunction(newId);
-                });
+                f.removeListeners();
 
                 f.functionIndex--;
                 f.id = newId;
-                f.component.id = newId;
-                // f.component.innerHTML = createComponent(newId); // TODO: update ID's of inner components
+                f.component.setIds(newId);
                 f.element.setId(newId);
+
+                f.addListeners();
             }
         });
 
-        this.bar.removeChild(element.component);
+        console.log(this.functions);
+        this.bar.removeChild(element.component.component);
+        this.functions.splice(elementIndex, 1);
     }
 
     removeAll() {
@@ -130,9 +125,7 @@ export class Task {
         this.adder.id = `add-bar-${this.id}`;
         this.adder.className = "adder-button custom-button button-large plus-button";
         this.adder.title = "Dodaj takt";
-        this.adder.addEventListener('click', () => {        
-            this.addBar(this.bars.length);        
-        });
+        this.adder.addEventListener('click', () => this.addBar(this.bars.length));
 
         this.addBar(0);
 
@@ -161,9 +154,7 @@ export class Task {
                 this.bars[i].shift(i);
             }
 
-            removeBarButton.addEventListener('click', () => {
-                this.removeBar(barIndex);
-            });
+            removeBarButton.addEventListener('click', () => this.removeBar(barIndex));
 
             this.componentsPlace.insertBefore(newBar, this.componentsPlace.children[barIndex]);
             this.bars.splice(barIndex, 0, new Bar(this, barIndex, 8));
@@ -222,6 +213,8 @@ export class Task {
     }
 
     confirmAll() {
+        this.result = [];
+
         this.bars.forEach(b => {
             b.functions.forEach(f => {
                 if (f.taskId === this.id) {

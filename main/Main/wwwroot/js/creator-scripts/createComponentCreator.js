@@ -1,5 +1,7 @@
+import { Component } from "./component.js";
+
 export function createComponent(newId) {
-    const newComponent = `
+    const newComponent2 = `
         <div class="suspension-popup popup-base" id="suspension-popup-${newId}">
             <span class="popup-title">Dodaj opóźnienie</span>
         
@@ -115,5 +117,7 @@ export function createComponent(newId) {
             </div>
         </div>`;
 
-    return newComponent;
+    const component = new Component(newId);
+
+    return component;
 }
