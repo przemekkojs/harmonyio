@@ -111,9 +111,10 @@ body {
 }
 
 .question-square {
-    width: 75px;
-    min-width: 75px;
-    height: 75px;
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    height: 80px;
 }
 
 .three-dots-img {

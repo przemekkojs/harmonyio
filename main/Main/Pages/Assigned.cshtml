@@ -24,7 +24,7 @@
             }
             @foreach (var quiz in toSolve)
             {
-                <div class="border rounded shadow-sm p-0 flex-shrink-0 d-flex flex-row p-3">
+                <div class="border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
                     <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                         <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
@@ -65,7 +65,7 @@
             }
             @foreach (var quiz in futureQuizes)
             {
-                <div class="border rounded shadow-sm p-0 flex-shrink-0 d-flex flex-row p-3">
+                <div class="border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
                     <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                         <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
@@ -111,7 +111,7 @@
             {
                 var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == Model.AppUser.Id);
 
-                <div class="border rounded shadow-sm p-0 flex-shrink-0 d-flex flex-row p-3">
+                <div class="border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
                     <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                         <div class="fw-bold fs-5 text-truncate">@quiz.Name</div>
 
