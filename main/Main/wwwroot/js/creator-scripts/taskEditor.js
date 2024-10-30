@@ -12,12 +12,7 @@ class Function {
         this.id = `x${this.taskId}-${this.barIndex}-${this.functionIndex}`;
         this.barElement = document.getElementById(`bar-${this.taskId}-${this.barIndex}`);
 
-        const component = document.createElement('div');
-        component.id = this.id;
-        component.className = 'task-box';
-        component.innerHTML = createComponent(this.id);
-
-        this.component = component;        
+        this.component = createComponent(this.id);   
         this.barElement.insertBefore(this.component, this.barElement.children[this.functionIndex + 1]);
 
         this.element = new Elements(this.id, task);

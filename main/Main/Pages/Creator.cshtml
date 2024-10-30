@@ -92,8 +92,7 @@
         });
     }
 
-    window.confirmExcersises = function() {        
-        questions.value = JSON.stringify(excersises);
+    window.confirmExcersises = function() {
         questionsValidationError.innerText = '';
 
         excersises = [];
@@ -131,6 +130,10 @@
                 task: task.result
             });
         });
+
+        questions.value = JSON.stringify(excersises);
+        console.log(excersises);
+        console.log(questions.value);
     }
 
     window.addExcersise = function () {
