@@ -1,4 +1,4 @@
-import { Component } from "./js/creator-scripts/component.js";
+import { Component } from "./component.js";
 
 export function createComponent(newId) {
     const newComponent2 = `
@@ -119,5 +119,5 @@ export function createComponent(newId) {
 
     const component = new Component(newId);
 
-    return component.getElement;
+    return component;
 }

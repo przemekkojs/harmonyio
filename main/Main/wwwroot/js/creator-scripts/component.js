@@ -278,7 +278,7 @@ export class Component {
         this.root.title = "Wybierz oparcie";
         this.root.name = "root";
 
-        this.rootContainer.appendChild(this.removed);
+        this.rootContainer.appendChild(this.root);
 
         // Kreator funkcji - siatka - dodane
         this.addedContainer = document.createElement('div');
@@ -352,6 +352,7 @@ export class Component {
 
         // Formularz zatwierdzenia - przycisk anuluj
         this.cancelCreator = document.createElement('input');
+        this.cancelCreator.type = "button";
         this.cancelCreator.name = "cancel-creator";        
         this.cancelCreator.title = "Usuń funkcję";
         this.cancelCreator.className = "custom-button trash-button button-small";
@@ -359,6 +360,7 @@ export class Component {
 
         // Formularz zatwierdzenia - przycisk resetuj
         this.resetCreator = document.createElement('input');
+        this.resetCreator.type = "button";
         this.resetCreator.name = "reset-creator";        
         this.resetCreator.title = "Resetuj funkcję";
         this.resetCreator.className = "custom-button round-arrow-button button-small";
@@ -366,6 +368,7 @@ export class Component {
 
         // Formularz zatwierdzenia - przycisk potwierdź
         this.submitCreator = document.createElement('input');
+        this.submitCreator.type = "button";
         this.submitCreator.name = "submit-creator";        
         this.submitCreator.title = "Zatwierdź funkcję";
         this.submitCreator.className = "custom-button tick-button button-small";
@@ -377,9 +380,12 @@ export class Component {
 
         [this.gridContainer, this.formButtons].forEach(e => {
             this.functionCreator.appendChild(e);
-        })
+        });
 
-        [this.suspensionPopup, this.alterationPopup, this.addedPopup, this.functionCreator].forEach(e => {
+        [this.suspensionPopup,
+         this.alterationPopup,
+         this.addedPopup,
+         this.functionCreator].forEach(e => {
             this.component.appendChild(e);
         });
 
@@ -390,8 +396,7 @@ export class Component {
     // TODO: Wszystko z "ID SET" powinno wywędrować tutaj
     setIds(newId) {
         this.id = newId;
-
-        this.component.id = id;
+        this.component.id = newId;
 
         this.suspensionPopup.id = `suspension-popup-${this.id}`; // ID SET
         this.confirmAddSuspension.id = `confirm-add-suspension-${this.id}`; // ID SET
@@ -438,7 +443,7 @@ export class Component {
         this.addNinthLabel.for = addNinthId; // ID SET
 
         const addedMinorId = `added-minor-${this.id}`; // ID SET
-        this.addedMinor.id = addedMajorId; // ID SET
+        this.addedMinor.id = addedMinorId; // ID SET
         this.addedMinorLabel.for = addedMinorId; // ID SET
 
         const addedNeutralId = `added-neutral-${this.id}`; // ID SET
@@ -446,7 +451,7 @@ export class Component {
         this.addedNeutralLabel.for = addedNeutralId; // ID SET
 
         const addedMajorId = `added-major-${this.id}`; // ID SET
-        this.addedMajor.id = addedMinorId; // ID SET
+        this.addedMajor.id = addedMajorId; // ID SET
         this.addedMajorLabel.for = addedMajorId; // ID SET
 
         this.confirmAddAdded.id = `confirm-add-added-${this.id}`; // ID SET

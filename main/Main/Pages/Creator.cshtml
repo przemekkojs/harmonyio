@@ -94,20 +94,16 @@
 
     window.confirmExcersises = function() {
         questionsValidationError.innerText = '';
-
         excersises = [];
 
-        tasks.forEach(t => {
-            const id = `task-container-${t.id}`;
-            const taskText = document.getElementById(id);
-            const children = Array.from(excersiseContainer.children);
-            const index = children.indexOf(taskText);
+        for (let i = 0; i < tasks.length; i++) {
+            const questionText = document.getElementById(`question-task-${i}`).value;
+            const hiddenInput = document.getElementById(`question-json-${i}`);
 
-            const questionText = document.getElementById(`question-task-${index}`);
-            const tonationLetterSelect = document.getElementById(`tonation-name-select-task-${index}`);
-            const accidentalSelect = document.getElementById(`accidental-task-${index}`);
-            const modeSelect = document.getElementById(`mode-task-${index}`);
-            const metreSelect = document.getElementById(`metre-select-task-${index}`);
+            const tonationLetterSelect = document.getElementById(`tonation-name-select-task-${i}`);
+            const accidentalSelect = document.getElementById(`accidental-task-${i}`);
+            const modeSelect = document.getElementById(`mode-task-${i}`);
+            const metreSelect = document.getElementById(`metre-select-task-${i}`);
 
             const metreSplitted = metreSelect.value.split('/');
             const metreCount = metreSplitted[0];
@@ -118,22 +114,20 @@
             const sharpsCount = tonationParsed[0];
             const flatsCount = tonationParsed[1];
 
-            const task = tasks[index];
-            task.confirmAll();
-
-            excersises.push({
-                question: questionText.value,
+            excersises[i] = {
+                question: questionText,
                 sharpsCount: sharpsCount,
                 flatsCount: flatsCount,
                 metreValue: metreCount,
                 metreCount: metreValue,
-                task: task.result
-            });
-        });
+                task: tasks[i].result
+            };
 
-        questions.value = JSON.stringify(excersises);
+            hiddenInput.value = JSON.stringify(excersises[i]);
+            console.log(hiddenInput.value);
+        }
+
         console.log(excersises);
-        console.log(questions.value);
     }
 
     window.addExcersise = function () {
@@ -144,18 +138,21 @@
         textBox.className = "task-content w-100 p-3";
         textBox.id = `task-container-${index}`;
         textBox.innerHTML = `
-            <input type="text" id="question-task-${index}" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" @(Model.BrowseOnly ? "readonly" : "")>            
-        `;
+        <!-- Visible input for the question text -->
+        <input type="text" id="question-task-${index}" class="form-control task-input" value="${excersises[index]}" placeholder="Enter question text" />
+
+        <!-- Hidden input to store JSON representation of the exercise for form submission -->
+        <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
 
         excersiseContainer.appendChild(textBox);
         createTask(textBox, index);
         
         const id = `task-container-${index}`;
         const removeButton = document.getElementById(`delete-${index}`);
-        removeButton.addEventListener('click', () => { removeExcersise(id); });
+        removeButton.addEventListener('click', () => removeExcersise(id));
 
         const confirmButton = document.getElementById(`submit-${index}`);
-        confirmButton.addEventListener('click', () => { updateExcersise(id); });
+        confirmButton.addEventListener('click', () => updateExcersise(id));
         
         questionsValidationError.innerText = '';
     }
@@ -192,6 +189,6 @@
 
 @section Scripts {
     @{
-                <partial name="_ValidationScriptsPartial" />
+        <partial name="_ValidationScriptsPartial" />
     }
 }
