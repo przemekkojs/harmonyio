@@ -62,16 +62,31 @@ class GrandStaff {
     });
   }
 
-  #loadTaskFromJson(taskJsonString) {
-    // task mock, for now only how many verticals per bar, metre and key signature
-    const taskJson = {
-      meterCount: 3,
-      meterValue: 4,
-      sharpsCount: 0,
-      flatsCount: 7,
-      verticalsPerBar: verticalsPerBarList,
-    };
+  #countVerticalsPerBar(tasksList) {
+    const verticalsCount = {};
 
+    // Iterate over each task to count verticals by bar index
+    tasksList.forEach((task) => {
+      const barIndex = parseInt(task.barIndex, 10);
+      if (!verticalsCount[barIndex]) {
+        verticalsCount[barIndex] = 0;
+      }
+      verticalsCount[barIndex]++;
+    });
+
+    // Convert the vertical counts to an array to represent each bar
+    const maxBarIndex = Math.max(...Object.keys(verticalsCount)); // Find the highest barIndex
+    const result = new Array(maxBarIndex + 1).fill(0); // Create an array filled with 0s
+
+    // Fill the result array with the counted verticals
+    Object.entries(verticalsCount).forEach(([barIndex, count]) => {
+      result[barIndex] = count;
+    });
+
+    return result;
+  }
+
+  #loadTaskFromJson(taskJson) {
     this.keySignature =
       taskJson.sharpsCount > 0
         ? new KeySignature(
@@ -83,13 +98,27 @@ class GrandStaff {
             new Accidental(Accidental.accidentals.bemol)
           );
 
-    this.metre = new Metre(taskJson.meterCount, taskJson.meterValue);
+    this.metre = new Metre(taskJson.metreCount, taskJson.metreValue);
 
     const slotsPerBar = this.metre.slotsPerBar();
+
+    const verticalsPerBar = this.#countVerticalsPerBar(taskJson.task);
     this.bars = [];
-    for (let i = 0; i < taskJson.verticalsPerBar.length; i++) {
-      this.bars.push(new Bar(this, taskJson.verticalsPerBar[i], slotsPerBar));
+    for (let i = 0; i < verticalsPerBar.length; i++) {
+      this.bars.push(new Bar(this, verticalsPerBar[i], slotsPerBar));
     }
+
+    taskJson.task.forEach((task) => {
+      const barIndex = parseInt(task.barIndex, 10);
+
+      if (this.bars[barIndex]) {
+        this.bars[barIndex].setFunctionSymbol(task);
+      } else {
+        console.warn(
+          `No bar found at index ${barIndex}. Jesli udalo ci sie to osiagnac daj znac`
+        );
+      }
+    });
 
     this.metreOffset =
       this.keySignatureOffset +
@@ -113,9 +142,9 @@ class GrandStaff {
     }
   }
 
-  loadFromJson(taskJsonString, notesJsonString) {
+  loadFromJson(taskJson, notesJsonString) {
     this.isLoaded = false;
-    this.#loadTaskFromJson(taskJsonString);
+    this.#loadTaskFromJson(taskJson);
     this.#loadNotesFromJson(notesJsonString);
     this.init();
     this.isLoaded = true;

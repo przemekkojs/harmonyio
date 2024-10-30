@@ -8,14 +8,16 @@
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
+        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest
+        najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
         @*Nie no, luzik mordeczko, rozumiemy Cię.*@
         @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się czym przejmować*@
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
                     <label asp-for="QuizName" class="form-label fw-bold"></label>
-                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
+                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly"
+                        placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger"></span>
                 </div>
 
@@ -41,7 +43,8 @@
 
                 @if (!Model.BrowseOnly)
                 {
-                    <div class="task task-add rounded d-flex justify-content-center align-items-center" onclick="addExcersise()">
+                    <div class="task task-add rounded d-flex justify-content-center align-items-center"
+                        onclick="addExcersise()">
                         <span class="plus">+</span>
                         <span>Dodaj zadanie</span>
                     </div>
@@ -50,21 +53,26 @@
         </div>
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
-        <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions"/>
+        @* <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions" /> *@
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             <input type="button" value="Test" onclick="confirmExcersises()" />
             @if (!Model.BrowseOnly)
             {
-                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto" onclick="confirmExcersises()">Zapisz</button>
-                <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3" onclick="confirmExcersises()">Opublikuj</button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto"
+                    onclick="confirmExcersises()">Zapisz</button>
+                <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
+                    onclick="confirmExcersises()">Opublikuj</button>
             }
             else
             {
-                <button type="button" class="btn btn-primary btn-std-width ms-auto">@(Model.Code == null ? "Quiz zakończony" : "KOD: " + Model.Code)</button>
+                <button type="button" class="btn btn-primary btn-std-width ms-auto">@(Model.Code == null ? "Quiz zakończony"
+                : "KOD: " + Model.Code)</button>
                 @if (Model.Code != null)
                 {
-                    <button type="button" class="btn btn-primary btn-std-width ms-auto" onclick="navigator.clipboard.writeText('harmony.io/solve?code=@Model.Code')">Skopiuj link quizu do schowka</button>
+                    <button type="button" class="btn btn-primary btn-std-width ms-auto"
+                        onclick="navigator.clipboard.writeText('harmony.io/solve?code=@Model.Code')">Skopiuj link quizu do
+                        schowka</button>
                 }
             }
         </div>
@@ -84,7 +92,6 @@
 
     const excersiseContainer = document.getElementById('excersise-container');
     const questionsValidationError = document.getElementById('questions-validation-error');
-    const questions = document.getElementById(`questions`);
 
     function addExisting() {
         excersises.forEach(x => {
@@ -144,16 +151,17 @@
         <!-- Hidden input to store JSON representation of the exercise for form submission -->
         <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
 
+
         excersiseContainer.appendChild(textBox);
         createTask(textBox, index);
-        
+
         const id = `task-container-${index}`;
         const removeButton = document.getElementById(`delete-${index}`);
         removeButton.addEventListener('click', () => removeExcersise(id));
 
         const confirmButton = document.getElementById(`submit-${index}`);
+
         confirmButton.addEventListener('click', () => updateExcersise(id));
-        
         questionsValidationError.innerText = '';
     }
 
@@ -177,10 +185,10 @@
 
         const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
-                
+
         if (taskText)
             excersiseContainer.removeChild(taskText);
-                    
+
         excersises.splice(index, 1);
 
         questionsValidationError.innerText = '';
