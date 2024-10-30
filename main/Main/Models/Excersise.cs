@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+
 namespace Main.Models
 {
 	public class Excersise
@@ -11,9 +13,10 @@ namespace Main.Models
 		//FOREIGN KEYS
 
 		public int QuizId { get; set; }
+		[JsonIgnore]
 		public Quiz Quiz { get; set; } = null!;
 
 		public ICollection<ExcersiseSolution> ExcersiseSolutions = new List<ExcersiseSolution>();
-    }
+	}
 }
 
