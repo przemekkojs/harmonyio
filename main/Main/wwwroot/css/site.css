@@ -55,18 +55,29 @@ body {
 }
 
 .input-error {
-    border: 1px solid #ea3342;
-    background-color: #ffe6e6;
+    border: 1px solid var(--bs-danger-border-subtle);
+    background-color: var(--bs-danger-bg-subtle);
 }
 
-.top-bar {
-    height: 40px;
-    min-height: 40px;
+.hover-primary:hover{
+    background-color: var(--bs-primary);
+    color: white;
+    border-color: var(--bs-primary);
+}
+.hover-primary:focus:active {
+    background-color: #0b5ed7;
+    color: white;
+    border-color: #0b5ed7;
 }
 
-.bottom-bar {
-    height: 80px;
-    min-height: 80px;
+.overflow-md-auto {
+    overflow: auto;
+}
+
+@media (max-width: 768px) { 
+    .overflow-md-auto {
+        overflow: visible;
+    }
 }
 
 .hr {
@@ -100,9 +111,10 @@ body {
 }
 
 .question-square {
-    width: 75px;
-    min-width: 75px;
-    height: 75px;
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    height: 80px;
 }
 
 .three-dots-img {
@@ -123,10 +135,15 @@ body {
 
 .icon-sm {
     font-size: 24px;
+    text-align: center;
+    justify-content: center;
+    width: 30px;
 }
 
 .icon-lg {
     font-size: 30px;
+    text-align: center;
+    justify-content: center;
 }
 
 .no-style {
@@ -137,7 +154,9 @@ body {
 /*BOOTSTRAP RECOLOR*/
 
 body {
-    background-color: #f8f9fa;
+    background: url('/images/bg-pattern.png') repeat, linear-gradient(#2d53b2, #426edb);
+    background-size: 38vw 38vw, cover;
+    background-position: 0 0, center;
 }
 
 

@@ -10,18 +10,11 @@ class Vertical {
 
     this.upperStaff = upperStaff;
     this.lowerStaff = lowerStaff;
-    this.functionSymbol = new FunctionSymbol(
-      this,
-      "Dvii",
-      true,
-      "9",
-      "7",
-      ["7", "7>", "7<", "7>"],
-      ["1", "5", "1", "5"],
-      ["1", "3>", "5<", "1>"]
-    );
-
     this.verticalWidth = getVerticalWidth();
+  }
+
+  setFunctionSymbol(task) {
+    this.functionSymbol = FunctionSymbol.fromJson(this, task);
   }
 
   toJson() {

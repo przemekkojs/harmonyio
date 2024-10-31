@@ -3,10 +3,14 @@ class Bar {
     this.parent = parent;
     this.verticals = [];
     this.slotsPerBar = slotsPerBar;
-
     for (let i = 0; i < numberOfVerticals; i++) {
       this.verticals.push(new Vertical(this, i));
     }
+  }
+
+  setFunctionSymbol(task) {
+    const verticalIndex = parseInt(task.verticalIndex, 10);
+    this.verticals[verticalIndex].setFunctionSymbol(task);
   }
 
   toJson() {

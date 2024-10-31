@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="~/css/quiz-lists-style.css" />
 </head>
 
-<div class="h-100 w-100 d-flex flex-row">
+<div class="h-100 w-100 d-flex flex-column flex-md-row mb-3">
     @foreach(var quiz in Model.UsersQuizes)
     {
         <form method="post" asp-page-handler="Delete" id="deleteFormForQuiz@(quiz.Id)">
@@ -46,28 +46,34 @@
             }
             @foreach (var quiz in readyToGrade)
             {
-                <div class="quiz shadow p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
-                    <div class="flex-grow-1 d-flex flex-column">
-                        <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
+                <div class="border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
+                    <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                        <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
                         <div class="d-flex flex-row align-items-center mb-2">
                             <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Otwarcie:</span>
-                            <span>@quiz.OpenDate</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Otwarcie:</span> 
+                                @quiz.OpenDate
+                            </span>
                         </div>
                         <div class="d-flex flex-row align-items-center mb-2">
                             <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Zamknięcie:</span>
-                            <span>@quiz.CloseDate</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Zamknięcie:</span> 
+                                @quiz.CloseDate
+                            </span>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                             <i class="fas fa-user-group icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Wypełniono:</span>
-                            <span>@Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Wypełniono:</span> 
+                                @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                            </span>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-column h-100">
+                    <div class="d-flex flex-column h-100 ms-2">
                         <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
                     </div>
                 </div>
@@ -79,28 +85,34 @@
             }
             @foreach (var quiz in published)
             {
-                <div class="quiz shadow p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
-                    <div class="flex-grow-1 d-flex flex-column">
-                        <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
+                <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
+                    <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
+                        <div class="fw-bold fs-5 mb-3 text-truncate" style="max-width: 100%;">@quiz.Name</div>
 
                         <div class="d-flex flex-row align-items-center mb-2">
                             <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Otwarcie:</span>
-                            <span>@quiz.OpenDate</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Otwarcie:</span> 
+                                @quiz.OpenDate
+                            </span>
                         </div>
                         <div class="d-flex flex-row align-items-center mb-2">
                             <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Zamknięcie:</span>
-                            <span>@quiz.CloseDate</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Zamknięcie:</span> 
+                                @quiz.CloseDate
+                            </span>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                             <i class="fas fa-user-group icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Wypełniono:</span>
-                            <span>@Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Wypełniono:</span> 
+                                @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                            </span>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-column h-100">
+                    <div class="d-flex flex-column h-100 ms-2">
                         <div class="d-flex flex-row">
                             <a asp-page="Creator" asp-route-id="@quiz.Id" class="btn-icon ms-auto">
                                 <i class="fas fa-magnifying-glass icon-sm"></i>
@@ -117,7 +129,6 @@
                             Udostępnij
                         </a>
                         
-
                     </div>
                 </div>
             }
@@ -128,28 +139,34 @@
             }
             @foreach (var quiz in closed)
             {
-                <div class="quiz shadow p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
-                    <div class="flex-grow-1 d-flex flex-column">
-                        <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
+                <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
+                    <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
+                        <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
                         <div class="d-flex flex-row align-items-center mb-2">
                             <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Otwarcie:</span>
-                            <span>@quiz.OpenDate</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Otwarcie:</span> 
+                                @quiz.OpenDate
+                            </span>
                         </div>
                         <div class="d-flex flex-row align-items-center mb-2">
                             <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Zamknięcie:</span>
-                            <span>@quiz.CloseDate</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Zamknięcie:</span> 
+                                @quiz.CloseDate
+                            </span>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                             <i class="fas fa-user-group icon-sm me-2"></i>
-                            <span class="fw-bold me-1">Wypełniono:</span>
-                            <span>@Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2</span>
+                            <span class="text-truncate">
+                                <span class="fw-bold">Wypełniono:</span> 
+                                @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                            </span>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-column h-100">
+                    <div class="d-flex flex-column h-100 ms-2">
                         <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
                     </div>
                 </div>
@@ -162,25 +179,24 @@
         }
     </div>
 
-    <div class="mx-3"></div>
-
-    <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column"
-         style="margin: 0px -10px 0px -20px; padding: 0px 20px 0px 20px;">
+    <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3"> 
         <div class="fw-bold fs-4 mb-3">Szkice</div>
         @foreach (var quiz in sketches)
         {
-            <div class="quiz shadow p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3">
-                <div class="flex-grow-1 d-flex flex-column">
-                    <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
+            <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
+                <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
+                    <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
                     <div class="d-flex flex-row align-items-center">
                         <i class="fas fa-music icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Zadania:</span>
-                        <span>@quiz.Excersises.Count</span>
+                        <span class="text-truncate">
+                            <span class="fw-bold">Zadania:</span> 
+                            @quiz.Excersises.Count
+                        </span>
                     </div>
                 </div>
 
-                <div class="d-flex flex-column h-100">
+                <div class="d-flex flex-column h-100 ms-2">
                     <div class="d-flex flex-row">
                         <a asp-page="Creator" asp-route-id="@quiz.Id" class="btn-icon me-3 ms-auto">
                             <i class="fas fa-pencil icon-sm"></i>
@@ -192,7 +208,7 @@
                         </a>
                     </div>
 
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishPopup"
+                    <a href="#" class="btn btn-primary mt-auto" data-bs-toggle="modal" data-bs-target="#publishPopup"
                        data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-callback-name="publish">
                         Opublikuj
                     </a>
@@ -201,27 +217,28 @@
         }
 
         <a asp-page="Creator" class="no-style">
-            <div class="quiz quiz-add d-flex justify-content-center align-items-center">
+            <div class="quiz quiz-add rounded d-flex justify-content-center align-items-center">
                 <i class="fas fa-plus me-1"></i>
+                
                 <span class="fw-bold">Utwórz nowy quiz</span>
             </div>
         </a>
 
         @*TODO: Remove this*@
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignPopup"
+        @* <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignPopup"
            data-quiz-id="3" data-quiz-name="Dummy quiz" data-pin="069 420"
            data-url="https://harmony.io/join?q=069420"
            data-emails='["email1@example.com", "email2@example.com"]'
            data-all-groups='["Klasa 2A", "Klasa 3A", "Klasa 1B"]'
            data-added-groups='["Klasa 3A"]' data-callback-name="assign">
             Test Assign
-        </a>
+        </a> *@
 
         @*TODO: Remove this*@
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishPopup"
+        @* <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishPopup"
            data-quiz-id="3" data-quiz-name="Dummy quiz" data-callback-name="publish">
             Test Publish
-        </a>
+        </a> *@
     </div>
 </div>
 

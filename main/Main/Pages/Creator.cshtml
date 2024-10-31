@@ -8,13 +8,16 @@
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
+        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest
+        najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
         @*Nie no, luzik mordeczko, rozumiemy Cię.*@
+        @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się czym przejmować*@
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
                     <label asp-for="QuizName" class="form-label fw-bold"></label>
-                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
+                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly"
+                        placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger"></span>
                 </div>
 
@@ -40,7 +43,8 @@
 
                 @if (!Model.BrowseOnly)
                 {
-                    <div class="task task-add rounded d-flex justify-content-center align-items-center" onclick="addExcersise()">
+                    <div class="task task-add rounded d-flex justify-content-center align-items-center"
+                        onclick="addExcersise()">
                         <span class="plus">+</span>
                         <span>Dodaj zadanie</span>
                     </div>
@@ -49,20 +53,26 @@
         </div>
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
-        <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions"/>
+        @* <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions" /> *@
         <div class="bottom-bar d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
+            <input type="button" value="Test" onclick="confirmExcersises()" />
             @if (!Model.BrowseOnly)
             {
-                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto">Zapisz</button>
-                <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3">Opublikuj</button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto"
+                    onclick="confirmExcersises()">Zapisz</button>
+                <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
+                    onclick="confirmExcersises()">Opublikuj</button>
             }
             else
             {
-                <button type="button" class="btn btn-primary btn-std-width ms-auto">@(Model.Code == null ? "Quiz zakończony" : "KOD: " + Model.Code)</button>
+                <button type="button" class="btn btn-primary btn-std-width ms-auto">@(Model.Code == null ? "Quiz zakończony"
+                : "KOD: " + Model.Code)</button>
                 @if (Model.Code != null)
                 {
-                    <button type="button" class="btn btn-primary btn-std-width ms-auto" onclick="navigator.clipboard.writeText('harmony.io/solve?code=@Model.Code')">Skopiuj link quizu do schowka</button>
+                    <button type="button" class="btn btn-primary btn-std-width ms-auto"
+                        onclick="navigator.clipboard.writeText('harmony.io/solve?code=@Model.Code')">Skopiuj link quizu do
+                        schowka</button>
                 }
             }
         </div>
@@ -71,11 +81,61 @@
 
 <script type="module">
     import { tasks, createTask } from "./js/creator-scripts/taskCreator.js";
+    import { parseTonationToAccidentalsCount } from "./js/utils.js";
 
-    const excersises = @Html.Raw(Json.Serialize(Model.Questions?.Select(q => q ?? "").ToList() ?? new List<string>()));
+    let excersises = @Html.Raw(
+        Json.Serialize(
+            Model.Questions?
+                .Select(q => q ?? "")
+                .ToList() ?? new List<string>()
+        ));
+
     const excersiseContainer = document.getElementById('excersise-container');
     const questionsValidationError = document.getElementById('questions-validation-error');
-    const questions = document.getElementById(`questions`);
+
+    function addExisting() {
+        excersises.forEach(x => {
+
+        });
+    }
+
+    window.confirmExcersises = function() {
+        questionsValidationError.innerText = '';
+        excersises = [];
+
+        for (let i = 0; i < tasks.length; i++) {
+            const questionText = document.getElementById(`question-task-${i}`).value;
+            const hiddenInput = document.getElementById(`question-json-${i}`);
+
+            const tonationLetterSelect = document.getElementById(`tonation-name-select-task-${i}`);
+            const accidentalSelect = document.getElementById(`accidental-task-${i}`);
+            const modeSelect = document.getElementById(`mode-task-${i}`);
+            const metreSelect = document.getElementById(`metre-select-task-${i}`);
+
+            const metreSplitted = metreSelect.value.split('/');
+            const metreCount = metreSplitted[0];
+            const metreValue = metreSplitted[1];
+
+            const tonationString = `${tonationLetterSelect.value}${accidentalSelect.value}${modeSelect.value}`;
+            const tonationParsed = parseTonationToAccidentalsCount(tonationString);
+            const sharpsCount = tonationParsed[0];
+            const flatsCount = tonationParsed[1];
+
+            excersises[i] = {
+                question: questionText,
+                sharpsCount: sharpsCount,
+                flatsCount: flatsCount,
+                metreValue: metreCount,
+                metreCount: metreValue,
+                task: tasks[i].result
+            };
+
+            hiddenInput.value = JSON.stringify(excersises[i]);
+            console.log(hiddenInput.value);
+        }
+
+        console.log(excersises);
+    }
 
     window.addExcersise = function () {
         excersises.push("");
@@ -85,19 +145,23 @@
         textBox.className = "task-content w-100 p-3";
         textBox.id = `task-container-${index}`;
         textBox.innerHTML = `
-            <input type="text" id="question-task-${index}" name="Questions[${index}]" class="form-control task-input" value="${excersises[index]}" @(Model.BrowseOnly ? "readonly" : "")>            
-        `;
+        <!-- Visible input for the question text -->
+        <input type="text" id="question-task-${index}" class="form-control task-input" value="${excersises[index]}" placeholder="Enter question text" />
+
+        <!-- Hidden input to store JSON representation of the exercise for form submission -->
+        <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
+
 
         excersiseContainer.appendChild(textBox);
         createTask(textBox, index);
-        
+
         const id = `task-container-${index}`;
         const removeButton = document.getElementById(`delete-${index}`);
-        removeButton.addEventListener('click', () => { removeExcersise(id); });
+        removeButton.addEventListener('click', () => removeExcersise(id));
 
         const confirmButton = document.getElementById(`submit-${index}`);
-        confirmButton.addEventListener('click', () => { updateExcersise(id); });
-        
+
+        confirmButton.addEventListener('click', () => updateExcersise(id));
         questionsValidationError.innerText = '';
     }
 
@@ -107,15 +171,12 @@
         const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
 
-        const questionText = document.getElementById(`question-task-${index}`);
-        const questionValue = questionText.value;
+        const taskToConfirm = tasks.filter(x => x.id == index)[0];
+        const confirmResult = taskToConfirm.confirmAll();
 
-        excersises[index] = JSON.stringify({
-            question: questionValue,
-            task: tasks[index].submitTask()
-        });
+        if (!confirmResult)
+            return;
 
-        questions.value = JSON.stringify(excersises);
         questionsValidationError.innerText = '';
     }
 
@@ -125,15 +186,12 @@
         const children = Array.from(excersiseContainer.children);
         const index = children.indexOf(taskText);
 
-        const removeButton = document.getElementById(`delete-${index}`);
-        
         if (taskText)
             excersiseContainer.removeChild(taskText);
 
-        if (removeButton)
-            removeButton.onclick = null;
-        
         excersises.splice(index, 1);
+
+        questionsValidationError.innerText = '';
     }
 </script>
 

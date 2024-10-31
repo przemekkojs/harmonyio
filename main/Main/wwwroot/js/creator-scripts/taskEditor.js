@@ -1,6 +1,5 @@
 import { createComponent } from "./createComponentCreator.js";
 import { Elements } from "./addFunctionality.js";
-import { ParsedFunction } from "./function.js";
 
 let allElements = [];
 
@@ -10,23 +9,40 @@ class Function {
         this.barIndex = bar.index;
         this.taskId = bar.taskId;
         this.bar = bar;
+        this.id = `x${this.taskId}-${this.barIndex}-${this.functionIndex}`;
         this.barElement = document.getElementById(`bar-${this.taskId}-${this.barIndex}`);
 
-        let component = document.createElement('div');
-        let newId = `x${this.taskId}-${this.barIndex}-${this.functionIndex}`;
-        component.id = newId;
-        component.className = 'task-box';
-        component.innerHTML = createComponent(newId);
+        this.component = createComponent(this.id);
+        this.barElement.insertBefore(this.component.component, this.barElement.children[this.functionIndex + 1]);
 
-        this.component = component;        
-        this.barElement.insertBefore(this.component, this.barElement.children[this.functionIndex + 1]);
+        this.element = new Elements(this.id, task);
+        allElements.push(this.element);
 
-        allElements.push(new Elements(newId, task));
-        let remover = component.querySelector(`#cancel-creator-${newId}`);
+        this.remover = this.component.cancelCreator;
+        this.resetter = this.component.resetCreator;
 
-        remover.addEventListener('click', () => {
-            this.bar.removeFunction()
-        });
+        this.handleRemoveClick = this.handleRemoveClick.bind(this);
+        this.handleResetClick = this.handleResetClick.bind(this);
+
+        this.addListeners();
+    }
+
+    handleRemoveClick() {
+        this.bar.removeFunction(this.id);
+    };
+
+    handleResetClick() {
+        this.bar.resetFunction(this.id);
+    };
+
+    removeListeners() {
+        this.remover.removeEventListener('click', this.handleRemoveClick);
+        this.resetter.removeEventListener('click', this.handleResetClick);
+    }
+
+    addListeners() {
+        this.remover.addEventListener('click', this.handleRemoveClick);
+        this.resetter.addEventListener('click', this.handleResetClick);
     }
 }
 
@@ -45,10 +61,7 @@ class Bar {
         this.addFunctionButton.className = "adder-button custom-button button-medium plus-button";
         this.addFunctionButton.title = "Dodaj funkcję";
 
-        this.addFunctionButton.addEventListener('click', () => {
-            this.addFunction();
-        });
-
+        this.addFunctionButton.addEventListener('click', () => this.addFunction());
         this.bar.appendChild(this.addFunctionButton);
     }
 
@@ -58,17 +71,43 @@ class Bar {
         }            
     }
 
-    removeFunction() {
-        if (this.functions.length > 0) {
-            let element = this.functions.pop();
-            this.bar.removeChild(element.component);
-        }        
+    resetFunction(id) {
+        const element = this.functions.filter(f => f.id == id)[0];
+        const elementIndex = this.functions.indexOf(element);
+        this.functions.splice(elementIndex, 1);
+    }
+
+    removeFunction(id) {
+        const element = this.functions.filter(f => f.id == id)[0];
+
+        if (!element)
+            return;
+
+        const elementIndex = this.functions.indexOf(element);
+
+        this.functions.forEach(f => {
+            if (f.functionIndex > element.functionIndex) {
+                const newId = `x${f.taskId}-${f.barIndex}-${f.functionIndex - 1}`;
+
+                f.removeListeners();
+
+                f.functionIndex--;
+                f.id = newId;
+                f.component.setIds(newId);
+                f.element.setId(newId);
+
+                f.addListeners();
+            }
+        });
+
+        console.log(this.functions);
+        this.bar.removeChild(element.component.component);
+        this.functions.splice(elementIndex, 1);
     }
 
     removeAll() {
-        while (this.functions.length > 0) {
-            this.removeFunction();
-        }
+        this.functions = [];
+        this.bar.replaceChildren();
     }
 }
 
@@ -86,9 +125,7 @@ export class Task {
         this.adder.id = `add-bar-${this.id}`;
         this.adder.className = "adder-button custom-button button-large plus-button";
         this.adder.title = "Dodaj takt";
-        this.adder.addEventListener('click', () => {        
-            this.addBar(this.bars.length);        
-        });
+        this.adder.addEventListener('click', () => this.addBar(this.bars.length));
 
         this.addBar(0);
 
@@ -117,9 +154,7 @@ export class Task {
                 this.bars[i].shift(i);
             }
 
-            removeBarButton.addEventListener('click', () => {
-                this.removeBar(barIndex);
-            });
+            removeBarButton.addEventListener('click', () => this.removeBar(barIndex));
 
             this.componentsPlace.insertBefore(newBar, this.componentsPlace.children[barIndex]);
             this.bars.splice(barIndex, 0, new Bar(this, barIndex, 8));
@@ -162,51 +197,35 @@ export class Task {
         }
     }
 
-    addFunction(element) {
-        element.addedPopup.style.display = "none";
-        element.suspensionPopup.style.display = "none";
-        element.alterationPopup.style.display = "none";
-    
-        let minor = element.minorBox.checked;
-        let symbol = element.symbolDropdown.value;
-        let position = element.positionDropdown.value;
-        let root = element.rootDropdown.value;
-        let removed = element.removedDropdown.value;
-        let alterations = element.alterations;
-        let added = element.added;
+    confirmFunction(element) {
+        if (element.confirmed)
+            return true;
 
-        element.allComponents.forEach(e => {
-            e.classList.add('hide-border');
-        });
-    
-        if (symbol === "") {
-            alert('Nie można dodać pustej funkcji!');
-            return null;
+        const confirmResult = element.confirm();    
+
+        if (confirmResult !== null) {
+            this.result.push(confirmResult);
+            return true;
         }
-    
-        element.disableItems(element.allComponents);
-        element.addButton.disabled = true;
-    
-        let splitted = element.thisId.split('-');
-        let barId = splitted[1];
-        let verticalId = splitted[2];
-    
-        let functionResult = new ParsedFunction(
-            barId,
-            verticalId,
-            minor,
-            symbol,
-            position,
-            root,
-            removed,
-            alterations,
-            added
-        );
-    
-        this.result.push(functionResult);
+        else {
+            return false;
+        }   
     }
 
-    submitTask() {
-        return JSON.stringify(this.result);
+    confirmAll() {
+        this.result = [];
+
+        this.bars.forEach(b => {
+            b.functions.forEach(f => {
+                if (f.taskId === this.id) {
+                    const currentResult = this.confirmFunction(f.element);
+
+                    if (!currentResult)
+                        return false;
+                }
+            });
+        });
+
+        return true;
     }
 }

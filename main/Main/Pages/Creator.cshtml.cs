@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Main.Pages
 {
@@ -81,7 +82,7 @@ namespace Main.Pages
         }
 
         public async Task<IActionResult> OnPostSave()
-        {            
+        {
             var currentUser = (await _userManager.GetUserAsync(User))!;
             if (currentUser == null)
                 return RedirectToPage("Error");
@@ -95,9 +96,9 @@ namespace Main.Pages
                     CloseDate = (DateTime)CloseDate!,
                     CreatorId = currentUser.Id,
                 };
-                
+
                 _repository.Add(quiz);
-                
+
                 await _repository.SaveChangesAsync();
 
                 foreach (string question in Questions!)
@@ -122,9 +123,9 @@ namespace Main.Pages
                 editedQuiz.Name = QuizName;
                 editedQuiz.OpenDate = (DateTime)OpenDate!;
                 editedQuiz.CloseDate = (DateTime)CloseDate!;
-                
+
                 _repository.Update(editedQuiz);
-                
+
                 await _repository.SaveChangesAsync();
 
                 foreach (var question in editedQuiz.Excersises)
@@ -148,7 +149,7 @@ namespace Main.Pages
         }
 
         public async Task<IActionResult> OnPostSubmit()
-        {               
+        {
             if (CloseDate <= OpenDate)
             {
                 ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");
@@ -171,7 +172,7 @@ namespace Main.Pages
             {
                 return Page();
             }
-        
+
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
                 return RedirectToPage("Error");
@@ -189,9 +190,9 @@ namespace Main.Pages
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
                     Participants = new List<ApplicationUser>() { currentUser },
                 };
-                
+
                 _repository.Add(quiz);
-                
+
                 await _repository.SaveChangesAsync();
 
                 foreach (string question in Questions!)
@@ -217,9 +218,9 @@ namespace Main.Pages
                 editedQuiz.OpenDate = (DateTime)OpenDate!;
                 editedQuiz.CloseDate = (DateTime)CloseDate!;
                 editedQuiz.IsCreated = true;
-                
+
                 _repository.Update(editedQuiz);
-                
+
                 await _repository.SaveChangesAsync();
 
                 foreach (var question in editedQuiz.Excersises)

@@ -23,8 +23,8 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container p-0">
+        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white border-bottom box-shadow mb-3" id="main-navbar">
+            <div class="container">
                 <a class="navbar-brand p-0" asp-area="" asp-page="/Index">
                     <img src="~/images/logo.svg" alt="Logo" class="nav-logo mt-1" style="width: 50px; height: 50px;" />
                 </a>
@@ -32,7 +32,7 @@
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Index">
@@ -52,41 +52,20 @@
                                 <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Created" ? "visible" : "invisible")" />
                             </a>
                         </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-
-                    <!-- NIEZALOGOWANY* -->
-                    @*<ul class="navbar-nav">
-                        <li class="nav-item ml-auto">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Log in</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Groups/Index">
+                                <span class="text-nowrap @(currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details" ? "text-primary" : "")">Grupy</span>
+                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details" ? "visible" : "invisible")" />
+                            </a>
                         </li>
-                        </ul>*@
-
-                    <!-- ZALOGOWANY - Profil z menu -->
-                    @* <ul class="navbar-nav position-relative"> *@
-                    @* <li class="nav-item dropdown ml-auto d-flex align-items-center"> *@
-                    @* <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false"> *@
-                    @* <span class="text-dark text-nowrap me-2">Kamil Nowak</span> *@
-                    @* <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height:
-                        40px;" /> *@
-                    @* </a> *@
-                    @* <ul class="dropdown-menu custom-dropdown position-absolute" aria-labelledby="profileDropdown"> *@
-                    @* <li> *@
-                    @* <a class="dropdown-item" asp-area="" asp-page="/Privacy">Profil</a> *@
-                    @* </li> *@
-                    @* <li> *@
-                    @* <a class="dropdown-item" asp-area="" asp-page="/Privacy">Wyloguj</a> *@
-                    @* </li> *@
-                    @* </ul> *@
-                    @* </li> *@
-                    @* </ul> *@
+                    </ul>
+                    <partial name="_LoginPartial" /> 
                 </div>
             </div>
         </nav>
     </header>
 
-    <div id="layout-main-container" class="container flex-grow-1 overflow-auto">
+    <div id="layout-main-container" class="flex-grow-1 overflow-auto container">
         <main role="main" class="h-100 w-100">
             @RenderBody()
         </main>
@@ -100,3 +79,5 @@
 </body>
 
 </html>
+
+
