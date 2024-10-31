@@ -1,6 +1,7 @@
 @page
 @model Main.Pages.CreatedModel
 @using Main.Enumerations;
+@using NuGet.Protocol
 @{
     var sketches = Model.UsersQuizes.Where(q => !q.IsCreated).ToList();
     var allPublished = Model.UsersQuizes.Where(q => q.IsCreated).ToList();
@@ -15,6 +16,26 @@
 </head>
 
 <div class="h-100 w-100 d-flex flex-row">
+    @foreach(var quiz in Model.UsersQuizes)
+    {
+        <form method="post" asp-page-handler="Delete" id="deleteFormForQuiz@(quiz.Id)">
+            <input type="hidden" asp-for="ChosenQuizId" value=@(quiz.Id) />
+        </form>
+
+        <form method="post" asp-page-handler="Publish" id="publishFormForQuiz@(quiz.Id)">
+            <input type="hidden" asp-for="ChosenQuizId" value=@(quiz.Id) />
+            <input type="hidden" asp-for="OpenDate" value="" id="openDateForQuiz@(quiz.Id)" />
+            <input type="hidden" asp-for="CloseDate" value="" id="closeDateForQuiz@(quiz.Id)" />
+        </form>
+        
+        <form method="post" asp-page-handler="Assign" id="assignFormForQuiz@(quiz.Id)">
+            <input type="hidden" asp-for="ChosenQuizId" value=@(quiz.Id) />
+            <input type="hidden" asp-for="Emails" value="" id="emailsForQuiz@(quiz.Id)" />
+            <input type="hidden" asp-for="GroupsIds" value="" id="groupsForQuiz@(quiz.Id)" />
+            <input type="hidden" asp-for="Groups" value="@(Model.Groups)" />
+        </form>
+    }
+
     <div class="w-50 flex-grow-1 overflow-auto d-flex flex-column"
          style="margin: 0px -20px 0px -20px; padding: 0px 20px 0px 20px;">
         @if (allPublished.Count > 0)
@@ -88,13 +109,14 @@
 
                         <a href="#" class="btn btn-primary ms-auto mt-auto" data-bs-toggle="modal" data-bs-target="#assignPopup"
                            data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-pin="@quiz.Code"
-                           data-url="jakiś url" @*TODO: URL DO QUIZU*@
-                           data-emails='["email1@example.com", "email2@example.com"]' @*TODO: UŻYTKOWNICY JUŻ DODANI DO QUIZU*@
-                           data-all-groups='["Klasa 2A", "Klasa 3A", "Klasa 1B"]' @*TODO: WSZYSTKIE GRUPY NALEŻĄCE DO WŁAŚCICIELA QUIZU*@
-                           data-added-groups='["Klasa 3A"]' @*TODO: GRUPY JUŻ DODANE DO QUIZU*@
+                           data-url="harmony.io/solve?code=@(quiz.Code)"
+                           data-emails='@(quiz.PublishedToEmails.ToJson())'
+                           data-all-groups='@(Model.Groups.ToJson())'
+                           data-added-groups='@(quiz.PublishedToGroupIds.ToJson())'
                            data-callback-name="assign">
                             Udostępnij
                         </a>
+                        
 
                     </div>
                 </div>
@@ -151,16 +173,6 @@
                 <div class="flex-grow-1 d-flex flex-column">
                     <div class="fw-bold fs-5 mb-3">@quiz.Name</div>
 
-                    @* <div class="d-flex flex-row align-items-center mb-2">
-                        <i class="far fa-clock icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Otwarcie:</span>
-                        <span>@quiz.OpenDate</span>
-                    </div>
-                    <div class="d-flex flex-row align-items-center mb-2">
-                        <i class="far fa-clock icon-sm me-2"></i>
-                        <span class="fw-bold me-1">Zamknięcie:</span>
-                        <span>@quiz.CloseDate</span>
-                    </div> *@
                     <div class="d-flex flex-row align-items-center">
                         <i class="fas fa-music icon-sm me-2"></i>
                         <span class="fw-bold me-1">Zadania:</span>
@@ -174,15 +186,10 @@
                             <i class="fas fa-pencil icon-sm"></i>
                         </a>
 
-                        <form method="post" id="deleteFormForQuiz@(quiz.Id)">
-                            <input type="hidden" asp-for="PostAction" value="delete" />
-                            <input type="hidden" asp-for="QuizId" value="@quiz.Id" />
-
-                            <a href="#" class="btn-icon" data-bs-toggle="modal" data-bs-target="#deleteQuizPopup"
-                               data-quiz-name="@quiz.Name" data-on-delete="deleteQuiz(@quiz.Id)">
-                                <i class="far fa-trash-can icon-sm"></i>
-                            </a>
-                        </form>
+                        <a href="#" class="btn-icon" data-bs-toggle="modal" data-bs-target="#deleteQuizPopup"
+                            data-quiz-name="@quiz.Name" data-on-delete="deleteQuiz(@quiz.Id)">
+                            <i class="far fa-trash-can icon-sm"></i>
+                        </a>
                     </div>
 
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishPopup"
@@ -229,7 +236,11 @@
 
     function publish(quizId, openDateTime, closeDateTime) {
         //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
-      
+
+        document.getElementById(`openDateForQuiz${quizId}`).value = openDateTime;
+        document.getElementById(`closeDateForQuiz${quizId}`).value = closeDateTime;
+        document.getElementById(`publishFormForQuiz${quizId}`).submit();
+
         console.log("publishing quiz: " + quizId);
         console.log("open datetime: " + openDateTime);
         console.log("close datetime: " + closeDateTime);
@@ -240,6 +251,11 @@
 
     function assign(quizId, assignedEmails, assignedGroups) {
         //TODO: Assign this quiz to users
+
+        document.getElementById(`emailsForQuiz${quizId}`).value = assignedEmails;
+        document.getElementById(`groupsForQuiz${quizId}`).value = JSON.stringify(assignedGroups);
+        document.getElementById(`assignFormForQuiz${quizId}`).submit();
+      
 
         console.log("assigned quiz: " + quizId);
         console.log("assigned users: " + assignedEmails);

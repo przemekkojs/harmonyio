@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Main.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,26 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasMany(q => q.Participants)
             .WithMany(u => u.ParticipatedQuizes)
             .UsingEntity(j => j.ToTable("QuizParticipants"));
+
+        // Opcje do serializacji JSON
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        // Lista PublishedToEmails
+        modelBuilder.Entity<Quiz>()
+            .Property(q => q.PublishedToEmails)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, options),
+                v => v != "" ? JsonSerializer.Deserialize<ICollection<string>>(v, options) ?? new List<string>() : new List<string>());
+
+        // Lista PublishedToGroups
+        modelBuilder.Entity<Quiz>()
+            .Property(q => q.PublishedToGroupIds)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, options),
+                v => v != "" ? JsonSerializer.Deserialize<ICollection<int>>(v, options) ?? new List<int>() : new List<int>());
 
         // Relacja jeden-do-wielu między Quiz a Excersise
         modelBuilder.Entity<Excersise>()
