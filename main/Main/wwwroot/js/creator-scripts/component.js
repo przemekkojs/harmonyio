@@ -367,14 +367,14 @@ export class Component {
         this.resetCreator.value = " ";
 
         // Formularz zatwierdzenia - przycisk potwierdź
-        this.submitCreator = document.createElement('input');
-        this.submitCreator.type = "button";
-        this.submitCreator.name = "submit-creator";        
-        this.submitCreator.title = "Zatwierdź funkcję";
-        this.submitCreator.className = "custom-button tick-button button-small";
-        this.submitCreator.value = " ";
+        //this.submitCreator = document.createElement('input');
+        //this.submitCreator.type = "button";
+        //this.submitCreator.name = "submit-creator";        
+        //this.submitCreator.title = "Zatwierdź funkcję";
+        //this.submitCreator.className = "custom-button tick-button button-small";
+        //this.submitCreator.value = " ";
 
-        [this.cancelCreator, this.resetCreator, this.submitCreator].forEach(e => {
+        [this.cancelCreator, this.resetCreator].forEach(e => {
             this.formButtons.appendChild(e);
         });
 
@@ -493,7 +493,7 @@ export class Component {
 
         this.cancelCreator.id = `cancel-creator-${this.id}`; // ID SET
         this.resetCreator.id = `reset-creator-${this.id}`; // ID SET
-        this.submitCreator.id = `submit-creator-${this.id}`; // ID SET
+        //this.submitCreator.id = `submit-creator-${this.id}`; // ID SET
     }
 
     getElement() {
