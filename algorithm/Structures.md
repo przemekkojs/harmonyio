@@ -108,7 +108,7 @@ Tutaj indeksowanie rozwiązań może się odbywać przy pomocy pary (Takt, Beat 
 ### Błąd (Mistake)
 Bazowa klasa abstrakcyjna błedu. Bład można podzielić na 2 typy, stąd ten podział, abstrakcja natomiast potem ułatwi serializację i operowanie po stronie frontendu. Typy błedów to:
 - Nutowe - kiedy nuty nie zgadzają się z funkcją
-- Funkcyjne - kiedy funkcje nie spełniają zasad
+- Stosowy - kiedy stosy użytkownika nie spełniają zasad
 Takie 2 klasy będą rozszerzały klasę błedu i wzbogacały je o swoje funkcjonalności.
 
 - Opis: string
@@ -119,8 +119,8 @@ Potrzebna jest też funkcja generowania opisu, nawet jeżeli na potrzeby testów
 - Nuty: List\<Note\>
 - Stos: Stack
 
-### Błąd funkcyjny (FunctionMistake)
-- Funkcje: List\<Function\>
+### Błąd stosu (StackMistake)
+- Stosy: List\<Stack\>
 - Zasada: Rule
 
 ### Zasada (Rule)

@@ -29,7 +29,7 @@
         public static readonly Component Seventh = new(ComponentType.Seventh, dissonant: true);
         public static readonly Component Ninth = new(ComponentType.Ninth, dissonant: true);
 
-        public static Component GetByString(string value)
+        public static Component? GetByString(string value)
         {
             return value switch
             {
@@ -41,7 +41,7 @@
                 "6" => Sixth,
                 "7" => Seventh,
                 "9" => Ninth,
-                _ => throw new ArgumentException("Invalid value")
+                _ => null
             };
         }
     }

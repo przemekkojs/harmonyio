@@ -4,7 +4,7 @@ namespace Algorithm.New.Algorithm.Mistake
 {
     public class NoteMistake : Mistake
     {
-        public List<Note> Notes { get; set; } = [];
+        public List<string> Notes { get; set; } = [];
         public Stack? Stack { get; set; } = null;
 
         public override void GenerateDescription()

@@ -3,13 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace Algorithm.New.Music
 {
-    public record Index
-    {
-        public int Bar { get; set; }
-        public int Beat { get; set; }
-        public int Duration { get; set; }
-    }
-
     public class Stack
     {
         public Note Soprano { get; set; }
@@ -19,6 +12,8 @@ namespace Algorithm.New.Music
 
         public Index Index { get; set; }
 
+        public List<Note> Notes { get; private set; }
+
         public Stack(Index index, Note soprano, Note alto, Note tenore, Note bass)
         { 
             Soprano = soprano;
@@ -26,6 +21,8 @@ namespace Algorithm.New.Music
             Tenore = tenore;
             Bass = bass;
             Index = index;
+
+            Notes = [Soprano, Alto, Tenore, Bass];        
         }
 
         public Stack (Index index, string soprano, string alto, string tenore, string bass)

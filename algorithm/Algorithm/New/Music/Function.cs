@@ -21,10 +21,9 @@ namespace Algorithm.New.Music
         public bool IsInsertion { get; set; }
         public InsertionType InsertionType { get; set; }
 
-        // TODO: Add suspensions
-        public int Bar { get; set; }
-        public int Beat { get; set; }
-        public int Duration { get; set; }
+        // TODO IN LATER VERSION: Add suspensions
+        
+        public Index Index { get; set; }
 
         public static readonly Dictionary<Symbol, int> symbolIndexes = new()
         {
@@ -59,14 +58,12 @@ namespace Algorithm.New.Music
         }
 
         // TODO: Params....
-        public Function(int bar, int beat, int duration, Symbol symbol, bool minor, Tonation tonation,
+        public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
             bool isInsertion=false, InsertionType insertionType=InsertionType.None,
             Component? root=null, Component? position=null, Component? removed=null,
             List<Component>? alterations=null, List<Component>? added=null)
         {
-            Bar = bar;
-            Beat = beat;
-            Duration = duration;
+            Index = index;
             Symbol = symbol;
             Minor = minor;
             Root = root;
@@ -84,13 +81,31 @@ namespace Algorithm.New.Music
             DeductPossibleComponents();
         }
 
+        // TODO: Re-think JSON constructor
         [JsonConstructor]
-        public Function(int bar, int beat, int duration, Symbol symbol, bool minor, string root, string position, string removed, List<string> alterations, List<string> added)
+        public Function(bool minor, string symbol, string position, string root, string removed,
+            List<string> alterations, List<string> added, int barIndex, int verticalIndex)
         {
-            Bar = bar;
-            Beat = beat;
-            Duration = duration;
-            Symbol = symbol;
+            Index = new Index()
+            { 
+                Bar = barIndex,
+                Beat = verticalIndex
+            };
+
+            Symbol = symbol switch
+            {
+                "T" => Symbol.T,
+                "Sii" => Symbol.Sii,
+                "Diii" => Symbol.Diii,
+                "S" => Symbol.S,
+                "D" => Symbol.D,
+                "Tvi" => Symbol.Tvi,
+                "Svi" => Symbol.Svi,
+                "Dvii" => Symbol.Dvii,
+                "Svii" => Symbol.Svii,
+                _ => throw new ArgumentException("Invalid symbol.")
+            };
+
             Minor = minor;
 
             Root = Component.GetByString(root);
@@ -101,10 +116,21 @@ namespace Algorithm.New.Music
             Added = [];
 
             foreach (var alterationString in alterations)
-                Alterations.Add(Component.GetByString(alterationString));
+            {
+                var toAdd = Component.GetByString(alterationString);
+                
+                if (toAdd != null)
+                    Alterations.Add(toAdd);
+            }
+                
 
             foreach (var addedString in added)
-                Added.Add(Component.GetByString(addedString));
+            {
+                var toAdd = Component.GetByString(addedString);
+
+                if (toAdd != null)
+                    Alterations.Add(toAdd);
+            }
 
             PossibleComponents = [];
 

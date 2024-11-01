@@ -2,8 +2,6 @@
 {
     public class Note
     {
-        // TODO: Make parsable from JSON
-
         public string Name { get; private set; }
         public int Octave { get; set; }
         public string Accidental { get; private set; }
@@ -16,6 +14,13 @@
             Octave = octave;
 
             DeductAccidental();
+        }
+
+        public Note (string name, int octave, string accidental)
+        {
+            Name = name;
+            Octave = octave;
+            Accidental = accidental;
         }
 
         private void DeductAccidental()

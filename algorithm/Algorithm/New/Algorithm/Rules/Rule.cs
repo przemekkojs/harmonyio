@@ -15,6 +15,6 @@ namespace Algorithm.New.Algorithm.Rules
             OneFunction = oneFunction;
         }
 
-        public abstract bool IsSatisfied(params Function[] functions);
+        public abstract bool IsSatisfied(params Stack[] functions);
     }
 }

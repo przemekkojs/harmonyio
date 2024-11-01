@@ -23,5 +23,19 @@ namespace Algorithm.New.Utils
 
             return result;
         }
+
+        public static bool Contains(List<string> toCheck, List<List<string>> possible)
+        {
+            foreach(var possibleNotes in possible)
+            {
+                for (int index = 0; index < possibleNotes.Count; index++)
+                {
+                    if (!toCheck[index].Equals(possibleNotes[index]))
+                        return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

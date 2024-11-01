@@ -3,33 +3,33 @@ using Algorithm.New.Music;
 
 namespace Algorithm.New.Algorithm.Mistake
 {
-    public class FunctionMistake : Mistake
+    public class StackMistake : Mistake
     {
-        public List<Function> Functions { get; set; } = [];
+        public List<Stack> Stacks { get; set; } = [];
         public Rule? Rule { get; set; } = null;
 
         public override void GenerateDescription()
         {
-            if (Functions.Count == 0 || Rule == null)
+            if (Stacks.Count == 0 || Rule == null)
             {
                 Description = "";
                 return;
             }
 
-            string postfix = Functions.Count == 1 ? "i" : "ach";
+            string postfix = Stacks.Count == 1 ? "i" : "ach";
             Description = $"Błąd w funkcj{postfix}: ";
 
-            if (Functions.Count == 1)
+            if (Stacks.Count == 1)
             {
-                var function = Functions[0];
-                Description += $"Takt {function.Bar}, Miara {function.Beat}. Niespełniona zasada {Rule.Name}.";
+                var function = Stacks[0];
+                Description += $"Takt {function.Index.Bar}, Miara {function.Index.Beat}. Niespełniona zasada {Rule.Name}.";
             }
             else
             {
-                var function1 = Functions[0];
-                var function2 = Functions[1];
+                var function1 = Stacks[0];
+                var function2 = Stacks[1];
 
-                Description += $"(Takt {function1.Bar}, Miara {function1.Beat}), (Takt {function2.Bar}, Miara {function2.Beat}). Niespełniona zasada {Rule.Name}.";
+                Description += $"(Takt {function1.Index.Bar}, Miara {function1.Index.Beat}), (Takt {function2.Index.Bar}, Miara {function2.Index.Beat}). Niespełniona zasada {Rule.Name}.";
             }
         }
     }
