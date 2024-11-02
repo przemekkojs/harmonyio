@@ -1,17 +1,18 @@
 ﻿using Algorithm.New.Music;
+
 namespace Algorithm.New.Algorithm.Parsers.SolutionParser
 {
-    public class TaskParseResult
+    public class SolutionParseResult
     {
         public Tonation Tonation { get; set; }
         public Metre Meter { get; set; }
-        public List<Stack> Bars { get; set; }
+        public List<Stack> Stacks { get; set; }
 
-        public TaskParseResult(Tonation tonation, Metre meter, List<Stack> bars)
+        public SolutionParseResult(Tonation tonation, Metre meter, List<Stack> stacks)
         {
             Tonation = tonation;
             Meter = meter;
-            Bars = bars;
+            Stacks = stacks;
         }
     }
 }
