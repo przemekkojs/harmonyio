@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Main.Pages;
 
-[Authorize]
 public class IndexModel : PageModel
 { 
     public void OnGet()

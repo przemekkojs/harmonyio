@@ -1,23 +1,34 @@
 ﻿@page
 @model RegisterConfirmationModel
 @{
-    ViewData["Title"] = "Register confirmation";
+    ViewData["Title"] = "Register confirmation"; 
 }
 
-<h1>@ViewData["Title"]</h1>
-@{
-    if (@Model.DisplayConfirmAccountLink)
-    {
-<p>
-    This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-    Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
-</p>
-    }
-    else
-    {
-<p>
-        Please check your email to confirm your account.
-</p>
-    }
-}
+<div class="d-flex justify-content-center" style="min-height: 100%;"> 
+    <div class="bg-white rounded shadow p-3 mb-3" style="width: 400px;">
+        <h2 class="text-center fw-bold mb-4">Utwórz konto</h2>
+
+        @if (Model.DisplayConfirmAccountLink)
+        {
+            <p>
+                This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
+                Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a>
+            </p>
+        } else
+        {
+            <div class="fw-semibold">Sprawdź skrzynkę odbiorczą, aby się zalogować</div>
+
+            <i class="fas fa-envelope-open-text my-4 w-100 text-center" style="font-size: 100px;"></i>
+
+            <div class="small">Aby dokończyć konfigurację i się zalogować, kliknij łącze weryfikacyjne w wiadomości e-mail, którą wysłaliśmy na adres:</div>
+            <div class="fw-bold mt-2">@Model.Email</div>
+
+            <div class="small mt-4 text-center w-100">
+                @* TODO: ZRÓB, ŻEBY TO DZIAŁAŁO *@
+                <a href="#">Wyślij ponownie weryfikacyjną wiadomość e-mail</a>
+            </div>
+        }
+    </div>
+
+</div>
 

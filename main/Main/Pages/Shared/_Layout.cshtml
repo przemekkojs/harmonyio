@@ -1,7 +1,20 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+@using Enumerations
 @{
-    var currentPageRoute = ViewContext.RouteData.Values["page"]?.ToString();
+    var currentPageRoute = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+    NavState currentNavState = NavState.Unselected;
+
+    if (currentPageRoute == "/Index")
+        currentNavState = NavState.Home;
+    else if (currentPageRoute == "/Assigned")
+        currentNavState = NavState.Assigned;
+    else if (currentPageRoute == "/Created")
+        currentNavState = NavState.Created;
+    else if (currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details")
+        currentNavState = NavState.Groups;
+    else if (currentPageRoute.StartsWith("/Account"))
+        currentNavState = NavState.HiddenTabs;
 }
 
 <head>
@@ -23,7 +36,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white border-bottom box-shadow mb-3" id="main-navbar">
+        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white border-bottom shadow-sm fixed-top" id="main-navbar">
             <div class="container">
                 <a class="navbar-brand p-0" asp-area="" asp-page="/Index">
                     <img src="~/images/logo.svg" alt="Logo" class="nav-logo mt-1" style="width: 50px; height: 50px;" />
@@ -33,32 +46,37 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Index">
-                                <span class="text-nowrap @(currentPageRoute == "/Index" ? "text-primary" : "")">Strona główna</span>
-                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Index" ? "visible" : "invisible")" />
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Assigned">
-                                <span class="text-nowrap @(currentPageRoute == "/Assigned" ? "text-primary" : "")">Przypisane</span>
-                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Assigned" ? "visible" : "invisible")" />
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Created">
-                                <span class="text-nowrap @(currentPageRoute == "/Created" ? "text-primary" : "")">Utworzone</span>
-                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Created" ? "visible" : "invisible")" />
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Groups/Index">
-                                <span class="text-nowrap @(currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details" ? "text-primary" : "")">Grupy</span>
-                                <hr class="mb-0 mt-1 border-primary nav-underline @(currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details" ? "visible" : "invisible")" />
-                            </a>
-                        </li>
-                    </ul>
+                    @if (currentNavState != NavState.HiddenTabs){
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Index">
+                                    <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : "")">Strona główna</span>
+                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Home ? "visible" : "invisible")" />
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Assigned">
+                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : "")">Przypisane</span>
+                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Created">
+                                    <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : "")">Utworzone</span>
+                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Created ? "visible" : "invisible")" />
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Groups/Index">
+                                    <span class="text-nowrap @(currentNavState == NavState.Groups ? "text-primary" : "")">Grupy</span>
+                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Groups ? "visible" : "invisible")" />
+                                </a>
+                            </li>
+                        </ul>
+                    } else {
+                        <div></div>
+                    }
+
                     <partial name="_LoginPartial" /> 
                 </div>
             </div>
@@ -79,5 +97,4 @@
 </body>
 
 </html>
-
 
