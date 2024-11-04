@@ -182,9 +182,20 @@
         thrashCan: '@Url.Content("~/images/staff-symbols/thrash-can.png")',
         thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
     };
+
+    let canvasWidth = 978;
+    let canvasHeight = 800;
+
     const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
     const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToSolutions[u].Select(es => es.Answer))));
+
+    let currentUserIndex = 0;
+    let currentQuestionIndex = 0;
+
+    function getCurrentSolution() {
+        return userSolutions[currentUserIndex][currentQuestionIndex]
+    }
 </script>
 
 <script src="~/lib/p5/p5.min.js"></script>
@@ -227,9 +238,6 @@
     const pointsElement = document.getElementById("points");
     const maxElement = document.getElementById("max");
     const commentElement = document.getElementById("comment");
-
-    let currentUserIndex = 0;
-    let currentQuestionIndex = 0;
 
     for (let i = 0; i < @Model.Excersises.Count; i++) {
         for (let j = 0; j < @Model.Users.Count; j++) {

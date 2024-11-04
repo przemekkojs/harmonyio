@@ -1,6 +1,4 @@
 let canvas;
-let canvasWidth = 978;
-let canvasHeight = 800;
 let sketchFont;
 
 let grandStaff;
@@ -28,7 +26,7 @@ function setup() {
   resizeSymbols();
 
   grandStaff = new GrandStaff(canvasWidth);
-  grandStaff.loadFromJson(questions[0], userSolutions[0][0]);
+  grandStaff.loadFromJson(questions[0], getCurrentSolution());
   //noLoop();
 }
 

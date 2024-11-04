@@ -34,7 +34,8 @@
 
     <div class="flex-grow-1 bg-white rounded shadow p-3 w-100 d-flex flex-column overflow-auto">
         <div class="d-flex flex-row align-items-start question-area">
-            <div class="question-square bg-secondary rounded shadow d-flex justify-content-center align-items-center me-3">
+            <div
+                class="question-square bg-secondary rounded shadow d-flex justify-content-center align-items-center me-3">
                 <div id="excersise-number" class="fs-1 fw-bold text-white">
                     @*SET VIA JS*@
                 </div>
@@ -49,21 +50,24 @@
 
         <div class="music-staff flex-grow-1 mt-3 w-100 d-flex flex-row justify-content-center align-items-center">
             <div class="music-staff-grade-area me-3 h-100 d-flex flex-column">
-                <div class="flex-grow-1 bg-secondary shadow rounded mb-3 d-flex flex-column justify-content-center align-items-center">
+                <div
+                    class="flex-grow-1 bg-secondary shadow rounded mb-3 d-flex flex-column justify-content-center align-items-center">
                     <span class="fw-bold text-white">Punkty</span>
                     <span id="points-text" class="text-white">
                         @*SET VIA JS*@
                     </span>
                 </div>
 
-                <div class="flex-grow-1 bg-secondary shadow rounded mb-3 d-flex flex-column justify-content-center align-items-center">
+                <div
+                    class="flex-grow-1 bg-secondary shadow rounded mb-3 d-flex flex-column justify-content-center align-items-center">
                     <span class="fw-bold text-white">Max</span>
                     <span id="max-text" class="text-white">
                         @*SET VIA JS*@
                     </span>
                 </div>
 
-                <div class="flex-grow-1 bg-secondary shadow rounded d-flex flex-column justify-content-center align-items-center">
+                <div
+                    class="flex-grow-1 bg-secondary shadow rounded d-flex flex-column justify-content-center align-items-center">
                     <span class="fw-bold text-white">Wynik</span>
                     <span id="percent-text" class="text-white">
                         @*SET VIA JS*@
@@ -71,11 +75,8 @@
                 </div>
             </div>
 
-            <div class="flex-grow-1 bg-white shadow rounded h-100 d-flex justify-content-center align-items-center">
-                <span class="me-2">Rozwiązanie (Pięciolinia):</span>
-                <span id="answer">
-                    @*SET VIA JS*@
-                </span>
+            <div id="music-staff-div" class="flex-grow-1 bg-white shadow rounded h-100 d-flex overflow-auto">
+                @* MUSIC STAFF DIV SET VIA JS *@
             </div>
         </div>
 
@@ -99,7 +100,8 @@
         </div>
         <div id="div-last-ex">
             <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-            <button id="btn-last-ex" type="button" onclick="lastQuestion()" class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+            <button id="btn-last-ex" type="button" onclick="lastQuestion()"
+                class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
         </div>
 
         <button onclick="nextQuestion()" class="btn btn-secondary btn-std-width ms-3">Następne</button>
@@ -107,18 +109,76 @@
 </div>
 
 <script>
-    const questions = @Html.Raw(JsonConvert.SerializeObject(Model.QuizResult.Quiz.Excersises.Select(e => e.Question)));
+    // needed to allow overflow from canvas div, but now navbar is hiding
+    // TODO try fix this
+    @* const mainContainer = document.getElementById('layout-main-container');
+        if (mainContainer) {
+        mainContainer.classList.remove('overflow-auto');
+        mainContainer.style.overflow = 'visible';
+        } *@
+
+    const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
+
+    const symbolPaths = {
+        curlyBrace: '@Url.Content("~/images/staff-symbols/curly-brace.png")',
+        bassKey: '@Url.Content("~/images/staff-symbols/bass-key.png")',
+        violinKey: '@Url.Content("~/images/staff-symbols/violin-key.png")',
+        bemol: '@Url.Content("~/images/staff-symbols/bemol.png")',
+        doubleBemol: '@Url.Content("~/images/staff-symbols/double-bemol.png")',
+        sharp: '@Url.Content("~/images/staff-symbols/sharp.png")',
+        doubleSharp: '@Url.Content("~/images/staff-symbols/double-sharp.png")',
+        natural: '@Url.Content("~/images/staff-symbols/natural.png")',
+        fullNote: '@Url.Content("~/images/staff-symbols/full-note.png")',
+        noteHeadClosed: '@Url.Content("~/images/staff-symbols/note-head-closed.png")',
+        noteHeadOpened: '@Url.Content("~/images/staff-symbols/note-head-opened.png")',
+        noteFlag: '@Url.Content("~/images/staff-symbols/note-flag.png")',
+        mouse: '@Url.Content("~/images/staff-symbols/mouse.png")',
+        noteReverse: '@Url.Content("~/images/staff-symbols/note-reverse.png")',
+        thrashCan: '@Url.Content("~/images/staff-symbols/thrash-can.png")',
+        thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
+    };
+
+    let canvasWidth = 978;
+    let canvasHeight = 800;
+
+    const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.QuizResult.Quiz.Excersises.Select(e => e.Question)));
+    const questions = questionsRaw.map(q => JSON.parse(q));
     const answers = @Html.Raw(JsonConvert.SerializeObject(Model.QuizResult.ExcersiseResults.Select(r => r.ExcersiseSolution.Answer)));
+
+    let currentIndex = 0;
+
+    function getCurrentSolution() {
+        return answers[currentIndex];
+    }
+
+</script>
+
+<script src="~/lib/p5/p5.min.js"></script>
+<script src="~/js/staff-scripts/constants.js"></script>
+<script src="~/js/staff-scripts/symbols.js"></script>
+<script src="~/js/staff-scripts/bar.js"></script>
+<script src="~/js/staff-scripts/vertical.js"></script>
+<script src="~/js/staff-scripts/twoNotes.js"></script>
+<script src="~/js/staff-scripts/functionSymbol.js"></script>
+<script src="~/js/staff-scripts/note.js"></script>
+<script src="~/js/staff-scripts/keySignature.js"></script>
+<script src="~/js/staff-scripts/metre.js"></script>
+<script src="~/js/staff-scripts/accidental.js"></script>
+<script src="~/js/staff-scripts/staff.js"></script>
+<script src="~/js/staff-scripts/sketchGrading.js"></script>
+
+<script>
     const results = @Json.Serialize(Model.QuizResult.ExcersiseResults);
 
-    var currentIndex = 0;
-
-    function loadQuestion(index) {
+    function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             document.getElementById("excersise-number").innerText = index + 1;
-            document.getElementById("excersise-question").innerText = questions[index];
+            document.getElementById("excersise-question").innerText = questions[index].question;
 
-            document.getElementById("answer").innerText = answers[index];
+            //document.getElementById("answer").innerText = answers[index];
+            if (loadToGrandStaff) {
+                grandStaff.loadFromJson(questions[index], answers[index]);
+            }
             document.getElementById("points-text").innerText = results[index].points;
             document.getElementById("max-text").innerText = results[index].maxPoints;
             document.getElementById("percent-text").innerText = Math.round((results[index].points / results[index].maxPoints) * 100) + "%";
@@ -199,6 +259,6 @@
         }
     }
 
-    loadQuestion(currentIndex);
+    loadQuestion(currentIndex, false);
 
 </script>
