@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="flex-grow-1 w-100 d-flex flex-column">
+        <div class="flex-grow-1 w-100 d-flex flex-column bg-white rounded shadow p-3">
             <div class="d-flex flex-row align-items-start question-area">
                 <div
                     class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-3">
@@ -34,16 +34,12 @@
                 </div>
             </div>
 
-            <div class="flex-grow-1 d-flex flex-row mt-3">
-                <div id="music-staff-div"
-                    class="bg-white rounded shadow p-3 flex-grow-1 d-flex justify-content-center align-items-center overflow-auto">
-
-                    <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
-                    @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
-                    {
-                        <input type="hidden" asp-for="@Model.Answers[@i]" value="@Model.Answers[@i]" />
-                    }
-                </div>
+            <div id="music-staff-div" class="flex-grow-1 d-flex flex-row mt-3 overflow-auto">
+                <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
+                @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
+                {
+                    <input type="hidden" asp-for="@Model.Answers[@i]" value="@Model.Answers[@i]" />
+                }
             </div>
         </div>
 

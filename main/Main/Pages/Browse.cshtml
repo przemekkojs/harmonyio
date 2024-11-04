@@ -46,35 +46,34 @@
                     @*SET VIA JS*@
                 </p>
             </div>
+
+            <div
+                class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                <span class="fw-bold text-white mb-1">Punkty</span>
+                <span id="points-text" class="text-white">
+                    @*SET VIA JS*@
+                </span>
+            </div>
+
+            <div
+                class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                <span class="fw-bold text-white mb-1">Max</span>
+                <span id="max-text" class="text-white">
+                    @*SET VIA JS*@
+                </span>
+            </div>
+
+            <div
+                class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                <span class="fw-bold text-white mb-1">Wynik</span>
+                <span id="percent-text" class="text-white">
+                    @*SET VIA JS*@
+                </span>
+            </div>
+
         </div>
 
         <div class="music-staff flex-grow-1 mt-3 w-100 d-flex flex-row justify-content-center align-items-center">
-            <div class="music-staff-grade-area me-3 h-100 d-flex flex-column">
-                <div
-                    class="flex-grow-1 bg-secondary shadow rounded mb-3 d-flex flex-column justify-content-center align-items-center">
-                    <span class="fw-bold text-white">Punkty</span>
-                    <span id="points-text" class="text-white">
-                        @*SET VIA JS*@
-                    </span>
-                </div>
-
-                <div
-                    class="flex-grow-1 bg-secondary shadow rounded mb-3 d-flex flex-column justify-content-center align-items-center">
-                    <span class="fw-bold text-white">Max</span>
-                    <span id="max-text" class="text-white">
-                        @*SET VIA JS*@
-                    </span>
-                </div>
-
-                <div
-                    class="flex-grow-1 bg-secondary shadow rounded d-flex flex-column justify-content-center align-items-center">
-                    <span class="fw-bold text-white">Wynik</span>
-                    <span id="percent-text" class="text-white">
-                        @*SET VIA JS*@
-                    </span>
-                </div>
-            </div>
-
             <div id="music-staff-div" class="flex-grow-1 bg-white shadow rounded h-100 d-flex overflow-auto">
                 @* MUSIC STAFF DIV SET VIA JS *@
             </div>
@@ -138,7 +137,7 @@
         thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
     };
 
-    let canvasWidth = 978;
+    let canvasWidth = 1264;
     let canvasHeight = 800;
 
     const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.QuizResult.Quiz.Excersises.Select(e => e.Question)));
