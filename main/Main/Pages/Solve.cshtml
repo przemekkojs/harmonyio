@@ -34,9 +34,6 @@
                 </div>
             </div>
 
-            @* TODO remove this input *@
-            @* <input type="text" id="answer-input" class="form-control task-input"> *@
-
             <div class="flex-grow-1 d-flex flex-row mt-3">
                 <div id="music-staff-div"
                     class="bg-white rounded shadow p-3 flex-grow-1 d-flex justify-content-center align-items-center overflow-auto">
@@ -75,11 +72,11 @@
 <script>
     // needed to allow overflow from canvas div, but now navbar is hiding
     // TODO try fix this
-    //var mainContainer = document.getElementById('layout-main-container');
-    //if (mainContainer) {
-    //    mainContainer.classList.remove('overflow-auto');
-    //    mainContainer.style.overflow = 'visible';
-    //}
+    const mainContainer = document.getElementById('layout-main-container');
+    if (mainContainer) {
+        mainContainer.classList.remove('overflow-auto');
+        mainContainer.style.overflow = 'visible';
+    }
 
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
 
@@ -103,9 +100,6 @@
     };
     const excersises = @Json.Serialize(Model.Quiz.Excersises);
     const questions = excersises.map(e => JSON.parse(e.question));
-
-    // console.log(questions);
-    // console.log(excersises);
 </script>
 
 <script src="~/lib/p5/p5.min.js"></script>

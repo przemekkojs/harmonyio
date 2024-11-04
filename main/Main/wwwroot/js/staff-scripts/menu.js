@@ -278,7 +278,7 @@ class Menu {
     );
 
     // NOTE BUTTONS
-    const noteButtonsYOffset = 90;
+    const noteButtonsYOffset = 80;
     const noteButtonConfig = [
       { x: 20, y: 15, noteValue: 1, label: "1" },
       { x: 85, y: 15, noteValue: 2, label: "2" },
@@ -304,7 +304,7 @@ class Menu {
       new Button(
         this,
         20,
-        405,
+        385,
         50,
         60,
         symbols.noteReverse,
@@ -324,7 +324,7 @@ class Menu {
       new Button(
         this,
         85,
-        405,
+        385,
         50,
         60,
         "dot",
@@ -341,7 +341,7 @@ class Menu {
     );
 
     // ACCIDENTAL BUTTONS
-    const accidentalButtonsYOffset = 485;
+    const accidentalButtonsYOffset = 455;
     const accidentalButtonConfig = [
       {
         x: 20,
@@ -397,16 +397,17 @@ class Menu {
   calculateYOffset() {
     const clientRect = canvas.elt.getBoundingClientRect();
     const y = clientRect.y;
+    const topOffset = 10;
 
-    if (y > 90) {
+    if (y > topOffset) {
       return 0;
     } else {
       const canvasHeight = clientRect.height;
 
-      if (y + canvasHeight < 850) {
-        return canvasHeight - 850 + 100;
+      if (y + canvasHeight < this.getHeight() + 20) {
+        return canvasHeight - (this.getHeight() + 20) + topOffset;
       } else {
-        return -y + 100;
+        return -y + topOffset;
       }
     }
   }

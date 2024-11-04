@@ -17,6 +17,12 @@ class Vertical {
     this.functionSymbol = FunctionSymbol.fromJson(this, task);
   }
 
+  clearFunctionSymbolGraphics() {
+    if (this.functionSymbol) {
+      this.functionSymbol.clearGraphics();
+    }
+  }
+
   toJson() {
     const upperJson = this.upperStaff.toJson();
     const lowerJson = this.lowerStaff.toJson();

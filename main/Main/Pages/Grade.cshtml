@@ -16,8 +16,10 @@
 
                 @for (int i = 0; i < Model.Users.Count; i++)
                 {
-                    <div onclick="selectUser(@i)" class="student-row d-flex flex-row @(i == Model.Users.Count - 1 ? "mb-3" : "mb-2")">
-                        <div class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                    <div onclick="selectUser(@i)"
+                        class="student-row d-flex flex-row @(i == Model.Users.Count - 1 ? "mb-3" : "mb-2")">
+                        <div
+                            class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
                             <div class="student-name">@Model.Users[i].FullName</div>
                         </div>
                         <div class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
@@ -39,15 +41,19 @@
 
                     <div class="d-flex align-items-center">
                         <span class="fw-bold me-2">Wynik</span>
-                        <div id="points-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap">
+                        <div id="points-text"
+                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap">
                             @*SET VIA JS*@
                         </div>
-                        <div id="percentage-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4">
+                        <div id="percentage-text"
+                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4">
                             @*SET VIA JS*@
                         </div>
                         <span class="fw-bold me-2">Ocena</span>
-                        <select id="grade-select" onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
-                                class="grade-select bg-transparent fw-bold form-select border border-secondary text-secondary rounded px-2 py-1" aria-label="Wybierz ocenę">
+                        <select id="grade-select"
+                            onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
+                            class="grade-select bg-transparent fw-bold form-select border border-secondary text-secondary rounded px-2 py-1"
+                            aria-label="Wybierz ocenę">
                             <option selected disabled>-</option>
                             @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
                             {
@@ -64,7 +70,8 @@
 
                 <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto">
                     <div class="d-flex flex-row align-items-start question-area">
-                        <div class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-2">
+                        <div
+                            class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-2">
                             <div class="fs-1 text-white fw-bold" id="excersiseNumber">
                                 @* FILLED VIA JS*@
                             </div>
@@ -76,30 +83,34 @@
                             </p>
                         </div>
 
-                        <div class="question-square flex-grow-1 rounded bg-secondary shadow mb-3 d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                        <div
+                            class="question-square flex-grow-1 rounded bg-secondary shadow mb-3 d-flex flex-column justify-content-center align-items-center p-1 me-2">
                             <span class="fw-bold text-white">Sugestia</span>
                             <span id="suggestion" class="text-white">
                                 @*SET VIA JS*@
                             </span>
                         </div>
 
-                        <div class="question-square flex-grow-1 rounded bg-secondary shadow mb-3 d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                        <div
+                            class="question-square flex-grow-1 rounded bg-secondary shadow mb-3 d-flex flex-column justify-content-center align-items-center p-1 me-2">
                             <span class="fw-bold text-white mb-1">Wynik</span>
                             <input type="number" id="points" onchange="onPointsChange(this.value)"
-                                    onKeyPress="integerKeyPress(event)"
-                                    class="form-control points-input bg-white text-dark rounded" />
+                                onKeyPress="integerKeyPress(event)"
+                                class="form-control points-input bg-white text-dark rounded" />
                         </div>
 
-                        <div class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                        <div
+                            class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
                             <span class="fw-bold text-white mb-1">Max</span>
                             <input type="number" id="max" onchange="onMaxChange(this.value)"
-                                    onKeyPress="integerKeyPress(event)"
-                                    class="form-control points-input bg-white text-dark rounded" />
+                                onKeyPress="integerKeyPress(event)"
+                                class="form-control points-input bg-white text-dark rounded" />
                         </div>
                     </div>
 
-                    <div class="music-staff mt-3 d-flex flex-row justify-content-center align-items-center">
-                        @for (int i = 0; i < Model.Excersises.Count; i++){
+                    <div class="mt-3 d-flex flex-row">
+                        @for (int i = 0; i < Model.Excersises.Count; i++)
+                        {
                             @for (int j = 0; j < Model.Users.Count; j++)
                             {
                                 <input id="points-hidden-@i-@j" type="hidden" asp-for="Points[j][i]" value="0" />
@@ -108,20 +119,17 @@
                             }
                         }
 
-                        <div class="flex-grow-1 h-100 rounded bg-white shadow d-flex justify-content-center align-items-center">
-                            <span class="me-2">Rozwiązanie (Pięciolinia):</span>
-                            <span id="solution">
-                                @*SET VIA JS*@
-                            </span>
+                        <div id="music-staff-div"
+                            class="flex-grow-1 h-100 rounded bg-white shadow d-flex justify-content-center align-items-center">
+                            @* MUSIC STAFF DIV SET VIA JS *@
                         </div>
                     </div>
 
                     <div class="mt-3">
                         <span class="fw-bold">Komentarz</span>
-                        <textarea id="comment" rows="1" placeholder="Dodaj komentarz..."
-                                    oninput="resizeTextArea(this)"
-                                    onchange="onCommentChange(this.value)"
-                                    class="form-control shadow border-white rounded overflow-hidden mt-2"></textarea>
+                        <textarea id="comment" rows="1" placeholder="Dodaj komentarz..." oninput="resizeTextArea(this)"
+                            onchange="onCommentChange(this.value)"
+                            class="form-control shadow border-white rounded overflow-hidden mt-2"></textarea>
                     </div>
                 </div>
             </div>
@@ -136,7 +144,8 @@
             </div>
             <div id="div-last-ex">
                 <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-                <button id="btn-last-ex" type="button" onclick="lastQuestion()" class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+                <button id="btn-last-ex" type="button" onclick="lastQuestion()"
+                    class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
             </div>
 
             <button type="submit" class="btn btn-secondary btn-std-width ms-3">Zapisz oceny</button>
@@ -145,15 +154,61 @@
 </form>
 
 <script>
-    const usernames = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => u.FullName)));
+    // needed to allow overflow from canvas div, but now navbar is hiding
+    // TODO try fix this
+    @* const mainContainer = document.getElementById('layout-main-container');
+        if (mainContainer) {
+        mainContainer.classList.remove('overflow-auto');
+        mainContainer.style.overflow = 'visible';
+        } *@
+
+    const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
+
+    const symbolPaths = {
+        curlyBrace: '@Url.Content("~/images/staff-symbols/curly-brace.png")',
+        bassKey: '@Url.Content("~/images/staff-symbols/bass-key.png")',
+        violinKey: '@Url.Content("~/images/staff-symbols/violin-key.png")',
+        bemol: '@Url.Content("~/images/staff-symbols/bemol.png")',
+        doubleBemol: '@Url.Content("~/images/staff-symbols/double-bemol.png")',
+        sharp: '@Url.Content("~/images/staff-symbols/sharp.png")',
+        doubleSharp: '@Url.Content("~/images/staff-symbols/double-sharp.png")',
+        natural: '@Url.Content("~/images/staff-symbols/natural.png")',
+        fullNote: '@Url.Content("~/images/staff-symbols/full-note.png")',
+        noteHeadClosed: '@Url.Content("~/images/staff-symbols/note-head-closed.png")',
+        noteHeadOpened: '@Url.Content("~/images/staff-symbols/note-head-opened.png")',
+        noteFlag: '@Url.Content("~/images/staff-symbols/note-flag.png")',
+        mouse: '@Url.Content("~/images/staff-symbols/mouse.png")',
+        noteReverse: '@Url.Content("~/images/staff-symbols/note-reverse.png")',
+        thrashCan: '@Url.Content("~/images/staff-symbols/thrash-can.png")',
+        thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
+    };
+    const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
+    const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToSolutions[u].Select(es => es.Answer))));
+</script>
+
+<script src="~/lib/p5/p5.min.js"></script>
+<script src="~/js/staff-scripts/constants.js"></script>
+<script src="~/js/staff-scripts/symbols.js"></script>
+<script src="~/js/staff-scripts/bar.js"></script>
+<script src="~/js/staff-scripts/vertical.js"></script>
+<script src="~/js/staff-scripts/twoNotes.js"></script>
+<script src="~/js/staff-scripts/functionSymbol.js"></script>
+<script src="~/js/staff-scripts/note.js"></script>
+<script src="~/js/staff-scripts/keySignature.js"></script>
+<script src="~/js/staff-scripts/metre.js"></script>
+<script src="~/js/staff-scripts/accidental.js"></script>
+<script src="~/js/staff-scripts/staff.js"></script>
+<script src="~/js/staff-scripts/sketchGrading.js"></script>
+
+<script>
+    const usernames = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => u.FullName)));
     const userScoreSuggestions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToGradings[u])));
-    const questions = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)))
 
     const userScores = @(Model.Points == null ?
         Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToGradings[u]))) :
-        Html.Raw(JsonConvert.SerializeObject(Model.Users.Select((u, index) => Model.Points[index].Zip(Model.Maxes[index], (x,y) => (x,y)).ToList())))
-    );
+        Html.Raw(JsonConvert.SerializeObject(Model.Users.Select((u, index) => Model.Points[index].Zip(Model.Maxes[index], (x, y) => (x, y)).ToList())))
+        );
 
     const userComments = @Html.Raw(JsonConvert.SerializeObject(Model.Comments))
         ?? Array.from({ length: usernames.length }, () => Array(@Model.Excersises.Count).fill(""));
@@ -171,7 +226,6 @@
     const suggestionElement = document.getElementById("suggestion");
     const pointsElement = document.getElementById("points");
     const maxElement = document.getElementById("max");
-    const solutionElement = document.getElementById("solution");
     const commentElement = document.getElementById("comment");
 
     let currentUserIndex = 0;
@@ -191,14 +245,14 @@
         }
     }
 
-    function loadUser(index) {
+    function loadUser(index, loadToGrandStaff = true) {
         handleStudentsList(index);
         handleTotalPoints(index);
 
         currentUserText.innerText = usernames[index];
         gradeSelect.value = userGrades[index][0];
 
-        loadQuestion(0);
+        loadQuestion(0, loadToGrandStaff);
     }
 
     function handleTotalPoints(index) {
@@ -225,8 +279,6 @@
         loadUser(currentUserIndex);
     }
 
-
-
     function getUserTotalPointsAndMax(userIndex) {
         var totalPoints = 0;
         var totalMax = 0;
@@ -244,7 +296,7 @@
         userGrades[currentUserIndex] = [value, strValue];
         document.getElementById(`user-grade-${currentUserIndex}`).innerText = strValue;
         document.getElementById(`grade-hidden-${currentUserIndex}`).value = value;
-        @* document.getElementById("grades-validation-text").innerText = ''; *@
+    @* document.getElementById("grades-validation-text").innerText = ''; *@
     }
 
     function onPointsChange(value) {
@@ -297,27 +349,30 @@
     }
 
 
-    function loadQuestion(index) {
+    function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
 
-            questionElement.innerText = questions[index]
-            excersiseNumberElement.innerHTML = index + 1;
+            questionElement.innerText = questions[currentQuestionIndex].question;
+            excersiseNumberElement.innerHTML = currentQuestionIndex + 1;
 
-            var score = userScores[currentUserIndex][index];
-            var scoreSuggestions = userScoreSuggestions[currentUserIndex][index];
+            var score = userScores[currentUserIndex][currentQuestionIndex];
+            var scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
 
             suggestionElement.innerText = scoreSuggestions.Item1 + " / " + scoreSuggestions.Item2;
             pointsElement.placeholder = scoreSuggestions.Item1;
             maxElement.placeholder = scoreSuggestions.Item2;
             pointsElement.value = score.Item1;
             maxElement.value = score.Item2;
-            solutionElement.innerText = userSolutions[currentUserIndex][index];
+            //solutionElement.innerText = userSolutions[currentUserIndex][currentQuestionIndex];
+            if (loadToGrandStaff) {
+                grandStaff.loadFromJson(questions[currentQuestionIndex], userSolutions[currentUserIndex][currentQuestionIndex])
+            }
 
-            commentElement.value = userComments[currentUserIndex][index];
+            commentElement.value = userComments[currentUserIndex][currentQuestionIndex];
             resizeTextArea(commentElement);
 
-            generateButtons(index);
+            generateButtons(currentQuestionIndex);
         }
     }
 
@@ -367,6 +422,6 @@
         document.getElementById("div-last-ex").style.display = end < questions.length - 1 ? 'inline-block' : 'none';
     }
 
-    loadUser(currentUserIndex);
+    loadUser(currentUserIndex, false);
 
 </script>
