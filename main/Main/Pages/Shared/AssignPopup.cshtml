@@ -9,7 +9,7 @@ ATRYBUTY:
     - data-emails: Emaile użytkowników, przypisanych już do quizu. Będą one nieusuwalne.
     - data-all-groups: Wszystkie grupy tworzącego quiz. Quiz może być przypisany do tych grup.
     - data-added-groups: Wszystkie przypisane już do tego quizu grupy. Będą one nieusuwalne.
-    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3 argumenty - quizId, assignedEmails i assignedGroups
+    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3 argumenty - quizId, assignedEmails i assignedGroups oraz zwracać null w przypadku powodzenia lub listę błędnych emaili w przypadku niepowodzenia
 *@
 
 <div class="modal fade" id="assignPopup" tabindex="-1" role="dialog" aria-labelledby="assignPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -83,11 +83,15 @@ ATRYBUTY:
 
                         </div>
                     </div>
+                    
+                    <div id="assignValidationText" class="text-danger mx-3 mt-3 d-none">
+                        Niektórzy z podanych użytkowników nie istnieją lub są już dodani do quizu!
+                    </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary ms-auto btn-sm-width" data-bs-dismiss="modal">Zamknij</button>
-                    <button type="button" class="btn btn-primary me-auto btn-sm-width" data-bs-dismiss="modal" id="assignSaveButton">Zapisz</button>
+                    <button type="button" class="btn btn-secondary ms-auto btn-sm-width" id="assignCancelButton" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="button" class="btn btn-primary me-auto btn-sm-width" id="assignSaveButton">Zapisz</button>
                 </div>
             </div>
         </div>
@@ -97,18 +101,20 @@ ATRYBUTY:
 
 <script>
 
-    var assignPopup = document.getElementById('assignPopup');
-    var assignSaveButton = assignPopup.querySelector('#assignSaveButton');
+    let assignPopup = document.getElementById('assignPopup');
+    let assignSaveButton = assignPopup.querySelector('#assignSaveButton');
     let assignModalButton;
     let assignPinTimeoutId;
     let assignUrlTimeoutId;
 
-    var assignedEmails = [];
-    var uneditableEmails = [];
-    var allGroups = [];
-    var uneditableGroups = [];
+    let assignedEmails = [];
+    let uneditableEmails = [];
+    let allGroups = [];
+    let uneditableGroups = [];
+    let wrongEmails = [];
 
-    var emailInput = document.getElementById("assignEmailInput");
+    const validationText = assignPopup.querySelector('#assignValidationText');
+    const emailInput = document.getElementById("assignEmailInput");
     const emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
 
     emailInput.addEventListener("focusout", addEmail);
@@ -120,18 +126,19 @@ ATRYBUTY:
 
     assignPopup.addEventListener('show.bs.modal', function (event) {
         assignModalButton = event.relatedTarget;
-        var quizName = assignModalButton.getAttribute('data-quiz-name');
-        var quizPin = assignModalButton.getAttribute('data-pin');
-        var quizUrl = assignModalButton.getAttribute('data-url');
+        let quizName = assignModalButton.getAttribute('data-quiz-name');
+        let quizPin = assignModalButton.getAttribute('data-pin');
+        let quizUrl = assignModalButton.getAttribute('data-url');
 
-        var nameElement = assignPopup.querySelector('#assignedQuizName');
-        var pinElement = assignPopup.querySelector('#assignedQuizPin');
-        var urlElement = assignPopup.querySelector('#assignedQuizUrl');
+        let nameElement = assignPopup.querySelector('#assignedQuizName');
+        let pinElement = assignPopup.querySelector('#assignedQuizPin');
+        let urlElement = assignPopup.querySelector('#assignedQuizUrl');
 
         nameElement.textContent = quizName;
         pinElement.textContent = quizPin;
         quizUrl.textContent = quizUrl;
 
+        wrongEmails = [];
         assignedEmails = JSON.parse(assignModalButton.getAttribute('data-emails'));
         uneditableEmails = [...assignedEmails];
         updateEmailsList();
@@ -144,22 +151,27 @@ ATRYBUTY:
     assignSaveButton.addEventListener('click', function (event) {
         const checkedCheckboxes = groupListContainer.querySelectorAll('input[type="checkbox"]:checked');
         const groups = Array.from(checkedCheckboxes).map(checkbox => checkbox.getAttribute('data-group'));
+        const closebutton = document.getElementById('assignCancelButton');
 
-        var callbackName = assignModalButton.getAttribute('data-callback-name');
-        var quizId = assignModalButton.getAttribute('data-quiz-id');
+        const callbackName = assignModalButton.getAttribute('data-callback-name');
+        const quizId = assignModalButton.getAttribute('data-quiz-id');
 
         if (typeof window[callbackName] === 'function') {
-            window[callbackName](quizId, assignedEmails, groups);
-            var closebutton = document.getElementById('publishCancelButton');
-            closebutton.click();
+            wrongEmails = window[callbackName](quizId, assignedEmails, groups);
+            
+            if (wrongEmails == null || wrongEmails.length == 0){
+                closebutton.click();
+            } else {
+                updateEmailsList();
+            }
         } else {
             console.error("Callback function not found:", callbackName);
         }
     });
 
     function copyPin() {
-        var pinElement = document.getElementById("assignedQuizPin");
-        var copyButton = document.getElementById("copyPinBtn");
+        let pinElement = document.getElementById("assignedQuizPin");
+        let copyButton = document.getElementById("copyPinBtn");
 
         navigator.clipboard.writeText(pinElement.textContent);
 
@@ -176,8 +188,8 @@ ATRYBUTY:
     }
 
     function copyUrl() {
-        var urlElement = document.getElementById("assignedQuizUrl");
-        var copyButton = document.getElementById("copyUrlBtn");
+        let urlElement = document.getElementById("assignedQuizUrl");
+        let copyButton = document.getElementById("copyUrlBtn");
 
         navigator.clipboard.writeText(urlElement.textContent);
 
@@ -226,9 +238,13 @@ ATRYBUTY:
         assignedEmails = assignedEmails.filter(email => !uneditableEmails.includes(email));
         assignedEmails = assignedEmails.concat(uneditableEmails);
 
+        let anyWrong = false;
         assignedEmails.forEach((email, index) => {
+            const isWrong = wrongEmails.includes(email);
+            if (isWrong) anyWrong = true;
+
             const emailDiv = document.createElement("div");
-            emailDiv.className = `bg-transparent rounded border d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""}`;
+            emailDiv.className = `rounded d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""} ${isWrong ? "input-error" : "border"}`;
             emailDiv.innerHTML = `
                 <span class="text-truncate me-2">${email}</span>
             `;
@@ -252,6 +268,11 @@ ATRYBUTY:
 
             emailListContainer.appendChild(emailDiv);
         });
+
+        if (anyWrong)
+            validationText.classList.remove('d-none')
+        else 
+            validationText.classList.add('d-none')
     }
 
     function initGroups() {
@@ -281,9 +302,3 @@ ATRYBUTY:
     }
 
 </script>
-
-
-@*<div class="bg-transparent rounded border d-flex flex-row p-2">
-    <input type="checkbox" class="form-check-input me-2">
-    <span class="text-truncate">Klasa 2A</span>
-</div>*@
