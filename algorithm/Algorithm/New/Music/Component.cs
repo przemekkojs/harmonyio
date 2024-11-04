@@ -1,4 +1,7 @@
-﻿namespace Algorithm.New.Music
+﻿using Algorithm.New.Algorithm;
+using System.ComponentModel.DataAnnotations;
+
+namespace Algorithm.New.Music
 {
     public enum ComponentType { Root, Second, Third, Fourth, Fifth, Sixth, Seventh, Ninth }
     public enum Alteration { Up, Down, None }
@@ -7,7 +10,7 @@
     {
         public ComponentType Type { get; private set; }
         public bool Obligatory { get; private set; }
-        public Alteration Alteration { get; private set; }
+        public Alteration Alteration { get; set; }
         public bool Suspension { get; private set; }
         public bool Dissonant { get; private set; }
 
@@ -43,6 +46,22 @@
                 "9" => Ninth,
                 _ => null
             };
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is Component casted)
+            {
+                var typeEqual = casted.Type == Type;
+                var alterationEqual = casted.Alteration == Alteration;
+
+                return typeEqual && alterationEqual;
+            }
+
+            return false;
         }
     }
 }

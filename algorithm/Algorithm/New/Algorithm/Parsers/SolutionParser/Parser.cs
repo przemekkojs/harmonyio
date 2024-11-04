@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
             JsonSolution? parsedTask = JsonConvert.DeserializeObject<JsonSolution>(solutionJsonString) ?? throw new ArgumentException("Invalid JSON string.");
 
             var tonation = Tonation.GetTonation(parsedTask.SharpsCount, parsedTask.FlatsCount);
-            var metre = Metre.GetMetre(parsedTask.MeterValue, parsedTask.MeterCount);
+            var metre = Metre.GetMetre(parsedTask.MetreCount, parsedTask.MetreValue);
             var notes = parsedTask.Notes;
 
             // (Bar index, vertical index) : Notes

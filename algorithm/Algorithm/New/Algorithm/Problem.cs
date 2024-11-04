@@ -16,5 +16,34 @@ namespace Algorithm.New.Algorithm
         }
 
         public Problem(Metre metre, Tonation tonation) : this([], metre, tonation) { }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is Problem casted)
+            {
+                if (casted.Functions.Count != Functions.Count)
+                    return false;
+
+                if (!casted.Tonation.Equals(Tonation))
+                    return false;
+
+                if (!casted.Metre.Equals(Metre))
+                    return false;
+
+                for (int index = 0; index < casted.Functions.Count; index++)
+                {
+                    var function1 = Functions[index];
+                    var function2 = casted.Functions[index];
+
+                    if (function1 == null || !function1.Equals(function2))
+                        return false;
+                }
+            }
+
+            return false;
+        }
     }
 }

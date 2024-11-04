@@ -11,7 +11,7 @@ namespace Algorithm.New.Music
         public int Value { get; set; }
 
         [JsonConstructor]
-        public Metre(int metreValue, int metreCount)
+        public Metre(int metreCount, int metreValue)
         {
             Count = metreCount;
             Value = metreValue;
@@ -31,14 +31,14 @@ namespace Algorithm.New.Music
         public static readonly Metre Meter3_8 = new(3, 2);
         public static readonly Metre Meter6_8 = new(6, 2);
 
-        public static Metre GetMetre(int value, int count)
+        public static Metre GetMetre(int count, int value)
         {
             List<Metre> meters = [
                 Meter2_4, Meter3_4, Meter4_4,
                 Meter3_8, Meter6_8
             ];
 
-            return meters.FirstOrDefault(x => x.Value == value && x.Count == count) ?? throw new ArgumentException("Invalid parameters.");
+            return meters.FirstOrDefault(x => x.Value == value && x.Count == count) ?? throw new ArgumentException("Invalid metre parameters.");
         }
     }
 }

@@ -20,8 +20,11 @@ namespace Algorithm.New.Utils
             { "B", 11 }, { "Ax", 11 }, { "Cb", 11 }
         };
 
-        public static int Determinant(Note note)
+        public static int Determinant(Note? note)
         {
+            if (note == null)
+                return 0;
+
             var octavePart = note.Octave * 4;
             var noteName = note.Name;
 
@@ -33,10 +36,13 @@ namespace Algorithm.New.Utils
             return octavePart + namePart;
         }
 
-        public static bool IsLower(Note note, Note target) => Determinant(note) < Determinant(target);
+        public static bool IsLower(Note? note, Note? target) => Determinant(note) < Determinant(target);
 
-        public static void SetCloser(Note note, Note target)
+        public static void SetCloser(Note? note, Note? target)
         {
+            if (note == null || target == null)
+                return;
+
             note.Octave = target.Octave;
 
             var option1 = new Note(note.Name, note.Octave + 1);

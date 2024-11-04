@@ -1,4 +1,5 @@
 ﻿using Algorithm.New.Music;
+using Algorithm.Old.Music;
 
 namespace Algorithm.New.Algorithm
 {
@@ -14,5 +15,31 @@ namespace Algorithm.New.Algorithm
         }
 
         public Solution(Problem problem) : this(problem, []) { }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is Solution casted)
+            {
+                if (casted.Stacks.Count != Stacks.Count)
+                    return false;
+
+                if (!casted.Problem.Equals(Problem))
+                    return false;
+
+                for (int index = 0; index < casted.Stacks.Count; index++)
+                {
+                    var stack1 = Stacks[index];
+                    var stack2 = casted.Stacks[index];
+
+                    if (stack1 == null || !stack1.Equals(stack2))
+                        return false;
+                }
+            }
+
+            return false;
+        }
     }
 }

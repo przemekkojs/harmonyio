@@ -1,4 +1,6 @@
-﻿using Algorithm.New.Utils;
+﻿using Algorithm.New.Algorithm;
+using Algorithm.New.Utils;
+using System.Security;
 using System.Text.Json.Serialization;
 
 namespace Algorithm.New.Music
@@ -14,7 +16,6 @@ namespace Algorithm.New.Music
         public Component? Root { get; set; }
         public Component? Position { get; set; }
         public Component? Removed { get; set; }
-        public List<Component> Alterations { get; set; }
         public List<Component> Added { get; set; }
         public List<List<Component>> PossibleComponents { get; set; }
         public Tonation Tonation { get; set; }
@@ -61,7 +62,7 @@ namespace Algorithm.New.Music
         public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
             bool isInsertion=false, InsertionType insertionType=InsertionType.None,
             Component? root=null, Component? position=null, Component? removed=null,
-            List<Component>? alterations=null, List<Component>? added=null)
+            List<string>? alterations=null, List<Component>? added=null)
         {
             Index = index;
             Symbol = symbol;
@@ -73,7 +74,6 @@ namespace Algorithm.New.Music
             IsInsertion = isInsertion;
             InsertionType = insertionType;
 
-            Alterations = alterations ?? [];
             Added = added ?? [];
 
             PossibleComponents = [];
@@ -112,24 +112,27 @@ namespace Algorithm.New.Music
             Position = Component.GetByString(position);
             Removed = Component.GetByString(removed);
 
-            Alterations = [];
             Added = [];
-
-            foreach (var alterationString in alterations)
-            {
-                var toAdd = Component.GetByString(alterationString);
-                
-                if (toAdd != null)
-                    Alterations.Add(toAdd);
-            }
-                
 
             foreach (var addedString in added)
             {
                 var toAdd = Component.GetByString(addedString);
 
                 if (toAdd != null)
-                    Alterations.Add(toAdd);
+                    Added.Add(toAdd);
+            }
+
+            foreach (var alterationString in alterations)
+            {
+                var componentToAlterString = alterationString[0].ToString();
+                var alterationType = alterationString[1..] ?? "";
+
+                var component = Component.GetByString(componentToAlterString);
+
+                if (component == null)
+                    throw new ArgumentException("Cannot add alteration to non-existend component");
+
+                component.Alteration = alterationType.Equals(">") ? Alteration.Down : Alteration.Up;
             }
 
             PossibleComponents = [];
@@ -306,6 +309,30 @@ namespace Algorithm.New.Music
         private void ValidatePossibleComponents()
         {
             PossibleComponents.RemoveAll(x => x.Count != Constants.NOTES_IN_FUNCTION);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is Function casted)
+            {
+                var minorEqual = (casted.Minor == Minor);
+                var symbolEqual = (casted.Symbol == Symbol);
+                var addedEqual = (casted.Added.Equals(Added));
+                var removedEqual = (casted.Removed?.Equals(Removed)) ?? false;
+                var rootEquals = (casted.Root?.Equals(Root)) ?? false;
+                var positionEquals = (casted.Position?.Equals(Position)) ?? false;
+                var insertionEqual = (casted.IsInsertion == IsInsertion);
+                var insertionTypeEqual = (casted.InsertionType == InsertionType);
+
+                return minorEqual && symbolEqual && addedEqual && 
+                    removedEqual && rootEquals && positionEquals &&
+                    insertionEqual && insertionTypeEqual;
+            }
+
+            return false;
         }
     }
 }

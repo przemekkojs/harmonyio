@@ -9,17 +9,20 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
         public List<JsonNote> Notes { get; set; }
         public int SharpsCount { get; set; }
         public int FlatsCount { get; set; }
-        public int MeterCount { get; set; }
-        public int MeterValue { get; set; }
 
-        [JsonConstructor]
-        public JsonSolution(List<JsonNote> notes, int sharpsCount, int flatsCount, int meterCount, int meterValue)
+        [JsonPropertyName("metreCount")]
+        public int MetreCount { get; set; }
+
+        [JsonPropertyName("metreValue")]
+        public int MetreValue { get; set; }
+
+        public JsonSolution(List<JsonNote> jsonNotes, int sharpsCount, int flatsCount, int metreValue, int metreCount)
         {
-            Notes = notes;
+            Notes = jsonNotes;
             SharpsCount = sharpsCount;
             FlatsCount = flatsCount;
-            MeterCount = meterCount;
-            MeterValue = meterValue;
+            MetreCount = metreCount;
+            MetreValue = metreValue;
         }
     }
 }

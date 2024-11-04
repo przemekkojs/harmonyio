@@ -1,5 +1,6 @@
 ﻿using Algorithm.New.Utils;
 using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace Algorithm.New.Music
 {
@@ -41,6 +42,7 @@ namespace Algorithm.New.Music
 
 
             Index = index;
+            Notes = [Soprano, Alto, Tenore, Bass];
 
             SetOctaves();
         }
@@ -52,34 +54,61 @@ namespace Algorithm.New.Music
 
         public Stack(Index index, List<string> notes) : this(index, notes[0], notes[1], notes[2], notes[3]) { }
         public Stack(Index index, List<Note?> notes) : this(index, notes[0], notes[1], notes[2], notes[3]) { }
-        public Stack (Index index, List<Component> components, Function function, Tonation tonation)
+        public Stack (Index index, List<Component> components, Function function)
         {
-            Index = index;
-
             Soprano = new Note(Converters.ComponentToNote(components[0], function), 4);
             Alto = new Note(Converters.ComponentToNote(components[1], function), 4);
             Tenore = new Note(Converters.ComponentToNote(components[2], function), 3);
             Bass = new Note(Converters.ComponentToNote(components[3], function), 3);
+
+            Index = index;
+            Notes = [Soprano, Alto, Tenore, Bass];
 
             SetOctaves();
         }
 
         public void SetOctaves()
         {
-            while (Interval.IsLower(Tenore, Bass))
+            while (Tenore != null && Interval.IsLower(Tenore, Bass))
                 Tenore.Octave++;
 
-            while (Interval.IsLower(Alto, Tenore))
-                Tenore.Octave++;
+            while (Alto != null && Interval.IsLower(Alto, Tenore))
+                Alto.Octave++;
 
-            while (Interval.IsLower(Soprano, Alto))
-                Tenore.Octave++;
+            while (Soprano != null && Interval.IsLower(Soprano, Alto))
+                Soprano.Octave++;
         }
 
         public void SetOctaves(Stack previous)
         {
             Interval.SetCloser(Bass, previous.Bass);
             SetOctaves();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is Stack casted)
+            {
+                if (casted.Notes.Count != Notes.Count)
+                    return false;
+
+                if (!casted.Index.Equals(Index))
+                    return false;
+
+                for (int index = 0; index < casted.Notes.Count; index++)
+                {
+                    var note1 = Notes[index];
+                    var note2 = casted.Notes[index];
+
+                    if (note1 == null || !note1.Equals(note2))
+                        return false;
+                }
+            }
+
+            return false;
         }
     }
 }
