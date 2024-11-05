@@ -189,6 +189,9 @@
     const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToSolutions[u].Select(es => es.Answer))));
 
+    console.log(questions);
+    console.log(userSolutions);
+
     let currentUserIndex = 0;
     let currentQuestionIndex = 0;
 

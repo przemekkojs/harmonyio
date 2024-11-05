@@ -8,7 +8,6 @@
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
@@ -38,7 +37,6 @@
         </div>
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
-        @* <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions" /> *@
         <div class="py-3 d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             <input type="button" value="Test" onclick="confirmExcersises()" />
@@ -109,22 +107,17 @@
             const taskToConfirm = tasks.filter(x => x.id == i)[0];
             const confirmResult = taskToConfirm.confirmAll();
 
-            // console.log(confirmResult);
-
             excersises.push({
                 question: questionText,
-                sharpsCount: sharpsCount,
-                flatsCount: flatsCount,
-                metreValue: metreValue,
-                metreCount: metreCount,
+                sharpsCount: Number(sharpsCount),
+                flatsCount: Number(flatsCount),
+                metreValue: Number(metreValue),
+                metreCount: Number(metreCount),
                 task: tasks[i].result
             });
 
             hiddenInput.value = JSON.stringify(excersises[i]);
-            // console.log(hiddenInput.value);
         }
-
-        // console.log(excersises);
     }
 
     window.addExcersise = function () {
