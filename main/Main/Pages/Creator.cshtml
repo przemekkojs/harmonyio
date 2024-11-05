@@ -22,18 +22,6 @@
                         placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger"></span>
                 </div>
-
-                <div class="mb-3">
-                    <label asp-for="OpenDate" class="form-label fw-bold"></label>
-                    <input asp-for="OpenDate" class="form-control" readonly="@Model.BrowseOnly">
-                    <span asp-validation-for="OpenDate" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="CloseDate" class="form-label fw-bold"></label>
-                    <input asp-for="CloseDate" class="form-control" readonly="@Model.BrowseOnly">
-                    <span asp-validation-for="CloseDate" class="text-danger"></span>
-                </div>
             </div>
 
             <div class="flex-grow-1 bg-white rounded shadow p-3 d-flex flex-column overflow-auto">
@@ -56,15 +44,16 @@
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
         @* <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions" /> *@
-        <div class="bottom-bar d-flex align-items-center">
+        <div class="bottom-bar d-flex align-items-center py-3">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             <input type="button" value="Test" onclick="confirmExcersises()" />
             @if (!Model.BrowseOnly)
             {
                 <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto"
                     onclick="confirmExcersises()">Zapisz</button>
-                <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
-                    onclick="confirmExcersises()">Opublikuj</button>
+                @* TODO: DODAĆ ŻEBY BUTTON PUBLIKUJ DZIAŁAŁ (TAK JAK ZAPISZ, ALE OD RAZU OTWIERA POPUP) *@
+                @* <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
+                    onclick="confirmExcersises()">Opublikuj</button> *@
             }
             else
             {

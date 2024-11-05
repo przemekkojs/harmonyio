@@ -21,14 +21,7 @@ namespace Main.Pages
         [Display(Name = "Quiz Name")]
         [Required(ErrorMessage = "Quiz name is required.")]
         public string QuizName { get; set; } = null!;
-        [BindProperty]
-        [Display(Name = "Open Date")]
-        [Required(ErrorMessage = "Open date is required.")]
-        public DateTime? OpenDate { get; set; } = null;
-        [BindProperty]
-        [Display(Name = "Close Date")]
-        [Required(ErrorMessage = "Close date is required.")]
-        public DateTime? CloseDate { get; set; } = null;
+
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
         [BindProperty]
@@ -68,8 +61,6 @@ namespace Main.Pages
 
             EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
-            CloseDate = quiz.CloseDate;
-            OpenDate = quiz.OpenDate;
             Code = quiz.Code;
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
 
@@ -92,8 +83,6 @@ namespace Main.Pages
                 var quiz = new Quiz()
                 {
                     Name = QuizName,
-                    OpenDate = (DateTime)OpenDate!,
-                    CloseDate = (DateTime)CloseDate!,
                     CreatorId = currentUser.Id,
                 };
 
@@ -121,8 +110,6 @@ namespace Main.Pages
                     return RedirectToPage("Error");
 
                 editedQuiz.Name = QuizName;
-                editedQuiz.OpenDate = (DateTime)OpenDate!;
-                editedQuiz.CloseDate = (DateTime)CloseDate!;
 
                 _repository.Update(editedQuiz);
 
@@ -150,15 +137,6 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnPostSubmit()
         {
-            if (CloseDate <= OpenDate)
-            {
-                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than open date.");
-            }
-            if (CloseDate <= DateTime.Now)
-            {
-                ModelState.AddModelError(nameof(CloseDate), "Close date can't be older than current date.");
-            }
-
             if (Questions!.Count == 0)
             {
                 ModelState.AddModelError(nameof(Questions), "At least one excersise is required.");
@@ -182,8 +160,6 @@ namespace Main.Pages
                 var quiz = new Quiz()
                 {
                     Name = QuizName,
-                    OpenDate = (DateTime)OpenDate!,
-                    CloseDate = (DateTime)CloseDate!,
                     CreatorId = currentUser.Id,
                     IsCreated = true,
 
@@ -215,8 +191,6 @@ namespace Main.Pages
                     return RedirectToPage("Error");
 
                 editedQuiz.Name = QuizName;
-                editedQuiz.OpenDate = (DateTime)OpenDate!;
-                editedQuiz.CloseDate = (DateTime)CloseDate!;
                 editedQuiz.IsCreated = true;
 
                 _repository.Update(editedQuiz);
