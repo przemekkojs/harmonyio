@@ -58,6 +58,14 @@ class Vertical {
     );
   }
 
+  shouldDrawHintArea(isUpperStaff) {
+    if(isUpperStaff) {
+      return !this.lowerStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index);
+    } else {
+      return !this.upperStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index);
+    }
+  }
+
   isEmpty() {
     return this.upperStaff.isEmpty() && this.lowerStaff.isEmpty();
   }

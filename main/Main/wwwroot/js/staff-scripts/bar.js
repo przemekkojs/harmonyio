@@ -44,6 +44,10 @@ class Bar {
       .length;
   }
 
+  shouldDrawHintArea(index) {
+    return index === 0 || this.verticals[index - 1].getSlotsTaken() !== 0;
+  }
+
   // needs to be called from vertical.canAddNote
   canAddNote(note, verticalIndex) {
     // cant add if left vertical is empty
@@ -141,7 +145,7 @@ class Bar {
     } else {
       this.#drawBarLine();
     }
-    this.#drawBoundingBox();
+    // this.#drawBoundingBox();
 
     for (let i = 0; i < this.verticals.length; i++) {
       this.verticals[i].draw();
@@ -150,6 +154,7 @@ class Bar {
 
   #drawBarLine() {
     strokeWeight(2);
+    stroke(0);
     const barLineX = this.x + this.width;
     const barLineY = this.y + upperStaffUpperMargin;
     line(barLineX, barLineY, barLineX, barLineY + braceHeight);

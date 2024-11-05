@@ -46,7 +46,7 @@ function setup() {
 }
 
 function draw() {
-  background(240);
+  background(255);
   if (grandStaff.isLoaded) {
     grandStaff.draw();
     menu.draw();

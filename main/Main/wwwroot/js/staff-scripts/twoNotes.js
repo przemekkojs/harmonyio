@@ -443,7 +443,7 @@ class TwoNotes {
   }
 
   draw() {
-    this.#drawBoundingBox();
+    this.#drawHintArea();
 
     // no note to draw
     if (this.isEmpty()) {
@@ -558,11 +558,16 @@ class TwoNotes {
     this.note2.drawAccidental(this.accidental2X, this.accidental2Y);
   }
 
-  #drawBoundingBox() {
-    push();
-    noFill();
-    strokeWeight(1);
-    rect(this.x, this.y, this.getWidth(), this.height);
-    pop();
+  #drawHintArea() {
+    if(this.note1 !== null && this.note2 !== null) {
+      return;
+    }
+    if((this.note1 !== null && this.note2 === null) || this.parent.shouldDrawHintArea(this.isUpperStaff)) {
+      push();
+      fill(0,255,0, 15);
+      noStroke();
+      rect(this.x, this.y, this.getWidth(), this.height)
+      pop();
+    }
   }
 }
