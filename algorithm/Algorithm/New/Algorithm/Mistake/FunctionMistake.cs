@@ -8,6 +8,10 @@ namespace Algorithm.New.Algorithm.Mistake
         public List<Stack> Stacks { get; set; } = [];
         public Rule? Rule { get; set; } = null;
 
+        // FOR JSON MISTAKE LOGIC
+        public int BarIndex { get; private set; }
+        public int VerticalIndex { get; private set }
+
         public override int Quantity => Stacks.Count;
 
         public override void GenerateDescription()

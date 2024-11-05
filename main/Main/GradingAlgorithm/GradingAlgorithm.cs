@@ -24,7 +24,7 @@ namespace Main.GradingAlgorithm
             var mistakesCount = checkResult.Sum(x => x.Quantity);
 
             var maxPoints = 10;
-            var pointsPercent = DivAsPercentage(mistakesCount, maxMistakesCount);
+            var pointsPercent = DivAsPercentage(maxMistakesCount - mistakesCount, maxMistakesCount);
             var points = Convert.ToInt32(pointsPercent / maxPoints);
 
             return (points, maxPoints);

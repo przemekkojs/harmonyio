@@ -10,8 +10,6 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
         {
             JsonSolution? parsedTask = JsonConvert.DeserializeObject<JsonSolution>(solutionJsonString) ?? throw new ArgumentException("Invalid JSON string.");
 
-            var tonation = Tonation.GetTonation(parsedTask.SharpsCount, parsedTask.FlatsCount);
-            var metre = Metre.GetMetre(parsedTask.MetreCount, parsedTask.MetreValue);
             var notes = parsedTask.Notes;
 
             // (Bar index, vertical index) : Notes
@@ -57,7 +55,17 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                 stacks.Add(toAdd);
             }
 
-            return new SolutionParseResult(tonation, metre, stacks);
+            var tonation = Tonation.GetTonation(parsedTask.SharpsCount, parsedTask.FlatsCount);
+            
+            try
+            {
+                var metre = Metre.GetMetre(parsedTask.MetreCount, parsedTask.MetreValue);
+                return new SolutionParseResult(tonation, metre, stacks);
+            }
+            catch (ArgumentException)
+            {
+                return new SolutionParseResult(null, null, stacks);
+            }
         }
 
         // TODO: Make a one-liner using FirstOrDefault<>()

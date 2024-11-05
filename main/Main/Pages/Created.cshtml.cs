@@ -129,7 +129,7 @@ public class CreatedModel : PageModel
 
         var emails = new HashSet<string>();
 
-        if (Emails != "")
+        if (Emails != "" && Emails != null)
         {
             if (Emails.Contains(','))
             {
