@@ -38,12 +38,19 @@ namespace Algorithm.New.Algorithm
                     var function1 = Functions[index];
                     var function2 = casted.Functions[index];
 
-                    if (function1 == null || !function1.Equals(function2))
-                        return false;
+                    if (function1 != null)
+                    {
+                        var functionsEqual = function1.Equals(function2);
+
+                        if (!functionsEqual)
+                            return false;
+                    }
                 }
             }
+            else
+                return false;
 
-            return false;
+            return true;
         }
     }
 }

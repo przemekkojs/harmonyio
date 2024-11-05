@@ -1,4 +1,5 @@
-﻿using Algorithm.Old.Music;
+﻿using Algorithm.New.Algorithm;
+using Algorithm.Old.Music;
 
 namespace Algorithm.New.Music
 {
@@ -11,6 +12,17 @@ namespace Algorithm.New.Music
         public Mode Mode { get; private set; }
 
         // TODO: Json Constructor
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is Tonation casted)
+                return casted.SharpsCount == SharpsCount && casted.FlatsCount == FlatsCount;
+            else
+                return false;
+        }
 
         public Tonation (string name, Mode mode, int flatsCount, int sharpsCount)
         {

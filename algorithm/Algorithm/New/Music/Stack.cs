@@ -50,7 +50,7 @@ namespace Algorithm.New.Music
         // TODO: Bind properties
         [JsonConstructor]
         public Stack(int bar, int beat, int duration, string soprano, string alto, string tenore, string bass) : 
-            this(new Index() { Bar = bar, Beat = beat, Duration = duration }, soprano, alto, tenore, bass) { }
+            this(new Index() { Bar = bar, Position = beat, Duration = duration }, soprano, alto, tenore, bass) { }
 
         public Stack(Index index, List<string> notes) : this(index, notes[0], notes[1], notes[2], notes[3]) { }
         public Stack(Index index, List<Note?> notes) : this(index, notes[0], notes[1], notes[2], notes[3]) { }
@@ -103,12 +103,21 @@ namespace Algorithm.New.Music
                     var note1 = Notes[index];
                     var note2 = casted.Notes[index];
 
-                    if (note1 == null || !note1.Equals(note2))
-                        return false;
+                    if (note1 != null)
+                    {
+                        var notesEqual = note1.Equals(note2);
+
+                        if (!notesEqual)
+                            return false;
+                    }
                 }
             }
+            else
+                return false;
 
-            return false;
+            return true;
         }
+
+        public override string ToString() => $"{Soprano} {Alto} {Tenore} {Bass}";
     }
 }

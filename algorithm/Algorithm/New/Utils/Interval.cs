@@ -25,7 +25,7 @@ namespace Algorithm.New.Utils
             if (note == null)
                 return 0;
 
-            var octavePart = note.Octave * 4;
+            var octavePart = note.Octave * 12;
             var noteName = note.Name;
 
             if (note.Accidental == "bq")

@@ -1,9 +1,6 @@
 ﻿using Algorithm.New;
 using Algorithm.New.Algorithm;
-using Algorithm.New.Algorithm.Parsers.ProblemParser;
-using Algorithm.New.Algorithm.Parsers.SolutionParser;
 using Algorithm.New.Music;
-using System.Reflection.Metadata;
 using Index = Algorithm.New.Music.Index;
 
 namespace AlgorithmTests.New
@@ -18,20 +15,20 @@ namespace AlgorithmTests.New
 
             var functions = new List<Function>()
             {
-                new(new Index() { Bar = 0, Beat = 0, Duration = 4 }, Symbol.T, false, tonation),
-                new(new Index() { Bar = 0, Beat = 4, Duration = 4 }, Symbol.S, false, tonation),
-                new(new Index() { Bar = 1, Beat = 0, Duration = 4 }, Symbol.D, false, tonation),
-                new(new Index() { Bar = 1, Beat = 4, Duration = 4 }, Symbol.T, false, tonation)
+                new(new Index() { Bar = 0, Position = 0, Duration = 4 }, Symbol.T, false, tonation),
+                new(new Index() { Bar = 0, Position = 1, Duration = 4 }, Symbol.S, false, tonation),
+                new(new Index() { Bar = 1, Position = 0, Duration = 4 }, Symbol.D, false, tonation),
+                new(new Index() { Bar = 1, Position = 1, Duration = 4 }, Symbol.T, false, tonation)
             };
 
             var problem = new Problem(functions, metre, tonation);
 
             var stacks = new List<Stack>()
             {
-                new (new Index() { Bar = 0, Beat = 0, Duration = 4 }, ["C", "E", "G", "C"]),
-                new (new Index() { Bar = 0, Beat = 4, Duration = 4 }, ["C", "F", "A", "C"]),
-                new (new Index() { Bar = 1, Beat = 0, Duration = 4 }, ["B", "G", "G", "D"]),
-                new (new Index() { Bar = 1, Beat = 4, Duration = 4 }, ["C", "E", "G", "C"])
+                new (new Index() { Bar = 0, Position = 0, Duration = 4 }, ["C", "E", "G", "C"]),
+                new (new Index() { Bar = 0, Position = 1, Duration = 4 }, ["C", "F", "A", "C"]),
+                new (new Index() { Bar = 1, Position = 0, Duration = 4 }, ["B", "G", "G", "D"]),
+                new (new Index() { Bar = 1, Position = 1, Duration = 4 }, ["C", "E", "G", "C"])
             };
 
             var solution = new Solution(problem, stacks);

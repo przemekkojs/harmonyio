@@ -16,7 +16,7 @@ namespace Algorithm.New.Algorithm.Mistake
             }
 
             string postfix = Notes.Count == 1 ? "u" : "ów";
-            Description = $"Błędy dźwięk{ postfix } [{ string.Join(", ", Notes) }] w funkcji: Takt: {Stack.Index.Bar}, Miara: {Stack.Index.Beat}.";
+            Description = $"Błędy dźwięk{ postfix } [{ string.Join(", ", Notes) }] w funkcji: Takt: {Stack.Index.Bar}, Miara: {Stack.Index.Position}.";
         }
     }
 }

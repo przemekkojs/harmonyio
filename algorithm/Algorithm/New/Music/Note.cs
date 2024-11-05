@@ -48,5 +48,7 @@
 
             return false;
         }
+
+        public override string ToString() => $"{Name}{Octave}";
     }
 }

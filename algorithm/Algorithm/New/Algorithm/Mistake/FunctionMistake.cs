@@ -22,14 +22,14 @@ namespace Algorithm.New.Algorithm.Mistake
             if (Stacks.Count == 1)
             {
                 var function = Stacks[0];
-                Description += $"Takt {function.Index.Bar}, Miara {function.Index.Beat}. Niespełniona zasada {Rule.Name}.";
+                Description += $"Takt {function.Index.Bar}, Miara {function.Index.Position}. Niespełniona zasada {Rule.Name}.";
             }
             else
             {
                 var function1 = Stacks[0];
                 var function2 = Stacks[1];
 
-                Description += $"(Takt {function1.Index.Bar}, Miara {function1.Index.Beat}), (Takt {function2.Index.Bar}, Miara {function2.Index.Beat}). Niespełniona zasada {Rule.Name}.";
+                Description += $"(Takt {function1.Index.Bar}, Miara {function1.Index.Position}), (Takt {function2.Index.Bar}, Miara {function2.Index.Position}). Niespełniona zasada {Rule.Name}.";
             }
         }
     }

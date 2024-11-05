@@ -1,13 +1,42 @@
-﻿using Algorithm.New.Algorithm;
-using Algorithm.New.Utils;
-using System.Security;
+﻿using Algorithm.New.Utils;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using System.Linq;
 
 namespace Algorithm.New.Music
 {
     public enum Symbol { T, Sii, Tiii, Diii, S, D, Tvi, Svi, Dvii, Svii }
     public enum InsertionType { Forward, Backward, None }
     
+    public class ParsedFunction
+    {
+        public string Symbol { get; set; }
+        public bool IsMain { get; set; }
+        public bool Minor { get; set; }
+        public string Root { get; set; }
+        public string Position { get; set; }
+        public string Removed { get; set; }
+        public List<string> Added { get; set; }
+        public List<string> Alterations { get; set; }
+        public string BarIndex { get; set; }
+        public string VerticalIndex { get; set; }
+
+        [JsonConstructor]
+        public ParsedFunction(bool minor, string symbol, string position, string root, string removed,
+            List<string> alterations, List<string> added, string barIndex, string verticalIndex)
+        {
+            Minor = minor;
+            Symbol = symbol;
+            Position = position;
+            Root = root;
+            Removed = removed;
+            Alterations = alterations;
+            Added = added;
+            BarIndex = barIndex;
+            VerticalIndex = verticalIndex;
+        }
+    }
+
     public class Function
     {
         public Symbol Symbol { get; set; }
@@ -20,10 +49,7 @@ namespace Algorithm.New.Music
         public List<List<Component>> PossibleComponents { get; set; }
         public Tonation Tonation { get; set; }
         public bool IsInsertion { get; set; }
-        public InsertionType InsertionType { get; set; }
-
-        // TODO IN LATER VERSION: Add suspensions
-        
+        public InsertionType InsertionType { get; set; }                
         public Index Index { get; set; }
 
         public static readonly Dictionary<Symbol, int> symbolIndexes = new()
@@ -57,42 +83,16 @@ namespace Algorithm.New.Music
                 { Component.Ninth, tonationNotes[Offset(1)] }
             };
         }
-
-        // TODO: Params....
-        public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
-            bool isInsertion=false, InsertionType insertionType=InsertionType.None,
-            Component? root=null, Component? position=null, Component? removed=null,
-            List<string>? alterations=null, List<Component>? added=null)
-        {
-            Index = index;
-            Symbol = symbol;
-            Minor = minor;
-            Root = root;
-            Position = position;
-            Removed = removed;
-            Tonation = tonation;
-            IsInsertion = isInsertion;
-            InsertionType = insertionType;
-
-            Added = added ?? [];
-
-            PossibleComponents = [];
-
-            DeductPossibleComponents();
-        }
-
-        // TODO: Re-think JSON constructor
-        [JsonConstructor]
-        public Function(bool minor, string symbol, string position, string root, string removed,
-            List<string> alterations, List<string> added, int barIndex, int verticalIndex)
+        
+        public Function(ParsedFunction parsedFunction)
         {
             Index = new Index()
-            { 
-                Bar = barIndex,
-                Beat = verticalIndex
+            {
+                Bar = Convert.ToInt32(parsedFunction.BarIndex),
+                Position = Convert.ToInt32(parsedFunction.VerticalIndex)
             };
 
-            Symbol = symbol switch
+            Symbol = parsedFunction.Symbol switch
             {
                 "T" => Symbol.T,
                 "Sii" => Symbol.Sii,
@@ -106,15 +106,17 @@ namespace Algorithm.New.Music
                 _ => throw new ArgumentException("Invalid symbol.")
             };
 
-            Minor = minor;
+            IsMain = new List<string>() { "T", "S", "D" }.Contains(parsedFunction.Symbol);
 
-            Root = Component.GetByString(root);
-            Position = Component.GetByString(position);
-            Removed = Component.GetByString(removed);
+            Minor = parsedFunction.Minor;
+
+            Root = Component.GetByString(parsedFunction.Root);
+            Position = Component.GetByString(parsedFunction.Position);
+            Removed = Component.GetByString(parsedFunction.Removed);
 
             Added = [];
 
-            foreach (var addedString in added)
+            foreach (var addedString in parsedFunction.Added)
             {
                 var toAdd = Component.GetByString(addedString);
 
@@ -122,7 +124,7 @@ namespace Algorithm.New.Music
                     Added.Add(toAdd);
             }
 
-            foreach (var alterationString in alterations)
+            foreach (var alterationString in parsedFunction.Alterations)
             {
                 var componentToAlterString = alterationString[0].ToString();
                 var alterationType = alterationString[1..] ?? "";
@@ -134,6 +136,34 @@ namespace Algorithm.New.Music
 
                 component.Alteration = alterationType.Equals(">") ? Alteration.Down : Alteration.Up;
             }
+
+            PossibleComponents = [];
+
+            // TODO - these should be also set somehow
+            InsertionType = InsertionType.None;
+            IsInsertion = false;
+            Tonation = Tonation.CMajor;
+
+            DeductPossibleComponents();
+        }
+
+        // TODO: Params....
+        public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
+            bool isInsertion = false, InsertionType insertionType = InsertionType.None,
+            Component? root = null, Component? position = null, Component? removed = null,
+            List<string>? alterations = null, List<Component>? added = null)
+        {
+            Index = index;
+            Symbol = symbol;
+            Minor = minor;
+            Root = root;
+            Position = position;
+            Removed = removed;
+            Tonation = tonation;
+            IsInsertion = isInsertion;
+            InsertionType = insertionType;
+
+            Added = added ?? [];
 
             PossibleComponents = [];
 
@@ -320,19 +350,24 @@ namespace Algorithm.New.Music
             {
                 var minorEqual = (casted.Minor == Minor);
                 var symbolEqual = (casted.Symbol == Symbol);
-                var addedEqual = (casted.Added.Equals(Added));
-                var removedEqual = (casted.Removed?.Equals(Removed)) ?? false;
-                var rootEquals = (casted.Root?.Equals(Root)) ?? false;
-                var positionEquals = (casted.Position?.Equals(Position)) ?? false;
+                var addedEqual = (casted.Added.SequenceEqual(Added));
+                var removedEqual = (casted.Removed?.Equals(Removed)) ?? Removed == null;
+                var rootEquals = (casted.Root?.Equals(Root)) ?? Root == null;
+                var positionEquals = (casted.Position?.Equals(Position)) ?? Position == null;
                 var insertionEqual = (casted.IsInsertion == IsInsertion);
                 var insertionTypeEqual = (casted.InsertionType == InsertionType);
 
-                return minorEqual && symbolEqual && addedEqual && 
+                return minorEqual && symbolEqual && addedEqual &&
                     removedEqual && rootEquals && positionEquals &&
                     insertionEqual && insertionTypeEqual;
             }
+            else
+                return false;
 
-            return false;
+            return true;
         }
+
+        private static string ComponentListToString(List<Component> components) => "[" + string.Join(", ", components.ConvertAll(item => $"{item}")) + "]";
+        public override string ToString() => $"{(Minor ? "m" : "")}{Symbol}^{Position}/{Root}+{ComponentListToString(Added)}+";
     }
 }

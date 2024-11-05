@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Algorithm.New.Algorithm;
+using System.Text.Json.Serialization;
 
 namespace Algorithm.New.Music
 {
@@ -17,6 +18,17 @@ namespace Algorithm.New.Music
             Value = metreValue;
 
             Validate();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj is Metre casted)
+                return casted.Count == Count && casted.Value == Value;
+            else
+                return false;
         }
 
         private void Validate()

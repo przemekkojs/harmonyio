@@ -34,12 +34,19 @@ namespace Algorithm.New.Algorithm
                     var stack1 = Stacks[index];
                     var stack2 = casted.Stacks[index];
 
-                    if (stack1 == null || !stack1.Equals(stack2))
-                        return false;
+                    if (stack1 != null)
+                    {
+                        var stacksEqual = stack1.Equals(stack2);
+
+                        if (!stacksEqual)
+                            return false;
+                    }
                 }
             }
+            else
+                return false;
 
-            return false;
+            return true;
         }
     }
 }

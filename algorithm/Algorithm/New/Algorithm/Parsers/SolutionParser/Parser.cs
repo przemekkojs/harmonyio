@@ -45,7 +45,7 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                     new Music.Index()
                     {
                         Bar = key.Item1,
-                        Beat = key.Item2,
+                        Position = key.Item2,
                         Duration = noteList[0].Value
                     },
                     soprano != null ? NoteParser.Parser.ParseJsonNoteToNote(soprano).Note : null,

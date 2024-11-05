@@ -9,17 +9,24 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
     {
         public static Problem ParseJsonToProblem(string jsonString)
         {
-            JsonProblem? parsedProblem = JsonConvert.DeserializeObject<JsonProblem>(jsonString) ?? throw new ArgumentException("Invalid JSON string.");
+            JsonProblem? parsedProblem = JsonConvert
+                .DeserializeObject<JsonProblem>(jsonString) ??
+                throw new ArgumentException("Invalid JSON string.");
 
             var metreValue = parsedProblem.MetreValue;
             var metreCount = parsedProblem.MetreCount;
-            var flatsCount = parsedProblem.FlatshCount;
+            var flatsCount = parsedProblem.FlatsCount;
             var sharpsCount = parsedProblem.SharpsCount;
             var functions = parsedProblem.Functions;
 
+            List<Function> realFuntions = [];
+
+            foreach (var f in functions)
+                realFuntions.Add(new Function(f));
+
             var tonation = Tonation.GetTonation(sharpsCount, flatsCount);
             var metre = Metre.GetMetre(metreCount, metreValue);
-            var result = new Problem(functions, metre, tonation);
+            var result = new Problem(realFuntions, metre, tonation);
 
             return result;
         }

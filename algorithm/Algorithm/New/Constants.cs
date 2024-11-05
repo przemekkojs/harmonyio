@@ -187,64 +187,64 @@
                     ""AccidentalName"": """",
                     ""Voice"": ""SOPRANO"",
                     ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 2
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
                 },
                 {
                     ""Line"": 3.0,
                     ""AccidentalName"": """",
                     ""Voice"": ""ALTO"",
                     ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 2
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
                 },
                 {
                     ""Line"": 0.5,
                     ""AccidentalName"": """",
                     ""Voice"": ""TENORE"",
                     ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 2
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
                 },
                 {
                     ""Line"": 2.0,
                     ""AccidentalName"": """",
                     ""Voice"": ""BASS"",
                     ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 2
+                    ""BarIndex"": 1,
+                    ""VerticalIndex"": 0
                 },
                 {
                     ""Line"": 1.5,
                     ""AccidentalName"": """",
                     ""Voice"": ""SOPRANO"",
-                    ""Value"": 12,
+                    ""Value"": 4,
                     ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
+                    ""VerticalIndex"": 1
                 },
                 {
                     ""Line"": 4.0,
                     ""AccidentalName"": """",
                     ""Voice"": ""ALTO"",
-                    ""Value"": 12,
+                    ""Value"": 4,
                     ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
+                    ""VerticalIndex"": 1
                 },
                 {
                     ""Line"": 0.5,
                     ""AccidentalName"": """",
                     ""Voice"": ""TENORE"",
-                    ""Value"": 12,
+                    ""Value"": 4,
                     ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
+                    ""VerticalIndex"": 1
                 },
                 {
                     ""Line"": 2.5,
                     ""AccidentalName"": """",
                     ""Voice"": ""BASS"",
-                    ""Value"": 12,
+                    ""Value"": 4,
                     ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
+                    ""VerticalIndex"": 1
                 }
             ]
         }";
@@ -287,8 +287,8 @@
                         ""removed"": """",
                         ""alterations"": [],
                         ""added"": [],
-                        ""barIndex"": ""0"",
-                        ""verticalIndex"": ""2""
+                        ""barIndex"": ""1"",
+                        ""verticalIndex"": ""0""
                     },
                     {
                         ""minor"": false,
@@ -298,8 +298,8 @@
                         ""removed"": """",
                         ""alterations"": [],
                         ""added"": [],
-                        ""barIndex"": ""0"",
-                        ""verticalIndex"": ""3""
+                        ""barIndex"": ""1"",
+                        ""verticalIndex"": ""1""
                     }
                 ]
             }
