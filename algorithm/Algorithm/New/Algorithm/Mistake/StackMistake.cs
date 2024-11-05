@@ -1,14 +1,22 @@
 ﻿using Algorithm.New.Algorithm.Rules;
 using Algorithm.New.Music;
+using System.Text.Json.Serialization;
 
 namespace Algorithm.New.Algorithm.Mistake
 {
     public class StackMistake : Mistake
     {
-        // FOR JSON MISTAKE LOGIC
         public List<int> BarIndexes { get; private set; }
         public List<int> VerticalIndexes { get; private set; }
         public string RuleName { get; private set; }
+
+        [JsonConstructor]
+        public StackMistake(List<int> barIndexes, List<int> verticalIndexes, string ruleName)
+        {
+            BarIndexes = barIndexes;
+            VerticalIndexes = verticalIndexes;
+            RuleName = ruleName;
+        }
 
         public StackMistake(List<Stack> stacks, Rule? rule)
         {

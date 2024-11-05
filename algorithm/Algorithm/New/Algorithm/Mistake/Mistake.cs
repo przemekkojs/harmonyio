@@ -1,6 +1,4 @@
-﻿using Algorithm.New.Music;
-
-namespace Algorithm.New.Algorithm.Mistake
+﻿namespace Algorithm.New.Algorithm.Mistake
 {
     public abstract class Mistake
     {

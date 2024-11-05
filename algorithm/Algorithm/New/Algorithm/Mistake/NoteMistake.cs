@@ -1,4 +1,5 @@
 ﻿using Algorithm.New.Music;
+using System.Text.Json.Serialization;
 
 namespace Algorithm.New.Algorithm.Mistake
 {
@@ -9,6 +10,14 @@ namespace Algorithm.New.Algorithm.Mistake
         public List<string> Voices { get; set; }
 
         public override int Quantity => Voices.Count;
+
+        [JsonConstructor]
+        public NoteMistake(int barIndex, int verticalIndex, List<string> voices)
+        {
+            BarIndex = barIndex;
+            VerticalIndex = verticalIndex;
+            Voices = voices;
+        }
 
         public NoteMistake(List<Note?> notes, Stack? stack)
         {
