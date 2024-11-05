@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="~/css/grade-style.css" />
 </head>
 
-<form method="post" class="h-100 w-100 d-flex flex-column">
-    <div class="flex-grow-1 d-flex">
+<form method="post" class="h-100 w-100 d-flex flex-column overflow-auto">
+    <div class="flex-grow-1 d-flex overflow-auto">
         <div class="left-panel overflow-auto bg-white shadow rounded p-3 me-3">
             <div class="fw-bold fs-4 mb-3">@Model.Quiz.Name</div>
             <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
@@ -29,7 +29,7 @@
             }
         </div>
 
-        <div class="flex-grow-1 d-flex flex-column overflow-auto">
+        <div class="flex-grow-1 d-flex flex-column overflow-auto ">
             <div class="bg-white rounded shadow d-flex justify-content-between align-items-center p-3 mb-3">
                 <div id="current-user-text" class="fw-bold fs-4">
                     @*SET VIA JS*@
@@ -73,22 +73,19 @@
                         </div>
                     </div>
 
-                    <div class="flex-grow-1">
-                        <p class="m-0" id="question">
-                            @* FILLED VIA JS *@
-                        </p>
+                    <div class="flex-grow-1 me-2 h-100">
+                        <textarea id="comment" rows="1" placeholder="Dodaj komentarz..." oninput="resizeTextArea(this)"
+                            onchange="onCommentChange(this.value)"
+                            class="form-control shadow border-white rounded overflow-hidden h-100"></textarea>
                     </div>
 
-                    <div
-                        class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
-                        <span class="fw-bold text-white">Sugestia</span>
-                        <span id="suggestion" class="text-white">
-                            @*SET VIA JS*@
-                        </span>
+                    <div class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                        <span class="fw-bold text-white mb-1">Sugestia</span>
+                        <input type="text" id="suggestion" readonly
+                            class="form-control points-input bg-transparent text-white px-0 text-dark rounded overflow-visible" />
                     </div>
 
-                    <div
-                        class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
+                    <div class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
                         <span class="fw-bold text-white mb-1">Wynik</span>
                         <input type="number" id="points" onchange="onPointsChange(this.value)"
                             onKeyPress="integerKeyPress(event)"
@@ -102,6 +99,12 @@
                             onKeyPress="integerKeyPress(event)"
                             class="form-control points-input bg-white text-dark rounded" />
                     </div>
+                </div>
+
+                <div class="flex-grow-1 mt-3" id="question-area">
+                    <p class="m-0" id="question">
+                        @* FILLED VIA JS *@
+                    </p>
                 </div>
 
                 <div class="mt-3 d-flex flex-row">
@@ -121,12 +124,12 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
+                @* <div class="mt-3">
                     <span class="fw-bold">Komentarz</span>
                     <textarea id="comment" rows="1" placeholder="Dodaj komentarz..." oninput="resizeTextArea(this)"
                         onchange="onCommentChange(this.value)"
                         class="form-control shadow border-white rounded overflow-hidden mt-2"></textarea>
-                </div>
+                </div> *@
             </div>
         </div>
     </div>
@@ -342,8 +345,8 @@
     }
 
     function resizeTextArea(textArea) {
-        textArea.style.height = '';
-        textArea.style.height = textArea.scrollHeight + 'px';
+        @* textArea.style.height = ''; *@
+        @* textArea.style.height = textArea.scrollHeight + 'px'; *@
     }
 
     function integerKeyPress(e) {
@@ -358,12 +361,17 @@
             currentQuestionIndex = index;
 
             questionElement.innerText = questions[currentQuestionIndex].question;
+            if (questions[currentQuestionIndex].question == '')
+                document.getElementById('question-area').classList.add('d-none');
+            else 
+                document.getElementById('question-area').classList.remove('d-none');
+
             excersiseNumberElement.innerHTML = currentQuestionIndex + 1;
 
             var score = userScores[currentUserIndex][currentQuestionIndex];
             var scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
 
-            suggestionElement.innerText = scoreSuggestions.Item1 + " / " + scoreSuggestions.Item2;
+            suggestionElement.value = scoreSuggestions.Item1 + " / " + scoreSuggestions.Item2;
             pointsElement.placeholder = scoreSuggestions.Item1;
             maxElement.placeholder = scoreSuggestions.Item2;
             pointsElement.value = score.Item1;
@@ -405,7 +413,7 @@
 
         for (var i = start; i <= end; i++) {
             var button = document.createElement("button");
-            button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") + " btn-tiny-width p-1";
+            button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-light btn-hidable") + " btn-tiny-width p-1";
             button.innerText = i + 1;
 
             button.onclick = (function (i) {
