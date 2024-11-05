@@ -11,7 +11,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
     <Folder Include="Enumerations\" />
-    <Folder Include="Algorithm\" />
     <Folder Include="Pages\Groups\" />
   </ItemGroup>
   <ItemGroup>
