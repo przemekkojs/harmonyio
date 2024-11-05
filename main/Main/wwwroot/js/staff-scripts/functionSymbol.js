@@ -124,7 +124,7 @@ class FunctionSymbol {
 
     const topRightOffset =
       this.numbersTopRight.length === 4
-        ? this.functionLetterH / 6
+        ? this.functionLetterH / 8
         : this.functionLetterH / 2;
     let currentY = graphicH / 2 - topRightOffset;
     for (let i = this.numbersTopRight.length - 1; i >= 0; i--) {
@@ -158,7 +158,7 @@ class FunctionSymbol {
   }
 
   draw(x, y) {
-    const letterSize = getVerticalWidth() * 0.5;
+    const letterSize = getVerticalWidth() * 0.7;
 
     if (!this.isRendered) {
       this.#renderGraphics(letterSize);
@@ -166,6 +166,7 @@ class FunctionSymbol {
 
     imageMode(CORNER);
 
+    y = y + taskHeight * 0.05;
     // function symbol, numbers above and below, roman number
     image(
       this.centerGraphic,

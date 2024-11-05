@@ -1,11 +1,11 @@
-const spaceBetweenStaffLines = 16; // everything is dependent on this, it scales the canvas (minimum=12, try svg graphics or using font for images later)
+const spaceBetweenStaffLines = 12; // everything is dependent on this, it scales the canvas (minimum=12, try svg graphics or using font for images later)
 const slotWidth = spaceBetweenStaffLines * 3;
 const barMargin = spaceBetweenStaffLines;
 const stemHeight = spaceBetweenStaffLines * 2.5;
-const upperStaffUpperMargin = 2 * spaceBetweenStaffLines + stemHeight + 10;
-const upperStaffLowerMargin = 2.5 * spaceBetweenStaffLines + stemHeight + 10;
-const lowerStaffUpperMargin = 3 * spaceBetweenStaffLines + stemHeight + 10;
-const lowerStaffLowerMargin = 2 * spaceBetweenStaffLines + stemHeight + 10;
+const upperStaffUpperMargin = 2 * spaceBetweenStaffLines + stemHeight;
+const upperStaffLowerMargin = 2.5 * spaceBetweenStaffLines + stemHeight;
+const lowerStaffUpperMargin = 3 * spaceBetweenStaffLines + stemHeight;
+const lowerStaffLowerMargin = 2 * spaceBetweenStaffLines + stemHeight;
 const upperStaffHeight =
   upperStaffUpperMargin + 4 * spaceBetweenStaffLines + upperStaffLowerMargin;
 const lowerStaffHeight =
@@ -15,7 +15,7 @@ const braceHeight =
   4 * 2 * spaceBetweenStaffLines +
   upperStaffLowerMargin +
   lowerStaffUpperMargin;
-const taskHeight = spaceBetweenStaffLines * 6;
+const taskHeight = spaceBetweenStaffLines * 7;
 const doubleGrandStaffHeight =
   upperStaffUpperMargin +
   upperStaffLowerMargin +
