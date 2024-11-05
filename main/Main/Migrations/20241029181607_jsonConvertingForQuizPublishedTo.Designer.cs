@@ -3,6 +3,7 @@ using System;
 using Main.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029181607_jsonConvertingForQuizPublishedTo")]
+    partial class jsonConvertingForQuizPublishedTo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -275,6 +278,10 @@ namespace Main.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PublishedToGroupIds")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
@@ -316,16 +323,11 @@ namespace Main.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("MasterId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MasterId");
 
                     b.ToTable("UsersGroups");
                 });
@@ -456,21 +458,6 @@ namespace Main.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("QuizUsersGroup", b =>
-                {
-                    b.Property<int>("PublishedToGroupId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("QuizzesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PublishedToGroupId", "QuizzesId");
-
-                    b.HasIndex("QuizzesId");
-
-                    b.ToTable("PublishedToQuizzes", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationUserQuiz", b =>
@@ -616,16 +603,6 @@ namespace Main.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Main.Models.UsersGroup", b =>
-                {
-                    b.HasOne("Main.Models.ApplicationUser", "MasterUser")
-                        .WithMany("MasterInGroups")
-                        .HasForeignKey("MasterId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("MasterUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -677,28 +654,11 @@ namespace Main.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("QuizUsersGroup", b =>
-                {
-                    b.HasOne("Main.Models.UsersGroup", null)
-                        .WithMany()
-                        .HasForeignKey("PublishedToGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Main.Models.Quiz", null)
-                        .WithMany()
-                        .HasForeignKey("QuizzesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Main.Models.ApplicationUser", b =>
                 {
                     b.Navigation("CreatedQuizes");
 
                     b.Navigation("ExcersiseSolutions");
-
-                    b.Navigation("MasterInGroups");
 
                     b.Navigation("QuizResults");
 
