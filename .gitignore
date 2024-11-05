@@ -2,9 +2,12 @@
 /algorithm/Algorithm/bin
 /algorithm/Algorithm/obj
 /algorithm/Algorithm/.vs
+/algorithm/Algorithm/Old
+
 /algorithm/AlgorithmTests/.vs
 /algorithm/AlgorithmTests/bin
 /algorithm/AlgorithmTests/obj
+/algorithm/AlgorithmTests/Old
 
 /main/Main/.vs
 /main/Main/bin
@@ -20,3 +23,5 @@
 **/app.db-wal
 
 **/.DS_Store
+
+
