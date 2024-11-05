@@ -1,39 +1,67 @@
 ﻿using Algorithm.New.Music;
+using System.Text.Json.Serialization;
 
 namespace Algorithm.New.Algorithm.Mistake
 {
     public class NoteMistake : Mistake
     {
-        public List<string> Notes { get; set; } = [];
-        public Stack? Stack { get; set; } = null;
-
-        // FOR JSON MISTAKE LOGIC
         public int BarIndex { get; set; }
         public int VerticalIndex { get; set; }
-        public List<string> Voices { get; set; } = [];
+        public List<string> Voices { get; set; }
 
-        public override int Quantity => Notes.Count;
+        public override int Quantity => Voices.Count;
 
-        public override void GenerateDescription()
+        [JsonConstructor]
+        public NoteMistake(int barIndex, int verticalIndex, List<string> voices)
         {
-            if (Notes.Count == 0 || Stack == null)
+            BarIndex = barIndex;
+            VerticalIndex = verticalIndex;
+            Voices = voices;
+        }
+
+        public NoteMistake(List<Note?> notes, Stack? stack)
+        {
+            Voices = [];
+
+            foreach (var note in notes)
             {
-                Description = "";
-                return;
+                if (note == null)
+                    continue;
+
+                var noteName = note.Name;
+                var voice = GetVoiceFromStack(note, stack);
+
+                if (voice != null)
+                    Voices.Add(voice);
             }
 
-            string postfix = Notes.Count == 1 ? "u" : "ów";
-            Description = $"Błędy dźwięk{ postfix } [{ string.Join(", ", Notes) }] w funkcji: Takt: {Stack.Index.Bar}, Miara: {Stack.Index.Position}.";
+            BarIndex = stack != null ? stack.Index.Bar : 0;
+            VerticalIndex = stack != null ? stack.Index.Position : 0;
         }
 
-        // FOR JSON MISTAKE LOGIC
-        public void SetInfo ()
+        public static string? GetVoiceFromStack(Note note, Stack? stack)
         {
-            if (Stack == null)
-                return;
+            int index = 0;
+            List<string> voices = ["S", "A", "T", "B"];
 
-            BarIndex = Stack.Index.Bar;
-            VerticalIndex = Stack.Index.Position;
+            while (index < stack?.Notes.Count)
+            {
+                var toCheck = stack.Notes[index];
+
+                if (toCheck == null)
+                {
+                    index++;
+                    continue;
+                }
+
+                if (toCheck.Equals(note))
+                    return voices[index];
+            }
+
+            return null;
         }
+
+        public override void GenerateDescription() => 
+            Description = Mistake.GenerateNoteMistakeDescription(Voices, BarIndex, VerticalIndex);
     }
 }
