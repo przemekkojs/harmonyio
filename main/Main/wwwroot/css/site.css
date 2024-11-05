@@ -107,7 +107,7 @@ body {
 }
 
 .question-area {
-    min-height: 75px;
+    min-height: 80px;
 }
 
 .question-square {
@@ -157,6 +157,8 @@ body {
     background: url('/images/bg-pattern.png') repeat, linear-gradient(#2d53b2, #426edb);
     background-size: 38vw 38vw, cover;
     background-position: 0 0, center;
+    background-attachment: fixed;
+    padding-top: 93px;
 }
 
 

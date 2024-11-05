@@ -37,10 +37,19 @@ class FunctionSymbol {
       task.minor,
       task.position,
       task.root,
-      task.added,
+      task.added.reverse(),
       [task.removed],
       task.alterations
     );
+  }
+
+  clearGraphics() {
+    if (this.centerGraphic) {
+      this.centerGraphic.remove();
+    }
+    if (this.numbersRightGraphic) {
+      this.numbersRightGraphic.remove();
+    }
   }
 
   #renderCenterGraphic(letterSize) {

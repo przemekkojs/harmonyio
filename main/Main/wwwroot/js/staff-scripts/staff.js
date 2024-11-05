@@ -1,28 +1,7 @@
 class GrandStaff {
-  constructor(
-    // numberOfVerticalsPerBarList,
-    minWidth
-    // metre = new Metre(4, 4),
-    // keySignature = new KeySignature(7)
-  ) {
-    // this.keySignature = keySignature;
-    // this.metre = metre;
-
-    // const slotsPerBar = this.metre.slotsPerBar();
-    // this.bars = [];
-    // for (let i = 0; i < numberOfVerticalsPerBarList.length; i++) {
-    //   this.bars.push(
-    //     new Bar(this, numberOfVerticalsPerBarList[i], slotsPerBar)
-    //   );
-    // }
-
+  constructor(minWidth) {
     this.keySignatureOffset =
       keyOffset + symbols.violinKey.width + 0.4 * spaceBetweenStaffLines;
-    // this.metreOffset =
-    //   this.keySignatureOffset +
-    //   this.keySignature.getWidth() +
-    //   0.2 * spaceBetweenStaffLines;
-    // this.dynamicElementsOffset = this.metreOffset + this.metre.getMetreWidth();
 
     this.minWidth = minWidth;
     this.isLoaded = false;
@@ -142,8 +121,17 @@ class GrandStaff {
     }
   }
 
+  #clearFunctionSymbolGraphics() {
+    if (this.bars) {
+      for (let i = 0; i < this.bars.length; i++) {
+        this.bars[i].clearFunctionSymbolGraphics();
+      }
+    }
+  }
+
   loadFromJson(taskJson, notesJsonString) {
     this.isLoaded = false;
+    this.#clearFunctionSymbolGraphics();
     this.#loadTaskFromJson(taskJson);
     this.#loadNotesFromJson(notesJsonString);
     this.init();

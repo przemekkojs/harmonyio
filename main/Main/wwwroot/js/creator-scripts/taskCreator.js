@@ -43,11 +43,15 @@ export function createTask(parent, id) {
                 
         </div>
 
-        <div class="task-submit">
-            <input type="button" value="Zatwierdź" id="submit-${id}" class="btn btn-primary btn-sm ms-3" style="width: 100px;">
+        <div class="task-submit">           
             <input type="button" value="Usuń" id="delete-${id}" class="btn btn-danger btn-sm" style="width: 100px;">
-        </div>
-    `;
+        </div>`;
+
+    //    <div class="task-submit">
+    //        <input type="button" value="Zatwierdź" id="submit-${id}" class="btn btn-primary btn-sm ms-3" style="width: 100px;">
+    //        <input type="button" value="Usuń" id="delete-${id}" class="btn btn-danger btn-sm" style="width: 100px;">
+    //    </div>
+    //`;
 
     let taskDiv = document.createElement('div');
     taskDiv.id = `task-${id}`;

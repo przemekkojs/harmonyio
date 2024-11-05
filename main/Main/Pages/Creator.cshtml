@@ -11,7 +11,9 @@
         @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest
         najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
         @*Nie no, luzik mordeczko, rozumiemy Cię.*@
-        @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się czym przejmować*@
+        @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się
+        czym przejmować*@
+        @*Po tym co zostało odwalone z PR-widmo, to nic nikogo nie zaskoczy*@
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
@@ -86,8 +88,8 @@
     let excersises = @Html.Raw(
         Json.Serialize(
             Model.Questions?
-                .Select(q => q ?? "")
-                .ToList() ?? new List<string>()
+        .Select(q => q ?? "")
+        .ToList() ?? new List<string>()
         ));
 
     const excersiseContainer = document.getElementById('excersise-container');
@@ -99,7 +101,7 @@
         });
     }
 
-    window.confirmExcersises = function() {
+    window.confirmExcersises = function () {
         questionsValidationError.innerText = '';
         excersises = [];
 
@@ -121,20 +123,25 @@
             const sharpsCount = tonationParsed[0];
             const flatsCount = tonationParsed[1];
 
-            excersises[i] = {
+            const taskToConfirm = tasks.filter(x => x.id == i)[0];
+            const confirmResult = taskToConfirm.confirmAll();
+
+            // console.log(confirmResult);
+
+            excersises.push({
                 question: questionText,
                 sharpsCount: sharpsCount,
                 flatsCount: flatsCount,
-                metreValue: metreCount,
-                metreCount: metreValue,
+                metreValue: metreValue,
+                metreCount: metreCount,
                 task: tasks[i].result
-            };
+            });
 
             hiddenInput.value = JSON.stringify(excersises[i]);
-            console.log(hiddenInput.value);
+            // console.log(hiddenInput.value);
         }
 
-        console.log(excersises);
+        // console.log(excersises);
     }
 
     window.addExcersise = function () {
@@ -159,9 +166,10 @@
         const removeButton = document.getElementById(`delete-${index}`);
         removeButton.addEventListener('click', () => removeExcersise(id));
 
-        const confirmButton = document.getElementById(`submit-${index}`);
-
-        confirmButton.addEventListener('click', () => updateExcersise(id));
+        // Komentarzy jest trochę w plikach kreatora, ale gdybym chciał jednak wrócić te przyciski zatwierdzania, to niech to
+        // jeszcze zostanie plz.......
+        // const confirmButton = document.getElementById(`submit-${index}`);
+        // confirmButton.addEventListener('click', () => updateExcersise(id));
         questionsValidationError.innerText = '';
     }
 

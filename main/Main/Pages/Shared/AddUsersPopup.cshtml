@@ -3,48 +3,59 @@ ADD USERS MODAL POPUP
 
 ATRYBUTY:
     - data-adding-admins: Bool, jeżeli jest true to dodajemy adminów, jeżeli false to zwykłych użytkowników
-    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku dodaj. Callback ten musi zawierać 2 argumenty - assignedEmails i areAdmins
+    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku dodaj. Callback ten musi zawierać 2 argumenty - assignedEmails i areAdmins oraz zwracać null w przypadku powodzenia lub listę niepoprawnych emaili w przypadku niepowodzenia
 *@
 
 <div class="modal fade" id="addUsersPopup" tabindex="-1" role="dialog" aria-labelledby="addUsersPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content d-flex flex-column overflow-hidden">
-            <div class="d-flex flex-row modal-header">
-                <span id="addUsersTitle" class="fw-bold fs-4">Dodaj uczestników grupy</span>
-                <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 650px;">
+        <div class="modal-content d-flex flex-row overflow-hidden">
+            <div class="col-4 bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
+                <span class="fw-bold fs-4 mb-1">Dodawanie</span>
+                <p>Możesz dodać do swojej grupy członków podając ich adresy email. Otrzymają oni wtedy w swojej skrzynce zaproszenia do grupy, a po zaakceptowaniu staną się jej częścią!</p>
             </div>
 
-            <div class="d-flex flex-column overflow-auto p-3">
-                <div class="rounded shadow d-flex flex-column border mb-3">
-                    <div class="bg-light rounded-top d-flex flex-row fw-bold p-2">
-                        <span>Wpisz email użytkownika</span>
+            <div class="col-8 d-flex flex-column">
+                <div class="d-flex flex-row modal-header">
+                    <span id="addUsersTitle" class="fw-bold fs-4">Dodaj uczestników grupy</span>
+                    <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="d-flex flex-column overflow-auto p-3">
+                    <div class="rounded shadow-sm d-flex flex-column border mb-3">
+                        <div class="bg-light rounded-top d-flex flex-row fw-bold p-2">
+                            <span>Wpisz email użytkownika</span>
+                        </div>
+
+                        <hr class="m-0 border border-1" />
+
+                        <div class="p-2">
+                            <input id="addEmailInput" class="form-control" type="email" placeholder="user@example.com" required />
+                        </div>
                     </div>
 
-                    <hr class="m-0 border border-1" />
+                    <div class="rounded shadow-sm d-flex flex-column border" style="height: 205px;">
+                        <div class="bg-light rounded-top d-flex flex-row fw-bold p-2">
+                            <span id="newUsersTitle" class="me-1">Nowi uczestnicy</span>
+                            <span id="emailsNumber">(2)</span>
+                        </div>
 
-                    <div class="p-2">
-                        <input id="assignEmailInput" class="form-control" type="email" placeholder="user@example.com" required />
+                        <hr class="m-0 border border-1" />
+
+                        <div id="emailListContainer" class="p-2 overflow-auto">
+                            @*FILLED VIA JS*@
+                        </div>
+                    </div>
+
+                    <div id="addValidationText" class="text-danger mt-2 d-none">
+                        Niektórzy z podanych użytkowników nie istnieją lub są już dodani do grupy!
                     </div>
                 </div>
 
-                <div class="rounded shadow d-flex flex-column border" style="height: 205px;">
-                    <div class="bg-light rounded-top d-flex flex-row fw-bold p-2">
-                        <span id="newUsersTitle" class="me-1">Nowi uczestnicy</span>
-                        <span id="emailsNumber">(2)</span>
-                    </div>
 
-                    <hr class="m-0 border border-1" />
-
-                    <div id="emailListContainer" class="p-2 overflow-auto">
-                        @*FILLED VIA JS*@
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm-width" id="addCancelButton" data-bs-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-primary btn-sm-width" id="addUserButton">Dodaj</button>
                 </div>
-            </div>
-
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm-width" data-bs-dismiss="modal">Anuluj</button>
-                <button type="button" class="btn btn-primary btn-sm-width" data-bs-dismiss="modal" id="addUserButton">Dodaj</button>
             </div>
         </div>
     </div>
@@ -53,14 +64,16 @@ ATRYBUTY:
 
 <script>
 
-    var addUsersPopup = document.getElementById('addUsersPopup');
-    var addUserButton = addUsersPopup.querySelector('#addUserButton');
+    let addUsersPopup = document.getElementById('addUsersPopup');
+    let addUserButton = addUsersPopup.querySelector('#addUserButton');
     let assignModalButton;
 
-    var addingAdmins = false;
-    var assignedEmails = [];
+    let addingAdmins = false;
+    let assignedEmails = [];
+    let wrongEmails = [];
 
-    var emailInput = document.getElementById("assignEmailInput");
+    const validationText = addUsersPopup.querySelector('#addValidationText');
+    let emailInput = document.getElementById("addEmailInput");
     const emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
 
     emailInput.addEventListener("focusout", addEmail);
@@ -75,6 +88,7 @@ ATRYBUTY:
 
         addingAdmins = assignModalButton.getAttribute('data-adding-admins') === "true";
         assignedEmails = [];
+        wrongEmails = [];
 
         updateEmailsList();
 
@@ -84,10 +98,18 @@ ATRYBUTY:
     });
 
     addUserButton.addEventListener('click', function (event) {
-        var callbackName = assignModalButton.getAttribute('data-callback-name');
+        const closebutton = document.getElementById('addCancelButton');
+
+        let callbackName = assignModalButton.getAttribute('data-callback-name');
 
         if (typeof window[callbackName] === 'function') {
-            window[callbackName](assignedEmails, addingAdmins);
+            wrongEmails = window[callbackName](assignedEmails, addingAdmins);
+
+            if (wrongEmails == null || wrongEmails.length == 0){
+                closebutton.click();
+            } else {
+                updateEmailsList();
+            }
         } else {
             console.error("Callback function not found:", callbackName);
         }
@@ -123,9 +145,13 @@ ATRYBUTY:
         emailListContainer.innerHTML = "";
         emailsNumber.innerText = `(${assignedEmails.length})`;
 
+        let anyWrong = false;
         assignedEmails.forEach((email, index) => {
+            const isWrong = wrongEmails.includes(email);
+            if (isWrong) anyWrong = true;
+
             const emailDiv = document.createElement("div");
-            emailDiv.className = `bg-transparent rounded border d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""}`;
+            emailDiv.className = `rounded d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""} ${isWrong ? "input-error" : "border"}`;
             emailDiv.innerHTML = `
                 <span class="text-truncate me-2">${email}</span>
                 <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
@@ -144,6 +170,11 @@ ATRYBUTY:
 
             emailListContainer.appendChild(emailDiv);
         });
+
+        if (anyWrong)
+            validationText.classList.remove('d-none')
+        else 
+            validationText.classList.add('d-none')
     }
 
 </script>
