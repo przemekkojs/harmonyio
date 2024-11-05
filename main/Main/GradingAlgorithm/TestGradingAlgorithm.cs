@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Main.Algorithm
+namespace Main.GradingAlgorithm
 {
     public class TestGradingAlgorithm : IGradingAlgorithm
     {

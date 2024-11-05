@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Main.Data;
 using Main.Models;
 using Main.Utils;
-using Main.Algorithm;
+using Main.GradingAlgorithm;
 
 var builder = WebApplication.CreateBuilder(args);
 

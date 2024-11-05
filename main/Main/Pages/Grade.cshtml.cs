@@ -1,4 +1,4 @@
-using Main.Algorithm;
+using Main.GradingAlgorithm;
 using Main.Data;
 using Main.Models;
 using Microsoft.AspNetCore.Identity;
