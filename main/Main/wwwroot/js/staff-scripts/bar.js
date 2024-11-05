@@ -8,6 +8,12 @@ class Bar {
     }
   }
 
+  clearFunctionSymbolGraphics() {
+    for (let i = 0; i < this.verticals.length; i++) {
+      this.verticals[i].clearFunctionSymbolGraphics();
+    }
+  }
+
   setFunctionSymbol(task) {
     const verticalIndex = parseInt(task.verticalIndex, 10);
     this.verticals[verticalIndex].setFunctionSymbol(task);

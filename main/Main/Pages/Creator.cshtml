@@ -11,7 +11,8 @@
         @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest
         najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
         @*Nie no, luzik mordeczko, rozumiemy Cię.*@
-        @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się czym przejmować*@
+        @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się
+        czym przejmować*@
         @*Po tym co zostało odwalone z PR-widmo, to nic nikogo nie zaskoczy*@
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
@@ -87,8 +88,8 @@
     let excersises = @Html.Raw(
         Json.Serialize(
             Model.Questions?
-                .Select(q => q ?? "")
-                .ToList() ?? new List<string>()
+        .Select(q => q ?? "")
+        .ToList() ?? new List<string>()
         ));
 
     const excersiseContainer = document.getElementById('excersise-container');
@@ -100,10 +101,10 @@
         });
     }
 
-    window.confirmExcersises = function() {
+    window.confirmExcersises = function () {
         questionsValidationError.innerText = '';
         excersises = [];
-        
+
         for (let i = 0; i < tasks.length; i++) {
             const questionText = document.getElementById(`question-task-${i}`).value;
             const hiddenInput = document.getElementById(`question-json-${i}`);
@@ -131,8 +132,8 @@
                 question: questionText,
                 sharpsCount: sharpsCount,
                 flatsCount: flatsCount,
-                metreValue: metreCount,
-                metreCount: metreValue,
+                metreValue: metreValue,
+                metreCount: metreCount,
                 task: tasks[i].result
             });
 

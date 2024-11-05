@@ -1,9 +1,5 @@
-const verticalsPerBarList = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
-
-
 let canvas;
-let canvasWidth;
-let canvasHeight;
+let sketchFont;
 
 let grandStaff;
 
@@ -19,24 +15,24 @@ function resizeCanvasVertically() {
 
 function preload() {
   preloadSymbols();
+  sketchFont = loadFont(fontUrl);
 }
 
 function setup() {
-  canvasWidth = windowWidth * 0.85;
-  canvasHeight = 800;
   canvas = createCanvas(canvasWidth, canvasHeight);
-  canvas.position((windowWidth - canvasWidth) / 2, 100);
+  canvas.parent("#music-staff-div");
 
+  textFont(sketchFont);
   resizeSymbols();
 
-  grandStaff = new GrandStaff(verticalsPerBarList, canvasWidth - 5);
-  grandStaff.init();
-  noLoop();
+  grandStaff = new GrandStaff(canvasWidth);
+  grandStaff.loadFromJson(questions[0], getCurrentSolution());
+  //noLoop();
 }
 
 function draw() {
   background(240);
-  grandStaff.draw();
+  if (grandStaff.isLoaded) {
+    grandStaff.draw();
+  }
 }
-
-
