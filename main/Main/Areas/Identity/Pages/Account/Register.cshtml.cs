@@ -73,23 +73,19 @@ namespace Main.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Podanie imienia jest obowiązkowe")]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
             
-            [Required]
+            [Required(ErrorMessage = "Podanie nazwiska jest obowiązkowe")]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
-            
-            [Required]
-            [Display(Name = "Role")]
-            public Role Role { get; set; }
             
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Podany email jest nieprawidłowy")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -98,7 +94,7 @@ namespace Main.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Podane hasło jest nieprawidłowe")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -110,7 +106,7 @@ namespace Main.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "Powtórzone hasło musi być takie samo jak hasło")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -141,8 +137,6 @@ namespace Main.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
-
-                    var roleResult = await _userManager.AddToRoleAsync(user, Roles.GetRoleName(Input.Role));
                     
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

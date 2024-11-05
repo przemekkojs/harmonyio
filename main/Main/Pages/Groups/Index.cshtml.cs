@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Main.Pages
 {
+    [Authorize]
     public class GroupsIndexModel : PageModel
     {
         public void OnGet()
