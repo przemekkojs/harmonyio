@@ -15,7 +15,7 @@ const braceHeight =
   4 * 2 * spaceBetweenStaffLines +
   upperStaffLowerMargin +
   lowerStaffUpperMargin;
-const taskHeight = spaceBetweenStaffLines * 6;
+const taskHeight = spaceBetweenStaffLines * 7;
 const doubleGrandStaffHeight =
   upperStaffUpperMargin +
   upperStaffLowerMargin +

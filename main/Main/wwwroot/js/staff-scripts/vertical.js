@@ -191,7 +191,7 @@ class Vertical {
     this.upperStaff.draw();
     this.lowerStaff.draw();
 
-    const functionSymbolX = this.getX() + this.verticalWidth / 2;
+    const functionSymbolX = this.getNotesCenterLineX();
     const functionSymbolY = this.getY() + this.getHeight() + taskHeight / 2;
     this.functionSymbol.draw(functionSymbolX, functionSymbolY);
   }
