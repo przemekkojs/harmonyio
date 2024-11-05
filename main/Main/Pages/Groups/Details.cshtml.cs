@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace Main.Pages
 {
@@ -59,6 +60,8 @@ namespace Main.Pages
                         .ThenInclude(q => q.Excersises)
                     .Include(g => g.Quizzes)
                         .ThenInclude(q => q.Creator)
+                    .Include(g => g.Requests)
+                        .ThenInclude(r => r.User)
                 );
 
             if (group == null)
@@ -85,7 +88,6 @@ namespace Main.Pages
 
             IsMaster = GroupMaster.Id == appUser.Id;
 
-            // TODO: Check if works with ApplicationUser from userManager or needs repository
             IsAdmin = IsMaster || group.Teachers.Contains(appUser);
 
             if (!IsAdmin && !group.Students.Contains(appUser))
@@ -142,7 +144,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage();
+            return RedirectToRoute(new { id = GroupId});
         }
 
         public async Task<IActionResult> OnPostAddUsers()
@@ -170,9 +172,9 @@ namespace Main.Pages
                 return RedirectToPage("Error");
             }
 
-            if (EmailsAsString == "")
+            if (EmailsAsString == "" || EmailsAsString == null)
             {
-                return RedirectToPage("Error");
+                return RedirectToRoute(new { id = GroupId});
             }
 
             var emails = new HashSet<string>();
@@ -208,6 +210,11 @@ namespace Main.Pages
                 }
             }
 
+            if (notFoundMails.Any())
+            {
+                return new JsonResult(notFoundMails);
+            }
+
             foreach(var user in users)
             {
                 _repository.Add(new GroupRequest()
@@ -221,7 +228,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage();
+            return RedirectToRoute(new { id = GroupId});
         }
 
         public IActionResult OnPostRedirectToIndexOwned()

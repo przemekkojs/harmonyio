@@ -148,7 +148,7 @@ ATRYBUTY:
         initGroups();
     });
 
-    assignSaveButton.addEventListener('click', function (event) {
+    assignSaveButton.addEventListener('click', async function (event) {
         const checkedCheckboxes = groupListContainer.querySelectorAll('input[type="checkbox"]:checked');
         const groups = Array.from(checkedCheckboxes).map(checkbox => checkbox.getAttribute('data-group'));
         const closebutton = document.getElementById('assignCancelButton');
@@ -157,7 +157,7 @@ ATRYBUTY:
         const quizId = assignModalButton.getAttribute('data-quiz-id');
 
         if (typeof window[callbackName] === 'function') {
-            wrongEmails = window[callbackName](quizId, assignedEmails, groups);
+            wrongEmails = await window[callbackName](quizId, assignedEmails, groups);
             
             if (wrongEmails == null || wrongEmails.length == 0){
                 closebutton.click();

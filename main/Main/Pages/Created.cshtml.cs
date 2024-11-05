@@ -156,10 +156,29 @@ public class CreatedModel : PageModel
             return RedirectToPage("Error");
         }
 
-        var usersToAsign = await _repository.GetAllAsync<ApplicationUser>(
-            q => q
-                .Where(u => emails.Any(e => e == u.Email))
-        );
+        var usersToAsign = new List<ApplicationUser>();
+
+        var notFoundMails = new List<string>();
+
+        foreach (var email in emails)
+        {
+            var user = await _repository.GetAsync<ApplicationUser>(
+                u => u.Email == email
+            );
+            if (user == null)
+            {
+                notFoundMails.Add(email);
+            }
+            else
+            {
+                usersToAsign.Add(user);
+            }
+        }
+
+        if (notFoundMails.Any())
+        {
+            return new JsonResult(notFoundMails);
+        }
 
         var groupsToAsign = await _repository.GetAllAsync<UsersGroup>(
             q => q

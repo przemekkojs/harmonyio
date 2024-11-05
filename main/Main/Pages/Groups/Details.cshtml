@@ -300,22 +300,49 @@
         console.log("deleting user " + userId);
     }
 
-    function addUsers(userEmails, areAdmins) {
-        //TODO: DODAJ TE EMAILE DO UŻYTKOWNIKÓW/ADMINÓW, REFRESH PAGE
-
+    async function addUsers(userEmails, areAdmins) {
 
         document.getElementById("addUserAsAdmins").value = areAdmins;
         document.getElementById("addUsersEmails").value = userEmails;
-        document.getElementById("formForAddUsers").submit();
+        form = document.getElementById("formForAddUsers");
+
+        const formData = new FormData(form);
 
         console.log("admins " + areAdmins)
         console.log("users " + userEmails);
 
-        //TODO: Zwróc liste niepoprawnych emaili w przypadku niepowodzenia (server side validation) lub null w przypadku powodzenia
-        if (true) 
-            return ["wrong1@gmail.com", "wrong2@gmail.com"];
-        else
-            return null;
+        try {
+            
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                redirect: 'manual'
+            });
+
+            if (response.status >= 300 && response.status < 400) {
+                const redirectUrl = response.headers.get('Location');
+                if (redirectUrl) {
+                    console.log('Redirect to:', redirectUrl);
+                    // Optionally navigate to the new page
+                    window.location.href = redirectUrl;
+                }
+                else {
+                    console.log('Redirect detected, but no Location header found');
+                }
+            }
+            else {
+                // Handle non-redirect response as usual
+                const result = await response.json();
+                console.log(result);
+                return result;
+            }
+
+        }
+        catch (error) {
+            console.error('An error occurred:', error);
+        }
+
+        return null;
     }
 
 </script>
