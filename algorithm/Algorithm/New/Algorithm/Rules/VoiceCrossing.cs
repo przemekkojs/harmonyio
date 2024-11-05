@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules
 
         public override bool IsSatisfied(params Stack[] functions)
         {
-            if (functions.Length != 2)
+            if (!ValidateParametersCount(functions))
                 return false;
 
             var stack1 = functions[0];

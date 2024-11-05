@@ -16,5 +16,15 @@ namespace Algorithm.New.Algorithm.Rules
         }
 
         public abstract bool IsSatisfied(params Stack[] functions);
+
+        protected bool ValidateParametersCount(params Stack[] functions)
+        {
+            if (OneFunction && functions.Length != 1)
+                return false;
+            else if (!OneFunction && functions.Length != 2)
+                return false;
+            
+            return true;
+        }
     }
 }

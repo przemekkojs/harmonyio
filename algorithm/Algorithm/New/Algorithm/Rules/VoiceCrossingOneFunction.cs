@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules
 
         public override bool IsSatisfied(params Music.Stack[] functions)
         {
-            if (functions.Length != 1)
+            if (!ValidateParametersCount(functions))
                 return false;
 
             var stack = functions[0];

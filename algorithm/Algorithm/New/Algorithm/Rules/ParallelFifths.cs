@@ -10,7 +10,10 @@ namespace Algorithm.New.Algorithm.Rules
 
         public override bool IsSatisfied(params Stack[] functions)
         {
-            throw new NotImplementedException();
+            if (!ValidateParametersCount(functions))
+                return false;
+
+            return true;
         }
     }
 }
