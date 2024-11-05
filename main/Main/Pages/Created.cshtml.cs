@@ -131,9 +131,12 @@ public class CreatedModel : PageModel
 
         if (Emails != "")
         {
-            if (EmailsAsString.Contains(','))
+            if (Emails.Contains(','))
             {
-                emails.AddRange(Emails.Split(','));
+                foreach (var email in Emails.Split(','))
+                {
+                    emails.Add(email);
+                }
             }
             else
             {

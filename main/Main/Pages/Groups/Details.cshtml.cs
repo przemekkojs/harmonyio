@@ -179,7 +179,10 @@ namespace Main.Pages
 
             if (EmailsAsString.Contains(','))
             {
-                emails.AddRange(EmailsAsString.Split(','));
+                foreach (var email in EmailsAsString.Split(','))
+                {
+                    emails.Add(email);
+                }
             }
             else
             {
