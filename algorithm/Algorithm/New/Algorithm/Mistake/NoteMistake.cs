@@ -7,6 +7,8 @@ namespace Algorithm.New.Algorithm.Mistake
         public List<string> Notes { get; set; } = [];
         public Stack? Stack { get; set; } = null;
 
+        public override int Quantity => Notes.Count;
+
         public override void GenerateDescription()
         {
             if (Notes.Count == 0 || Stack == null)

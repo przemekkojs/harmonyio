@@ -8,6 +8,8 @@ namespace Algorithm.New.Algorithm.Mistake
         public List<Stack> Stacks { get; set; } = [];
         public Rule? Rule { get; set; } = null;
 
+        public override int Quantity => Stacks.Count;
+
         public override void GenerateDescription()
         {
             if (Stacks.Count == 0 || Rule == null)
