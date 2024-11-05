@@ -102,6 +102,9 @@ ATRYBUTY:
 
         let callbackName = assignModalButton.getAttribute('data-callback-name');
 
+        if (assignedEmails.length == 0)
+            return;
+
         if (typeof window[callbackName] === 'function') {
             wrongEmails = window[callbackName](assignedEmails, addingAdmins);
 

@@ -8,12 +8,7 @@
 
 <form method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-column">
-        @*Ten margin, padding jest tu po to, aby zachować scrolla, ale jednocześnie nie ucinać shadow'a. To jest
-        najgorsza linijka kodu, jaką w życiu napisałem, ale nie umiem inaczej tego zrobić'*@
-        @*Nie no, luzik mordeczko, rozumiemy Cię.*@
-        @*Maaaati, po tym co widziałem na innych repo, Twoje to najbardziej profesjonalny kod na świecie, nie ma się
-        czym przejmować*@
-        @*Po tym co zostało odwalone z PR-widmo, to nic nikogo nie zaskoczy*@
+
         <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
             <div class="left-panel bg-white rounded shadow me-3 p-3">
                 <div class="mb-3">
@@ -21,18 +16,6 @@
                     <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly"
                         placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="OpenDate" class="form-label fw-bold"></label>
-                    <input asp-for="OpenDate" class="form-control" readonly="@Model.BrowseOnly">
-                    <span asp-validation-for="OpenDate" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="CloseDate" class="form-label fw-bold"></label>
-                    <input asp-for="CloseDate" class="form-control" readonly="@Model.BrowseOnly">
-                    <span asp-validation-for="CloseDate" class="text-danger"></span>
                 </div>
             </div>
 
@@ -56,7 +39,7 @@
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
         @* <input type="hidden" asp-for="Questions" value="@Model.Questions" id="questions" /> *@
-        <div class="bottom-bar d-flex align-items-center">
+        <div class="py-3 d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             <input type="button" value="Test" onclick="confirmExcersises()" />
             @if (!Model.BrowseOnly)
