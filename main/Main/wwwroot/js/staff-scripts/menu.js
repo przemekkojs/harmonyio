@@ -517,6 +517,8 @@ function handleNoteInteraction(elementsUnderMouse, note) {
         isMouseClickedHelper = false;
       }
     } else {
+      imageMode(CENTER);
+      image(symbols.forbiddenSymbol, mouseX + 25, mouseY - 20, 20, 20)
       note.draw(mouseX, mouseY);
     }
   } else {

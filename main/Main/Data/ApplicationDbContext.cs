@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Main.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,32 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasMany(q => q.Participants)
             .WithMany(u => u.ParticipatedQuizes)
             .UsingEntity(j => j.ToTable("QuizParticipants"));
+
+        // Opcje do serializacji JSON
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        // Lista PublishedToEmails
+        modelBuilder.Entity<Quiz>()
+            .Property(q => q.PublishedToEmails)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, options),
+                v => v != "" ? JsonSerializer.Deserialize<ICollection<string>>(v, options) ?? new List<string>() : new List<string>());
+
+        // Relacja wiele-do-wielu między Quiz a Group (grupy przypisane do quizu)
+        modelBuilder.Entity<Quiz>()
+            .HasMany(q => q.PublishedToGroup)
+            .WithMany(u => u.Quizzes)
+            .UsingEntity(j => j.ToTable("PublishedToQuizzes"));
+
+        // Relacja jeden-do-wielu między UsersGroup a ApplicationUser (założyciel)
+        modelBuilder.Entity<UsersGroup>()
+            .HasOne(g => g.MasterUser)
+            .WithMany(u => u.MasterInGroups)
+            .HasForeignKey(g => g.MasterId)
+            .OnDelete(DeleteBehavior.NoAction); // Nie usuwaj grupy przy usunięciu założyciela 
 
         // Relacja jeden-do-wielu między Quiz a Excersise
         modelBuilder.Entity<Excersise>()

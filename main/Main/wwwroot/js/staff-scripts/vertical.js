@@ -58,6 +58,14 @@ class Vertical {
     );
   }
 
+  shouldDrawHintArea(isUpperStaff) {
+    if(isUpperStaff) {
+      return !this.lowerStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index);
+    } else {
+      return !this.upperStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index);
+    }
+  }
+
   isEmpty() {
     return this.upperStaff.isEmpty() && this.lowerStaff.isEmpty();
   }
@@ -183,7 +191,7 @@ class Vertical {
     this.upperStaff.draw();
     this.lowerStaff.draw();
 
-    const functionSymbolX = this.getX() + this.verticalWidth / 2;
+    const functionSymbolX = this.getNotesCenterLineX();
     const functionSymbolY = this.getY() + this.getHeight() + taskHeight / 2;
     this.functionSymbol.draw(functionSymbolX, functionSymbolY);
   }

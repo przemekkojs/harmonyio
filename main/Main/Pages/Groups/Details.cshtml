@@ -1,9 +1,25 @@
 ﻿@page
 @model Main.Pages.GroupDetailsModel
 @{
+    var teacherRequests = Model.Group.Requests.Where(q => q.ForTeacher).Select(q => q.User);
+
+    var studentRequests = Model.Group.Requests.Where(q => !q.ForTeacher).Select(q => q.User);
+
+    var teachers = Model.Group.Teachers;
+
+    var students = Model.Group.Students;
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
+    <form method="post" asp-page-handler="DeleteUser" id="formForDeleteUser">
+        <input type="hidden" asp-for="GroupId" value="@Model.Group.Id"/>
+        <input type="hidden" asp-for="UserId" value="" id="userToRemoveId"/>
+    </form>
+    <form method="post" asp-page-handler="AddUsers" id="formForAddUsers">
+        <input type="hidden" asp-for="GroupId" value="@Model.Group.Id"/>
+        <input type="hidden" asp-for="AsAdmins" value="" id="addUserAsAdmins"/>
+        <input type="hidden" asp-for="EmailsAsString" value="" id="addUsersEmails"/>
+    </form>
     <div class="h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
         <form method="post" asp-page-handler="RedirectToIndexOwned" class="mb-2">
             <button type="submit" class="w-100 btn d-flex align-items-center justify-content-start p-3 @(Model.IsAdmin ? "btn-primary" : "btn-outline-dark hover-primary")">
@@ -21,7 +37,7 @@
 
     <div class="h-100 w-100 flex-group-1 d-flex flex-column p-3 bg-white rounded shadow">
         <div class="d-flex flex-column mb-3">
-            <span class="fs-3 fw-bold mb-2">Klasa 1A</span>
+            <span class="fs-3 fw-bold mb-2">@(Model.Group.Name)</span>
             <div class="d-flex flex-row">
                 <button id="usersButton" onclick="switchTab(this)"
                         class="btn btn-primary d-flex align-items-center p-3 me-3">
@@ -47,31 +63,31 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto">(@(2))</span> @*TODO: ILOŚĆ UCZESTNIKÓW*@
+                        <span class="me-auto">(@(students.Count()))</span>
                     </div>
 
                     <div class="d-flex flex-column">
-                        @for (int i = 0; i < 2; i++)@*TODO: DLA KAŻDEGO UCZESTNIKA*@
+                        @foreach (var student in students)
                         {
                             <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
-                                <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span> @*TODO: MAIL*@
+                                <span class="text-truncate me-2">@(student.FullName)</span>
                                 <button type="button" class="ms-auto btn-close" aria-label="Close"
                                         data-bs-toggle="modal" data-bs-target="#deleteUserPopup"
-                                        data-user-mail="krzysztof.kowalski@gmail.com" data-on-delete="deleteUser(@(i))"></button> @*TODO: MAIL, ID ZAMIAST I*@
+                                        data-user-mail="@(student.Email)" data-on-delete="deleteUser(@(student.Id))"></button>
                                     </div>
                                 }
                     </div>
 
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Oczekujący</span>
-                        <span class="me-auto">(@(2))</span> @*ILOŚĆ UCZESTNIKÓW, KTÓRZY JESZCZE NIE ZAAKCEPTOWALI ZAPROSZENIA*@
+                        <span class="me-auto">(@(studentRequests.Count()))</span>
                     </div>
 
                     <div class="d-flex flex-column">
-                        @for (int i = 0; i < 2; i++)@*TODO: DLA KAŻDEGO OCZEKUJĄCEGO*@
+                        @foreach (var studentRequest in studentRequests)
                         {
                             <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
-                                <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span> @*TODO: MAIL*@
+                                <span class="text-truncate me-2">@(studentRequest.Email)</span>
                             </div>
                         }
                     </div>
@@ -99,40 +115,37 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto">(@(2))</span> @*TODO: ILOŚĆ AKTYWNYCH NAUCZYCIELI*@
+                        <span class="me-auto">(@(teachers.Count()+1))</span>
                     </div>
 
                     <div class="d-flex flex-column">
-                        @for (int i = 0; i < 2; i++)
+                        <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <i class="fas fa-crown icon-sm me-1"></i>
+
+                            <span class="text-truncate me-2">@(Model.GroupMaster.FullName)</span>
+                        </div>
+                        @foreach (var teacher in teachers)
                         {
                             <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
-                                @if (i == 0)@*TODO: JEŻELI TWÓRCA GRUPY*@
-                                {
-                                    <i class="fas fa-crown icon-sm me-1"></i>
-                                }
+                                <span class="text-truncate me-2">@(teacher.FullName)</span>
 
-                                <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span> @*TODO: EMAIL*@
-
-                                @if (i != 0)@*TODO: NIE JEŻELI TWÓRCA GRUPY*@
-                                {
-                                    <button type="button" class="ms-auto btn-close" aria-label="Close"
+                                <button type="button" class="ms-auto btn-close" aria-label="Close"
                                             data-bs-toggle="modal" data-bs-target="#deleteUserPopup"
-                                            data-user-mail="krzysztof.kowalski@gmail.com" data-on-delete="deleteUser(@(i))"></button> @*TODO: MAIL, ID ZAMIAST I*@
-                                }
+                                            data-user-mail="@(teacher.Email)" data-on-delete="deleteUser(@(teacher.Id))"></button>
                             </div>
                         }
                     </div>
 
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Oczekujący</span>
-                        <span class="me-auto">(@(2))</span> @*TODO: ILOŚĆ ADMINÓW, KTÓRZY JESZCZE NIE ZAAKCEPTOWALI ZAPRO*@
+                        <span class="me-auto">(@(teacherRequests.Count()))</span>
                     </div>
 
                     <div class="d-flex flex-column">
-                        @for (int i = 0; i < 2; i++)@*TODO: DLA KAŻDEGO Z OCZEKUJĄCYCH ADMINÓW*@
+                        @foreach (var teacherRequest in teacherRequests)
                         {
                             <div class="bg-transparent rounded-bottom rounded border d-flex flex-row p-2 mb-2">
-                                <span class="text-truncate me-2">krzysztof.kowalski@gmail.com</span> @*TODO: EMAIL*@
+                                <span class="text-truncate me-2">@(teacherRequest.Email)</span>
                             </div>
                         }
                     </div>
@@ -159,39 +172,40 @@
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @for (int i = 0; i < 3; i++)@*TODO: DLA KAŻDEGO AKTYWNEGO QUIZU W TEJ GRUPIE*@
+                    @{var first = true;}
+                    @foreach (var quiz in Model.Group.Quizzes)
                     {
-                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(i > 0 ? "mt-2" : "")">
+                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
                             <div class="flex-grow-1 d-flex flex-column">
-                                <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div> @*TODO: NAZWA QUIZU*@
+                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="far fa-clock icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Pozostało:</span>
-                                    <span id="to-solve-time-@(i)">
-                                        @*TODO: QUIZ ID ZAMIAST I*@
+                                    <span id="to-solve-time-@(quiz.Id)">
                                         @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA PRZEKOPIOWAĆ Z EKRANU CREATED*@
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="fas fa-music icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Zadania:</span>
-                                    <span>@(12)</span> @*TODO: ILOŚĆ ZADAŃ*@
+                                    <span>@(quiz.Excersises.Count())</span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center">
                                     <i class="fas fa-user icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Twórca:</span>
-                                    <span>Janusz Kowlaski</span> @*TODO: TWÓRCA*@
+                                    <span>@(quiz.Creator.FullName)</span>
                                 </div>
                             </div>
 
                             @if (!Model.IsAdmin)
                             {
                                 <div class="d-flex flex-column h-100">
-                                    <a class="btn btn-primary ms-auto mt-auto">Rozwiąż</a> @*TODO: TO NIECH PRZENOSI DO ROZWIĄZYWANIA QUIZU*@
+                                    <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
                                 </div>
                             }
                         </div>
+                        first = false;
                     }
                 </div>
             </div>
@@ -204,39 +218,41 @@
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @for (int i = 0; i < 3; i++)
+                    @{first = true;}
+                    @foreach(var quiz in Model.Group.Quizzes)
                     {
-                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(i > 0 ? "mt-2" : "")">
+                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first? "mt-2" : "")">
                             <div class="flex-grow-1 d-flex flex-column">
-                                <div class="fw-bold fs-5 mb-3">Kartkówka 2A</div> @*TODO: NAZWA QUIZU*@
+                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="far fa-clock icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Dostępne za:</span>
-                                    <span id="future-quiz-time-@(i)">
-                                        @*TODO: QUIZ ID ZAMIAST I*@
+                                    <span id="future-quiz-time-@(quiz.Id)">
                                         @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA PRZEKOPIOWAĆ Z EKRANU CREATED*@
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="fas fa-music icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Zadania:</span>
-                                    <span>12</span> @*TODO: ILOŚĆ ZADAŃ*@
+                                    <span>@(quiz.Excersises.Count())</span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center">
                                     <i class="fas fa-user icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Twórca:</span>
-                                    <span>Janusz Kowalski</span> @*TODO: TWÓRCA QUIZU*@
+                                    <span>@(quiz.Creator.FullName)</span>
                                 </div>
                             </div>
 
+                            @* Chyba usunąć - nie można edytować quizu po publikacji *@
                             @if (Model.IsAdmin)
                             {
                                 <div class="d-flex flex-column h-100">
-                                    <a class="btn btn-primary ms-auto mt-auto">Edytuj</a> @*TODO: TO NIECH PRZENOSI DO EDYTOWANIA QUIZU*@
+                                    <a asp-page="/Creator" asp-route-id="@(quiz.Id)" class="btn btn-primary ms-auto mt-auto">Edytuj</a>
                                 </div>
                             }
                         </div>
+                        first = false;
                     }
                 </div>
             </div>
@@ -278,11 +294,19 @@
     function deleteUser(userId) {
         //TODO: DELETE USER WITH ID, REFRESH PAGE
 
+        document.getElementById("userToRemoveId").value = userId;
+        document.getElementById("formForDeleteUser").submit();
+
         console.log("deleting user " + userId);
     }
 
     function addUsers(userEmails, areAdmins) {
         //TODO: DODAJ TE EMAILE DO UŻYTKOWNIKÓW/ADMINÓW, REFRESH PAGE
+
+
+        document.getElementById("addUserAsAdmins").value = areAdmins;
+        document.getElementById("addUsersEmails").value = userEmails;
+        document.getElementById("formForAddUsers").submit();
 
         console.log("admins " + areAdmins)
         console.log("users " + userEmails);

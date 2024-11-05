@@ -1,6 +1,9 @@
 ﻿@page
 @model Main.Pages.GroupsIndexModel
 @{
+    var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.TeacherInGroups);
+
+    var joinedGroups = Model.AppUser.StudentInGroups;
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
@@ -30,77 +33,81 @@
                     data-bs-target="#createGroupPopup" data-callback-name="createGroup">
                 Utwórz grupę
             </button>
+            <form method="post" asp-page-handler="CreateGroup" id="formForCreateGroup">
+                <input type="hidden" asp-for="GroupName" value="" id="groupNameInput"/>
+            </form>
         </div>
 
         <div class="row px-3 pt-3 pb-1 d-none" id="ownedGroupsList">
-            @for (int i = 0; i < 3; i++)
+            @{var i = 0;}
+            @foreach(var group in ownedGroups)
             {
-                <div class="owned-groups col-6 p-0 m-0 @(i % 2 == 0 ? "pe-3" : "") @(i > 1 ? "pt-3" : "")"
-                     data-name="Klasa @(i)A">
+                <div class="owned-groups col-6 p-0 m-0 @(i % 2 == 0 ? "pe-3" : "") @(i != 0 ? "pt-3" : "")"
+                     data-name="@(group.Name)">
                     <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
                         <div class="flex-grow-1 d-flex flex-column">
-                            <div class="fw-bold fs-5 mb-3">Klasa @(i)A</div>
+                            <div class="fw-bold fs-5 mb-3">@(group.Name)</div>
 
                             <div class="d-flex flex-row mb-2">
                                 <i class="fas fa-user icon-sm me-2"></i>
                                 <span class="fw-bold me-1">Twórca:</span>
-                                <span>Kamil Nowak</span>
+                                <span>@(group.MasterUser.FullName)</span>
                             </div>
 
                             <div class="d-flex flex-row">
                                 <i class="fas fa-user-group icon-sm me-2"></i>
                                 <span class="fw-bold me-1">Uczniowie:</span>
-                                <span>24</span>
+                                <span>@(group.Students.Count())</span>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column h-100">
                             <div class="d-flex flex-row">
+                                @if (group.MasterId == Model.AppUser.Id)
+                                {
                                 <a class="btn-icon ms-auto" data-bs-toggle="modal" data-bs-target="#deleteGroupPopup"
-                                   data-group-name="Klasa @(i)A" data-on-delete="deleteGroup(@i)">
+                                   data-group-name="@(group.Name)" data-on-delete="deleteGroup(@(group.Id))">
                                     <i class="far fa-trash-can icon-sm"></i>
                                 </a>
+                                }
                             </div>
-
-                            <form method="post" asp-page-handler="RedirectToDetailsAdmin" class="ms-auto mt-auto">
-                                <button type="submit" class="btn btn-primary">
-                                    Szczegóły
-                                </button>
+                            <form method="post" asp-page-handler="DeleteGroup" id="formForDeleteGroup@(group.Id)">
+                                <input type="hidden" asp-for="GroupId" value="@(group.Id)"/>
                             </form>
+
+                            <a asp-page="Details" asp-route-id="@group.Id" class="ms-auto mt-auto btn btn-primary">Szczegóły</a>
                         </div>
                     </div>
                 </div>
+                i += 1;
             }
         </div>
 
         <div class="row px-3 pt-3 pb-1" id="joinedGroupsList">
-            @for (int i = 0; i < 3; i++)
+            @{i = 0;}
+            @foreach(var group in joinedGroups)
             {
                 <div class="joined-groups col-6 p-0 m-0 @(i % 2 == 0 ? "pe-3" : "") @(i > 1 ? "pt-3" : "")"
-                     data-name="Klasa @(i)B">
+                     data-name="@(group.Name)">
                     <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
                         <div class="flex-grow-1 d-flex flex-column">
-                            <div class="fw-bold fs-5 mb-3">Klasa @(i)B</div>
+                            <div class="fw-bold fs-5 mb-3">@(group.Name)</div>
 
                             <div class="d-flex flex-row mb-2">
                                 <i class="fas fa-user icon-sm me-2"></i>
                                 <span class="fw-bold me-1">Twórca:</span>
-                                <span>Kamil Nowak</span>
+                                <span>@(group.MasterUser.FullName)</span>
                             </div>
 
                             <div class="d-flex flex-row">
                                 <i class="fas fa-user-group icon-sm me-2"></i>
                                 <span class="fw-bold me-1">Uczniowie:</span>
-                                <span>24</span>
+                                <span>@(group.Students.Count())</span>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column h-100">
-                            <form method="post" asp-page-handler="RedirectToDetailsUser" class="ms-auto mt-auto">
-                                <button type="submit" class="btn btn-primary">
-                                    Szczegóły
-                                </button>
-                            </form>
+                            <a asp-page="Details" asp-route-id="@group.Id" class="ms-auto mt-auto btn btn-primary">Szczegóły</a>
                         </div>
                     </div>
                 </div>
@@ -171,13 +178,16 @@
 
 
     function deleteGroup(groupId) {
-        //TODO: Delte group and refresh page
+        
+        document.getElementById(`formForDeleteGroup${groupId}`).submit();
 
         console.log("deleting group " + groupId);
     }
 
     function createGroup(groupName) {
-        //TODO: Create group and go to group details
+
+        document.getElementById("groupNameInput").value = groupName;
+        document.getElementById(`formForCreateGroup`).submit();
 
         console.log("creating group " + groupName);
     }

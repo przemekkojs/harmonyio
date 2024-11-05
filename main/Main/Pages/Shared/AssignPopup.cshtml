@@ -144,7 +144,7 @@ ATRYBUTY:
         updateEmailsList();
 
         allGroups = JSON.parse(assignModalButton.getAttribute('data-all-groups'));
-        uneditableGroups = JSON.parse(assignModalButton.getAttribute('data-added-groups'));
+        uneditableGroups = JSON.parse(assignModalButton.getAttribute('data-added-groups')).map(n => n+'');
         initGroups();
     });
 
@@ -279,12 +279,12 @@ ATRYBUTY:
         const groupListContainer = document.getElementById("groupListContainer");
         groupListContainer.innerHTML = '';
 
-        allGroups.forEach((group, index) => {
+        Object.entries(allGroups).forEach((group, index) => {
             const groupDiv = document.createElement("div");
             groupDiv.className = `bg-transparent rounded border d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""}`;
             groupDiv.innerHTML = `
-                <input data-group="${group}" type="checkbox" onchange="updateGroups()" class="form-check-input me-2" ${uneditableGroups.includes(group) ? "checked disabled" : ""}>
-                <span class="text-truncate">${group}</span>
+                <input data-group="${group[0]}" type="checkbox" onchange="updateGroups()" class="form-check-input me-2" ${uneditableGroups.includes(group[0]) ? "checked disabled" : ""}>
+                <span class="text-truncate">${group[1]}</span>
             `;
 
             groupListContainer.appendChild(groupDiv);
