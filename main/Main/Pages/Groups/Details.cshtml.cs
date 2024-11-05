@@ -175,7 +175,16 @@ namespace Main.Pages
                 return RedirectToPage("Error");
             }
 
-            var emails = EmailsAsString.Split(',');
+            var emails = new HashSet<string>();
+
+            if (EmailsAsString.Contains(','))
+            {
+                emails.AddRange(EmailsAsString.Split(','));
+            }
+            else
+            {
+                emails.Add(EmailsAsString);
+            }
 
             var users = new List<ApplicationUser>();
 

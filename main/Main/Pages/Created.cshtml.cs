@@ -107,10 +107,6 @@ public class CreatedModel : PageModel
             return RedirectToPage("Error");
         }
 
-        Console.Write(CloseDate);
-        Console.Write(OpenDate);
-        Console.Write("aaaaaaaaaaaaaaaaaaaaaaa");
-
         quizToPublic.CloseDate = (DateTime)CloseDate!;
 
         quizToPublic.OpenDate = (DateTime)OpenDate!;
@@ -135,7 +131,14 @@ public class CreatedModel : PageModel
 
         if (Emails != "")
         {
-            emails.AddRange(Emails.Split(',').ToHashSet());
+            if (EmailsAsString.Contains(','))
+            {
+                emails.AddRange(Emails.Split(','));
+            }
+            else
+            {
+                emails.Add(Emails);
+            }
         }
 
         var quizToAssign = await _repository.GetAsync<Quiz>(
