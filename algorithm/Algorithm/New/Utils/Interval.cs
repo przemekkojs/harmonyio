@@ -63,5 +63,13 @@ namespace Algorithm.New.Utils
             else
                 note.Octave = option2.Octave;
         }
+
+        public static int SemitonesBetween(Note? note1, Note? note2)
+        {
+            var det1 = Determinant(note1);
+            var det2 = Determinant(note2);
+
+            return Math.Abs(det1 - det2);
+        }
     }
 }
