@@ -78,6 +78,8 @@
     const questionsValidationError = document.getElementById('questions-validation-error');
 
     function addExisting() {
+        console.log(excersises);
+
         excersises.forEach(x => {
 
         });
@@ -129,12 +131,8 @@
         textBox.className = "task-content w-100 p-3";
         textBox.id = `task-container-${index}`;
         textBox.innerHTML = `
-        <!-- Visible input for the question text -->
         <input type="text" id="question-task-${index}" class="form-control task-input" value="${excersises[index]}" placeholder="Enter question text" />
-
-        <!-- Hidden input to store JSON representation of the exercise for form submission -->
         <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
-
 
         excersiseContainer.appendChild(textBox);
         createTask(textBox, index);
@@ -143,10 +141,6 @@
         const removeButton = document.getElementById(`delete-${index}`);
         removeButton.addEventListener('click', () => removeExcersise(id));
 
-        // Komentarzy jest trochę w plikach kreatora, ale gdybym chciał jednak wrócić te przyciski zatwierdzania, to niech to
-        // jeszcze zostanie plz.......
-        // const confirmButton = document.getElementById(`submit-${index}`);
-        // confirmButton.addEventListener('click', () => updateExcersise(id));
         questionsValidationError.innerText = '';
     }
 
@@ -178,6 +172,8 @@
 
         questionsValidationError.innerText = '';
     }
+
+    addExisting();
 </script>
 
 @section Scripts {
