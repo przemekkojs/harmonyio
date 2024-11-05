@@ -97,13 +97,13 @@ ATRYBUTY:
 
     });
 
-    addUserButton.addEventListener('click', function (event) {
+    addUserButton.addEventListener('click', async function (event) {
         const closebutton = document.getElementById('addCancelButton');
 
         let callbackName = assignModalButton.getAttribute('data-callback-name');
 
         if (typeof window[callbackName] === 'function') {
-            wrongEmails = window[callbackName](assignedEmails, addingAdmins);
+            wrongEmails = await window[callbackName](assignedEmails, addingAdmins);
 
             if (wrongEmails == null || wrongEmails.length == 0){
                 closebutton.click();
