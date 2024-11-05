@@ -4,20 +4,14 @@ namespace Algorithm.New.Algorithm.Mistake
 {
     public class NoteMistake : Mistake
     {
-        public List<string> Notes { get; set; } = [];
-        public Stack? Stack { get; set; } = null;
-
-        // FOR JSON MISTAKE LOGIC
         public int BarIndex { get; set; }
         public int VerticalIndex { get; set; }
         public List<string> Voices { get; set; }
 
-        public override int Quantity => Notes.Count;
+        public override int Quantity => Voices.Count;
 
         public NoteMistake(List<Note?> notes, Stack? stack)
         {
-            Stack = stack;
-            Notes = [];
             Voices = [];
 
             foreach (var note in notes)
@@ -30,8 +24,6 @@ namespace Algorithm.New.Algorithm.Mistake
 
                 if (voice != null)
                     Voices.Add(voice);
-
-                Notes.Add(noteName);
             }
 
             BarIndex = stack != null ? stack.Index.Bar : 0;
@@ -61,6 +53,6 @@ namespace Algorithm.New.Algorithm.Mistake
         }
 
         public override void GenerateDescription() => 
-            Description = Mistake.GenerateNoteMistakeDescription(Notes, BarIndex, VerticalIndex);
+            Description = Mistake.GenerateNoteMistakeDescription(Voices, BarIndex, VerticalIndex);
     }
 }

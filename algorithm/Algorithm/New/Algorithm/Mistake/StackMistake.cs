@@ -5,9 +5,6 @@ namespace Algorithm.New.Algorithm.Mistake
 {
     public class StackMistake : Mistake
     {
-        public List<Stack> Stacks { get; set; } = [];
-        public Rule? Rule { get; set; } = null;
-
         // FOR JSON MISTAKE LOGIC
         public List<int> BarIndexes { get; private set; }
         public List<int> VerticalIndexes { get; private set; }
@@ -15,14 +12,12 @@ namespace Algorithm.New.Algorithm.Mistake
 
         public StackMistake(List<Stack> stacks, Rule? rule)
         {
-            Rule = rule;
-            Stacks = stacks;
             RuleName = rule != null ? rule.Name : "Nieokreślona zasada";
 
             BarIndexes = [];
             VerticalIndexes = [];
 
-            foreach (var stack in Stacks)
+            foreach (var stack in stacks)
             {
                 var barIndex = stack.Index.Bar;
                 var verticalIndex = stack.Index.Position;
@@ -40,7 +35,7 @@ namespace Algorithm.New.Algorithm.Mistake
                 .ToList();
         }
 
-        public override int Quantity => Stacks.Count;
+        public override int Quantity => VerticalIndexes.Count;
 
         public override void GenerateDescription() =>
             Description = Mistake.GenerateStackMistakeDescription(BarIndexes, VerticalIndexes, RuleName);

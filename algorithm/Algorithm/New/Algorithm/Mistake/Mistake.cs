@@ -26,13 +26,13 @@ namespace Algorithm.New.Algorithm.Mistake
             return result;
         }
 
-        public static string GenerateNoteMistakeDescription(List<string> notes, int barIndex, int verticalIndex)
+        public static string GenerateNoteMistakeDescription(List<string> voices, int barIndex, int verticalIndex)
         {
-            if (notes.Count == 0)
+            if (voices.Count == 0)
                 return "";
 
-            string postfix = notes.Count == 1 ? "u" : "ów";
-            return $"Błędy dźwięk{postfix} [{string.Join(", ", notes)}] w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}.";
+            string postfix = voices.Count == 1 ? "u" : "ów";
+            return $"Błędy głos{postfix} [{string.Join(", ", voices)}] w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}.";
         }
     }
 }
