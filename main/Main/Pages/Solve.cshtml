@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="bottom-bar d-flex align-items-center">
+        <div class="bottom-bar d-flex align-items-center py-3">
             <a asp-page="Assigned" class="btn btn-danger btn-std-width me-auto">Powrót</a>
             <button id="btn-prev" type="button" onclick="prevQuestion()"
                 class="btn btn-secondary btn-std-width mx-3">Poprzednie</button>
@@ -60,7 +60,7 @@
             <button id="btn-next" type="button" onclick="nextQuestion()"
                 class="btn btn-secondary btn-std-width ms-3">Następne</button>
             <button id="btn-finish" onclick="submitFormClicked()"
-                class="btn btn-primary btn-std-width ms-3">Zakończ</button>
+                class="btn btn-secondary btn-std-width ms-3">Zakończ</button>
         </div>
     </div>
 </form>
@@ -169,7 +169,7 @@
 
         for (let i = start; i <= end; i++) {
             let button = document.createElement("button");
-            button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") + " btn-tiny-width p-1";
+            button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-light btn-hidable") + " btn-tiny-width p-1";
             button.innerText = i + 1;
 
             button.onclick = (function (i) {

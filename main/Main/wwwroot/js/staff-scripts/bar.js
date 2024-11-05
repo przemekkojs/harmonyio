@@ -141,7 +141,7 @@ class Bar {
     } else {
       this.#drawBarLine();
     }
-    this.#drawBoundingBox();
+    // this.#drawBoundingBox();
 
     for (let i = 0; i < this.verticals.length; i++) {
       this.verticals[i].draw();

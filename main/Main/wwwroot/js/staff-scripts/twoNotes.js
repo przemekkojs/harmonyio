@@ -443,7 +443,7 @@ class TwoNotes {
   }
 
   draw() {
-    this.#drawBoundingBox();
+    // this.#drawBoundingBox();
 
     // no note to draw
     if (this.isEmpty()) {
