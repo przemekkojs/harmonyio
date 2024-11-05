@@ -12,6 +12,7 @@ export class ParsedFunction {
     }
 }
 
+// Dla Kuby:
 // functionLetter = symbol,
 // hasCircle = minor,
 // numberAbove = position,

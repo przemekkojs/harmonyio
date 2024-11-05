@@ -226,4 +226,23 @@ export class Task {
         console.log(this.result);
         return true;
     }
+
+    load(task) {
+        const tmpBars = [];
+
+        task.forEach(parsedFunction => {
+            /* TODO: Implementacja ładowania tasków
+             * ParsedFunction ma barIndex oraz verticalIndex, na tej podstawie można odtworzyć
+             * całą strukturę zadania.
+             * 
+             * Na podstawie innych atrybutów parsedFunction będzie się dało wywoływać konstruktor
+             * klasy Function() i potem ustawiać wszysto w f.component.
+             * 
+             * NIE KORZYSTAĆ Z BAR.ADDFUNCTION() - tam potem trudno się będzie dostać do tej funkcji.
+             * Lepiej stworzyć samemu i dodać po prostu do bar.functions
+             * 
+             * No i chyba tyle teraz wymyślę XD.
+             */
+        });
+    }
 }

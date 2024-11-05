@@ -78,11 +78,37 @@
     const questionsValidationError = document.getElementById('questions-validation-error');
 
     function addExisting() {
-        console.log(excersises);
+        let index = 0;
 
-        excersises.forEach(x => {
+        excersises.forEach(ex => {
+            const parsed = JSON.parse(ex);
+            console.log(parsed); ////////////////////////////////////////
 
+            const textBox = document.createElement('div');
+            const question = parsed.question;
+
+            console.log(question); ////////////////////////////////////////
+
+            textBox.className = "task-content w-100 p-3";
+            textBox.id = `task-container-${index}`;
+            textBox.innerHTML = `
+            <input type="text" id="question-task-${index}" class="form-control task-input" value="${question}" placeholder="Wpisz polecenie" />
+            <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
+
+            excersiseContainer.appendChild(textBox);
+            createTask(textBox, index);
+
+            const currentTask = tasks[index];
+            console.log(currentTask); ////////////////////////////////////////
+
+            const id = `task-container-${index}`;
+            const removeButton = document.getElementById(`delete-${index}`);
+            removeButton.addEventListener('click', () => removeExcersise(id));
+            
+            index++;
         });
+
+        questionsValidationError.innerText = '';
     }
 
     window.confirmExcersises = function () {

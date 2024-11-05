@@ -47,12 +47,6 @@ export function createTask(parent, id) {
             <input type="button" value="Usuń" id="delete-${id}" class="btn btn-danger btn-sm" style="width: 100px;">
         </div>`;
 
-    //    <div class="task-submit">
-    //        <input type="button" value="Zatwierdź" id="submit-${id}" class="btn btn-primary btn-sm ms-3" style="width: 100px;">
-    //        <input type="button" value="Usuń" id="delete-${id}" class="btn btn-danger btn-sm" style="width: 100px;">
-    //    </div>
-    //`;
-
     let taskDiv = document.createElement('div');
     taskDiv.id = `task-${id}`;
     taskDiv.innerHTML = taskHtml;
@@ -61,20 +55,4 @@ export function createTask(parent, id) {
 
     let toAppend = new Task(id);    
     tasks.push(toAppend);
-}
-
-export function loadTasks(parent, questions) {
-    const parsedQuestions = JSON.parse(questions);
-    const excersises = [];
-    const questionTexts = [];
-
-    parsedQuestions.forEach(x => {
-        const excersise = x.task;
-        const question = x.question;
-
-        excersises.push(excersise);
-        questionTexts.push(question);
-    }); 
-
-    return excersises;
 }
