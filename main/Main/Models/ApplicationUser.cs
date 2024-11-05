@@ -26,6 +26,8 @@ public class ApplicationUser : IdentityUser
 
     public ICollection<UsersGroup> TeacherInGroups { get; set; } = new List<UsersGroup>();
 
+    public ICollection<UsersGroup> MasterInGroups { get; set; } = new List<UsersGroup>();
+
     public ICollection<GroupRequest> Requests { get; set; } = new List<GroupRequest>();
 
     //NOT MAPPED

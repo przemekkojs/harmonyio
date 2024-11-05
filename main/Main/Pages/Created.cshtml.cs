@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Mono.TextTemplating;
+using NuGet.Packaging;
 using NuGet.Protocol;
 
 namespace Main.Pages;
@@ -28,7 +29,7 @@ public class CreatedModel : PageModel
     public DateTime? CloseDate { get; set; } = null;
 
     [BindProperty]
-    public int ChosenQuizId { get; set; }
+    public int QuizId { get; set; }
 
     [BindProperty]
     public string Emails { get; set; } = "";
@@ -52,7 +53,11 @@ public class CreatedModel : PageModel
     public async Task<bool> Init()
     {
         var appUser = await _userManager.GetUserAsync(User);
-        if (appUser == null) return false;
+        
+        if (appUser == null)
+        { 
+            return false;
+        }
 
         var user = await _repository.GetAsync<ApplicationUser>(
             filter: u => u.Id == appUser.Id,
@@ -95,12 +100,16 @@ public class CreatedModel : PageModel
 
     public async Task<IActionResult> OnPostPublish()
     {
-        var quizToPublic = await _repository.GetAsync<Quiz>(q => q.Id == ChosenQuizId);
+        var quizToPublic = await _repository.GetAsync<Quiz>(q => q.Id == QuizId);
 
         if (quizToPublic == null || quizToPublic.IsCreated)
         {
             return RedirectToPage("Error");
         }
+
+        Console.Write(CloseDate);
+        Console.Write(OpenDate);
+        Console.Write("aaaaaaaaaaaaaaaaaaaaaaa");
 
         quizToPublic.CloseDate = (DateTime)CloseDate!;
 
@@ -122,12 +131,18 @@ public class CreatedModel : PageModel
 
         var groupsIds = groupsIdsStrings.Select(int.Parse).ToList();
 
-        var emails = Emails.Split(',').ToHashSet();
+        var emails = new HashSet<string>();
+
+        if (Emails != "")
+        {
+            emails.AddRange(Emails.Split(',').ToHashSet());
+        }
 
         var quizToAssign = await _repository.GetAsync<Quiz>(
-            q => q.Id == ChosenQuizId,
+            q => q.Id == QuizId,
             q => q
                 .Include(a => a.Participants)
+                .Include(a => a.PublishedToGroup)
         );
 
         if (quizToAssign == null)
@@ -173,11 +188,16 @@ public class CreatedModel : PageModel
             quizToAssign.PublishedToEmails.Add(email);
         }
 
-        quizToAssign.PublishedToGroupIds.Clear();
+        quizToAssign.PublishedToGroup.Clear();
 
         foreach(var groupId in groupsIds)
         {
-            quizToAssign.PublishedToGroupIds.Add(groupId);
+            var group = await _repository.GetAsync<UsersGroup>(q => q.Id == groupId);
+            if (group == null)
+            {
+                return RedirectToPage("Error");
+            }
+            quizToAssign.PublishedToGroup.Add(group);
         }
 
         _repository.Update(quizToAssign);
@@ -189,7 +209,7 @@ public class CreatedModel : PageModel
 
     public async Task<IActionResult> OnPostDelete()
     {
-        var deletedQuiz = await _repository.GetAsync<Quiz>(q => q.Id == ChosenQuizId);
+        var deletedQuiz = await _repository.GetAsync<Quiz>(q => q.Id == QuizId);
         if (deletedQuiz == null)
         {
             return RedirectToPage("Error");

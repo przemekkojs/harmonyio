@@ -124,8 +124,8 @@ ATRYBUTY:
         openHour = openHour.padStart(2, '0');
         closeHour = closeHour.padStart(2, '0');
 
-        var openDateTime = new Date(`${openDate}T${openHour}:00`);
-        var closeDateTime = new Date(`${closeDate}T${closeHour}:00`);
+        var openDateTime = (new Date(`${openDate}T${openHour}:00`)).toJSON();
+        var closeDateTime = (new Date(`${closeDate}T${closeHour}:00`)).toJSON();
 
         var callbackName = publishModalButton.getAttribute('data-callback-name');
         var quizId = publishModalButton.getAttribute('data-quiz-id');

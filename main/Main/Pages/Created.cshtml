@@ -19,17 +19,19 @@
     @foreach(var quiz in Model.UsersQuizes)
     {
         <form method="post" asp-page-handler="Delete" id="deleteFormForQuiz@(quiz.Id)">
-            <input type="hidden" asp-for="ChosenQuizId" value=@(quiz.Id) />
+            <input type="hidden" asp-for="QuizId" value=@(quiz.Id) />
+            <input type="hidden" asp-for="Groups" value="@(Model.Groups)" /> @* nie usuwać, bez tego nie działa *@
         </form>
 
         <form method="post" asp-page-handler="Publish" id="publishFormForQuiz@(quiz.Id)">
-            <input type="hidden" asp-for="ChosenQuizId" value=@(quiz.Id) />
+            <input type="hidden" asp-for="QuizId" value=@(quiz.Id) />
             <input type="hidden" asp-for="OpenDate" value="" id="openDateForQuiz@(quiz.Id)" />
             <input type="hidden" asp-for="CloseDate" value="" id="closeDateForQuiz@(quiz.Id)" />
+            <input type="hidden" asp-for="Groups" value="@(Model.Groups)" /> @* nie usuwać, bez tego nie działa *@
         </form>
         
         <form method="post" asp-page-handler="Assign" id="assignFormForQuiz@(quiz.Id)">
-            <input type="hidden" asp-for="ChosenQuizId" value=@(quiz.Id) />
+            <input type="hidden" asp-for="QuizId" value=@(quiz.Id) />
             <input type="hidden" asp-for="Emails" value="" id="emailsForQuiz@(quiz.Id)" />
             <input type="hidden" asp-for="GroupsIds" value="" id="groupsForQuiz@(quiz.Id)" />
             <input type="hidden" asp-for="Groups" value="@(Model.Groups)" />
@@ -121,10 +123,10 @@
 
                         <a href="#" class="btn btn-primary ms-auto mt-auto" data-bs-toggle="modal" data-bs-target="#assignPopup"
                            data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-pin="@quiz.Code"
-                           data-url="harmony.io/solve?code=@(quiz.Code)"
+                           data-url="/Solve?code=@(quiz.Code)"
                            data-emails='@(quiz.PublishedToEmails.ToJson())'
                            data-all-groups='@(Model.Groups.ToJson())'
-                           data-added-groups='@(quiz.PublishedToGroupIds.ToJson())'
+                           data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
                            data-callback-name="assign">
                             Udostępnij
                         </a>

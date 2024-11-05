@@ -49,12 +49,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 v => JsonSerializer.Serialize(v, options),
                 v => v != "" ? JsonSerializer.Deserialize<ICollection<string>>(v, options) ?? new List<string>() : new List<string>());
 
-        // Lista PublishedToGroups
+        // Relacja wiele-do-wielu między Quiz a Group (grupy przypisane do quizu)
         modelBuilder.Entity<Quiz>()
-            .Property(q => q.PublishedToGroupIds)
-            .HasConversion(
-                v => JsonSerializer.Serialize(v, options),
-                v => v != "" ? JsonSerializer.Deserialize<ICollection<int>>(v, options) ?? new List<int>() : new List<int>());
+            .HasMany(q => q.PublishedToGroup)
+            .WithMany(u => u.Quizzes)
+            .UsingEntity(j => j.ToTable("PublishedToQuizzes"));
+
+        // Relacja jeden-do-wielu między UsersGroup a ApplicationUser (założyciel)
+        modelBuilder.Entity<UsersGroup>()
+            .HasOne(g => g.MasterUser)
+            .WithMany(u => u.MasterInGroups)
+            .HasForeignKey(g => g.MasterId)
+            .OnDelete(DeleteBehavior.NoAction); // Nie usuwaj grupy przy usunięciu założyciela 
 
         // Relacja jeden-do-wielu między Quiz a Excersise
         modelBuilder.Entity<Excersise>()
