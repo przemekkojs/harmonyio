@@ -9,16 +9,16 @@ ATRYBUTY:
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createPopupLongTitle">Utwórz grupę</h5>
+                <h5 class="modal-title fw-bold fs-4" id="createPopupLongTitle">Utwórz grupę</h5>
             </div>
             <div class="modal-body">
                 <label class="form-label fw-bold">Nazwa</label>
                 <input id="groupName" class="form-control" placeholder="Wpisz nazwę grupy..." oninput="updateGroupName(this.value)">
-                <span id="groupNameValidation" class="text-danger"></span>
+                <span id="groupNameValidation" class="text-danger small"></span>
             </div>
             <div class="modal-footer">
-                <button id="createCancelButton" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-                <button id="createGroupButton" class="btn btn-primary">Utwórz grupę</button>
+                <button id="createCancelButton" class="btn btn-secondary btn-std-width ms-auto" data-bs-dismiss="modal">Anuluj</button>
+                <button id="createGroupButton" class="btn btn-primary btn-std-width me-auto">Utwórz grupę</button>
             </div>
         </div>
     </div>

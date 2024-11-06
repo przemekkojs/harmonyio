@@ -6,15 +6,25 @@ ATRYBUTY:
     - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku dodaj. Callback ten musi zawierać 2 argumenty - assignedEmails i areAdmins oraz zwracać null w przypadku powodzenia lub listę niepoprawnych emaili w przypadku niepowodzenia
 *@
 
+<style>
+    #addUsersPopup .modal-dialog{
+        max-width: 650px;
+    }
+    #addUsersTipPanel{
+        width: 215px; 
+        min-width: 215px;
+    }
+</style> 
+
 <div class="modal fade" id="addUsersPopup" tabindex="-1" role="dialog" aria-labelledby="addUsersPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 650px;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content d-flex flex-row overflow-hidden">
-            <div class="col-4 bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
+            <div id="addUsersTipPanel" class="d-none d-sm-flex bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
                 <span class="fw-bold fs-4 mb-1">Dodawanie</span>
                 <p>Możesz dodać do swojej grupy członków podając ich adresy email. Otrzymają oni wtedy w swojej skrzynce zaproszenia do grupy, a po zaakceptowaniu staną się jej częścią!</p>
             </div>
 
-            <div class="col-8 d-flex flex-column">
+            <div class="flex-grow-1 d-flex flex-column">
                 <div class="d-flex flex-row modal-header">
                     <span id="addUsersTitle" class="fw-bold fs-4">Dodaj uczestników grupy</span>
                     <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -52,7 +62,7 @@ ATRYBUTY:
                 </div>
 
 
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-center align-items-center">
                     <button type="button" class="btn btn-secondary btn-sm-width" id="addCancelButton" data-bs-dismiss="modal">Anuluj</button>
                     <button type="button" class="btn btn-primary btn-sm-width" id="addUserButton">Dodaj</button>
                 </div>

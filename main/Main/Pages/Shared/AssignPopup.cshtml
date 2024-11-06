@@ -12,35 +12,44 @@ ATRYBUTY:
     - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3 argumenty - quizId, assignedEmails i assignedGroups oraz zwracać null w przypadku powodzenia lub listę błędnych emaili w przypadku niepowodzenia
 *@
 
+<style>
+    #assignPopup .modal-dialog{
+        max-width: 850px;
+    }
+    #assignTipPanel{
+        width: 215px; 
+        min-width: 215px;
+    }
+</style> 
+
 <div class="modal fade" id="assignPopup" tabindex="-1" role="dialog" aria-labelledby="assignPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered" role="document"
-         style="width: 850px; min-width: 850px;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content d-flex flex-row overflow-hidden">
-            <div class="col-3 bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
+            <div id="assignTipPanel" class="d-none d-sm-flex bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
                 <span class="fw-bold fs-4 mb-1">Udostępnianie</span>
                 <p>Quiz udostepnić możesz za pomocą kodu lub linku, poprzez które użytkownicy dołączyć mogą samodzielnie. Możesz również zaprosić do quizu indywidualnych użytkowników lub  przypisać go do swoich grup. </p>
             </div>
 
-            <div class="col-9 d-flex flex-column">
+            <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                 <div class="d-flex flex-row modal-header">
                     <span id="assignedQuizName" class="fw-bold fs-4">Kartkówka 2A</span>
                     <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="d-flex flex-column py-3">
-                    <div class="d-flex flex-row mb-3 mx-3">
-                        <div class="w-50 bg-white rounded shadow p-2 d-flex flex-row me-3">
-                            <div class="d-flex flex-column me-auto">
-                                <span class="fw-bold">PIN</span>
+                <div class="d-flex flex-column pt-3">
+                    <div class="mb-3 mx-3" id="pinUrlArea">
+                        <div class="bg-white rounded shadow-sm p-2 d-flex flex-row">
+                            <div class="overflow-hidden text-truncate me-auto">
+                                <span class="fw-bold">PIN</span> <br/>
                                 <span id="assignedQuizPin">027 312</span>
                             </div>
-                            <button type="button" id="copyPinBtn" class="btn btn-secondary my-auto" onclick="copyPin()">Kopiuj</button>
+                            <button type="button" id="copyPinBtn" class="btn btn-secondary ms-2 my-auto" onclick="copyPin()">Kopiuj</button>
                         </div>
 
-                        <div class="w-50 bg-white rounded shadow p-2 d-flex flex-row">
-                            <div class="d-flex flex-column me-auto overflow-hidden text-nowrap">
-                                <span class="fw-bold">URL</span>
-                                <span id="assignedQuizUrl" class="text-truncate">https://harmony.io/join?q=021367</span>
+                        <div class="bg-white rounded shadow-sm p-2 d-flex flex-row">
+                            <div class="overflow-hidden text-truncate me-auto">
+                                <span class="fw-bold">URL</span> <br/>
+                                <span id="assignedQuizUrl">https://harmony.io/join?q=021367</span>
                             </div>
                             <button type="button" id="copyUrlBtn" class="btn btn-secondary ms-2 my-auto" onclick="copyUrl()">Kopiuj</button>
                         </div>
@@ -48,8 +57,8 @@ ATRYBUTY:
 
                     <hr class="m-0" style="border: none; border-top: 0.5px solid #ced4da; opacity: 1;" />
 
-                    <div class="d-flex flex-row flex-grow-1 mx-3 mt-3" style="height: 265px; max-height: 265px;">
-                        <div class="h-100 w-50 bg-white rounded shadow border border-light d-flex flex-column me-3 overflow-auto">
+                    <div class="d-flex flex-row flex-grow-1 p-3 overflow-auto" style="height: 265px; max-height: 265px;">
+                        <div class="h-100 w-50 bg-white rounded shadow-sm border border-light d-flex flex-column me-3 overflow-auto" style="min-width: 200px;">
                             <div class="bg-light d-flex flex-row fw-bold p-2">
                                 <span class="ms-auto me-1">Użytkownicy</span>
                                 <span id="emailsNumber" class="me-auto">(2)</span>
@@ -64,12 +73,12 @@ ATRYBUTY:
                             <hr class="m-0 border border-1" />
 
                             <div id="emailListContainer" class="p-2 overflow-auto">
-                                @*FILLED VIA JS*@
+
                             </div>
 
                         </div>
 
-                        <div class="h-100 w-50 bg-white rounded shadow d-flex flex-column me-3 overflow-auto">
+                        <div class="h-100 w-50 bg-white rounded shadow-sm d-flex flex-column overflow-auto" style="min-width: 200px;">
                             <div class="bg-light d-flex flex-row fw-bold p-2">
                                 <span class="ms-auto me-1">Grupy</span>
                                 <span id="groupsNumber" class="me-auto">(1)</span>
@@ -78,7 +87,7 @@ ATRYBUTY:
                             <hr class="m-0 border border-1" />
 
                             <div id="groupListContainer" class="p-2 overflow-auto">
-                                @*FILLED VIA JS*@
+
                             </div>
 
                         </div>
@@ -89,9 +98,9 @@ ATRYBUTY:
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary ms-auto btn-sm-width" id="assignCancelButton" data-bs-dismiss="modal">Zamknij</button>
-                    <button type="button" class="btn btn-primary me-auto btn-sm-width" id="assignSaveButton">Zapisz</button>
+                <div class="modal-footer justify-content-center align-items-center">
+                    <button type="button" class="btn btn-secondary btn-sm-width" id="assignCancelButton" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="button" class="btn btn-primary btn-sm-width" id="assignSaveButton">Zapisz</button>
                 </div>
             </div>
         </div>

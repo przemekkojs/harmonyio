@@ -8,10 +8,6 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
 html {
   position: relative;
   min-height: 100%;
@@ -151,8 +147,6 @@ body {
     text-decoration: none;
 }
 
-/*BOOTSTRAP RECOLOR*/
-
 body {
     background: url('/images/bg-pattern.png') repeat, linear-gradient(#2d53b2, #426edb);
     background-size: 38vw 38vw, cover;
@@ -161,37 +155,30 @@ body {
     padding-top: 93px;
 }
 
+/* OTHER */
 
-/*
-.btn-primary {
-    background-color: #5b169b !important;
-    border-color: #5b169b !important;
+.grid-quizes{
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+    gap: 1rem;
+}
+@media (max-width: 500px) {
+    .grid-quizes {
+      display: flex;
+      flex-direction: column;
+    }
 }
 
-.bg-primary {
-    background-color: #5b169b !important;
+#pinUrlArea{
+    display: grid; 
+    grid-template-columns: repeat(2, minmax(100px, 1fr)); 
+    gap: 1rem;
 }
-
-.text-primary {
-    color: #5b169b !important;
+@media (max-width: 500px) {
+    #pinUrlArea {
+        display: flex; 
+        flex-direction: column;
+    }
 }
-
-.btn-danger {
-    background-color: #dc3545 !important;
-    border-color: #dc3545 !important;
-}
-
-.bg-secondary {
-    background-color: #6c757d !important;
-}
-
-.btn-secondary {
-    background-color: #6c757d !important;
-    border-color: #6c757d !important;
-}
-
-.text-secondary {
-    color: #6c757d !important;
-}*/
 
 
