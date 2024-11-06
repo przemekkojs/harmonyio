@@ -159,16 +159,29 @@ body {
     padding-top: 93px;
 }
 
+/* OTHER */
+
 .grid-quizes{
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
     gap: 1rem;
 }
-
 @media (max-width: 500px) {
     .grid-quizes {
       display: flex;
       flex-direction: column;
+    }
+}
+
+#pinUrlArea{
+    display: grid; 
+    grid-template-columns: repeat(2, minmax(100px, 1fr)); 
+    gap: 1rem;
+}
+@media (max-width: 500px) {
+    #pinUrlArea {
+        display: flex; 
+        flex-direction: column;
     }
 }
 

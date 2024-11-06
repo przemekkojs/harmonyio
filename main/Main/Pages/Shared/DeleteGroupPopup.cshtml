@@ -10,16 +10,17 @@ ATRYBUTY:
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deletePopupLongTitle">Usunąć grupę?</h5>
+                <h5 class="modal-title fw-bold fs-4" id="deletePopupLongTitle">Usunąć grupę?</h5>
+                <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <span>Jesteś pewny, że chcesz usunąć grupę</span>
                 <span id="deletedGroupName" class="m-0">"Klasa 2A"?</span>
                 <span>Ta akcja nie może zostać cofnięta.</span>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="deleteButton">Usuń</button>
+            <div class="modal-footer justify-content-center align-items-center">
+                <button type="button" class="btn btn-secondary btn-std-width" data-bs-dismiss="modal">Anuluj</button>
+                <button type="button" class="btn btn-danger btn-std-width" data-bs-dismiss="modal" id="deleteButton">Usuń</button>
             </div>
         </div>
     </div>
