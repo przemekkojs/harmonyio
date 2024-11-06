@@ -21,7 +21,6 @@ export class Elements {
 
         this.resetButton = this.thisDiv.querySelector(`#reset-creator-${thisId}`);
         this.cancelButton = this.thisDiv.querySelector(`#cancel-creator-${thisId}`);
-        //this.addButton = this.thisDiv.querySelector(`#submit-creator-${thisId}`);
 
         this.addedPopup = this.thisDiv.querySelector(`#added-popup-${thisId}`);
         this.suspensionPopup = this.thisDiv.querySelector(`#suspension-popup-${thisId}`);
@@ -63,7 +62,6 @@ export class Elements {
 
         this.resetButton.id = `reset-creator-${this.thisId}`;
         this.cancelButton.id = `cancel-creator-${this.thisId}`;
-        //this.addButton.id = `submit-creator-${this.thisId}`;
 
         this.addedPopup.id = `added-popup-${this.thisId}`;
         this.suspensionPopup.id = `suspension-popup-${this.thisId}`;
@@ -93,7 +91,6 @@ export class Elements {
         }
 
         this.disableItems(this.allComponents);
-        // this.addButton.disabled = true;
         this.confirmed = true;
 
         let splitted = this.thisId.split('-');
@@ -149,8 +146,7 @@ export class Elements {
         this.suspensionButton.addEventListener('click', (event) => { this.addSuspension(event); });
         this.alterationButton.addEventListener('click', (event) => { this.addAlteration(event); });
         this.resetButton.addEventListener('click', () => { this.resetAll(); });
-        //this.addButton.addEventListener('click', () => { this.task.confirmFunction(this); return false; });
-
+        
         this.addAddedOnClickEvents();
     }
 
@@ -273,8 +269,6 @@ export class Elements {
     }
     
     disableItems(items) {
-        //this.addButton.disabled = true;
-
         items.forEach(item => {
             this.disableElement(item);
         });
@@ -284,8 +278,6 @@ export class Elements {
     }
     
     enableItems(items) {
-        //this.addButton.disabled = false;
-
         items.forEach(item => {
             this.enableElement(item);
         });
@@ -317,9 +309,10 @@ export class Elements {
         items.forEach(element => {
             container.removeChild(element);
         });
-    
-        this.addedPopup.style.display = "none";
-        this.suspensionPopup.style.display = "none";
-        this.alterationPopup.style.display = "none";        
+
+        const none = "none";
+        this.addedPopup.style.display = none;
+        this.suspensionPopup.style.display = none;
+        this.alterationPopup.style.display = none;        
     }    
 }

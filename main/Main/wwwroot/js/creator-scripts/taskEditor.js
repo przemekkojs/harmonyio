@@ -100,7 +100,6 @@ class Bar {
             }
         });
 
-        console.log(this.functions);
         this.bar.removeChild(element.component.component);
         this.functions.splice(elementIndex, 1);
     }
@@ -150,9 +149,9 @@ export class Task {
             let removeBarButton = newBar
                 .querySelector('input');
 
-            for (let i = barIndex; i < this.bars.length; i++) {
-                this.bars[i].shift(i);
-            }
+            //for (let i = barIndex; i < this.bars.length; i++) {
+            //    this.bars[i].shift(i);
+            //}
 
             removeBarButton.addEventListener('click', () => this.removeBar(barIndex));
 
@@ -223,7 +222,29 @@ export class Task {
             });
         });
 
-        console.log(this.result);
         return true;
+    }
+
+    load(task) {        
+        task.forEach(parsedFunction => {
+            const barIndex = parsedFunction.barIndex;
+
+            if (this.bars.length - 1 < barIndex)
+                this.addBar(barIndex);
+
+            const bar = this.bars[barIndex];
+            bar.addFunction();
+            const newFunction = bar.functions[bar.functions.length - 1];
+
+            if (parsedFunction.minor) {
+                newFunction.component.minor.checked = true;
+            }
+
+            if (parsedFunction.symbol != "" && parsedFunction.symbol != null) {
+                newFunction.component.symbol.value = parsedFunction.symbol;
+            }
+
+            // TODO: Reszta atrybutów żeby się wypełniała
+        });
     }
 }
