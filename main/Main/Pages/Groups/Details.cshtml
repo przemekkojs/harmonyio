@@ -20,7 +20,7 @@
         <input type="hidden" asp-for="AsAdmins" value="" id="addUserAsAdmins"/>
         <input type="hidden" asp-for="EmailsAsString" value="" id="addUsersEmails"/>
     </form>
-    <div class="h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
+    <div class="d-none d-lg-inline h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
         <form method="post" asp-page-handler="RedirectToIndexOwned" class="mb-2">
             <button type="submit" class="w-100 btn d-flex align-items-center justify-content-start p-3 @(Model.IsAdmin ? "btn-primary" : "btn-outline-dark hover-primary")">
                 <i class="fas fa-user icon-sm me-2"></i>
@@ -35,25 +35,33 @@
         </form>
     </div>
 
-    <div class="h-100 w-100 flex-group-1 d-flex flex-column p-3 bg-white rounded shadow">
-        <div class="d-flex flex-column mb-3">
+    <div class="h-100 w-100 flex-group-1 d-flex flex-column py-3 bg-white rounded shadow border">
+        <div class="d-flex flex-column px-3 mb-3">
             <span class="fs-3 fw-bold mb-2">@(Model.Group.Name)</span>
-            <div class="d-flex flex-row">
-                <button id="usersButton" onclick="switchTab(this)"
+
+            <div class="d-none d-md-flex flex-row">
+                <button id="usersButton" onclick="switchTab(0)"
                         class="btn btn-primary d-flex align-items-center p-3 me-3">
                     <i class="fas fa-user-group icon-sm me-2"></i>
                     <span>Uczestnicy</span>
                 </button>
-                <button id="quizesButton" onclick="switchTab(this)"
+                <button id="quizesButton" onclick="switchTab(1)"
                         class="btn btn-outline-dark hover-primary d-flex align-items-center p-3">
                     <i class="fas fa-music icon-sm me-2"></i>
                     <span>Quizy</span>
                 </button>
             </div>
+
+            <div class="d-md-none w-100">
+                <select class="form-select" id="sm-tab-select" onchange="switchTab(parseInt(this.value))">
+                    <option value="0" selected>Uczestnicy</option>
+                    <option value="1">Quizy</option>
+                </select>
+            </div>
         </div>
 
-        <div id="usersSection" class="h-100 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px;">
-            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+        <div id="usersSection" class="h-100 d-flex flex-row overflow-auto px-3">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3" style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Uczestnicy</span>
                 </div>
@@ -96,7 +104,7 @@
 
                 <hr class="m-0 border border-1" />
 
-                <div class="bg-light rounded-bottom d-flex flex-row fw-bold p-2">
+                <div class="rounded-bottom d-flex flex-row fw-bold p-2">
                     <button class="btn btn-primary mx-auto"
                             data-bs-toggle="modal" data-bs-target="#addUsersPopup"
                             data-adding-admins="false" data-callback-name="addUsers">
@@ -105,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column" style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Administratorzy</span>
                 </div>
@@ -163,8 +171,8 @@
             </div>
         </div>
 
-        <div id="quizesSection" class="h-100 d-flex flex-row overflow-auto d-none" style="margin: -20px; padding: 20px;">
-            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+        <div id="quizesSection" class="h-100 d-flex flex-row overflow-auto px-3 d-none">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3" style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Aktywne</span>
                 </div>
@@ -210,7 +218,7 @@
                 </div>
             </div>
 
-            <div class="w-50 h-100 rounded bg-white shadow border border-1 d-flex flex-column me-3">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column" style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Zaplanowane</span>
                 </div>
@@ -270,9 +278,10 @@
     const quizesButton = document.getElementById("quizesButton");
     const usersSection = document.getElementById("usersSection");
     const quizesSection = document.getElementById("quizesSection");
+    const smallTabSelect = document.getElementById("sm-tab-select");
 
-    function switchTab(selectedButton) {
-        if (selectedButton == usersButton) {
+    function switchTab(tabIndex) {
+        if (tabIndex == 0) {
             usersButton.classList.add("btn-primary");
             usersButton.classList.remove("btn-outline-dark", "hover-primary");
             quizesButton.classList.add("btn-outline-dark", "hover-primary");
@@ -289,6 +298,8 @@
             usersSection.classList.add("d-none")
             quizesSection.classList.remove("d-none");
         }
+
+        smallTabSelect.value = tabIndex;
     }
 
     function deleteUser(userId) {
@@ -344,5 +355,7 @@
 
         return null;
     }
+
+    switchTab(0);
 
 </script>

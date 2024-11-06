@@ -7,13 +7,13 @@
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
-    <div class="h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
-        <button id="ownedGroupsButton" onclick="switchTab(this)"
+    <div class="d-none d-md-flex h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
+        <button id="ownedGroupsButton" onclick="switchTab(0)"
                 class="btn btn-outline-dark hover-primary d-flex align-items-center justify-content-start p-3 mb-2">
             <i class="fas fa-user icon-sm me-2"></i>
             <span>Posiadane grupy</span>
         </button>
-        <button id="joinedGroupsButton" onclick="switchTab(this)"
+        <button id="joinedGroupsButton" onclick="switchTab(1)"
                 class="btn btn-primary d-flex align-items-center justify-content-start p-3">
             <i class="fas fa-user-group icon-sm me-2"></i>
             <span>Dołączone grupy</span>
@@ -22,8 +22,8 @@
 
     <div class="h-100 w-100 flex-group-1 d-flex flex-column bg-white shadow rounded p-3 overflow-auto">
         <div class="d-flex flex-row">
-            <div class="input-group me-3">
-                <span class="input-group-text p-3">
+            <div class="input-group me-3" style="height: 54px;">
+                <span class="d-none d-sm-flex input-group-text p-3">
                     <i class="fas fa-search icon-sm"></i>
                 </span>
                 <input id="searchInput" class="form-control" type="search" placeholder="Search" aria-label="Search" oninput="filterGroups(this.value)">
@@ -31,33 +31,43 @@
 
             <button class="ms-auto btn btn-primary fw-bold text-nowrap" data-bs-toggle="modal"
                     data-bs-target="#createGroupPopup" data-callback-name="createGroup">
-                Utwórz grupę
+                <span class="d-none d-sm-inline">Utwórz grupę</span>
+                <span class="d-sm-none"><i class="fas fa-plus icon-sm"></i></span>
             </button>
             <form method="post" asp-page-handler="CreateGroup" id="formForCreateGroup">
                 <input type="hidden" asp-for="GroupName" value="" id="groupNameInput"/>
             </form>
         </div>
 
-        <div class="row px-3 pt-3 pb-1 d-none" id="ownedGroupsList">
-            @{var i = 0;}
-            @foreach(var group in ownedGroups)
+        <div class="d-md-none w-100 mt-3">
+            <select class="form-select" id="sm-tab-select" onchange="switchTab(parseInt(this.value))">
+                <option value="0">Posiadane grupy</option>
+                <option value="1" selected>Dołączone grupy</option>
+            </select>
+        </div>
+
+        <div id="ownedGroupsList" class="pt-3 grid-quizes">
+            @foreach (var group in ownedGroups)
             {
-                <div class="owned-groups col-6 p-0 m-0 @(i % 2 == 0 ? "pe-3" : "") @(i != 0 ? "pt-3" : "")"
-                     data-name="@(group.Name)">
-                    <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
-                        <div class="flex-grow-1 d-flex flex-column">
-                            <div class="fw-bold fs-5 mb-3">@(group.Name)</div>
+                <div class="owned-groups w-100" data-name="@(group.Name)">
+                    <div class="border border-1 rounded p-3 d-flex flex-row overflow-hidden h-100">
+                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                            <div class="fw-bold fs-5 mb-3 text-truncate">@(group.Name)</div>
 
                             <div class="d-flex flex-row mb-2">
                                 <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="fw-bold me-1">Twórca:</span>
-                                <span>@(group.MasterUser.FullName)</span>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Twórca:</span>
+                                    @(group.MasterUser.FullName)
+                                </span>
                             </div>
 
                             <div class="d-flex flex-row">
                                 <i class="fas fa-user-group icon-sm me-2"></i>
-                                <span class="fw-bold me-1">Uczniowie:</span>
-                                <span>@(group.Students.Count())</span>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Uczniowie:</span>
+                                    @(group.Students.Count())
+                                </span>
                             </div>
                         </div>
 
@@ -65,44 +75,45 @@
                             <div class="d-flex flex-row">
                                 @if (group.MasterId == Model.AppUser.Id)
                                 {
-                                <a class="btn-icon ms-auto" data-bs-toggle="modal" data-bs-target="#deleteGroupPopup"
-                                   data-group-name="@(group.Name)" data-on-delete="deleteGroup(@(group.Id))">
-                                    <i class="far fa-trash-can icon-sm"></i>
-                                </a>
+                                    <a class="btn-icon ms-auto" data-bs-toggle="modal" data-bs-target="#deleteGroupPopup"
+                                    data-group-name="@(group.Name)" data-on-delete="deleteGroup(@(group.Id))">
+                                        <i class="far fa-trash-can icon-sm"></i>
+                                    </a>
                                 }
                             </div>
                             <form method="post" asp-page-handler="DeleteGroup" id="formForDeleteGroup@(group.Id)">
-                                <input type="hidden" asp-for="GroupId" value="@(group.Id)"/>
+                                <input type="hidden" asp-for="GroupId" value="@(group.Id)" />
                             </form>
 
                             <a asp-page="Details" asp-route-id="@group.Id" class="ms-auto mt-auto btn btn-primary">Szczegóły</a>
                         </div>
                     </div>
                 </div>
-                i += 1;
             }
         </div>
 
-        <div class="row px-3 pt-3 pb-1" id="joinedGroupsList">
-            @{i = 0;}
+        <div class="pt-3 grid-quizes" id="joinedGroupsList">
             @foreach(var group in joinedGroups)
             {
-                <div class="joined-groups col-6 p-0 m-0 @(i % 2 == 0 ? "pe-3" : "") @(i > 1 ? "pt-3" : "")"
-                     data-name="@(group.Name)">
+                <div class="joined-groups" data-name="@(group.Name)">
                     <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
-                        <div class="flex-grow-1 d-flex flex-column">
-                            <div class="fw-bold fs-5 mb-3">@(group.Name)</div>
+                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                            <div class="fw-bold fs-5 mb-3 text-truncate">@(group.Name)</div>
 
                             <div class="d-flex flex-row mb-2">
                                 <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="fw-bold me-1">Twórca:</span>
-                                <span>@(group.MasterUser.FullName)</span>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Twórca:</span>
+                                    @(group.MasterUser.FullName)
+                                </span>
                             </div>
 
                             <div class="d-flex flex-row">
                                 <i class="fas fa-user-group icon-sm me-2"></i>
-                                <span class="fw-bold me-1">Uczniowie:</span>
-                                <span>@(group.Students.Count())</span>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Uczniowie:</span>
+                                    @(group.Students.Count())
+                                </span>
                             </div>
                         </div>
 
@@ -126,15 +137,17 @@
     const joinedGroupsButton = document.getElementById("joinedGroupsButton");
     const ownedGroupsList = document.getElementById("ownedGroupsList");
     const joinedGroupsList = document.getElementById("joinedGroupsList");
+    const smallTabSelect = document.getElementById("sm-tab-select");
 
     const searchInput = document.getElementById("searchInput");
     const ownedGroups = document.getElementsByClassName("owned-groups");
     const joinedGroups = document.getElementsByClassName("joined-groups");
 
+
     var ownedGroupsShown = @((TempData["OwnedShown"] ?? false).ToString()!.ToLower());
 
-    function switchTab(selectedButton) {
-        if (selectedButton == ownedGroupsButton) {
+    function switchTab(tabIndex) {
+        if (tabIndex == 0) {
             ownedGroupsButton.classList.add("btn-primary");
             ownedGroupsButton.classList.remove("btn-outline-dark", "hover-primary");
             joinedGroupsButton.classList.add("btn-outline-dark", "hover-primary");
@@ -156,6 +169,8 @@
             ownedGroupsShown = false;
         }
 
+        console.log(tabIndex)
+        smallTabSelect.value = tabIndex;
         searchInput.value = "";
         filterGroups("");
     }
@@ -174,7 +189,7 @@
         }
     }
 
-    switchTab(ownedGroupsShown ? ownedGroupsButton : joinedGroupsButton);
+    switchTab(ownedGroupsShown ? 0 : 1);
 
 
     function deleteGroup(groupId) {
