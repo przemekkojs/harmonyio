@@ -232,15 +232,26 @@ class Menu {
 
   #createButtons() {
     this.buttons = [];
+    const horizontalSpaceBetweenButtons = 15;
+    const verticalSpaceBetweenButtons = 15;
+    const verticalSpaceBetweenSections = 20;
+
+    const buttonsWidth = 50;
+    const leftXOffset = 20;
+    const rightXOffset =
+      leftXOffset + buttonsWidth + horizontalSpaceBetweenButtons;
+
+    const firstRowYOffset = 15;
+    const firstRowHeight = 60;
 
     // MOUSE BUTTON
     this.buttons.push(
       new Button(
         this,
-        20,
-        15,
-        50,
-        60,
+        leftXOffset,
+        firstRowYOffset,
+        buttonsWidth,
+        firstRowHeight,
         symbols.mouse,
         "esc",
         () => {
@@ -259,10 +270,10 @@ class Menu {
     this.buttons.push(
       new Button(
         this,
-        85,
-        15,
-        50,
-        60,
+        rightXOffset,
+        firstRowYOffset,
+        buttonsWidth,
+        firstRowHeight,
         symbols.thrashCan,
         "d",
         () => {
@@ -277,36 +288,59 @@ class Menu {
       )
     );
 
+    const noteButtonsHeight = stemHeight + 2 * spaceBetweenStaffLines + 10;
     // NOTE BUTTONS
-    const noteButtonsYOffset = 80;
+    const noteButtonsYOffset =
+      firstRowYOffset + firstRowHeight + verticalSpaceBetweenSections;
     const noteButtonConfig = [
-      { x: 20, y: 15, noteValue: 1, label: "1" },
-      { x: 85, y: 15, noteValue: 2, label: "2" },
-      { x: 20, y: 110, noteValue: 4, label: "3" },
-      { x: 85, y: 110, noteValue: 8, label: "4" },
-      { x: 20, y: 205, noteValue: 16, label: "5" },
+      { x: leftXOffset, y: 0, noteValue: 1, label: "1" },
+      { x: rightXOffset, y: 0, noteValue: 2, label: "2" },
+      {
+        x: leftXOffset,
+        y: noteButtonsHeight + verticalSpaceBetweenButtons,
+        noteValue: 4,
+        label: "3",
+      },
+      {
+        x: rightXOffset,
+        y: noteButtonsHeight + verticalSpaceBetweenButtons,
+        noteValue: 8,
+        label: "4",
+      },
+      {
+        x: leftXOffset,
+        y: 2 * (noteButtonsHeight + verticalSpaceBetweenButtons),
+        noteValue: 16,
+        label: "5",
+      },
     ];
     for (let config of noteButtonConfig) {
       this.buttons.push(
         this.#createNoteButton(
           config.x,
           config.y + noteButtonsYOffset,
-          50,
-          80,
+          buttonsWidth,
+          noteButtonsHeight,
           config.noteValue,
           config.label
         )
       );
     }
 
+    const noteModificationRowYOffset =
+      noteButtonsYOffset +
+      2 * (noteButtonsHeight + verticalSpaceBetweenButtons) +
+      noteButtonsHeight +
+      verticalSpaceBetweenSections;
+    const noteModificationButtonHeight = 60;
     // REVERSE NOTE BUTTON
     this.buttons.push(
       new Button(
         this,
-        20,
-        385,
-        50,
-        60,
+        leftXOffset,
+        noteModificationRowYOffset,
+        buttonsWidth,
+        noteModificationButtonHeight,
         symbols.noteReverse,
         "x",
         () => {
@@ -323,10 +357,10 @@ class Menu {
     this.buttons.push(
       new Button(
         this,
-        85,
-        385,
-        50,
-        60,
+        rightXOffset,
+        noteModificationRowYOffset,
+        buttonsWidth,
+        noteModificationButtonHeight,
         "dot",
         ".",
         () => {
@@ -341,35 +375,47 @@ class Menu {
     );
 
     // ACCIDENTAL BUTTONS
-    const accidentalButtonsYOffset = 455;
+    const accidentalButtonsYOffset =
+      noteModificationRowYOffset +
+      noteModificationButtonHeight +
+      verticalSpaceBetweenSections;
+    const accidentalButtonsHeight = 2 * symbols.bemol.height;
     const accidentalButtonConfig = [
       {
-        x: 20,
-        y: 15,
+        x: leftXOffset,
+        y: accidentalButtonsYOffset,
         accidental: Accidental.accidentals.sharp,
         label: "q",
       },
       {
-        x: 85,
-        y: 15,
+        x: rightXOffset,
+        y: accidentalButtonsYOffset,
         accidental: Accidental.accidentals.doubleSharp,
         label: "w",
       },
       {
-        x: 20,
-        y: 100,
+        x: leftXOffset,
+        y:
+          accidentalButtonsYOffset +
+          accidentalButtonsHeight +
+          verticalSpaceBetweenButtons,
         accidental: Accidental.accidentals.bemol,
         label: "e",
       },
       {
-        x: 85,
-        y: 100,
+        x: rightXOffset,
+        y:
+          accidentalButtonsYOffset +
+          accidentalButtonsHeight +
+          verticalSpaceBetweenButtons,
         accidental: Accidental.accidentals.doubleBemol,
         label: "r",
       },
       {
-        x: 20,
-        y: 185,
+        x: leftXOffset,
+        y:
+          accidentalButtonsYOffset +
+          2 * (accidentalButtonsHeight + verticalSpaceBetweenButtons),
         accidental: Accidental.accidentals.natural,
         label: "t",
       },
@@ -378,9 +424,9 @@ class Menu {
       this.buttons.push(
         this.#createAccidentalButton(
           config.x,
-          config.y + accidentalButtonsYOffset,
-          50,
-          70,
+          config.y,
+          buttonsWidth,
+          accidentalButtonsHeight,
           config.accidental,
           config.label
         )
@@ -397,7 +443,7 @@ class Menu {
   calculateYOffset() {
     const clientRect = canvas.elt.getBoundingClientRect();
     const y = clientRect.y;
-    const topOffset = 10;
+    const topOffset = 90;
 
     if (y > topOffset) {
       return 0;
@@ -518,7 +564,7 @@ function handleNoteInteraction(elementsUnderMouse, note) {
       }
     } else {
       imageMode(CENTER);
-      image(symbols.forbiddenSymbol, mouseX + 25, mouseY - 20, 20, 20)
+      image(symbols.forbiddenSymbol, mouseX + 25, mouseY - 20, 20, 20);
       note.draw(mouseX, mouseY);
     }
   } else {
