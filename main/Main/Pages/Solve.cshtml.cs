@@ -39,19 +39,14 @@ namespace Main.Pages
                 q => q.Code == code,
                 query => query
                     .Include(q => q.Participants)
-                    .Include(q => q.QuizResults)
                     .Include(q => q.Excersises)
-                    .ThenInclude(q => q.ExcersiseSolutions)
+                        .ThenInclude(q => q.ExcersiseSolutions
+                            .Where(es => es.UserId == appUser.Id))
             );
 
-            if (quiz == null)
+            if (quiz == null || quiz.State != Enumerations.QuizState.Open)
             {
-                return NotFound();
-            }
-
-            if (quiz.State != Enumerations.QuizState.Open)
-            {
-                return Forbid();
+                return RedirectToPage("Error");
             }
 
             Quiz = quiz;
@@ -64,8 +59,8 @@ namespace Main.Pages
             }
 
             Answers = Quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault(es => es.UserId == appUser.Id))
-                .Select(es => es?.Answer ?? "").ToList();
+                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? "")
+                .ToList();
 
             return Page();
         }
@@ -102,8 +97,8 @@ namespace Main.Pages
                 };
                 _repository.Add(solution);
             }
-            await _repository.SaveChangesAsync();
 
+            await _repository.SaveChangesAsync();
             return RedirectToPage("Index");
         }
     }
