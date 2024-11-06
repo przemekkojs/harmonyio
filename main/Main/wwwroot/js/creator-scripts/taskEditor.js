@@ -110,6 +110,37 @@ class Bar {
     }
 }
 
+class BarContainer {
+    constructor(bar) {
+        this.bar = bar;
+
+        const barIndex = bar.index;
+        const taskIndex = bar.taskId;
+
+        this.container = document.createElement('div');
+        this.container.id = `bar-${taskIndex}-${barIndex}`;
+        this.container.className = "bars";
+
+        this.barNumber = document.createElement('span');
+        this.barNumber.style = "margin-bottom: 5px; font-style: italic;";
+        this.barNumber.innerText = `${barIndex + 1}`;
+
+        this.deleteButton = document.createElement('input');
+        this.deleteButton.className = "button-medium custom-button trash-button";
+        this.deleteButton.title = `Usuń takt ${barIndex + 1}`;
+        this.deleteButton.id = `delete-bar-${taskIndex}-${barIndex}`;
+
+        this.container.appendChild(this.barNumber);
+        this.container.innerHTML += `<svg height="120" width="10">
+                <line x1="5" y1="0" x2="5" y2="110" style="stroke:black;stroke-width:1"/>
+            </svg >`;
+
+        this.container.appendChild(this.deleteButton);
+
+        this.deleteButton.addEventListener('click', () => bar.task.removeBar(barIndex));
+    }
+}
+
 export class Task {
     constructor(id, limit=16) {
         this.bars = [];
@@ -149,10 +180,6 @@ export class Task {
             let removeBarButton = newBar
                 .querySelector('input');
 
-            //for (let i = barIndex; i < this.bars.length; i++) {
-            //    this.bars[i].shift(i);
-            //}
-
             removeBarButton.addEventListener('click', () => this.removeBar(barIndex));
 
             this.componentsPlace.insertBefore(newBar, this.componentsPlace.children[barIndex]);
@@ -171,26 +198,29 @@ export class Task {
         this.updateBars(index);
     }
 
-    updateBars(startIndex) {
+    // Jeżeli parametr newId jest podany, to trzeba potem manualnie ustawić task.id!!!!!
+    updateBars(startIndex, newId=this.id) {
         for (let i = startIndex; i < this.bars.length; i++) {
-            let bar = this.bars[i];
+            const bar = this.bars[i];
             bar.index = i;
             
-            let barElement = document.querySelector(`#bar-${this.id}-${i + 1}`);
-            barElement.id = `bar-${this.id}-${i}`;
+            const barElement = document.querySelector(`#bar-${this.id}-${i + 1}`);
+            barElement.id = `bar-${newId}-${i}`;
 
-            let span = barElement.querySelector('span');
+            const span = barElement.querySelector('span');
             span.innerText = i + 1;
 
-            let addFunctionButton = barElement.querySelector(`#add-function-${this.id}-${i + 1}`);
-            addFunctionButton.id = `add-function-${this.id}-${i}`;
-            let addFunctionButtonClone = addFunctionButton.cloneNode(true);            
+            const addFunctionButton = barElement.querySelector(`#add-function-${this.id}-${i + 1}`);
+            addFunctionButton.id = `add-function-${newId}-${i}`;
+
+            const addFunctionButtonClone = addFunctionButton.cloneNode(true);            
             addFunctionButton.parentNode.replaceChild(addFunctionButtonClone, addFunctionButton);            
             addFunctionButtonClone.addEventListener('click', () => bar.addFunction());
             
-            let deleteBarButton = barElement.querySelector(`#delete-bar-${this.id}-${i + 1}`);
-            deleteBarButton.id = `delete-bar-${this.id}-${i}`;
-            let deleteBarButtonClone = deleteBarButton.cloneNode(true);
+            const deleteBarButton = barElement.querySelector(`#delete-bar-${this.id}-${i + 1}`);
+            deleteBarButton.id = `delete-bar-${newId}-${i}`;
+
+            const deleteBarButtonClone = deleteBarButton.cloneNode(true);
             deleteBarButton.parentNode.replaceChild(deleteBarButtonClone, deleteBarButton); 
             deleteBarButtonClone.addEventListener('click', () => this.removeBar(i));
         }
@@ -236,15 +266,29 @@ export class Task {
             bar.addFunction();
             const newFunction = bar.functions[bar.functions.length - 1];
 
-            if (parsedFunction.minor) {
+            if (parsedFunction.minor)
                 newFunction.component.minor.checked = true;
-            }
 
-            if (parsedFunction.symbol != "" && parsedFunction.symbol != null) {
+            if (parsedFunction.symbol != null)
                 newFunction.component.symbol.value = parsedFunction.symbol;
-            }
 
-            // TODO: Reszta atrybutów żeby się wypełniała
+            if (parsedFunction.root != null)
+                newFunction.component.root.value = parsedFunction.root;
+
+            if (parsedFunction.position != null)
+                newFunction.component.position.value = parsedFunction.position;
+
+            if (parsedFunction.removed != null)
+                newFunction.component.removed.value = parsedFunction.removed;
+
+            parsedFunction.added.forEach(a => {
+                const component = a[0];
+                const option = a.length == 1 ? "-" : a[1];
+
+                newFunction.element.createAddedElement(component, option);
+            });
+
+            // TODO: Alteracje
         });
     }
 }

@@ -64,8 +64,10 @@
 </form>
 
 <script type="module">
-    import { tasks, createTask } from "./js/creator-scripts/taskCreator.js";
+    import { TaskContainer } from "./js/creator-scripts/taskCreator.js";
     import { parseTonationToAccidentalsCount } from "./js/utils.js";
+
+    let tasks = [];
 
     let excersises = @Html.Raw(
         Json.Serialize(
@@ -93,12 +95,13 @@
             <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
 
             excersiseContainer.appendChild(textBox);
-            createTask(textBox, index);
+            const taskContainer = new TaskContainer(textBox, index);
+            const currentTask = taskContainer.task;
+            const id = taskContainer.id;
+            const removeButton = taskContainer.deleteButton;
 
-            const currentTask = tasks[index];
+            tasks.push(taskContainer);
             currentTask.load(task);
-            const id = `task-container-${index}`;
-            const removeButton = document.getElementById(`delete-${index}`);
             removeButton.addEventListener('click', () => removeExcersise(id));
             
             index++;
@@ -107,6 +110,7 @@
         questionsValidationError.innerText = '';
     }
 
+    // TODO: Przerobić, żeby było sprytniejsze
     window.confirmExcersises = function () {
         questionsValidationError.innerText = '';
         excersises = [];
@@ -138,7 +142,7 @@
                 flatsCount: Number(flatsCount),
                 metreValue: Number(metreValue),
                 metreCount: Number(metreCount),
-                task: tasks[i].result
+                task: tasks[i].task.result
             });
 
             hiddenInput.value = JSON.stringify(excersises[i]);
@@ -156,11 +160,14 @@
         <input type="text" id="question-task-${index}" class="form-control task-input" value="${excersises[index]}" placeholder="Enter question text" />
         <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
 
-        excersiseContainer.appendChild(textBox);
-        createTask(textBox, index);
+        excersiseContainer.appendChild(textBox);    
 
-        const id = `task-container-${index}`;
-        const removeButton = document.getElementById(`delete-${index}`);
+        const taskContainer = new TaskContainer(textBox, index);
+        const currentTask = taskContainer.task;
+        const id = taskContainer.id;
+        const removeButton = taskContainer.deleteButton;
+
+        tasks.push(taskContainer);
         removeButton.addEventListener('click', () => removeExcersise(id));
 
         questionsValidationError.innerText = '';
@@ -184,13 +191,20 @@
     function removeExcersise(id) {
         const taskText = document.getElementById(id);
 
-        const children = Array.from(excersiseContainer.children);
-        const index = children.indexOf(taskText);
+        tasks.forEach(t => {
+            const currentIndex = t.id;
+
+            if (currentIndex > id) {
+                const newIndex = currentIndex - 1;
+                console.log(newIndex);
+                t.setId(newIndex);
+            }
+        });
 
         if (taskText)
             excersiseContainer.removeChild(taskText);
 
-        excersises.splice(index, 1);
+        excersises.splice(id, 1);
 
         questionsValidationError.innerText = '';
     }
@@ -200,6 +214,6 @@
 
 @section Scripts {
     @{
-        <partial name="_ValidationScriptsPartial" />
+                <partial name="_ValidationScriptsPartial" />
     }
 }

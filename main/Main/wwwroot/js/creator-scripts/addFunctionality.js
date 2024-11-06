@@ -215,6 +215,10 @@ export class Elements {
     createAddedElement(component, option) {
         const container = document.getElementById(`added-container-${this.thisId}`);
         let element = document.createElement('input');
+
+        if (option == "-")
+            option = "";
+
         let val = `${component}${option}`;
         element.type = "button";
         element.value = val;

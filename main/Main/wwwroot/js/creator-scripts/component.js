@@ -365,14 +365,6 @@
         this.resetCreator.className = "custom-button round-arrow-button button-small";
         this.resetCreator.value = " ";
 
-        // Formularz zatwierdzenia - przycisk potwierdź
-        //this.submitCreator = document.createElement('input');
-        //this.submitCreator.type = "button";
-        //this.submitCreator.name = "submit-creator";        
-        //this.submitCreator.title = "Zatwierdź funkcję";
-        //this.submitCreator.className = "custom-button tick-button button-small";
-        //this.submitCreator.value = " ";
-
         [this.cancelCreator, this.resetCreator].forEach(e => {
             this.formButtons.appendChild(e);
         });
