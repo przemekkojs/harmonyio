@@ -8,101 +8,103 @@
 </head>
 
 <form method="post" class="h-100 w-100 d-flex flex-column overflow-auto">
-    <div class="flex-grow-1 d-flex overflow-auto">
-        <div class="left-panel overflow-auto bg-white shadow rounded p-3 me-3">
-            <div class="fw-bold fs-4 mb-3">@Model.Quiz.Name</div>
+    <div class="flex-grow-1 d-flex mb-3 overflow-auto">
+        <div class="left-panel d-flex flex-column bg-white shadow rounded p-3 me-3">
             <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
+            <div class="fw-bold fs-4 overflow-hidden" style="text-overflow: ellipsis;">
+                Kartkówka 2A
+                @*todo: @Model.Quiz.Name *@
+            </div>
+            
+            <hr class="m-0 mt-2"/>
 
-            @for (int i = 0; i < Model.Users.Count; i++)
-            {
-                <div onclick="selectUser(@i)"
-                    class="student-row d-flex flex-row @(i == Model.Users.Count - 1 ? "mb-3" : "mb-2")">
-                    <div
-                        class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
-                        @Model.Users[i].FullName
+            <div class="overflow-auto flex-grow-1 py-2">
+                @for (int i = 0; i < Model.Users.Count; i++)
+                {
+                    <div onclick="selectUser(@i)" class="student-row d-flex flex-row mb-2">
+                        <div
+                            class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                            @Model.Users[i].FullName
+                        </div>
+                        <div id="user-grade-@i"
+                            class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
+                            -
+                        </div>
                     </div>
-                    <div id="user-grade-@i"
-                        class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
-                        - @*SET VIA JS*@
-                    </div>
-                </div>
-            }
+                }
+            </div>
+
+            <hr class="m-0 mb-3"/>
+
+            <button type="submit" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz oceny</button>
+            <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
         </div>
 
         <div class="flex-grow-1 d-flex flex-column overflow-auto ">
-            <div class="bg-white rounded shadow d-flex justify-content-between align-items-center p-3 mb-3">
-                <div id="current-user-text" class="fw-bold fs-4">
-                    @*SET VIA JS*@
+            <div class="bg-white rounded shadow d-flex flex-column mb-3 p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div id="current-user-text" class="fw-bold fs-4">
+                        @*SET VIA JS*@
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-2">Wynik</span>
+                        <div id="points-text"
+                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap">
+                            @*SET VIA JS*@
+                        </div>
+                        <div id="percentage-text"
+                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4">
+                            @*SET VIA JS*@
+                        </div>
+                        <span class="fw-bold me-2">Ocena</span>
+                        <select id="grade-select"
+                            onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
+                            class="grade-select bg-transparent fw-bold form-select border border-secondary text-secondary rounded px-2 py-1"
+                            aria-label="Wybierz ocenę">
+                            <option selected disabled>-</option>
+                            @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
+                            {
+                                <option value="@grade">@grade.AsString()</option>
+                            }
+                        </select>
+
+                        @for (int i = 0; i < Model.Users.Count; i++)
+                        {
+                            <input id="grade-hidden-@i" type="hidden" asp-for="Grades[i]" />
+                        }
+                    </div>
                 </div>
 
-                <div class="d-flex align-items-center">
-                    <span class="fw-bold me-2">Wynik</span>
-                    <div id="points-text"
-                        class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap">
-                        @*SET VIA JS*@
-                    </div>
-                    <div id="percentage-text"
-                        class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4">
-                        @*SET VIA JS*@
-                    </div>
-                    <span class="fw-bold me-2">Ocena</span>
-                    <select id="grade-select"
-                        onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
-                        class="grade-select bg-transparent fw-bold form-select border border-secondary text-secondary rounded px-2 py-1"
-                        aria-label="Wybierz ocenę">
-                        <option selected disabled>-</option>
-                        @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
-                        {
-                            <option value="@grade">@grade.AsString()</option>
-                        }
-                    </select>
+                <hr class="my-3"/>
 
-                    @for (int i = 0; i < Model.Users.Count; i++)
-                    {
-                        <input id="grade-hidden-@i" type="hidden" asp-for="Grades[i]" />
-                    }
+                <div class="d-flex flex-row align-items-center">
+                    <div id="excersises-buttons" class="d-flex flex-row align-items-center">
+
+                    </div>
+                    <div id="div-last-ex">
+                        <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
+                        <button id="btn-last-ex" type="button" onclick="lastQuestion()"
+                            class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+                    </div>
+
+                    <span class="fw-bold ms-auto me-2">Punkty</span>
+                    <input type="number" id="points" onchange="onPointsChange(this.value)"
+                            onKeyPress="integerKeyPress(event)"
+                            class="form-control points-input border-secondary bg-white" />
+
+                    <span class="fw-bold ms-3 me-2">Max</span>
+                    <input type="number" id="max" onchange="onMaxChange(this.value)"
+                            onKeyPress="integerKeyPress(event)"
+                            class="form-control points-input border-secondary bg-white" />
+
+                    <button class="ms-3 btn btn-secondary">Komentarz</button>
                 </div>
             </div>
 
             <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto">
-                <div class="d-flex flex-row align-items-start question-area">
-                    <div
-                        class="question-square bg-secondary shadow rounded d-flex justify-content-center align-items-center me-2">
-                        <div class="fs-1 text-white fw-bold" id="excersiseNumber">
-                            @* FILLED VIA JS*@
-                        </div>
-                    </div>
-
-                    <div class="flex-grow-1 me-2 h-100">
-                        <textarea id="comment" rows="1" placeholder="Dodaj komentarz..." oninput="resizeTextArea(this)"
-                            onchange="onCommentChange(this.value)"
-                            class="form-control shadow border-white rounded overflow-hidden h-100"></textarea>
-                    </div>
-
-                    <div class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
-                        <span class="fw-bold text-white mb-1">Sugestia</span>
-                        <input type="text" id="suggestion" readonly
-                            class="form-control points-input bg-transparent text-white px-0 text-dark rounded overflow-visible" />
-                    </div>
-
-                    <div class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
-                        <span class="fw-bold text-white mb-1">Wynik</span>
-                        <input type="number" id="points" onchange="onPointsChange(this.value)"
-                            onKeyPress="integerKeyPress(event)"
-                            class="form-control points-input bg-white text-dark rounded" />
-                    </div>
-
-                    <div
-                        class="question-square flex-grow-1 rounded bg-secondary shadow d-flex flex-column justify-content-center align-items-center p-1 me-2">
-                        <span class="fw-bold text-white mb-1">Max</span>
-                        <input type="number" id="max" onchange="onMaxChange(this.value)"
-                            onKeyPress="integerKeyPress(event)"
-                            class="form-control points-input bg-white text-dark rounded" />
-                    </div>
-                </div>
-
-                <div class="flex-grow-1 mt-3" id="question-area">
-                    <p class="m-0" id="question">
+                <div class="flex-grow-1" id="question-area">
+                    <p class="m-0 fw-semibold" id="question">
                         @* FILLED VIA JS *@
                     </p>
                 </div>
@@ -119,7 +121,7 @@
                     }
 
                     <div id="music-staff-div"
-                        class="flex-grow-1 h-100 rounded bg-white shadow d-flex justify-content-center align-items-center">
+                        class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
                         @* MUSIC STAFF DIV SET VIA JS *@
                     </div>
                 </div>
@@ -133,34 +135,18 @@
             </div>
         </div>
     </div>
-
-    <div class="py-3 d-flex align-items-center">
-        <a asp-page="Created" class="btn btn-danger btn-std-width me-auto">Powrót</a>
-        @* <span asp-validation-for="Grades" id="grades-validation-text" class="text-danger me-3"></span> *@
-
-        <div id="excersises-buttons" class="d-flex align-items-center">
-            @*EXCERSISES ARE FILLED WITH JS SCRIPT*@
-        </div>
-        <div id="div-last-ex">
-            <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-            <button id="btn-last-ex" type="button" onclick="lastQuestion()"
-                class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
-        </div>
-
-        <button type="submit" class="btn btn-secondary btn-std-width ms-3">Zapisz oceny</button>
-    </div>
-
 </form>
 
-<script>
-    // needed to allow overflow from canvas div, but now navbar is hiding
-    // TODO try fix this
-    @* const mainContainer = document.getElementById('layout-main-container');
-        if (mainContainer) {
-        mainContainer.classList.remove('overflow-auto');
-        mainContainer.style.overflow = 'visible';
-        } *@
 
+
+@* <div class="flex-grow-1 me-2 h-100">
+    <textarea id="comment" rows="1" placeholder="Dodaj komentarz..." oninput="resizeTextArea(this)"
+        onchange="onCommentChange(this.value)"
+        class="form-control shadow border-white rounded overflow-hidden h-100"></textarea>
+</div> *@
+
+
+<script>
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
 
     const symbolPaths = {
@@ -363,28 +349,27 @@
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
 
+
             questionElement.innerText = questions[currentQuestionIndex].question;
             if (questions[currentQuestionIndex].question == '')
                 document.getElementById('question-area').classList.add('d-none');
             else 
                 document.getElementById('question-area').classList.remove('d-none');
 
-            excersiseNumberElement.innerHTML = currentQuestionIndex + 1;
-
             var score = userScores[currentUserIndex][currentQuestionIndex];
             var scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
 
-            suggestionElement.value = scoreSuggestions.Item1 + " / " + scoreSuggestions.Item2;
             pointsElement.placeholder = scoreSuggestions.Item1;
             maxElement.placeholder = scoreSuggestions.Item2;
             pointsElement.value = score.Item1;
             maxElement.value = score.Item2;
             //solutionElement.innerText = userSolutions[currentUserIndex][currentQuestionIndex];
+
             if (loadToGrandStaff) {
                 grandStaff.loadFromJson(questions[currentQuestionIndex], userSolutions[currentUserIndex][currentQuestionIndex])
             }
 
-            commentElement.value = userComments[currentUserIndex][currentQuestionIndex];
+            @* commentElement.value = userComments[currentUserIndex][currentQuestionIndex]; *@
             resizeTextArea(commentElement);
 
             generateButtons(currentQuestionIndex);
@@ -416,7 +401,7 @@
 
         for (var i = start; i <= end; i++) {
             var button = document.createElement("button");
-            button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-light btn-hidable") + " btn-tiny-width p-1";
+            button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") + " btn-tiny-width p-1";
             button.innerText = i + 1;
 
             button.onclick = (function (i) {

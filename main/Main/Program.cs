@@ -36,7 +36,7 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(Roles.GetRoleName(Role.Standard), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Standard)));
 
 builder.Services.AddScoped<ApplicationRepository>();
-builder.Services.AddSingleton<IGradingAlgorithm, GradingAlgorithm>();
+builder.Services.AddSingleton<IGradingAlgorithm, TestGradingAlgorithm>();
 
 var app = builder.Build();
 
