@@ -100,7 +100,6 @@ class Bar {
             }
         });
 
-        console.log(this.functions);
         this.bar.removeChild(element.component.component);
         this.functions.splice(elementIndex, 1);
     }
@@ -150,9 +149,9 @@ export class Task {
             let removeBarButton = newBar
                 .querySelector('input');
 
-            for (let i = barIndex; i < this.bars.length; i++) {
-                this.bars[i].shift(i);
-            }
+            //for (let i = barIndex; i < this.bars.length; i++) {
+            //    this.bars[i].shift(i);
+            //}
 
             removeBarButton.addEventListener('click', () => this.removeBar(barIndex));
 
@@ -223,26 +222,29 @@ export class Task {
             });
         });
 
-        console.log(this.result);
         return true;
     }
 
-    load(task) {
-        const tmpBars = [];
-
+    load(task) {        
         task.forEach(parsedFunction => {
-            /* TODO: Implementacja ładowania tasków
-             * ParsedFunction ma barIndex oraz verticalIndex, na tej podstawie można odtworzyć
-             * całą strukturę zadania.
-             * 
-             * Na podstawie innych atrybutów parsedFunction będzie się dało wywoływać konstruktor
-             * klasy Function() i potem ustawiać wszysto w f.component.
-             * 
-             * NIE KORZYSTAĆ Z BAR.ADDFUNCTION() - tam potem trudno się będzie dostać do tej funkcji.
-             * Lepiej stworzyć samemu i dodać po prostu do bar.functions
-             * 
-             * No i chyba tyle teraz wymyślę XD.
-             */
+            const barIndex = parsedFunction.barIndex;
+
+            if (this.bars.length - 1 < barIndex)
+                this.addBar(barIndex);
+
+            const bar = this.bars[barIndex];
+            bar.addFunction();
+            const newFunction = bar.functions[bar.functions.length - 1];
+
+            if (parsedFunction.minor) {
+                newFunction.component.minor.checked = true;
+            }
+
+            if (parsedFunction.symbol != "" && parsedFunction.symbol != null) {
+                newFunction.component.symbol.value = parsedFunction.symbol;
+            }
+
+            // TODO: Reszta atrybutów żeby się wypełniała
         });
     }
 }

@@ -82,12 +82,9 @@
 
         excersises.forEach(ex => {
             const parsed = JSON.parse(ex);
-            console.log(parsed); ////////////////////////////////////////
-
             const textBox = document.createElement('div');
             const question = parsed.question;
-
-            console.log(question); ////////////////////////////////////////
+            const task = parsed.task;
 
             textBox.className = "task-content w-100 p-3";
             textBox.id = `task-container-${index}`;
@@ -99,8 +96,7 @@
             createTask(textBox, index);
 
             const currentTask = tasks[index];
-            console.log(currentTask); ////////////////////////////////////////
-
+            currentTask.load(task);
             const id = `task-container-${index}`;
             const removeButton = document.getElementById(`delete-${index}`);
             removeButton.addEventListener('click', () => removeExcersise(id));
