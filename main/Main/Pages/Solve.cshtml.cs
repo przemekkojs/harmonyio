@@ -30,6 +30,11 @@ namespace Main.Pages
         public async Task<IActionResult> OnGetAsync(string code)
         {
             var appUser = await _userManager.GetUserAsync(User);
+            if (appUser == null)
+            {
+                return Forbid();
+            }
+
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Code == code,
                 query => query
@@ -39,8 +44,12 @@ namespace Main.Pages
                     .ThenInclude(q => q.ExcersiseSolutions)
             );
 
-            if (quiz == null || appUser == null ||
-                quiz.State != Enumerations.QuizState.Open)
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            if (quiz.State != Enumerations.QuizState.Open)
             {
                 return Forbid();
             }
