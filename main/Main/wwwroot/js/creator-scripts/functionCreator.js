@@ -1,4 +1,6 @@
-﻿export class Function {
+﻿import { ParsedFunction } from "./parsedFunction.js";
+
+export class Function {
     constructor(functionContainer, functionIndex) {
         //console.log("Function");
         this.functionContainer = functionContainer;        
@@ -12,8 +14,8 @@
         this.remover = this.functionCreator.cancelCreator;
         this.resetter = this.functionCreator.resetCreator;
 
-        this.handleRemove = this.handleRemoveClick.bind(this);
-        this.handleReset = this.handleResetClick.bind(this);
+        this.handleRemove = this.functionContainer.removeFunction.bind(this.functionContainer, this.functionIndex);
+        this.handleReset = this.functionCreator.resetAll.bind(this.functionContainer);
 
         this.addListeners();
     }
@@ -27,18 +29,10 @@
 
         this.functionCreator.setId(taskIndex, barIndex, functionIndex);
 
-        this.handleRemove = this.handleRemoveClick.bind(this);
-        this.handleReset = this.handleResetClick.bind(this);
+        this.handleRemove = this.functionContainer.removeFunction.bind(this.functionContainer, this.functionIndex);
+        this.handleReset = this.functionCreator.resetAll.bind(this.functionContainer);
         this.addListeners();
     }
-
-    handleRemoveClick() {
-        this.functionContainer.removeFunction(this.functionIndex);
-    };
-
-    handleResetClick() {
-        this.functionCreator.resetAll();
-    };
 
     removeListeners() {
         this.remover.removeEventListener('click', this.handleRemove);
@@ -577,7 +571,7 @@ class FunctionCreator {
 
         this.addedList.length = 0;
 
-        const container = document.getElementById(`added-container-${this.thisId}`);
+        const container = document.getElementById(`added-container-${this.id}`);
         const items = container.querySelectorAll('.added-component');
 
         items.forEach(element => {
@@ -715,7 +709,7 @@ class FunctionCreator {
             });
 
             if (checkedComponent !== "" && checkedOption !== "") {
-                if (document.getElementById(`added-container-${this.thisId}`).children.length < 5) {
+                if (document.getElementById(`added-container-${this.id}`).children.length < 5) {
                     this.createAddedElement(checkedComponent, checkedOption);
                 }
 
@@ -725,7 +719,7 @@ class FunctionCreator {
     }    
 
     createAddedElement(component, option) {
-        const container = document.getElementById(`added-container-${this.thisId}`);
+        const container = document.getElementById(`added-container-${this.id}`);
         let element = document.createElement('input');
 
         if (option == "-")
@@ -794,7 +788,7 @@ class FunctionCreator {
             this.disableElement(item);
         });
 
-        let minorSpan = document.getElementById(`minor-span-${this.thisId}`);
+        let minorSpan = document.getElementById(`minor-span-${this.id}`);
         minorSpan.classList.remove('checkmark-border');
     }
 
@@ -803,7 +797,7 @@ class FunctionCreator {
             this.enableElement(item);
         });
 
-        let minorSpan = document.getElementById(`minor-span-${this.thisId}`);
+        let minorSpan = document.getElementById(`minor-span-${this.id}`);
         minorSpan.classList.add('checkmark-border');
     }
 

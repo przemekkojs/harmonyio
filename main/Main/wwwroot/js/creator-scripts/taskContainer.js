@@ -92,7 +92,7 @@ class Task {
     }
 
     setId(taskIndex) {
-        console.log("Task: setId(): taskIndex: ", taskIndex);
+        //console.log("Task: setId(): taskIndex: ", taskIndex);
         this.deleteButton.removeEventListener('click', this.handleRemove);
 
         this.taskIndex = taskIndex;
@@ -118,7 +118,17 @@ class Task {
     }
 
     getResult() {
-        // Tutaj trzeba zrobić logikę tworzenia listy ParsedFunction.
+        const result = [];
+
+        this.barContainer.bars.forEach(b => {
+            b.functionContainer.functions.forEach(f => {
+                const toAdd = f.functionCreator.confirm();
+                result.push(toAdd);
+            });
+        });
+
+        console.log(result);
+        return result;
     }
 
     // Tutaj wlatuje obiekt zadania
@@ -127,46 +137,51 @@ class Task {
         const flatsCount = excersiseObject.sharpsCount;
         const metreValue = excersiseObject.metreValue;
         const metreCount = excersiseObject.metreCount;
-        const taskObject = excersiseObject.taskObject;
+        const taskObject = excersiseObject.task;
         const question = excersiseObject.question;
 
         this.questionInput.value = question;
+
+        console.log("TaskContainer: load(): taskObject: ", taskObject);
 
         // TODO: Tonacja i metrum
 
         taskObject.forEach(parsedFunction => {
             const barIndex = parsedFunction.barIndex;
-            const barCount = this.bars.length;
+            const barCount = this.barContainer.bars.length;
 
             if (barIndex >= barCount)
                 this.barContainer.addBar();
 
             const bar = this.barContainer.bars[barIndex];
-            bar.addFunction();
+            console.log("TaskContainer: load(): bar: ", bar);
+            bar.functionContainer.addFunction();
 
             const functionCountInBar = bar.functionContainer.functions.length;
             const newFunction = bar.functionContainer.functions[functionCountInBar - 1];
 
+            console.log("TaskContainer: load(): newFunction: ", newFunction);
+
             if (parsedFunction.minor)
-                newFunction.component.minor.checked = true;
+                newFunction.functionCreator.minor.checked = true;
 
             if (parsedFunction.symbol != null)
-                newFunction.component.symbol.value = parsedFunction.symbol;
+                newFunction.functionCreator.symbol.value = parsedFunction.symbol;
 
             if (parsedFunction.root != null)
-                newFunction.component.root.value = parsedFunction.root;
+                newFunction.functionCreator.root.value = parsedFunction.root;
 
             if (parsedFunction.position != null)
-                newFunction.component.position.value = parsedFunction.position;
+                newFunction.functionCreator.position.value = parsedFunction.position;
 
             if (parsedFunction.removed != null)
-                newFunction.component.removed.value = parsedFunction.removed;
+                newFunction.functionCreator.removed.value = parsedFunction.removed;
 
             parsedFunction.added.forEach(a => {
                 const component = a[0];
                 const option = a.length == 1 ? "-" : a[1];
 
-                newFunction.element.createAddedElement(component, option);
+                newFunction.functionCreator.createAddedElement(component, option);
             });
 
             // TODO: Alteracje (Alterations)
@@ -223,29 +238,27 @@ export class TaskContainer {
 
         for (let index = taskIndex; index < taskCount; index++) {
             const toChange = this.tasks[index];
-            console.log("TaskContainer: setId(): toChange: ", toChange)
+            //console.log("TaskContainer: setId(): toChange: ", toChange)
 
             if (toChange != null)
                 toChange.setId(index);
-            else
-                console.log("TaskContainer: setId() null: index: ", index)
+            // else
+                //console.log("TaskContainer: setId() null: index: ", index)
         }
     }
 
     // Ładowanie z całego JSONa
     load(excersises) {
-        try {
-            const excersisesObject = JSON.parse(excersises);
+        console.log("TaskContainer: load(): excersises: ", excersises);
 
-            excersisesObject.forEach(excersiseObject => {
-                this.addTask();
-                const task = this.tasks[this.tasks.length - 1];
+        excersises.forEach(excersise => {
+            const excersiseObject = JSON.parse(excersise);
 
-                task.load(excersiseObject);
-            });
-        }
-        catch (ex) {
-            
-        }        
+            console.log("TaskContainer: load(): excersiseObject: ", excersiseObject);
+            this.addTask();
+            const task = this.tasks[this.tasks.length - 1];
+
+            task.load(excersiseObject);
+        });
     }
 }

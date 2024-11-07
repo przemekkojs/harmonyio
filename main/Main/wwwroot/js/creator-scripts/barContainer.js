@@ -11,7 +11,7 @@ class Bar {
         this.functionContainer = new FunctionContainer(this, maxFunctionsCount);
         this.deleteButton = this.functionContainer.deleteButton;
 
-        this.handleRemoveBarClick = this.barContainer.removeBar.bind(this, barIndex);
+        this.handleRemoveBarClick = this.barContainer.removeBar.bind(this.barContainer, barIndex);
         this.deleteButton.addEventListener('click', this.handleRemoveBarClick);
     }
 
@@ -23,7 +23,7 @@ class Bar {
         this.functionContainer.setId(taskIndex, barIndex);
         this.deleteButton.id = `delete-bar-${this.taskIndex}-${this.barIndex}`;
 
-        this.handleRemoveBarClick = this.barContainer.removeBar.bind(this, barIndex);
+        this.handleRemoveBarClick = this.barContainer.removeBar.bind(this.barContainer, barIndex);
         this.deleteButton.addEventListener('click', this.handleRemoveBarClick);
     }
 }

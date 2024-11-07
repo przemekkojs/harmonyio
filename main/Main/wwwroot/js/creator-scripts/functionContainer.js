@@ -32,23 +32,32 @@ export class FunctionContainer {
         this.deleteButton.title = `Usuń takt ${this.barIndex + 1}`;
         this.deleteButton.id = `delete-bar-${this.taskIndex}-${this.barIndex}`;
 
-        this.container.appendChild(this.barNumber);
-        this.container.innerHTML += `<svg height="120" width="10">
-            <line x1="5" y1="0" x2="5" y2="110" style="stroke:black;stroke-width:1"/>
-        </svg >`;
+        this.barInfo = `<svg heigth="120" width="10"><line x1="5" y1="0" x2="5" y2="110" style="stroke:black;stroke-width:1px;"/></svg>`
+
+        this.barInfoPlaceholder = document.createElement('div');
+        this.barInfoPlaceholder.style.display = 'flex';
+        this.barInfoPlaceholder.style.flexDirection = 'column';
+        this.barInfoPlaceholder.style.alignItems = 'center';
+
+        this.barInfoPlaceholder.appendChild(this.barNumber);
+        this.barInfoPlaceholder.innerHTML += this.barInfo;
+        this.barInfoPlaceholder.appendChild(this.deleteButton);
+
+        this.container.appendChild(this.barInfoPlaceholder);
+        this.container.appendChild(this.addFunctionButton);
 
         this.addFunction();
     }
 
     addFunction() {
-        console.log("FunctionContainer.addFunction()");
+        //console.log("FunctionContainer.addFunction()");
         const functionCount = this.functions.length;
 
         if (functionCount < this.maxFunctionsCount) {
             const newFunction = new Function(this, functionCount);
 
             this.functions.push(newFunction);
-            this.container.appendChild(newFunction.functionCreator.container);
+            this.container.insertBefore(newFunction.functionCreator.container, this.addFunctionButton);
         }        
     }
 
@@ -59,12 +68,15 @@ export class FunctionContainer {
             return;
         
         const currentFunction = this.functions[functionIndex];
-        console.log("FunctionContainer: removeFunction(): functionIndex", functionIndex);
-        console.log("FunctionContainer: removeFunction(): currentFunction", currentFunction);
+        //console.log("FunctionContainer: removeFunction(): functionIndex", functionIndex);
+        //console.log("FunctionContainer: removeFunction(): currentFunction", currentFunction);
 
         this.functions.splice(functionIndex, 1);
         this.setId(this.taskIndex, this.barIndex, functionIndex);
-        this.container.removeChild(currentFunction.functionContainer.container);
+
+        //console.log("FunctionContainer: removeFunction(): container", this.container);
+        //console.log("FunctionContainer: removeFunction(): currentFunction.functionCreator.container", currentFunction.functionCreator.container);
+        this.container.removeChild(currentFunction.functionCreator.container);
     }
 
     setId(taskIndex, barIndex, startFunctionIndex=0) {
