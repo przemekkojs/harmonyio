@@ -64,65 +64,48 @@
 </form>
 
 <script type="module">
-    import { TaskContainer } from "./js/creator-scripts/taskCreator.js";
+    import { TaskContainer } from "./js/creator-scripts/taskContainer.js";
     import { parseTonationToAccidentalsCount } from "./js/utils.js";
 
-    let tasks = [];
-
-    let excersises = @Html.Raw(
-        Json.Serialize(
-            Model.Questions?
-        .Select(q => q ?? "")
-        .ToList() ?? new List<string>()
-        ));
+    const answer = [];
 
     const excersiseContainer = document.getElementById('excersise-container');
+    const taskContainer = new TaskContainer(excersiseContainer);
     const questionsValidationError = document.getElementById('questions-validation-error');
 
+    const excersises = @Html.Raw(
+        Json.Serialize(
+        Model.Questions?
+            .Select(q => q ?? "")
+            .ToList() ?? new List<string>()
+        )
+    );
+
     function addExisting() {
-        let index = 0;
-
-        excersises.forEach(ex => {
-            const parsed = JSON.parse(ex);
-            const textBox = document.createElement('div');
-            const question = parsed.question;
-            const task = parsed.task;
-
-            textBox.className = "task-content w-100 p-3";
-            textBox.id = `task-container-${index}`;
-            textBox.innerHTML = `
-            <input type="text" id="question-task-${index}" class="form-control task-input" value="${question}" placeholder="Wpisz polecenie" />
-            <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
-
-            excersiseContainer.appendChild(textBox);
-            const taskContainer = new TaskContainer(textBox, index);
-            const currentTask = taskContainer.task;
-            const id = taskContainer.id;
-            const removeButton = taskContainer.deleteButton;
-
-            tasks.push(taskContainer);
-            currentTask.load(task);
-            removeButton.addEventListener('click', () => removeExcersise(id));
-            
-            index++;
-        });
-
+        taskContainer.load(excersises);
         questionsValidationError.innerText = '';
     }
 
-    // TODO: Przerobić, żeby było sprytniejsze
+    window.addExcersise = function () {
+        taskContainer.addTask();
+        questionsValidationError.innerText = '';
+    }
+
     window.confirmExcersises = function () {
         questionsValidationError.innerText = '';
-        excersises = [];
+        answer.length = 0;
+        const tasks = taskContainer.tasks;
 
         for (let i = 0; i < tasks.length; i++) {
-            const questionText = document.getElementById(`question-task-${i}`).value;
-            const hiddenInput = document.getElementById(`question-json-${i}`);
+            const currentTask = tasks[i];
 
-            const tonationLetterSelect = document.getElementById(`tonation-name-select-task-${i}`);
-            const accidentalSelect = document.getElementById(`accidental-task-${i}`);
-            const modeSelect = document.getElementById(`mode-task-${i}`);
-            const metreSelect = document.getElementById(`metre-select-task-${i}`);
+            const questionText = currentTask.questionInput.value;
+            const hiddenInput = currentTask.hiddenInput;
+
+            const tonationLetterSelect = currentTask.tonationNameSelect;
+            const accidentalSelect = currentTask.tonationAccidentalSelect;
+            const modeSelect = currentTask.tonationModeSelect;
+            const metreSelect = currentTask.metreSelect;
 
             const metreSplitted = metreSelect.value.split('/');
             const metreCount = metreSplitted[0];
@@ -133,87 +116,26 @@
             const sharpsCount = tonationParsed[0];
             const flatsCount = tonationParsed[1];
 
-            const taskToConfirm = tasks.filter(x => x.id == i)[0];
-            const confirmResult = taskToConfirm.confirmAll();
+            const taskResult = currentTask.getResult();
 
-            excersises.push({
+            answer.push({
                 question: questionText,
                 sharpsCount: Number(sharpsCount),
                 flatsCount: Number(flatsCount),
                 metreValue: Number(metreValue),
                 metreCount: Number(metreCount),
-                task: tasks[i].task.result
+                task: taskResult
             });
 
-            hiddenInput.value = JSON.stringify(excersises[i]);
+            hiddenInput.value = JSON.stringify(answer[i]);
         }
-    }
-
-    window.addExcersise = function () {
-        excersises.push("");
-        const index = excersises.length - 1;
-        const textBox = document.createElement('div');
-
-        textBox.className = "task-content w-100 p-3";
-        textBox.id = `task-container-${index}`;
-        textBox.innerHTML = `
-        <input type="text" id="question-task-${index}" class="form-control task-input" value="${excersises[index]}" placeholder="Enter question text" />
-        <input type="hidden" name="Questions[${index}]" id="question-json-${index}" />`;
-
-        excersiseContainer.appendChild(textBox);    
-
-        const taskContainer = new TaskContainer(textBox, index);
-        const currentTask = taskContainer.task;
-        const id = taskContainer.id;
-        const removeButton = taskContainer.deleteButton;
-
-        tasks.push(taskContainer);
-        removeButton.addEventListener('click', () => removeExcersise(id));
-
-        questionsValidationError.innerText = '';
-    }
-
-    function updateExcersise(id) {
-        const taskText = document.getElementById(id);
-
-        const children = Array.from(excersiseContainer.children);
-        const index = children.indexOf(taskText);
-
-        const taskToConfirm = tasks.filter(x => x.id == index)[0];
-        const confirmResult = taskToConfirm.confirmAll();
-
-        if (!confirmResult)
-            return;
-
-        questionsValidationError.innerText = '';
-    }
-
-    function removeExcersise(id) {
-        const taskText = document.getElementById(id);
-
-        tasks.forEach(t => {
-            const currentIndex = t.id;
-
-            if (currentIndex > id) {
-                const newIndex = currentIndex - 1;
-                console.log(newIndex);
-                t.setId(newIndex);
-            }
-        });
-
-        if (taskText)
-            excersiseContainer.removeChild(taskText);
-
-        excersises.splice(id, 1);
-
-        questionsValidationError.innerText = '';
-    }
+    }        
 
     addExisting();
 </script>
 
 @section Scripts {
     @{
-                <partial name="_ValidationScriptsPartial" />
+                    <partial name="_ValidationScriptsPartial" />
     }
 }

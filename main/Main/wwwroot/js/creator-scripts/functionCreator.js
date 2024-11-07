@@ -1,8 +1,67 @@
-﻿export class Component {
-    constructor(id) {
-        this.id = id;
-        this.component = document.createElement('div');        
-        this.component.className = "task-box";
+﻿export class Function {
+    constructor(functionContainer, functionIndex) {
+        //console.log("Function");
+        this.functionContainer = functionContainer;        
+        
+        this.taskIndex = functionContainer.taskIndex;
+        this.functionIndex = functionIndex;
+        this.barIndex = functionContainer.barIndex;
+
+        this.functionCreator = new FunctionCreator(this.taskIndex, this.barIndex, this.functionIndex);
+
+        this.remover = this.functionCreator.cancelCreator;
+        this.resetter = this.functionCreator.resetCreator;
+
+        this.handleRemove = this.handleRemoveClick.bind(this);
+        this.handleReset = this.handleResetClick.bind(this);
+
+        this.addListeners();
+    }
+
+    setId(taskIndex, barIndex, functionIndex) {
+        this.removeListeners();
+
+        this.taskIndex = taskIndex;
+        this.barIndex = barIndex;
+        this.functionIndex = functionIndex;
+
+        this.functionCreator.setId(taskIndex, barIndex, functionIndex);
+
+        this.handleRemove = this.handleRemoveClick.bind(this);
+        this.handleReset = this.handleResetClick.bind(this);
+        this.addListeners();
+    }
+
+    handleRemoveClick() {
+        this.functionContainer.removeFunction(this.functionIndex);
+    };
+
+    handleResetClick() {
+        this.functionCreator.resetAll();
+    };
+
+    removeListeners() {
+        this.remover.removeEventListener('click', this.handleRemove);
+        this.resetter.removeEventListener('click', this.handleReset);
+    }
+
+    addListeners() {
+        this.remover.addEventListener('click', this.handleRemove);
+        this.resetter.addEventListener('click', this.handleReset);
+    }
+}
+
+class FunctionCreator {
+    constructor(taskIndex, barIndex, functionIndex) {
+        //console.log("FunctionCreator");
+        this.id = `x-${taskIndex}-${barIndex}-${functionIndex}`;
+
+        this.taskIndex = taskIndex;
+        this.barIndex = barIndex;
+        this.functionIndex = functionIndex;
+
+        this.container = document.createElement('div');        
+        this.container.className = "task-box";
 
         // Popup opóźnienia
         this.suspensionPopup = document.createElement('div');
@@ -377,117 +436,377 @@
          this.alterationPopup,
          this.addedPopup,
          this.functionCreator].forEach(e => {
-            this.component.appendChild(e);
+            this.container.appendChild(e);
         });
 
         // Ustawienie ID'ków wszystkiego co trzeba
-        this.setIds(this.id);
+        this.setId(this.taskIndex, this.barIndex, this.functionIndex);
+
+        this.avaiableAlterations = ['up', 'down'];
+        this.alterationList = [];
+        this.addedList = [];
+
+        this.allComponents = [this.minor, this.position, this.root,
+        this.symbol, this.removed, this.added, this.alteration,
+        this.suspension, this.leftBrace, this.rightBrace];
+
+        this.controlButtons = [this.resetCreator, this.cancelCreator];
+
+        this.allPopups = [this.addedPopup, this.suspensionPopup, this.alterationPopup];
+
+        this.populateDropdowns();
+        this.addOnClickEvents();
     }
 
-    // TODO: Wszystko z "ID SET" powinno wywędrować tutaj
-    setIds(newId) {
+    setId(taskIndex, barIndex, functionIndex) {
+        const newId = `x-${taskIndex}-${barIndex}-${functionIndex}`
         this.id = newId;
-        this.component.id = newId;
+        this.container.id = newId;
+        this.taskIndex = taskIndex;
+        this.barIndex = barIndex;
+        this.functionIndex = functionIndex;
 
-        this.suspensionPopup.id = `suspension-popup-${this.id}`; // ID SET
-        this.confirmAddSuspension.id = `confirm-add-suspension-${this.id}`; // ID SET
-        this.cancelAddSuspension.id = `cancel-add-suspension-${this.id}`; // ID SET
-        this.alterationPopup.id = `alteration-popup-${this.id}`; // ID SET
+        this.suspensionPopup.id = `suspension-popup-${this.id}`;
+        this.confirmAddSuspension.id = `confirm-add-suspension-${this.id}`;
+        this.cancelAddSuspension.id = `cancel-add-suspension-${this.id}`;
+        this.alterationPopup.id = `alteration-popup-${this.id}`;
 
-        const alterRootId = `alter-root-${this.id}`; // ID SET
-        this.alterRoot.id = alterRootId; // ID SET
-        this.alterRootLabel.for = alterRootId; // ID SET
+        const alterRootId = `alter-root-${this.id}`;
+        this.alterRoot.id = alterRootId;
+        this.alterRootLabel.for = alterRootId;
 
-        const alterThirdId = `alter-third-${this.id}`; // ID SET
-        this.alterThird.id = alterThirdId; // ID SET
-        this.alterThirdLabel.for = alterThirdId; // ID SET
+        const alterThirdId = `alter-third-${this.id}`;
+        this.alterThird.id = alterThirdId;
+        this.alterThirdLabel.for = alterThirdId;
 
-        const alterFifthId = `alter-fifth-${this.id}`; // ID SET
-        this.alterFifth.id = alterFifthId; // ID SET
-        this.alterFifthLabel.for = alterFifthId; // ID SET
+        const alterFifthId = `alter-fifth-${this.id}`;
+        this.alterFifth.id = alterFifthId;
+        this.alterFifthLabel.for = alterFifthId;
 
-        const alterUpId = `up-${this.id}`; // ID SET
-        this.alterUp.id = alterUpId; // ID SET
-        this.alterUpLabel.for = alterUpId; // ID SET
+        const alterUpId = `up-${this.id}`;
+        this.alterUp.id = alterUpId;
+        this.alterUpLabel.for = alterUpId;
 
-        const alterDownId = `down-${this.id}`; // ID SET
-        this.alterDown.id = alterDownId; // ID SET
-        this.alterDownLabel.for = alterDownId; // ID SET
+        const alterDownId = `down-${this.id}`;
+        this.alterDown.id = alterDownId;
+        this.alterDownLabel.for = alterDownId;
 
-        this.confirmAddAlteration.id = `confirm-add-alteration-${this.id}`; // ID SET
-        this.cancelAddAlteration.id = `cancel-add-alteration-${this.id}`; // ID SET
-        this.addedPopup.id = `added-popup-${this.id}`; // ID SET
-        this.addAddedFormComponents.id = `add-added-form-${this.id}-components`; // ID SET
+        this.confirmAddAlteration.id = `confirm-add-alteration-${this.id}`;
+        this.cancelAddAlteration.id = `cancel-add-alteration-${this.id}`;
+        this.addedPopup.id = `added-popup-${this.id}`;
+        this.addAddedFormComponents.id = `add-added-form-${this.id}-components`;
 
-        this.addAddedFormOptions.id = `add-added-form-${this.id}-options`; // ID SET
+        this.addAddedFormOptions.id = `add-added-form-${this.id}-options`;
 
-        const addSixthId = `add-sixth-${this.id}`; // ID SET
-        this.addSixth.id = addSixthId; // ID SET
-        this.addSixthLabel.for = addSixthId; // ID SET
+        const addSixthId = `add-sixth-${this.id}`;
+        this.addSixth.id = addSixthId;
+        this.addSixthLabel.for = addSixthId;
 
-        const addSeventhId = `add-seventh-${this.id}`; // ID SET
-        this.addSeventh.id = addSeventhId; // ID SET
-        this.addSeventhLabel.for = addSeventhId; // ID SET
+        const addSeventhId = `add-seventh-${this.id}`;
+        this.addSeventh.id = addSeventhId;
+        this.addSeventhLabel.for = addSeventhId;
 
-        const addNinthId = `add-ninth-${this.id}`; // ID SET
-        this.addNinth.id = addNinthId; // ID SET
-        this.addNinthLabel.for = addNinthId; // ID SET
+        const addNinthId = `add-ninth-${this.id}`;
+        this.addNinth.id = addNinthId;
+        this.addNinthLabel.for = addNinthId;
 
-        const addedMinorId = `added-minor-${this.id}`; // ID SET
-        this.addedMinor.id = addedMinorId; // ID SET
-        this.addedMinorLabel.for = addedMinorId; // ID SET
+        const addedMinorId = `added-minor-${this.id}`;
+        this.addedMinor.id = addedMinorId;
+        this.addedMinorLabel.for = addedMinorId;
 
-        const addedNeutralId = `added-neutral-${this.id}`; // ID SET
-        this.addedNeutral.id = addedNeutralId; // ID SET
-        this.addedNeutralLabel.for = addedNeutralId; // ID SET
+        const addedNeutralId = `added-neutral-${this.id}`;
+        this.addedNeutral.id = addedNeutralId;
+        this.addedNeutralLabel.for = addedNeutralId;
 
-        const addedMajorId = `added-major-${this.id}`; // ID SET
-        this.addedMajor.id = addedMajorId; // ID SET
-        this.addedMajorLabel.for = addedMajorId; // ID SET
+        const addedMajorId = `added-major-${this.id}`;
+        this.addedMajor.id = addedMajorId;
+        this.addedMajorLabel.for = addedMajorId;
 
-        this.confirmAddAdded.id = `confirm-add-added-${this.id}`; // ID SET
-        this.cancelAddAdded.id = `cancel-add-added-${this.id}`; // ID SET
+        this.confirmAddAdded.id = `confirm-add-added-${this.id}`;
+        this.cancelAddAdded.id = `cancel-add-added-${this.id}`;
 
-        this.leftBraceContainer.id = `left-brace-container-${this.id}`; // ID SET
-        this.leftBrace.id = `left-brace-${this.id}`; // ID SET
+        this.leftBraceContainer.id = `left-brace-container-${this.id}`;
+        this.leftBrace.id = `left-brace-${this.id}`;
 
-        this.minorContainer.id = `minor-container-${this.id}`; // ID SET
-        this.minor.id = `minor-${this.id}`; // ID SET
+        this.minorContainer.id = `minor-container-${this.id}`;
+        this.minor.id = `minor-${this.id}`;
 
-        this.minorSpan.id = `minor-span-${this.id}`; // ID SET
+        this.minorSpan.id = `minor-span-${this.id}`;
 
-        this.symbolContainer.id = `symbol-container-${this.id}`; // ID SET
-        this.symbol.id = `symbol-${this.id}`; // ID SET
+        this.symbolContainer.id = `symbol-container-${this.id}`;
+        this.symbol.id = `symbol-${this.id}`;
 
-        this.positionContainer.id = `position-container-${this.id}`; // ID SET
-        this.position.id = `position-${this.id}`; // ID SET
+        this.positionContainer.id = `position-container-${this.id}`;
+        this.position.id = `position-${this.id}`;
 
-        this.rootContainer.id = `root-container-${this.id}`; // ID SET
-        this.root.id = `root-${this.id}`; // ID SET
+        this.rootContainer.id = `root-container-${this.id}`;
+        this.root.id = `root-${this.id}`;
 
-        this.addedContainer.id = `added-container-${this.id}`; // ID SET
-        this.added.id = `add-added-${this.id}`; // ID SET
+        this.addedContainer.id = `added-container-${this.id}`;
+        this.added.id = `add-added-${this.id}`;
 
-        this.suspensionContainer.id = `suspension-container-${this.id}`; // ID SET
-        this.suspension.id = `add-suspension-${this.id}`; // ID SET
+        this.suspensionContainer.id = `suspension-container-${this.id}`;
+        this.suspension.id = `add-suspension-${this.id}`;
 
-        this.alterationContainer.id = `alteration-container-${this.id}`; // ID SET
-        this.alteration.id = `add-alteration-${this.id}`; // ID SET
+        this.alterationContainer.id = `alteration-container-${this.id}`;
+        this.alteration.id = `add-alteration-${this.id}`;
 
-        this.removedContainer.id = `removed-container-${this.id}`; // ID SET
-        this.removed.id = `removed-${this.id}`; // ID SET
+        this.removedContainer.id = `removed-container-${this.id}`;
+        this.removed.id = `removed-${this.id}`;
 
-        this.rightBraceContainer.id = `right-brace-container-${this.id}`; // ID SET
-        this.rightBrace.id = `right-brace-${this.id}`; // ID SET
+        this.rightBraceContainer.id = `right-brace-container-${this.id}`;
+        this.rightBrace.id = `right-brace-${this.id}`;
 
-        this.formButtons.id = `form-buttons-${this.id}`; // ID SET
+        this.formButtons.id = `form-buttons-${this.id}`;
 
-        this.cancelCreator.id = `cancel-creator-${this.id}`; // ID SET
-        this.resetCreator.id = `reset-creator-${this.id}`; // ID SET
-        //this.submitCreator.id = `submit-creator-${this.id}`; // ID SET
+        this.cancelCreator.id = `cancel-creator-${this.id}`;
+        this.resetCreator.id = `reset-creator-${this.id}`;
     }
 
-    getElement() {
-        return this.component;
+    resetAll() {
+        this.enableItems(this.allComponents);
+        this.confirmed = false;
+
+        [this.position, this.symbol, this.removed, this.root].forEach(component => {
+            component.value = ' ';
+        });
+
+        this.allComponents.forEach(e => {
+            e.classList.remove('hide-border');
+        });
+
+        this.addedList.length = 0;
+
+        const container = document.getElementById(`added-container-${this.thisId}`);
+        const items = container.querySelectorAll('.added-component');
+
+        items.forEach(element => {
+            container.removeChild(element);
+        });
+
+        const none = "none";
+        this.addedPopup.style.display = none;
+        this.suspensionPopup.style.display = none;
+        this.alterationPopup.style.display = none;
     }
+
+    // Ta funkcja tworzy i wysyła obiekt, który potem jest zapisywany do bazy
+    // Typ: ParsedFunction
+    confirm() {
+        this.allPopups.forEach(p => {
+            p.style.display = "none";
+        });
+
+        const minor = this.minor.checked;
+        const symbol = this.symbol.value;
+        const position = this.position.value;
+        const root = this.root.value;
+        const removed = this.removed.value;
+        const alterations = this.alterationsList;
+        const added = this.addedList;
+
+        if (symbol === "") {
+            alert('Nie można dodać pustej funkcji!'); // TODO: Dać jakieś ładniejsze coś XD
+            return null;
+        }
+
+        // TODO: To chyba można pominąć ostatecznie...
+        //this.allComponents.forEach(e => {
+        //    e.classList.add('hide-border');
+        //});
+        // this.disableItems(this.allComponents);
+        // this.confirmed = true;
+
+        let splitted = this.id.split('-');
+        let barId = splitted[1];
+        let verticalId = splitted[2];
+
+        let functionResult = new ParsedFunction(
+            barId, verticalId,
+            minor, symbol, position, root, removed,
+            alterations, added
+        );
+
+        return functionResult;
+    }
+
+    populateDropdowns() {
+        this.addEmpty();
+        this.populatePosition();
+        this.populateSymbols();
+        this.populateRoot();
+        this.populateRemoved();
+    }
+
+    populatePosition() { this.populateDropdown(this.position, ['1', '3', '5', '6', '7', '9']); }
+    populateRoot() { this.populateDropdown(this.root, ['1', '3', '5', '7']); }
+    populateSymbols() { this.populateDropdown(this.symbol, ['T', 'Sii', 'Tiii', 'Diii', 'S', 'D', 'Tvi', 'Svi', 'Dvii', 'Svii']); }
+    populateRemoved() { this.populateDropdown(this.removed, ['1', '5']); }
+
+    populateDropdown(dropdown, components) {
+        components.forEach(element => {
+            const opt = document.createElement('option');
+            opt.value = element;
+            opt.innerText = element;
+            dropdown.appendChild(opt);
+        });
+    }
+
+    addEmpty() {
+        [this.position, this.root, this.symbol, this.removed].forEach(element => {
+            element.appendChild(document.createElement('option'));
+        });
+    }
+
+    addOnClickEvents() {
+        this.added.addEventListener('click', (event) => { this.addAdded(event); });
+        this.suspension.addEventListener('click', (event) => { this.addSuspension(event); });
+        this.alteration.addEventListener('click', (event) => { this.addAlteration(event); });
+        this.resetCreator.addEventListener('click', () => { this.resetAll(); });
+
+        this.addAddedOnClickEvents();
+    }
+
+    addAddedOnClickEvents() {
+        const components = this.addedPopup
+            .querySelectorAll('div')[0]
+            .querySelectorAll('input[type="radio"]');
+
+        const options = this.addedPopup
+            .querySelectorAll('div')[1]
+            .querySelectorAll('input[type="radio"]');
+
+        const confirmButton = this.addedPopup.querySelectorAll('input[type="button"]')[0];
+
+        confirmButton.addEventListener('click', () => {
+            let checkedComponent = "";
+            let checkedOption = "";
+
+            components.forEach(c => {
+                if (c.checked) {
+                    switch (c.value) {
+                        case 'sixth':
+                            checkedComponent = '6';
+                            break;
+                        case 'seventh':
+                            checkedComponent = '7';
+                            break;
+                        case 'ninth':
+                            checkedComponent = '9';
+                            break;
+                    }
+                }
+            });
+
+            options.forEach(c => {
+                if (c.checked) {
+                    switch (c.value) {
+                        case 'major':
+                            checkedOption = "<";
+                            break;
+                        case 'neutral':
+                            checkedOption = "-";
+                            break;
+                        case 'minor':
+                            checkedOption = ">";
+                            break;
+                    }
+                }
+            });
+
+            if (checkedComponent !== "" && checkedOption !== "") {
+                if (document.getElementById(`added-container-${this.thisId}`).children.length < 5) {
+                    this.createAddedElement(checkedComponent, checkedOption);
+                }
+
+                this.togglePopupOff(this.addedPopup);
+            }
+        });
+    }    
+
+    createAddedElement(component, option) {
+        const container = document.getElementById(`added-container-${this.thisId}`);
+        let element = document.createElement('input');
+
+        if (option == "-")
+            option = "";
+
+        let val = `${component}${option}`;
+        element.type = "button";
+        element.value = val;
+        element.className = "added-component";
+
+        element.addEventListener('click', () => {
+            if (container.contains(element)) {
+                container.removeChild(element);
+                this.addedList.pop(val);
+            }
+        });
+
+        this.addedList.push(val);
+        container.appendChild(element);
+    }
+
+    addAdded(event) {
+        this.togglePopupOn(this.addedPopup, event);
+        this.disableItems(this.allComponents);
+    }
+
+    addAlteration(event) {
+        this.togglePopupOn(this.alterationPopup, event);
+        this.disableItems(this.allComponents);
+    }
+
+    addSuspension(event) {
+        this.togglePopupOn(this.suspensionPopup, event);
+        this.disableItems(this.allComponents);
+    }
+
+    addComponent(popup) {
+        this.togglePopupOff(popup);
+    }
+
+    togglePopupOn(popup, event) {
+        if (popup.style.display === "block") {
+            popup.style.display = "none";
+        }
+        else {
+            popup.style.display = "block";
+        }
+
+        const button = event.currentTarget;
+        const rect = button.getBoundingClientRect();
+
+        popup.style.left = (rect.left - (popup.style.width / 2)) + "px";
+        popup.style.top = (rect.top + button.offsetHeight) + "px";
+
+        const cancelButton = popup.querySelectorAll('input[type="button"]')[1];
+        cancelButton.addEventListener('click', () => { this.togglePopupOff(popup); });
+    }
+
+    togglePopupOff(popup) {
+        popup.style.display = "none";
+        this.enableItems(this.allComponents);
+    }    
+
+    disableItems(items) {
+        items.forEach(item => {
+            this.disableElement(item);
+        });
+
+        let minorSpan = document.getElementById(`minor-span-${this.thisId}`);
+        minorSpan.classList.remove('checkmark-border');
+    }
+
+    enableItems(items) {
+        items.forEach(item => {
+            this.enableElement(item);
+        });
+
+        let minorSpan = document.getElementById(`minor-span-${this.thisId}`);
+        minorSpan.classList.add('checkmark-border');
+    }
+
+    enableElement(button) { button.disabled = false; }
+    disableElement(button) { button.disabled = true; }
 }
