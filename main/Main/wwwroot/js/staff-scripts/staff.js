@@ -262,7 +262,8 @@ class GrandStaff {
         y,
         linesWidth,
         upperStaffHeight,
-        lowerStaffHeight
+        lowerStaffHeight,
+        i
       );
 
       this.#drawBarLine(braceWidth, upperStaffFirstLineY, braceHeight);
@@ -307,10 +308,19 @@ class GrandStaff {
     line(x, y, x, y + height);
   }
 
-  #drawSeparationLines(x, y, width, upperStaffHeight, lowerStaffHeight) {
+  #drawSeparationLines(
+    x,
+    y,
+    width,
+    upperStaffHeight,
+    lowerStaffHeight,
+    staffIndex
+  ) {
     stroke(150);
     strokeWeight(1);
-    line(x, y, width, y); // above
+    if (staffIndex !== 0) {
+      line(x, y, width, y); // above
+    }
     const betweenY = y + upperStaffHeight;
     line(x, betweenY, x + width, betweenY); // between
     const belowY = betweenY + lowerStaffHeight;

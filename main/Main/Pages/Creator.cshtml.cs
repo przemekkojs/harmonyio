@@ -18,8 +18,8 @@ namespace Main.Pages
         private readonly ApplicationRepository _repository;
 
         [BindProperty]
-        [Display(Name = "Quiz Name")]
-        [Required(ErrorMessage = "Quiz name is required.")]
+        [Display(Name = "Nazwa quizu")]
+        [Required(ErrorMessage = "Nazwa quizu jest wymagana")]
         public string QuizName { get; set; } = null!;
 
         [BindProperty]
@@ -47,6 +47,7 @@ namespace Main.Pages
             }
 
             var appUser = await _userManager.GetUserAsync(User);
+
             var quiz = await _repository.GetAsync<Quiz>(
                 filter: q => q.Id == id,
                 modifier: q => q.Include(r => r.Excersises)
@@ -141,7 +142,7 @@ namespace Main.Pages
             {
                 ModelState.AddModelError(nameof(Questions), "At least one excersise is required.");
             }
-            else if (Questions.Any(q => (q == "" || q == null)))
+            else if (Questions.Any(q => q == "" || q == null))
             {
                 ModelState.AddModelError(nameof(Questions), "No excersise can be empty.");
             }

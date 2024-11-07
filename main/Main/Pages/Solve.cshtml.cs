@@ -30,19 +30,23 @@ namespace Main.Pages
         public async Task<IActionResult> OnGetAsync(string code)
         {
             var appUser = await _userManager.GetUserAsync(User);
+            if (appUser == null)
+            {
+                return Forbid();
+            }
+
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Code == code,
                 query => query
                     .Include(q => q.Participants)
-                    .Include(q => q.QuizResults)
                     .Include(q => q.Excersises)
-                    .ThenInclude(q => q.ExcersiseSolutions)
+                        .ThenInclude(q => q.ExcersiseSolutions
+                            .Where(es => es.UserId == appUser.Id))
             );
 
-            if (quiz == null || appUser == null ||
-                quiz.State != Enumerations.QuizState.Open)
+            if (quiz == null || quiz.State != Enumerations.QuizState.Open)
             {
-                return Forbid();
+                return RedirectToPage("Error");
             }
 
             Quiz = quiz;
@@ -55,8 +59,8 @@ namespace Main.Pages
             }
 
             Answers = Quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault(es => es.UserId == appUser.Id))
-                .Select(es => es?.Answer ?? "").ToList();
+                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? "")
+                .ToList();
 
             return Page();
         }
@@ -93,33 +97,9 @@ namespace Main.Pages
                 };
                 _repository.Add(solution);
             }
+
             await _repository.SaveChangesAsync();
-
             return RedirectToPage("Index");
-        }
-
-
-        private async Task<ApplicationUser> GetTestUser()
-        {
-            var userId = "testUser";
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                return user;
-            }
-            else
-            {
-                user = new ApplicationUser
-                {
-                    Id = userId,
-                    UserName = userId,
-                    FirstName = "Test",
-                    LastName = "User"
-                };
-
-                var result = await _userManager.CreateAsync(user, "Test123!");
-                return (await _userManager.FindByIdAsync(userId))!;
-            }
         }
     }
 }
