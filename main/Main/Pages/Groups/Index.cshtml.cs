@@ -74,12 +74,10 @@ namespace Main.Pages
             var showJoined = TempData["showJoined"] as bool?;
             if (showJoined.HasValue)
             {
-                // Set a property or flag based on TempData to determine the active tab
                 ViewData["ActiveTab"] = showJoined.Value ? "Joined" : "Owned";
             }
             else
             {
-                // Default tab, for example, you could show the "Owned" tab by default if TempData is not set
                 ViewData["ActiveTab"] = "Joined";
             }
 
@@ -223,17 +221,5 @@ namespace Main.Pages
 
             return RedirectToPage();
         }
-
-        // public IActionResult OnPostRedirectToDetailsAdmin()
-        // {
-        //     TempData["IsAdmin"] = true;
-        //     return RedirectToPage("Details");
-        // }
-
-        // public IActionResult OnPostRedirectToDetailsUser()
-        // {
-        //     TempData["IsAdmin"] = false;
-        //     return RedirectToPage("Details");
-        // }
     }
 }
