@@ -25,6 +25,8 @@ namespace Main.Pages
         public ApplicationUser AppUser { get; set; } = null!;
 
         [BindProperty]
+        public int RequestId { get; set; }
+        [BindProperty]
         public int GroupId { get; set; }
 
         [BindProperty]
@@ -33,15 +35,14 @@ namespace Main.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             var appUser = await _userManager.GetUserAsync(User);
-
             if (appUser == null)
             {
                 return Forbid();
             }
 
             appUser = await _repository.GetAsync<ApplicationUser>(
-                q => q.Id == appUser.Id,
-                q => q
+                au => au.Id == appUser.Id,
+                au => au
                     .Include(u => u.StudentInGroups)
                         .ThenInclude(g => g.MasterUser)
                     .Include(u => u.StudentInGroups)
@@ -58,34 +59,31 @@ namespace Main.Pages
                         .ThenInclude(g => g.Students)
                     .Include(u => u.MasterInGroups)
                         .ThenInclude(g => g.Teachers)
+                    .Include(u => u.Requests)
+                        .ThenInclude(r => r.Group)
+                        .ThenInclude(g => g.MasterUser)
             );
 
             if (appUser == null)
             {
                 return Forbid();
             }
-            
-            // foreach (var group in appUser.StudentInGroups.Concat(appUser.TeacherInGroups))
-            // {
-            //     if (group.MasterId == null)
-            //     {
-            //         var teacher = group.Teachers.First();
-
-            //         group.MasterUser = teacher;
-
-            //         group.Teachers.Remove(teacher);
-
-            //         _repository.Update(group);
-            //     }
-            // }
-
-            // await _repository.SaveChangesAsync();
 
             AppUser = appUser;
 
+            var showJoined = TempData["showJoined"] as bool?;
+            if (showJoined.HasValue)
+            {
+                // Set a property or flag based on TempData to determine the active tab
+                ViewData["ActiveTab"] = showJoined.Value ? "Joined" : "Owned";
+            }
+            else
+            {
+                // Default tab, for example, you could show the "Owned" tab by default if TempData is not set
+                ViewData["ActiveTab"] = "Joined";
+            }
 
             return Page();
-
         }
 
         public async Task<IActionResult> OnPostDeleteGroup()
@@ -94,34 +92,31 @@ namespace Main.Pages
 
             if (appUser == null)
             {
-                return RedirectToPage("Error");
+                return Forbid();
             }
 
-            var group = await _repository.GetAsync<UsersGroup>(q => q.Id == GroupId );
+            var group = await _repository.GetAsync<UsersGroup>(q => q.Id == GroupId);
 
-            if (group == null || 
-                (
-                    group.MasterId != appUser.Id &&
-                    !group.Teachers.Any(t => t.Id == appUser.Id)
-                ))
+            // only master user can delete the group
+            if (group == null || group.MasterId != appUser.Id)
             {
                 return RedirectToPage("Error");
             }
 
             _repository.Delete(group);
-
             await _repository.SaveChangesAsync();
 
+            TempData["showJoined"] = false;
             return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostCreateGroup()
         {
-            var appUser = await _userManager.GetUserAsync(User);
+            var currentUser = await _userManager.GetUserAsync(User);
 
-            if (appUser == null)
+            if (currentUser == null)
             {
-                return RedirectToPage("Error");
+                return Forbid();
             }
 
             if (GroupName == "")
@@ -132,15 +127,101 @@ namespace Main.Pages
 
             var group = new UsersGroup()
             {
-                MasterUser = appUser,
+                MasterUser = currentUser,
                 Name = GroupName
             };
 
             _repository.Add(group);
-
             await _repository.SaveChangesAsync();
 
             return RedirectToPage("Details", new { id = group.Id });
+        }
+
+        public async Task<IActionResult> OnPostDeclineRequest()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return Forbid();
+            }
+
+            var groupRequest = await _repository.GetAsync<GroupRequest>(q => q.Id == RequestId);
+            // group could be deleted between loading the screen and accepting, so just redirect to page and do nothing
+            if (groupRequest == null)
+            {
+                return RedirectToPage();
+            }
+
+            if (currentUser.Id != groupRequest.UserId)
+            {
+                return Forbid();
+            }
+
+            if (groupRequest.ForTeacher)
+            {
+                TempData["showJoined"] = false;
+            }
+            else
+            {
+                TempData["showJoined"] = true;
+            }
+
+            _repository.Delete(groupRequest);
+            await _repository.SaveChangesAsync();
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostAcceptRequest()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return Forbid();
+            }
+
+            var groupRequest = await _repository.GetAsync<GroupRequest>(q => q.Id == RequestId);
+            // group could be deleted between loading the screen and accepting, so just redirect to page and do nothing
+            if (groupRequest == null)
+            {
+                return RedirectToPage();
+            }
+
+            if (currentUser.Id != groupRequest.UserId)
+            {
+                return Forbid();
+            }
+
+            var user = await _repository.GetAsync<ApplicationUser>(
+                filter: u => u.Id == currentUser.Id,
+                modifier: u => u
+                    .Include(u => u.Requests)
+                        .ThenInclude(r => r.Group)
+                    .Include(u => u.StudentInGroups)
+                    .Include(u => u.TeacherInGroups));
+
+            if (user == null)
+            {
+                return RedirectToPage("Error");
+            }
+
+            if (groupRequest.ForTeacher)
+            {
+                TempData["showJoined"] = false;
+                user.TeacherInGroups.Add(groupRequest.Group);
+            }
+            else
+            {
+                TempData["showJoined"] = true;
+                user.StudentInGroups.Add(groupRequest.Group);
+            }
+
+            _repository.Update(user);
+            _repository.Delete(groupRequest);
+            await _repository.SaveChangesAsync();
+
+            return RedirectToPage();
         }
 
         // public IActionResult OnPostRedirectToDetailsAdmin()
