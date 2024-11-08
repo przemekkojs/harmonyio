@@ -96,6 +96,7 @@ namespace Algorithm.New.Music
             {
                 "T" => Symbol.T,
                 "Sii" => Symbol.Sii,
+                "Tiii" => Symbol.Tiii,
                 "Diii" => Symbol.Diii,
                 "S" => Symbol.S,
                 "D" => Symbol.D,

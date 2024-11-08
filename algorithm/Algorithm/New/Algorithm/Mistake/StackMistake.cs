@@ -31,8 +31,8 @@ namespace Algorithm.New.Algorithm.Mistake
                 var barIndex = stack.Index.Bar;
                 var verticalIndex = stack.Index.Position;
 
-                BarIndexes.Add(barIndex);
-                VerticalIndexes.Add(verticalIndex);
+                BarIndexes.Add(barIndex + 1);
+                VerticalIndexes.Add(verticalIndex + 1);
             }
 
             BarIndexes = BarIndexes

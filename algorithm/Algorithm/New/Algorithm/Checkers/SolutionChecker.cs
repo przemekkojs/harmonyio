@@ -5,8 +5,17 @@ using System.Diagnostics;
 
 namespace Algorithm.New.Algorithm.Checkers
 {
+    /// <summary>
+    /// Klasa sprawdzająca rozwiązanie
+    /// </summary>
     public static class SolutionChecker
     {
+        /// <summary>
+        /// Metoda główna
+        /// </summary>
+        /// <param name="solution">Rozwiązanie</param>
+        /// <param name="settings">Ustawienia sprawdzania</param>
+        /// <returns>Lista błędów</returns>
         public static List<Mistake.Mistake> CheckSolution(Solution solution, Settings settings)
         {
             List<Mistake.Mistake> result = [];

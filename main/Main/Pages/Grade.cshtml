@@ -125,9 +125,10 @@
                     @* TODO: Stylowanie trochę porządniej XD *@
                     <div style="width: 100%; height: 100%;">
                         <span>Opinia algorytmu</span>
-                        <textarea readonly id="algorithm-opinions" style="width: 100%; height: 100%; resize: none;" placeholder="Bezbłędnie, gratulacje!">
-
-                        </textarea>
+                        <textarea readonly
+                            id="algorithm-opinions"
+                            style="width: 100%; height: 100%; resize: none; border: none;"
+                            placeholder="Bezbłędnie, gratulacje!"></textarea>
                     </div>
                 </div>
             </div>
@@ -261,7 +262,7 @@
     }
 
     function handleTotalPoints(index) {
-        var [totalPoints, totalMax] = getUserTotalPointsAndMax(index);
+        let [totalPoints, totalMax] = getUserTotalPointsAndMax(index);
         pointsText.innerText = totalPoints + " / " + totalMax;
         percentageText.innerText = Math.round((totalPoints / totalMax) * 100) + "%";
     }
@@ -285,10 +286,10 @@
     }
 
     function getUserTotalPointsAndMax(userIndex) {
-        var totalPoints = 0;
-        var totalMax = 0;
+        let totalPoints = 0;
+        let totalMax = 0;
 
-        var scores = userScores[userIndex];
+        let scores = userScores[userIndex];
         scores.forEach((score) => {
             totalPoints += score.Item1;
             totalMax += score.Item2;
@@ -305,8 +306,8 @@
         }
 
     function onPointsChange(value) {
-        var numValue = Number(value);
-        var maxValue = Number(userScores[currentUserIndex][currentQuestionIndex].Item2);
+        let numValue = Number(value);
+        let maxValue = Number(userScores[currentUserIndex][currentQuestionIndex].Item2);
 
         if (value === "") {
             numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item1;
@@ -324,7 +325,7 @@
     }
 
     function onMaxChange(value) {
-        var numValue = Number(value);
+        let numValue = Number(value);
 
         if (value === "") {
             numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item2;
@@ -359,8 +360,11 @@
             else
                 document.getElementById('question-area').classList.remove('d-none');
 
-            var score = userScores[currentUserIndex][currentQuestionIndex];
-            var scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
+            let score = userScores[currentUserIndex][currentQuestionIndex];
+            let scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
+            let opinion = scoreSuggestions.Item3;
+
+            document.getElementById('algorithm-opinions').value = opinion;
 
             pointsElement.placeholder = scoreSuggestions.Item1;
             maxElement.placeholder = scoreSuggestions.Item2;
@@ -381,14 +385,14 @@
     const maxVisibleButtons = 9;
     const targetVisibleOneSide = Math.floor(maxVisibleButtons / 2)
     function generateButtons(index) {
-        var questionButtonsContainer = document.getElementById("excersises-buttons");
+        let questionButtonsContainer = document.getElementById("excersises-buttons");
         questionButtonsContainer.innerHTML = '';
 
-        var start = Math.max(index - targetVisibleOneSide, 0);
-        var end = Math.min(index + targetVisibleOneSide, questions.length - 1);
+        let start = Math.max(index - targetVisibleOneSide, 0);
+        let end = Math.min(index + targetVisibleOneSide, questions.length - 1);
 
-        var missingStart = start - (index - targetVisibleOneSide);
-        var missingEnd = (index + targetVisibleOneSide) - end;
+        let missingStart = start - (index - targetVisibleOneSide);
+        let missingEnd = (index + targetVisibleOneSide) - end;
 
         if (missingStart > 0 && missingEnd == 0) {
             end = Math.min(end + missingStart, questions.length - 1);
@@ -401,8 +405,8 @@
             end++;
         }
 
-        for (var i = start; i <= end; i++) {
-            var button = document.createElement("button");
+        for (let i = start; i <= end; i++) {
+            let button = document.createElement("button");
             button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") + " btn-tiny-width p-1";
             button.innerText = i + 1;
 

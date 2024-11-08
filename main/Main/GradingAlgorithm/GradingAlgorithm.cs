@@ -6,7 +6,7 @@ namespace Main.GradingAlgorithm
 {
     public class GradingAlgorithm : IGradingAlgorithm
     {
-        public (int, int) Grade(string question, string answer)
+        public (int, int, string) Grade(string question, string answer)
         {
             var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser.ParseJsonToProblem(question);
             var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser.ParseJsonToSolutionParseResult(answer);
@@ -19,15 +19,27 @@ namespace Main.GradingAlgorithm
             ]);
 
             var checkResult = SolutionChecker.CheckSolution(solution, settings);
+            checkResult = checkResult
+                .Distinct()
+                .ToList();
 
-            var maxMistakesCount = solution.Stacks.Count * 4 * settings.ActiveRules.Count;
+            var opinionList = checkResult.Select(x => x.Description).ToList();
+            var opinion = string.Join("\n", opinionList);
+
+            var maxMistakesCount = solution.Stacks.Count * 4;
+
+            foreach(var setting in settings.ActiveRules)
+            {
+                maxMistakesCount += (setting.OneFunction ? 1 : 2) * solution.Stacks.Count;
+            }
+
             var mistakesCount = checkResult.Sum(x => x.Quantity);
 
             var maxPoints = 10;
             var pointsPercent = DivAsPercentage(maxMistakesCount - mistakesCount, maxMistakesCount);
             var points = Convert.ToInt32(pointsPercent / maxPoints);
 
-            return (points, maxPoints);
+            return (points, maxPoints, opinion);
         }
 
         private static float DivAsPercentage(int numerator, int denominator)

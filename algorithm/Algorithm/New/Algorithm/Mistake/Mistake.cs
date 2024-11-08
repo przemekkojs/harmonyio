@@ -9,7 +9,7 @@
 
         public static string GenerateStackMistakeDescription(List<int> barIndexes, List<int> verticalIndexes, string ruleName)
         {
-            if (barIndexes.Count == 0 || ruleName == null)
+            if (barIndexes.Count == 0 || verticalIndexes.Count == 0 || ruleName == null)
                 return "";
 
             var count = verticalIndexes.Count;
@@ -19,7 +19,15 @@
             if (count == 1)
                 result += $"Takt: {barIndexes[0]}, Miara: {verticalIndexes[0]}. Niespełniona zasada: {ruleName}.";
             else
-                result += $"(Takt {barIndexes[0]}, Funkcja {verticalIndexes[0]}), (Takt {barIndexes[1]}, Funkcja {verticalIndexes[1]}). Niespełniona zasada {ruleName}.";
+            {
+                var barCount = barIndexes.Count;
+
+                if (barCount == 1)
+                    result += $"Takt {barIndexes[0]}, Funkcje {verticalIndexes[0]}, {verticalIndexes[1]}. Niespełniona zasada {ruleName}.";
+                else
+                    result += $"(Takt {barIndexes[0]}, Funkcja {verticalIndexes[0]}), (Takt {barIndexes[1]}, Funkcja {verticalIndexes[1]}). Niespełniona zasada {ruleName}.";
+            }
+                
 
             return result;
         }
@@ -28,7 +36,9 @@
         {
             return voice == string.Empty ?
                 $"Brakujący głos w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}." : 
-                $"Błędy głos {voice} w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}.";
-        }            
+                $"Błędny głos {voice} w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}.";
+        }
+
+        public override string ToString() => Description;
     }
 }

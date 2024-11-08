@@ -40,7 +40,6 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnGetAsync(int? id, bool? triggerSubmit)
         {
-            //create new quiz
             if (id == null)
             {
                 return Page();
