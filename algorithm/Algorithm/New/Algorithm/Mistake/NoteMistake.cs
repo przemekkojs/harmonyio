@@ -7,36 +7,47 @@ namespace Algorithm.New.Algorithm.Mistake
     {
         public int BarIndex { get; set; }
         public int VerticalIndex { get; set; }
-        public List<string> Voices { get; set; }
+        public string Voice { get; set; }
 
-        public override int Quantity => Voices.Count;
+        public override int Quantity => 1;
+
+        public static NoteMistake CreateEmptyNoteMistake(int barIndex, int verticalIndex, string voice)
+        {
+            return new NoteMistake(barIndex, verticalIndex, voice)
+            {
+                Description = $"Brakuje nuty w głosie {voice}."
+            };
+        }
 
         [JsonConstructor]
-        public NoteMistake(int barIndex, int verticalIndex, List<string> voices)
+        public NoteMistake(int barIndex, int verticalIndex, string voice)
         {
             BarIndex = barIndex;
             VerticalIndex = verticalIndex;
-            Voices = voices;
+            Voice = voice;
+
+            GenerateDescription();
         }
 
-        public NoteMistake(List<Note?> notes, Stack? stack)
-        {
-            Voices = [];
-
-            foreach (var note in notes)
+        public NoteMistake(Note? note, Stack? stack)
+        {            
+            if (note == null)
             {
-                if (note == null)
-                    continue;
-
-                var noteName = note.Name;
+                Voice = string.Empty;
+            }
+            else
+            {
                 var voice = GetVoiceFromStack(note, stack);
 
                 if (voice != null)
-                    Voices.Add(voice);
-            }
+                    Voice = voice;
+                else
+                    Voice = string.Empty;
+            }            
 
             BarIndex = stack != null ? stack.Index.Bar : 0;
             VerticalIndex = stack != null ? stack.Index.Position : 0;
+            GenerateDescription();
         }
 
         public static string? GetVoiceFromStack(Note note, Stack? stack)
@@ -62,6 +73,6 @@ namespace Algorithm.New.Algorithm.Mistake
         }
 
         public override void GenerateDescription() => 
-            Description = Mistake.GenerateNoteMistakeDescription(Voices, BarIndex, VerticalIndex);
+            Description = Mistake.GenerateNoteMistakeDescription(Voice, BarIndex, VerticalIndex);
     }
 }

@@ -437,7 +437,7 @@ class FunctionCreator {
         this.setId(this.taskIndex, this.barIndex, this.functionIndex);
 
         this.avaiableAlterations = ['up', 'down'];
-        this.alterationList = [];
+        this.alterationsList = [];
         this.addedList = [];
 
         this.allComponents = [this.minor, this.position, this.root,

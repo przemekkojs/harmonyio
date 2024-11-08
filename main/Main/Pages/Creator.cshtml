@@ -123,26 +123,29 @@
 
             taskResult.forEach(f => {
                 if (f.symbol === null || f.symbol === '' || f.symbol === " ") {
-                    // Może jakiś popup?
+                    // TODO: Może jakiś popup?
                     questionsValidationError.innerText = "W zadaniu nie może być pustych funkcji.";
                     event.preventDefault();
                     good = false;
                 }
             });
 
-            if (!good)
+            if (good) {
+                console.log(taskResult);
+
+                answer.push({
+                    question: questionText,
+                    sharpsCount: Number(sharpsCount),
+                    flatsCount: Number(flatsCount),
+                    metreValue: Number(metreValue),
+                    metreCount: Number(metreCount),
+                    task: taskResult
+                });
+
+                hiddenInput.value = JSON.stringify(answer[i]);
+            }
+            else
                 return false;
-
-            answer.push({
-                question: questionText,
-                sharpsCount: Number(sharpsCount),
-                flatsCount: Number(flatsCount),
-                metreValue: Number(metreValue),
-                metreCount: Number(metreCount),
-                task: taskResult
-            });
-
-            hiddenInput.value = JSON.stringify(answer[i]);
         }
 
         return true;
