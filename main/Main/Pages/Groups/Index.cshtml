@@ -4,17 +4,21 @@
     var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.TeacherInGroups);
 
     var joinedGroups = Model.AppUser.StudentInGroups;
+
+    var studentRequests = Model.AppUser.Requests.Where(r => !r.ForTeacher);
+    var teacherRequests = Model.AppUser.Requests.Where(r => r.ForTeacher);
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
-    <div class="d-none d-md-flex h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
+    <div class="d-none d-md-flex h-100 bg-white shadow rounded d-flex flex-column p-3 me-3"
+        style="width: 250px; min-width: 250px;">
         <button id="ownedGroupsButton" onclick="switchTab(0)"
-                class="btn btn-outline-dark hover-primary d-flex align-items-center justify-content-start p-3 mb-2">
+            class="btn btn-outline-dark hover-primary d-flex align-items-center justify-content-start p-3 mb-2">
             <i class="fas fa-user icon-sm me-2"></i>
             <span>Posiadane grupy</span>
         </button>
         <button id="joinedGroupsButton" onclick="switchTab(1)"
-                class="btn btn-primary d-flex align-items-center justify-content-start p-3">
+            class="btn btn-primary d-flex align-items-center justify-content-start p-3">
             <i class="fas fa-user-group icon-sm me-2"></i>
             <span>Dołączone grupy</span>
         </button>
@@ -26,16 +30,17 @@
                 <span class="d-none d-sm-flex input-group-text p-3">
                     <i class="fas fa-search icon-sm"></i>
                 </span>
-                <input id="searchInput" class="form-control" type="search" placeholder="Search" aria-label="Search" oninput="filterGroups(this.value)">
+                <input id="searchInput" class="form-control" type="search" placeholder="Search" aria-label="Search"
+                    oninput="filterGroups(this.value)">
             </div>
 
             <button class="ms-auto btn btn-primary fw-bold text-nowrap" data-bs-toggle="modal"
-                    data-bs-target="#createGroupPopup" data-callback-name="createGroup">
+                data-bs-target="#createGroupPopup" data-callback-name="createGroup">
                 <span class="d-none d-sm-inline">Utwórz grupę</span>
                 <span class="d-sm-none"><i class="fas fa-plus icon-sm"></i></span>
             </button>
             <form method="post" asp-page-handler="CreateGroup" id="formForCreateGroup">
-                <input type="hidden" asp-for="GroupName" value="" id="groupNameInput"/>
+                <input type="hidden" asp-for="GroupName" value="" id="groupNameInput" />
             </form>
         </div>
 
@@ -46,85 +51,207 @@
             </select>
         </div>
 
-        <div id="ownedGroupsList" class="pt-3 grid-quizes">
-            @foreach (var group in ownedGroups)
+        <div id="ownedGroupsList">
+            @if (teacherRequests.Count() > 0)
             {
-                <div class="owned-groups w-100" data-name="@(group.Name)">
-                    <div class="border border-1 rounded p-3 d-flex flex-row overflow-hidden h-100">
-                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
-                            <div class="fw-bold fs-5 mb-3 text-truncate">@(group.Name)</div>
+                <h3 class="mt-3">Zaproszenia do administrowania grupą</h3>
+                <div class="grid-quizes">
+                    @foreach (var request in teacherRequests)
+                    {
+                        <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
+                            <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                <div class="fw-bold fs-5 mb-3 text-truncate">@(request.Group.Name)</div>
 
-                            <div class="d-flex flex-row mb-2">
-                                <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Twórca:</span>
-                                    @(group.MasterUser.FullName)
-                                </span>
+                                <div class="d-flex flex-row mb-2">
+                                    <i class="fas fa-user icon-sm me-2"></i>
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">Twórca:</span>
+                                        @(request.Group.MasterUser.FullName)
+                                    </span>
+                                </div>
+
+                                <div class="d-flex flex-row">
+                                    <i class="fas fa-clock icon-sm me-2"></i>
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">Wygasa:</span>
+                                        @(request.ExpirationDate)
+                                    </span>
+                                </div>
                             </div>
 
-                            <div class="d-flex flex-row">
-                                <i class="fas fa-user-group icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Uczniowie:</span>
-                                    @(group.Students.Count())
-                                </span>
-                            </div>
-                        </div>
+                            <div class="d-flex flex-column h-100 ms-auto">
+                                <!-- Accept Request Button -->
+                                <form method="post">
+                                    <input type="hidden" asp-for="RequestId" value="@request.Id" />
+                                    <button class="btn-icon" type="submit" asp-page-handler="AcceptRequest">
+                                        <i class="fa fa-check icon-sm text-success"></i>
+                                    </button>
+                                </form>
 
-                        <div class="d-flex flex-column h-100">
-                            <div class="d-flex flex-row">
-                                @if (group.MasterId == Model.AppUser.Id)
-                                {
-                                    <a class="btn-icon ms-auto" data-bs-toggle="modal" data-bs-target="#deleteGroupPopup"
-                                    data-group-name="@(group.Name)" data-on-delete="deleteGroup(@(group.Id))">
+                                <!-- Decline Request Button -->
+                                <form method="post">
+                                    <input type="hidden" asp-for="RequestId" value="@request.Id" />
+                                    <button class="btn-icon mt-2" type="submit" asp-page-handler="DeclineRequest">
                                         <i class="far fa-trash-can icon-sm"></i>
-                                    </a>
-                                }
+                                    </button>
+                                </form>
                             </div>
-                            <form method="post" asp-page-handler="DeleteGroup" id="formForDeleteGroup@(group.Id)">
-                                <input type="hidden" asp-for="GroupId" value="@(group.Id)" />
-                            </form>
-
-                            <a asp-page="Details" asp-route-id="@group.Id" class="ms-auto mt-auto btn btn-primary">Szczegóły</a>
                         </div>
-                    </div>
+                    }
                 </div>
             }
-        </div>
 
-        <div class="pt-3 grid-quizes" id="joinedGroupsList">
-            @foreach(var group in joinedGroups)
+            <h3 class="mt-3">Grupy</h3>
+            @if (ownedGroups.Count() > 0)
             {
-                <div class="joined-groups" data-name="@(group.Name)">
-                    <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
-                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
-                            <div class="fw-bold fs-5 mb-3 text-truncate">@(group.Name)</div>
+                <div class="grid-quizes">
+                    @foreach (var group in ownedGroups)
+                    {
+                        <div class="owned-groups w-100" data-name="@(group.Name)">
+                            <div class="border border-1 rounded p-3 d-flex flex-row overflow-hidden h-100">
+                                <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                    <div class="fw-bold fs-5 mb-3 text-truncate">@(group.Name)</div>
 
-                            <div class="d-flex flex-row mb-2">
-                                <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Twórca:</span>
-                                    @(group.MasterUser.FullName)
-                                </span>
-                            </div>
+                                    <div class="d-flex flex-row mb-2">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Twórca:</span>
+                                            @(group.MasterUser.FullName)
+                                        </span>
+                                    </div>
 
-                            <div class="d-flex flex-row">
-                                <i class="fas fa-user-group icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Uczniowie:</span>
-                                    @(group.Students.Count())
-                                </span>
+                                    <div class="d-flex flex-row">
+                                        <i class="fas fa-user-group icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Uczniowie:</span>
+                                            @(group.Students.Count())
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column h-100">
+                                    <div class="d-flex flex-row">
+                                        @if (group.MasterId == Model.AppUser.Id)
+                                        {
+                                            <a class="btn-icon ms-auto" data-bs-toggle="modal" data-bs-target="#deleteGroupPopup"
+                                                data-group-name="@(group.Name)" data-on-delete="deleteGroup(@(group.Id))">
+                                                <i class="far fa-trash-can icon-sm"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                    <form method="post" asp-page-handler="DeleteGroup" id="formForDeleteGroup@(group.Id)">
+                                        <input type="hidden" asp-for="GroupId" value="@(group.Id)" />
+                                    </form>
+
+                                    <a asp-page="Details" asp-route-id="@group.Id"
+                                        class="ms-auto mt-auto btn btn-primary">Szczegóły</a>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="d-flex flex-column h-100">
-                            <a asp-page="Details" asp-route-id="@group.Id" class="ms-auto mt-auto btn btn-primary">Szczegóły</a>
-                        </div>
-                    </div>
+                    }
                 </div>
             }
+            else
+            {
+                <p>Nie posiadasz żadnej grupy. Utwórz grupę lub poproś o zostanie administratorem grupy, a pojawi się tutaj!
+                </p>
+            }
+
         </div>
 
+
+        <div id="joinedGroupsList">
+            @if (studentRequests.Count() > 0)
+            {
+                <h3 class="mt-3">Zaproszenia do grupy</h3>
+                <div class="grid-quizes">
+                    @foreach (var request in studentRequests)
+                    {
+                        <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
+                            <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                <div class="fw-bold fs-5 mb-3 text-truncate">@(request.Group.Name)</div>
+
+                                <div class="d-flex flex-row mb-2">
+                                    <i class="fas fa-user icon-sm me-2"></i>
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">Twórca:</span>
+                                        @(request.Group.MasterUser.FullName)
+                                    </span>
+                                </div>
+
+                                <div class="d-flex flex-row">
+                                    <i class="fas fa-clock icon-sm me-2"></i>
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">Wygasa:</span>
+                                        @(request.ExpirationDate)
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column h-100 ms-auto">
+                                <!-- Accept Request Button -->
+                                <form method="post">
+                                    <input type="hidden" asp-for="RequestId" value="@request.Id" />
+                                    <button class="btn-icon" type="submit" asp-page-handler="AcceptRequest">
+                                        <i class="fa fa-check icon-sm text-success"></i>
+                                    </button>
+                                </form>
+
+                                <!-- Decline Request Button -->
+                                <form method="post">
+                                    <input type="hidden" asp-for="RequestId" value="@request.Id" />
+                                    <button class="btn-icon mt-2" type="submit" asp-page-handler="DeclineRequest">
+                                        <i class="far fa-trash-can icon-sm"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <h3 class="mt-3">Grupy</h3>
+            @if (joinedGroups.Count() > 0)
+            {
+                <div class="grid-quizes">
+                    @foreach (var group in joinedGroups)
+                    {
+                        <div class="joined-groups" data-name="@(group.Name)">
+                            <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
+                                <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                    <div class="fw-bold fs-5 mb-3 text-truncate">@(group.Name)</div>
+
+                                    <div class="d-flex flex-row mb-2">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Twórca:</span>
+                                            @(group.MasterUser.FullName)
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex flex-row">
+                                        <i class="fas fa-user-group icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Uczniowie:</span>
+                                            @(group.Students.Count())
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column h-100">
+                                    <a asp-page="Details" asp-route-id="@group.Id"
+                                        class="ms-auto mt-auto btn btn-primary">Szczegóły</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>Nie jesteś członkiem żadnej grupy. Utwórz grupę lub poproś o dołączenie, a pojawi się tutaj!</p>
+            }
+        </div>
     </div>
 </div>
 
@@ -132,7 +259,6 @@
 <partial name="~/Pages/Shared/CreateGroupPopup.cshtml" />
 
 <script>
-
     const ownedGroupsButton = document.getElementById("ownedGroupsButton");
     const joinedGroupsButton = document.getElementById("joinedGroupsButton");
     const ownedGroupsList = document.getElementById("ownedGroupsList");
@@ -144,7 +270,7 @@
     const joinedGroups = document.getElementsByClassName("joined-groups");
 
 
-    var ownedGroupsShown = @((TempData["OwnedShown"] ?? false).ToString()!.ToLower());
+    var ownedGroupsShown = @((ViewData["ActiveTab"] ?? false).ToString()!.ToLower() == "joined" ? "false" : "true");
 
     function switchTab(tabIndex) {
         if (tabIndex == 0) {
@@ -191,19 +317,14 @@
 
     switchTab(ownedGroupsShown ? 0 : 1);
 
-
     function deleteGroup(groupId) {
-        
         document.getElementById(`formForDeleteGroup${groupId}`).submit();
-
         console.log("deleting group " + groupId);
     }
 
     function createGroup(groupName) {
-
         document.getElementById("groupNameInput").value = groupName;
         document.getElementById(`formForCreateGroup`).submit();
-
         console.log("creating group " + groupName);
     }
 

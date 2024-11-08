@@ -33,6 +33,9 @@ namespace Main.Pages
         public string UserId { get; set; } = "";
 
         [BindProperty]
+        public bool RemoveFromStudents { get; set; }
+
+        [BindProperty]
         public int GroupId { get; set; }
 
         [BindProperty]
@@ -66,21 +69,8 @@ namespace Main.Pages
 
             if (group == null)
             {
-                return Forbid();
+                return RedirectToPage("/Error");
             }
-
-            // if (group.MasterId == null)
-            // {
-            //     var teacher = group.Teachers.FirstOrDefault() ?? appUser;
-
-            //     group.MasterUser = teacher;
-
-            //     group.Teachers.Remove(teacher);
-
-            //     _repository.Update(group);
-
-            //     await _repository.SaveChangesAsync();
-            // }
 
             Group = group;
 
@@ -101,10 +91,9 @@ namespace Main.Pages
         public async Task<IActionResult> OnPostDeleteUser()
         {
             var appUser = await _userManager.GetUserAsync(User);
-
             if (appUser == null)
             {
-                return RedirectToPage("Error");
+                return Forbid();
             }
 
             var group = await _repository.GetAsync<UsersGroup>(
@@ -113,47 +102,77 @@ namespace Main.Pages
                     .Include(g => g.Teachers)
                     .Include(g => g.Students)
             );
-
-            if (group == null || 
-                (
-                    group.MasterId != appUser.Id &&
-                    !group.Teachers.Any(t => t.Id == appUser.Id)
-                ))
+            if (group == null)
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
 
-            var teacher = group.Teachers.FirstOrDefault(u => u.Id == UserId);
-
-            if (teacher == null)
+            var success = false;
+            if (RemoveFromStudents)
             {
-                var student = group.Students.FirstOrDefault(u => u.Id == UserId);
-
-                if (student == null)
-                {
-                    return RedirectToPage("Error");
-                }
-                group.Students.Remove(student);
+                success = HandleRemoveFromStudents(appUser, group);
             }
             else
             {
-                group.Teachers.Remove(teacher);
+                success = HandleRemoveFromTeachers(appUser, group);
             }
 
-            _repository.Update(group);
+            if (success)
+            {
+                _repository.Update(group);
+                await _repository.SaveChangesAsync();
+                return new JsonResult(new { success = true });
+            }
+            else
+            {
+                return RedirectToPage("/Error");
+            }
+        }
 
-            await _repository.SaveChangesAsync();
+        private bool HandleRemoveFromStudents(ApplicationUser appUser, UsersGroup group)
+        {
+            // Allow only Master or Teacher to remove students
+            if (group.MasterId != appUser.Id && !group.Teachers.Any(t => t.Id == appUser.Id))
+            {
+                return false;
+            }
 
-            return RedirectToRoute(new { id = GroupId});
+            // Find and remove the student
+            var student = group.Students.FirstOrDefault(u => u.Id == UserId);
+            if (student == null)
+            {
+                return false;
+            }
+
+            group.Students.Remove(student);
+            return true;
+        }
+
+        private bool HandleRemoveFromTeachers(ApplicationUser appUser, UsersGroup group)
+        {
+            // Only Master can remove a teacher
+            if (group.MasterId != appUser.Id)
+            {
+                return false;
+            }
+
+            // Find and remove the teacher
+            var teacher = group.Teachers.FirstOrDefault(u => u.Id == UserId);
+            if (teacher == null)
+            {
+                return false;
+            }
+
+            group.Teachers.Remove(teacher);
+            return true;
         }
 
         public async Task<IActionResult> OnPostAddUsers()
         {
             var appUser = await _userManager.GetUserAsync(User);
-
             if (appUser == null)
             {
-                return RedirectToPage("Error");
+                return Forbid();
             }
 
             var group = await _repository.GetAsync<UsersGroup>(
@@ -163,59 +182,40 @@ namespace Main.Pages
                     .Include(g => g.Students)
             );
 
-            if (group == null || 
+            if (group == null ||
                 (
                     group.MasterId != appUser.Id &&
                     !group.Teachers.Any(t => t.Id == appUser.Id)
                 ))
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
 
-            if (EmailsAsString == "" || EmailsAsString == null)
+            if (string.IsNullOrEmpty(EmailsAsString))
             {
-                return RedirectToRoute(new { id = GroupId});
+                return RedirectToPage("/Error");
             }
 
-            var emails = new HashSet<string>();
+            var emails = EmailsAsString
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(e => e.Trim())
+                .ToHashSet();
 
-            if (EmailsAsString.Contains(','))
+            var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
+                q => q.Where(u => u.Email != null && emails.Contains(u.Email))
+            );
+
+            var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
+            var notFoundMails = emails
+                    .Where(email => !usersByEmail.ContainsKey(email))
+                    .ToList();
+
+            if (notFoundMails.Count() != 0)
             {
-                foreach (var email in EmailsAsString.Split(','))
-                {
-                    emails.Add(email);
-                }
-            }
-            else
-            {
-                emails.Add(EmailsAsString);
+                return new JsonResult(new { notFoundEmails = notFoundMails });
             }
 
-            var users = new List<ApplicationUser>();
-
-            var notFoundMails = new List<string>();
-
-            foreach (var email in emails)
-            {
-                var user = await _repository.GetAsync<ApplicationUser>(
-                    u => u.Email == email
-                );
-                if (user == null)
-                {
-                    notFoundMails.Add(email);
-                }
-                else
-                {
-                    users.Add(user);
-                }
-            }
-
-            if (notFoundMails.Any())
-            {
-                return new JsonResult(notFoundMails);
-            }
-
-            foreach(var user in users)
+            foreach (var user in foundUsers)
             {
                 _repository.Add(new GroupRequest()
                 {
@@ -227,19 +227,18 @@ namespace Main.Pages
             }
 
             await _repository.SaveChangesAsync();
-
-            return RedirectToRoute(new { id = GroupId});
+            return new JsonResult(new { success = true });
         }
 
         public IActionResult OnPostRedirectToIndexOwned()
         {
-            TempData["OwnedShown"] = true;
+            TempData["showJoined"] = false;
             return RedirectToPage("Index");
         }
 
         public IActionResult OnPostRedirectToIndexJoined()
         {
-            TempData["OwnedShown"] = false;
+            TempData["showJoined"] = true;
             return RedirectToPage("Index");
         }
     }
