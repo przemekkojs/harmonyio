@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Main.Data;
 using Main.Models;
 using Main.Utils;
 using Main.GradingAlgorithm;
+using Main.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +38,11 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(Roles.GetRoleName(Role.Standard), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Standard)));
 
 builder.Services.AddScoped<ApplicationRepository>();
-builder.Services.AddSingleton<IGradingAlgorithm, GradingAlgorithm>();
+builder.Services.AddSingleton<IGradingAlgorithm, TestGradingAlgorithm>();
+
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
 var app = builder.Build();
 
