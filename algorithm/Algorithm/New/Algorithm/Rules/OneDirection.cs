@@ -15,13 +15,13 @@ namespace Algorithm.New.Algorithm.Rules
             name: "Ruch jednokierunkowy",
             description: "Czy w ramach dwóch funkcji, wszystkie głosy wykonały ruch w jednym kierunku?") { }
 
-        public override bool IsSatisfied(params Stack[] functions)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
-            if (!ValidateParametersCount(functions))
+            if (!ValidateParametersCount(stacks))
                 return false;
 
-            var stack1 = functions[0];
-            var stack2 = functions[1];
+            var stack1 = stacks[0];
+            var stack2 = stacks[1];
 
             int length = stack1.Notes.Count;
 
@@ -36,7 +36,13 @@ namespace Algorithm.New.Algorithm.Rules
 
             for (int index = 1; index < length; index++)
             {
-                currentUp = Interval.IsLower(stack1.Notes[index], stack1.Notes[index]);
+                var note1 = stack1.Notes[index];
+                var note2 = stack2.Notes[index];
+
+                if (note1 == null || note2 == null)
+                    continue;
+
+                currentUp = Interval.IsLower(note1, note2);
 
                 if (currentUp != lastUp)
                     return true;

@@ -9,13 +9,13 @@ namespace Algorithm.New.Algorithm.Rules
             name: "Kwinty równoległe",
             description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale kwinty?") { }
 
-        public override bool IsSatisfied(params Stack[] functions)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
-            if (!ValidateParametersCount(functions))
+            if (!ValidateParametersCount(stacks))
                 return false;
 
-            var stack1 = functions[0];
-            var stack2 = functions[1];
+            var stack1 = stacks[0];
+            var stack2 = stacks[1];
 
             List<((Note?, Note?), (Note ?, Note ?))> pairs = [
                 ((stack1.Soprano, stack1.Alto), (stack2.Soprano, stack2.Alto)),
@@ -31,8 +31,16 @@ namespace Algorithm.New.Algorithm.Rules
                 var pair1 = pair.Item1;
                 var pair2 = pair.Item2;
 
-                var pair1Interval = Interval.SemitonesBetween(pair1.Item1, pair1.Item2);
-                var pair2Interval = Interval.SemitonesBetween(pair2.Item1, pair2.Item2);
+                var note1_1 = pair1.Item1;
+                var note1_2 = pair1.Item2;
+                var note2_1 = pair2.Item1;
+                var note2_2 = pair2.Item2;
+
+                if (new List<Note?>() { note1_1, note1_2, note2_1, note2_2 }.Contains(null))
+                    continue;
+
+                var pair1Interval = Interval.SemitonesBetween(note1_1, note1_2);
+                var pair2Interval = Interval.SemitonesBetween(note2_1, note2_2);
 
                 if (pair1Interval == 7 && pair2Interval == 7)
                     return false;

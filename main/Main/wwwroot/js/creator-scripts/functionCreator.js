@@ -437,7 +437,7 @@ class FunctionCreator {
         this.setId(this.taskIndex, this.barIndex, this.functionIndex);
 
         this.avaiableAlterations = ['up', 'down'];
-        this.alterationList = [];
+        this.alterationsList = [];
         this.addedList = [];
 
         this.allComponents = [this.minor, this.position, this.root,
@@ -596,20 +596,13 @@ class FunctionCreator {
         const position = this.position.value;
         const root = this.root.value;
         const removed = this.removed.value;
-        const alterations = this.alterationsList;
-        const added = this.addedList;
+        const alterations = this.alterationsList != null ? this.alterationsList : [];
+        const added = this.addedList != null ? this.addedList : [];
 
         if (symbol === "") {
             alert('Nie można dodać pustej funkcji!'); // TODO: Dać jakieś ładniejsze coś XD
             return null;
-        }
-
-        // TODO: To chyba można pominąć ostatecznie...
-        //this.allComponents.forEach(e => {
-        //    e.classList.add('hide-border');
-        //});
-        // this.disableItems(this.allComponents);
-        // this.confirmed = true;
+        }        
 
         let functionResult = new ParsedFunction(
             this.barIndex, this.functionIndex,

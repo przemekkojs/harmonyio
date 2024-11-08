@@ -11,12 +11,12 @@ namespace Algorithm.New.Algorithm.Rules
 
         // TODO: Jakoś trzeba wsm przekazać metrum... XD
         // Wsm przekazywanie który składnik jest kwintą też się cholibka przyda
-        public override bool IsSatisfied(params Stack[] functions)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
-            if (!ValidateParametersCount(functions))
+            if (!ValidateParametersCount(stacks))
                 return false;
 
-            var stack = functions[0];
+            var stack = stacks[0];
 
             int verticalIndex = stack.Index.Position;
 

@@ -15,13 +15,13 @@ namespace Algorithm.New.Algorithm.Rules
             OneFunction = oneFunction;
         }
 
-        public abstract bool IsSatisfied(params Stack[] functions);
+        public abstract bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks);
 
-        protected bool ValidateParametersCount(params Stack[] functions)
+        protected bool ValidateParametersCount(params Stack[] stacks)
         {
-            if (OneFunction && functions.Length != 1)
+            if (OneFunction && stacks.Length != 1)
                 return false;
-            else if (!OneFunction && functions.Length != 2)
+            else if (!OneFunction && stacks.Length != 2)
                 return false;
             
             return true;
