@@ -15,7 +15,7 @@ namespace Algorithm.New.Algorithm.Rules
             OneFunction = oneFunction;
         }
 
-        public abstract bool IsSatisfied(params Stack[] stacks);
+        public abstract bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks);
 
         protected bool ValidateParametersCount(params Stack[] stacks)
         {

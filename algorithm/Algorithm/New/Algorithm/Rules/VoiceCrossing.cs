@@ -9,7 +9,7 @@ namespace Algorithm.New.Algorithm.Rules
             name: "Krzyżowanie głosów",
             description: "Czy nuty w obu funkcjach nie krzyżują się wysokościami w ramach tego samego głosu?") { }
 
-        public override bool IsSatisfied(params Stack[] stacks)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

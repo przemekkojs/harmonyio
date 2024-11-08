@@ -9,7 +9,7 @@ namespace Algorithm.New.Algorithm.Rules
             description: "Czy nuty w ramach jednej funkcji nie krzyżują się wysokościami w ramach sąsiednich głosów?",
             oneFunction: true) { }
 
-        public override bool IsSatisfied(params Music.Stack[] stacks)
+        public override bool IsSatisfied(string additionalParamsJson="", params Music.Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

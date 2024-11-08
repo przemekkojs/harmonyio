@@ -9,7 +9,7 @@ namespace Algorithm.New.Algorithm.Rules
             name: "Oktawy równoległe",
             description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale oktawy?") { }
 
-        public override bool IsSatisfied(params Stack[] stacks)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

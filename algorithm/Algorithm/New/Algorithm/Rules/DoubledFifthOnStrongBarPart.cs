@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules
 
         // TODO: Jakoś trzeba wsm przekazać metrum... XD
         // Wsm przekazywanie który składnik jest kwintą też się cholibka przyda
-        public override bool IsSatisfied(params Stack[] stacks)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

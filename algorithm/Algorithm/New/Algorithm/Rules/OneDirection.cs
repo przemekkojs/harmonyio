@@ -15,7 +15,7 @@ namespace Algorithm.New.Algorithm.Rules
             name: "Ruch jednokierunkowy",
             description: "Czy w ramach dwóch funkcji, wszystkie głosy wykonały ruch w jednym kierunku?") { }
 
-        public override bool IsSatisfied(params Stack[] stacks)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;
