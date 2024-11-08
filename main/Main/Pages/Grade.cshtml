@@ -3,10 +3,6 @@
 @using Main.Enumerations;
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 
-@{
-    Model.Users = Model.Users.SelectMany(q => Enumerable.Repeat(q, 10)).ToList();
-}
-
 <head>
     <link rel="stylesheet" href="~/css/grade-style.css" />
 </head>
