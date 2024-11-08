@@ -63,8 +63,12 @@ namespace Main.Pages
             );
 
             if (quiz == null || currentUser == null ||
-                quiz.CreatorId != currentUser.Id ||
-                (quiz.State == QuizState.Open && quiz.Excersises.First().ExcersiseSolutions.Count < quiz.Participants.Count))
+                quiz.CreatorId != currentUser.Id 
+                    // ||
+                    // (quiz.State == QuizState.Open 
+                    // && quiz.Excersises.First().ExcersiseSolutions.Count < quiz.Participants.Count
+                    // )
+                )
             {
                 return false;
             }

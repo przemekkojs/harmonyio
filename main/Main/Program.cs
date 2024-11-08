@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Main.Data;
 using Main.Models;
-using Main.Utils;
+// using Main.Utils;
 using Main.GradingAlgorithm;
 using Main.Services;
 
@@ -32,10 +32,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy(Roles.GetRoleName(Role.Admin), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Admin)))
-    .AddPolicy(Roles.GetRoleName(Role.Creator), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Creator)))
-    .AddPolicy(Roles.GetRoleName(Role.Standard), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Standard)));
+builder.Services.AddAuthorizationBuilder();
+    // .AddPolicy(Roles.GetRoleName(Role.Admin), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Admin)))
+    // .AddPolicy(Roles.GetRoleName(Role.Creator), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Creator)))
+    // .AddPolicy(Roles.GetRoleName(Role.Standard), policyBuilder => policyBuilder.RequireRole(Roles.GetRoleName(Role.Standard)));
 
 builder.Services.AddScoped<ApplicationRepository>();
 builder.Services.AddSingleton<IGradingAlgorithm, GradingAlgorithm>();
@@ -63,16 +63,16 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { Role.Admin, Role.Creator, Role.Standard };
+// using (var scope = app.Services.CreateScope())
+// {
+//     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+//     var roles = new[] { Role.Admin, Role.Creator, Role.Standard };
 
-    foreach (var role in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(Roles.GetRoleName(role)))
-            await roleManager.CreateAsync(new IdentityRole(Roles.GetRoleName(role)));
-    }
-}
+//     foreach (var role in roles)
+//     {
+//         if (!await roleManager.RoleExistsAsync(Roles.GetRoleName(role)))
+//             await roleManager.CreateAsync(new IdentityRole(Roles.GetRoleName(role)));
+//     }
+// }
 
 app.Run();

@@ -69,7 +69,9 @@ public class CreatedModel : PageModel
                 .Include(u => u.CreatedQuizes)
                     .ThenInclude(q => q.Excersises)
                         .ThenInclude(e => e.ExcersiseSolutions)
-                .Include(u => u.TeacherInGroups));
+                .Include(u => u.CreatedQuizes)
+                .Include(u => u.TeacherInGroups)
+            );
 
         if (user == null) return false;
 
@@ -177,8 +179,17 @@ public class CreatedModel : PageModel
 
         if (notFoundMails.Any())
         {
-            return new JsonResult(notFoundMails);
+            return new JsonResult(new { notFoundEmails = notFoundMails });
         }
+
+        foreach(var user in usersToAsign)
+        {
+            if (!quizToAssign.Participants.Contains(user))
+            {
+                quizToAssign.Participants.Add(user);
+            }
+        }
+
 
         var groupsToAsign = await _repository.GetAllAsync<UsersGroup>(
             q => q
@@ -194,23 +205,11 @@ public class CreatedModel : PageModel
         {
             foreach (var user in group.Students)
             {
-                usersToAsign.Add(user);
+                if (!quizToAssign.Participants.Contains(user))
+                {
+                    quizToAssign.Participants.Add(user);
+                }
             }
-        }
-
-        foreach(var user in usersToAsign)
-        {
-            if (!quizToAssign.Participants.Contains(user))
-            {
-                quizToAssign.Participants.Add(user);
-            }
-        }
-
-        quizToAssign.PublishedToEmails.Clear();
-
-        foreach(var email in emails)
-        {
-            quizToAssign.PublishedToEmails.Add(email);
         }
 
         quizToAssign.PublishedToGroup.Clear();
@@ -229,7 +228,7 @@ public class CreatedModel : PageModel
 
         await _repository.SaveChangesAsync();
         
-        return RedirectToPage();
+        return new JsonResult(new { success = true });
     }
 
     public async Task<IActionResult> OnPostDelete()
