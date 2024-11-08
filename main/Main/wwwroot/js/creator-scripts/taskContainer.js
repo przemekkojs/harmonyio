@@ -146,16 +146,31 @@ class Task {
 
         // TODO: Tonacja i metrum
 
+        let index = 0;
+
         taskObject.forEach(parsedFunction => {
             const barIndex = parsedFunction.barIndex;
-            const barCount = this.barContainer.bars.length;
+            let barCount = this.barContainer.bars.length;
 
-            if (barIndex >= barCount)
+            while (barIndex > barCount) {
+                barCount++;
                 this.barContainer.addBar();
+            }                
 
             const bar = this.barContainer.bars[barIndex];
+
             console.log("TaskContainer: load(): bar: ", bar);
-            bar.functionContainer.addFunction();
+
+            const functionCount = bar ? bar.functionContainer.functions.length - 1 : 0;
+
+            console.log(parsedFunction);
+
+            if (index > functionCount) {
+                bar.functionContainer.addFunction();
+                console.log("added");
+            }
+            else
+                console.log("edited");
 
             const functionCountInBar = bar.functionContainer.functions.length;
             const newFunction = bar.functionContainer.functions[functionCountInBar - 1];
@@ -186,6 +201,8 @@ class Task {
 
             // TODO: Alteracje (Alterations)
             // TODO: Opóźnienia (Suspensions)
+
+            index++;
         });
     }
 }
@@ -249,16 +266,24 @@ export class TaskContainer {
 
     // Ładowanie z całego JSONa
     load(excersises) {
-        console.log("TaskContainer: load(): excersises: ", excersises);
+        //console.log("TaskContainer: load(): excersises: ", excersises);
+
+        let index = 0;
 
         excersises.forEach(excersise => {
             const excersiseObject = JSON.parse(excersise);
 
-            console.log("TaskContainer: load(): excersiseObject: ", excersiseObject);
-            this.addTask();
-            const task = this.tasks[this.tasks.length - 1];
+            //console.log("TaskContainer: load(): excersiseObject: ", excersiseObject);            
+            const tasksCount = this.tasks.length - 1;
+
+            if (index > tasksCount)
+                this.addTask();
+
+            const task = this.tasks[index];
 
             task.load(excersiseObject);
+
+            index++;
         });
     }
 }

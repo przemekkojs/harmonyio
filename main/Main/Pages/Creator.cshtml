@@ -39,11 +39,13 @@
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
         <div class="py-3 d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
-            <input type="button" value="Test" onclick="confirmExcersises()" />
+            @* <input type="button" value="Test" onclick="confirmExcersises()" /> *@
             @if (!Model.BrowseOnly)
             {
-                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto"
-                    onclick="confirmExcersises()">Zapisz</button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto" onclick="return confirmExcersises(event)">
+                    Zapisz
+                </button>
+
                 @* TODO: DODAĆ ŻEBY BUTTON PUBLIKUJ DZIAŁAŁ (TAK JAK ZAPISZ, ALE OD RAZU OTWIERA POPUP) *@
                 @* <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
                     onclick="confirmExcersises()">Opublikuj</button> *@
@@ -91,7 +93,7 @@
         questionsValidationError.innerText = '';
     }
 
-    window.confirmExcersises = function () {
+    window.confirmExcersises = function (event) {
         questionsValidationError.innerText = '';
         answer.length = 0;
         const tasks = taskContainer.tasks;
@@ -117,6 +119,19 @@
             const flatsCount = tonationParsed[1];
 
             const taskResult = currentTask.getResult();
+            let good = true;
+
+            taskResult.forEach(f => {
+                if (f.symbol === null || f.symbol === '' || f.symbol === " ") {
+                    // Może jakiś popup?
+                    questionsValidationError.innerText = "W zadaniu nie może być pustych funkcji.";
+                    event.preventDefault();
+                    good = false;
+                }
+            });
+
+            if (!good)
+                return false;
 
             answer.push({
                 question: questionText,
@@ -129,6 +144,8 @@
 
             hiddenInput.value = JSON.stringify(answer[i]);
         }
+
+        return true;
     }        
 
     addExisting();
@@ -136,6 +153,6 @@
 
 @section Scripts {
     @{
-                    <partial name="_ValidationScriptsPartial" />
+                            <partial name="_ValidationScriptsPartial" />
     }
 }

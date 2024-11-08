@@ -141,10 +141,10 @@ class FunctionCreator {
         this.alterDown.value = "down";        
 
         this.alterUpLabel = document.createElement('label');
-        this.alterUpLabel.innerText = "&uarr;";        
+        this.alterUpLabel.innerHTML = "&uarr;";        
 
         this.alterDownLabel = document.createElement('label');
-        this.alterDownLabel.innerText = "&darr;";        
+        this.alterDownLabel.innerHTML = "&darr;";        
 
         // Dodanie do opcji składników
         [this.alterDown, this.alterDownLabel, this.alterUp, this.alterUpLabel].forEach(e => {
@@ -229,13 +229,13 @@ class FunctionCreator {
         this.addedMajor.value = 'minor';        
 
         this.addedMinorLabel = document.createElement('label');
-        this.addedMinorLabel.innerText = "&lt;";        
+        this.addedMinorLabel.innerHTML = "&lt;";        
 
         this.addedNeutralLabel = document.createElement('label');
         this.addedNeutralLabel.innerText = "-";        
 
         this.addedMajorLabel = document.createElement('label');
-        this.addedMajorLabel.innerText = "&gt;";        
+        this.addedMajorLabel.innerHTML = "&gt;";        
 
         [this.addedMajor, this.addedMajorLabel, this.addedNeutral, this.addedNeutralLabel, this.addedMinor, this.addedMinorLabel].forEach(e => {
             this.addAddedFormOptions.appendChild(e);
@@ -611,12 +611,8 @@ class FunctionCreator {
         // this.disableItems(this.allComponents);
         // this.confirmed = true;
 
-        let splitted = this.id.split('-');
-        let barId = splitted[1];
-        let verticalId = splitted[2];
-
         let functionResult = new ParsedFunction(
-            barId, verticalId,
+            this.barIndex, this.functionIndex,
             minor, symbol, position, root, removed,
             alterations, added
         );
@@ -670,7 +666,7 @@ class FunctionCreator {
             .querySelectorAll('div')[1]
             .querySelectorAll('input[type="radio"]');
 
-        const confirmButton = this.addedPopup.querySelectorAll('input[type="button"]')[0];
+        const confirmButton = this.confirmAddAdded;
 
         confirmButton.addEventListener('click', () => {
             let checkedComponent = "";

@@ -46,7 +46,7 @@ export class FunctionContainer {
         this.container.appendChild(this.barInfoPlaceholder);
         this.container.appendChild(this.addFunctionButton);
 
-        this.addFunction();
+        // this.addFunction();
     }
 
     addFunction() {
