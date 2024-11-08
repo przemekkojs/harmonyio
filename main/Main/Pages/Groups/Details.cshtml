@@ -2,11 +2,8 @@
 @model Main.Pages.GroupDetailsModel
 @{
     var teacherRequests = Model.Group.Requests.Where(q => q.ForTeacher).Select(q => q.User);
-
     var studentRequests = Model.Group.Requests.Where(q => !q.ForTeacher).Select(q => q.User);
-
     var teachers = Model.Group.Teachers;
-
     var students = Model.Group.Students;
 }
 
@@ -14,7 +11,8 @@
 <div class="h-100 w-100 d-flex flex-row pb-3">
     <form method="post" asp-page-handler="DeleteUser" id="formForDeleteUser">
         <input type="hidden" asp-for="GroupId" value="@Model.Group.Id" />
-        <input type="hidden" asp-for="UserId" value="" id="userToRemoveId" />
+        <input type="hidden" asp-for="RemoveFromStudents" value="" id="deleteUserFromStudents" />
+        <input type="hidden" asp-for="UserId" value="" id="deleteUserId" />
     </form>
     <form method="post" asp-page-handler="AddUsers" id="formForAddUsers">
         <input type="hidden" asp-for="GroupId" value="@Model.Group.Id" />
@@ -76,21 +74,26 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto">(@(students.Count()))</span>
+                        <span class="me-auto" id="student-list-count">(@(students.Count()))</span>
                     </div>
 
                     <div class="d-flex flex-column">
+                        @{
+                            int studentIndex = 0;
+                        }
                         @foreach (var student in students)
                         {
-                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
+                                id="students-list-element-@(studentIndex)">
                                 <span class="text-truncate me-2">@(student.FullName)</span>
                                 @if (Model.IsAdmin)
                                 {
                                     <button type="button" class="ms-auto btn-close" aria-label="Close" data-bs-toggle="modal"
                                         data-bs-target="#deleteUserPopup" data-user-mail="@(student.Email)"
-                                        data-on-delete="deleteUser(@(student.Id))"></button>
+                                        data-on-delete="deleteUser(`@(student.Id)`, true, @(studentIndex))"></button>
                                 }
                             </div>
+                            studentIndex++;
                         }
                     </div>
 
@@ -138,7 +141,7 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto">(@(teachers.Count() + 1))</span>
+                        <span class="me-auto" id="teacher-list-count">(@(teachers.Count() + 1))</span>
                     </div>
 
                     <div class="d-flex flex-column">
@@ -147,18 +150,23 @@
 
                             <span class="text-truncate me-2">@(Model.GroupMaster.FullName)</span>
                         </div>
+                        @{
+                            int teacherIndex = 0;
+                        }
                         @foreach (var teacher in teachers)
                         {
-                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
+                                id="teachers-list-element-@(teacherIndex)">
                                 <span class="text-truncate me-2">@(teacher.FullName)</span>
 
                                 @if (Model.IsMaster)
                                 {
                                     <button type="button" class="ms-auto btn-close" aria-label="Close" data-bs-toggle="modal"
                                         data-bs-target="#deleteUserPopup" data-user-mail="@(teacher.Email)"
-                                        data-on-delete="deleteUser(@(teacher.Id))"></button>
+                                        data-on-delete="deleteUser(`@(teacher.Id)`, false, @(teacherIndex))"></button>
                                 }
                             </div>
+                            teacherIndex++;
                         }
                     </div>
 
@@ -337,20 +345,55 @@
         smallTabSelect.value = tabIndex;
     }
 
-    function deleteUser(userId) {
-        //TODO: DELETE USER WITH ID, REFRESH PAGE
+    async function deleteUser(userId, fromStudents, divIndex) {
+        document.getElementById("deleteUserId").value = userId;
+        document.getElementById("deleteUserFromStudents").value = fromStudents;
 
-        document.getElementById("userToRemoveId").value = userId;
-        document.getElementById("formForDeleteUser").submit();
+        const form = document.getElementById("formForDeleteUser");
+        const formData = new FormData(form);
 
-        console.log("deleting user " + userId);
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                redirect: 'follow'
+            });
+
+            if (response.status === 403) {
+                window.location.href = '/Identity/Account/Login';
+            }
+
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+
+            // Handle JSON responses (for normal operation)
+            if (response.headers.get('content-type')?.includes('application/json')) {
+                const result = await response.json();
+
+                if (result.success) {
+                    const listElementId = fromStudents ? "students-list-element-" + divIndex : "teachers-list-element-" + divIndex;
+                    const listElement = document.getElementById(listElementId);
+                    if (listElement) {
+                        listElement.remove();
+                    }
+
+                    const countElement = document.getElementById(fromStudents ? "student-list-count" : "teacher-list-count");
+                    const currentCount = parseInt(countElement.textContent.match(/\d+/)[0]);
+                    const newCount = currentCount - 1;
+                    countElement.textContent = `(${newCount})`;
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
     }
 
     async function addUsers(userEmails, areAdmins) {
         document.getElementById("addUserAsAdmins").value = areAdmins;
         document.getElementById("addUsersEmails").value = userEmails;
 
-        form = document.getElementById("formForAddUsers");
+        const form = document.getElementById("formForAddUsers");
         const formData = new FormData(form);
 
         try {

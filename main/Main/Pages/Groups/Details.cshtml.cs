@@ -33,6 +33,9 @@ namespace Main.Pages
         public string UserId { get; set; } = "";
 
         [BindProperty]
+        public bool RemoveFromStudents { get; set; }
+
+        [BindProperty]
         public int GroupId { get; set; }
 
         [BindProperty]
@@ -88,7 +91,6 @@ namespace Main.Pages
         public async Task<IActionResult> OnPostDeleteUser()
         {
             var appUser = await _userManager.GetUserAsync(User);
-
             if (appUser == null)
             {
                 return Forbid();
@@ -100,44 +102,74 @@ namespace Main.Pages
                     .Include(g => g.Teachers)
                     .Include(g => g.Students)
             );
-
-            if (group == null ||
-                (
-                    group.MasterId != appUser.Id &&
-                    !group.Teachers.Any(t => t.Id == appUser.Id)
-                ))
+            if (group == null)
             {
                 return RedirectToPage("/Error");
             }
 
-            var teacher = group.Teachers.FirstOrDefault(u => u.Id == UserId);
-
-            if (teacher == null)
+            var success = false;
+            if (RemoveFromStudents)
             {
-                var student = group.Students.FirstOrDefault(u => u.Id == UserId);
-
-                if (student == null)
-                {
-                    return RedirectToPage("/Error");
-                }
-                group.Students.Remove(student);
+                success = HandleRemoveFromStudents(appUser, group);
             }
             else
             {
-                group.Teachers.Remove(teacher);
+                success = HandleRemoveFromTeachers(appUser, group);
             }
 
-            _repository.Update(group);
+            if (success)
+            {
+                _repository.Update(group);
+                await _repository.SaveChangesAsync();
+                return new JsonResult(new { success = true });
+            }
+            else
+            {
+                return RedirectToPage("/Error");
+            }
+        }
 
-            await _repository.SaveChangesAsync();
+        private bool HandleRemoveFromStudents(ApplicationUser appUser, UsersGroup group)
+        {
+            // Allow only Master or Teacher to remove students
+            if (group.MasterId != appUser.Id && !group.Teachers.Any(t => t.Id == appUser.Id))
+            {
+                return false;
+            }
 
-            return RedirectToRoute(new { id = GroupId });
+            // Find and remove the student
+            var student = group.Students.FirstOrDefault(u => u.Id == UserId);
+            if (student == null)
+            {
+                return false;
+            }
+
+            group.Students.Remove(student);
+            return true;
+        }
+
+        private bool HandleRemoveFromTeachers(ApplicationUser appUser, UsersGroup group)
+        {
+            // Only Master can remove a teacher
+            if (group.MasterId != appUser.Id)
+            {
+                return false;
+            }
+
+            // Find and remove the teacher
+            var teacher = group.Teachers.FirstOrDefault(u => u.Id == UserId);
+            if (teacher == null)
+            {
+                return false;
+            }
+
+            group.Teachers.Remove(teacher);
+            return true;
         }
 
         public async Task<IActionResult> OnPostAddUsers()
         {
             var appUser = await _userManager.GetUserAsync(User);
-
             if (appUser == null)
             {
                 return Forbid();
