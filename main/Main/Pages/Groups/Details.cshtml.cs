@@ -66,21 +66,8 @@ namespace Main.Pages
 
             if (group == null)
             {
-                return Forbid();
+                return RedirectToPage("/Error");
             }
-
-            // if (group.MasterId == null)
-            // {
-            //     var teacher = group.Teachers.FirstOrDefault() ?? appUser;
-
-            //     group.MasterUser = teacher;
-
-            //     group.Teachers.Remove(teacher);
-
-            //     _repository.Update(group);
-
-            //     await _repository.SaveChangesAsync();
-            // }
 
             Group = group;
 
@@ -104,7 +91,7 @@ namespace Main.Pages
 
             if (appUser == null)
             {
-                return RedirectToPage("Error");
+                return Forbid();
             }
 
             var group = await _repository.GetAsync<UsersGroup>(
@@ -114,13 +101,13 @@ namespace Main.Pages
                     .Include(g => g.Students)
             );
 
-            if (group == null || 
+            if (group == null ||
                 (
                     group.MasterId != appUser.Id &&
                     !group.Teachers.Any(t => t.Id == appUser.Id)
                 ))
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
 
             var teacher = group.Teachers.FirstOrDefault(u => u.Id == UserId);
@@ -131,7 +118,7 @@ namespace Main.Pages
 
                 if (student == null)
                 {
-                    return RedirectToPage("Error");
+                    return RedirectToPage("/Error");
                 }
                 group.Students.Remove(student);
             }
@@ -144,7 +131,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToRoute(new { id = GroupId});
+            return RedirectToRoute(new { id = GroupId });
         }
 
         public async Task<IActionResult> OnPostAddUsers()
@@ -153,7 +140,7 @@ namespace Main.Pages
 
             if (appUser == null)
             {
-                return RedirectToPage("Error");
+                return Forbid();
             }
 
             var group = await _repository.GetAsync<UsersGroup>(
@@ -163,59 +150,40 @@ namespace Main.Pages
                     .Include(g => g.Students)
             );
 
-            if (group == null || 
+            if (group == null ||
                 (
                     group.MasterId != appUser.Id &&
                     !group.Teachers.Any(t => t.Id == appUser.Id)
                 ))
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
 
-            if (EmailsAsString == "" || EmailsAsString == null)
+            if (string.IsNullOrEmpty(EmailsAsString))
             {
-                return RedirectToRoute(new { id = GroupId});
+                return RedirectToPage("/Error");
             }
 
-            var emails = new HashSet<string>();
+            var emails = EmailsAsString
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(e => e.Trim())
+                .ToHashSet();
 
-            if (EmailsAsString.Contains(','))
+            var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
+                q => q.Where(u => u.Email != null && emails.Contains(u.Email))
+            );
+
+            var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
+            var notFoundMails = emails
+                    .Where(email => !usersByEmail.ContainsKey(email))
+                    .ToList();
+
+            if (notFoundMails.Count() != 0)
             {
-                foreach (var email in EmailsAsString.Split(','))
-                {
-                    emails.Add(email);
-                }
-            }
-            else
-            {
-                emails.Add(EmailsAsString);
+                return new JsonResult(new { notFoundEmails = notFoundMails });
             }
 
-            var users = new List<ApplicationUser>();
-
-            var notFoundMails = new List<string>();
-
-            foreach (var email in emails)
-            {
-                var user = await _repository.GetAsync<ApplicationUser>(
-                    u => u.Email == email
-                );
-                if (user == null)
-                {
-                    notFoundMails.Add(email);
-                }
-                else
-                {
-                    users.Add(user);
-                }
-            }
-
-            if (notFoundMails.Any())
-            {
-                return new JsonResult(notFoundMails);
-            }
-
-            foreach(var user in users)
+            foreach (var user in foundUsers)
             {
                 _repository.Add(new GroupRequest()
                 {
@@ -227,19 +195,18 @@ namespace Main.Pages
             }
 
             await _repository.SaveChangesAsync();
-
-            return RedirectToRoute(new { id = GroupId});
+            return new JsonResult(new { success = true });
         }
 
         public IActionResult OnPostRedirectToIndexOwned()
         {
-            TempData["OwnedShown"] = true;
+            TempData["showJoined"] = false;
             return RedirectToPage("Index");
         }
 
         public IActionResult OnPostRedirectToIndexJoined()
         {
-            TempData["OwnedShown"] = false;
+            TempData["showJoined"] = true;
             return RedirectToPage("Index");
         }
     }

@@ -98,7 +98,7 @@ namespace Main.Pages
             // only master user can delete the group
             if (group == null || group.MasterId != appUser.Id)
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
 
             _repository.Delete(group);
@@ -120,7 +120,7 @@ namespace Main.Pages
             if (GroupName == "")
             {
                 //Model error instead?
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
 
             var group = new UsersGroup()
@@ -201,7 +201,7 @@ namespace Main.Pages
 
             if (user == null)
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("/Error");
             }
 
             if (groupRequest.ForTeacher)
