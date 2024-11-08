@@ -57,9 +57,19 @@
                         }
                     </select>
 
-                    @for (int i = 0; i < Model.Users.Count; i++)
+                    @* @if(Model.Grades == null)
                     {
-                        <input id="grade-hidden-@i" type="hidden" asp-for="Grades[i]" />
+                        Model.Grades = [];
+                    } *@
+
+                    @for (int userId = 0; userId < Model.Users.Count; userId++)
+                    {
+                        @* while (Model.Grades.Count <= userId)
+                        {
+                            Model.Grades.Add(Grade.Two);
+                        } *@
+
+                        <input id="grade-hidden-@userId" type="hidden" asp-for="Grades[userId]" />
                     }
                 </div>
             </div>
@@ -108,13 +118,51 @@
                 </div>
 
                 <div class="mt-3 d-flex flex-row">
-                    @for (int i = 0; i < Model.Excersises.Count; i++)
+                    @* @if (Model.Points == null)
                     {
-                        @for (int j = 0; j < Model.Users.Count; j++)
+                        Model.Points = [];
+                    }
+
+                    @if (Model.Maxes == null)
+                    {
+                        Model.Maxes = [];
+                    }
+
+                    @if (Model.Comments == null)
+                    {
+                        Model.Comments = [];
+                    }*@
+
+                    @for (int exId = 0; exId < Model.Excersises.Count; exId++)
+                    {
+                        @* Model.Maxes.Add([]);
+                        Model.Points.Add([]);
+                        Model.Comments.Add([]); *@
+
+                        @for (int usrId = 0; usrId < Model.Users.Count; usrId++)
                         {
-                            <input id="points-hidden-@i-@j" type="hidden" asp-for="Points[j][i]" value="0" />
-                            <input id="max-hidden-@i-@j" type="hidden" asp-for="Maxes[j][i]" value="0" />
-                            <input id="comment-hidden-@i-@j" type="hidden" asp-for="Comments[j][i]" value="" />
+                            @* var currentMaxes = Model.Maxes[exId];
+                            var currentPoints = Model.Points[exId];
+                            var currentComments = Model.Comments[exId];
+
+                            while (currentMaxes.Count <= usrId)
+                            {
+                                currentMaxes.Add(0);
+                            }
+
+                            while (currentPoints.Count <= usrId)
+                            {
+                                currentPoints.Add(0);
+                            }
+
+                            while (currentComments.Count <= usrId)
+                            {
+                                currentComments.Add("");
+                            } *@
+
+                            <input id="points-hidden-@exId-@usrId" type="hidden" asp-for="Points[usrId][exId]" value="0" />
+                            <input id="max-hidden-@exId-@usrId" type="hidden" asp-for="Maxes[usrId][exId]" value="0" />
+                            <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]" value="" />
                         }
                     }
 
@@ -122,7 +170,16 @@
                         class="flex-grow-1 h-100 rounded bg-white shadow d-flex justify-content-center align-items-center">
                         @* MUSIC STAFF DIV SET VIA JS *@
                     </div>
+                    
                 </div>
+
+                @* TODO: Stylowanie trochę porządniej XD *@
+                @* <div style="width: 100%; height: 100%;">
+                    <span>Opinia algorytmu</span>
+                    <textarea readonly id="algorithm-opinions" style="width: 100%; height: 100%; resize: none;" placeholder="Bezbłędnie, gratulacje!">
+                        
+                    </textarea>
+                </div> *@
 
                 @* <div class="mt-3">
                     <span class="fw-bold">Komentarz</span>
@@ -188,6 +245,7 @@
     const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
     const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToSolutions[u].Select(es => es.Answer))));
+    const algorithmOpinions = null; //TODO;
 
     console.log(questions);
     console.log(userSolutions);

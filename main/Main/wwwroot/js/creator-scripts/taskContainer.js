@@ -142,40 +142,43 @@ class Task {
 
         this.questionInput.value = question;
 
-        console.log("TaskContainer: load(): taskObject: ", taskObject);
+        //console.log("TaskContainer: load(): taskObject: ", taskObject); 
 
         // TODO: Tonacja i metrum
 
         let index = 0;
+        let lastBar = 0;
 
         taskObject.forEach(parsedFunction => {
             const barIndex = parsedFunction.barIndex;
+
+            if (barIndex != lastBar)
+                index = 0;
+
             let barCount = this.barContainer.bars.length;
 
-            while (barIndex > barCount) {
+            while (barIndex >= barCount) {
                 barCount++;
                 this.barContainer.addBar();
             }                
 
             const bar = this.barContainer.bars[barIndex];
 
-            console.log("TaskContainer: load(): bar: ", bar);
+            //console.log("TaskContainer: load(): bar: ", bar);
 
             const functionCount = bar ? bar.functionContainer.functions.length - 1 : 0;
 
-            console.log(parsedFunction);
+            //console.log(parsedFunction);
+            //console.log(index, '/', functionCount);
 
-            if (index > functionCount) {
+            if (index >= functionCount) {
                 bar.functionContainer.addFunction();
-                console.log("added");
             }
-            else
-                console.log("edited");
 
             const functionCountInBar = bar.functionContainer.functions.length;
             const newFunction = bar.functionContainer.functions[functionCountInBar - 1];
 
-            console.log("TaskContainer: load(): newFunction: ", newFunction);
+            //console.log("TaskContainer: load(): newFunction: ", newFunction);
 
             if (parsedFunction.minor)
                 newFunction.functionCreator.minor.checked = true;

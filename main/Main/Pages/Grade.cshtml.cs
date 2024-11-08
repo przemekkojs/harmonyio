@@ -103,6 +103,7 @@ namespace Main.Pages
         public async Task<IActionResult> OnGetAsync(int id)
         {
             bool success = await Init(id);
+
             if (!success)
             {
                 return Forbid();
@@ -126,6 +127,33 @@ namespace Main.Pages
                     .Select(innerList => innerList.Select(t => t.Comment).ToList())
                     .ToList();
             }
+            else
+            {
+                Grades = [];
+                Points = [];
+                Maxes = [];
+                Comments = [];
+                
+                foreach (var user in Users)
+                {
+                    Grades.Add(Grade.One);
+
+                    var pointsToAdd = new List<int>();
+                    var maxesToAdd = new List<int>();
+                    var commentsToAdd = new List<string>();
+
+                    foreach (var ex in Quiz.Excersises)
+                    {
+                        pointsToAdd.Add(0);
+                        maxesToAdd.Add(0);
+                        commentsToAdd.Add("");
+                    }
+
+                    Points.Add(pointsToAdd);
+                    Maxes.Add(maxesToAdd);
+                    Comments.Add(commentsToAdd);
+                }                
+            }
 
             return Page();
         }
@@ -147,7 +175,6 @@ namespace Main.Pages
             {
                 return Page();
             }
-
 
             var quizResults = new List<QuizResult>();
             if (Quiz.QuizResults.Count == 0)

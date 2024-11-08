@@ -32,9 +32,7 @@ namespace Algorithm.New.Algorithm.Mistake
         public NoteMistake(Note? note, Stack? stack)
         {            
             if (note == null)
-            {
                 Voice = string.Empty;
-            }
             else
             {
                 var voice = GetVoiceFromStack(note, stack);
@@ -67,6 +65,8 @@ namespace Algorithm.New.Algorithm.Mistake
 
                 if (toCheck.Equals(note))
                     return voices[index];
+
+                index++;
             }
 
             return null;
