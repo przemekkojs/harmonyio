@@ -2,26 +2,32 @@
 ADD USERS MODAL POPUP
 
 ATRYBUTY:
-    - data-adding-admins: Bool, jeżeli jest true to dodajemy adminów, jeżeli false to zwykłych użytkowników
-    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku dodaj. Callback ten musi zawierać 2 argumenty - assignedEmails i areAdmins oraz zwracać null w przypadku powodzenia lub listę niepoprawnych emaili w przypadku niepowodzenia
+- data-adding-admins: Bool, jeżeli jest true to dodajemy adminów, jeżeli false to zwykłych użytkowników
+- data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku dodaj. Callback ten musi zawierać 2
+argumenty - assignedEmails i areAdmins oraz zwracać null w przypadku powodzenia lub listę niepoprawnych emaili w
+przypadku niepowodzenia
 *@
 
 <style>
-    #addUsersPopup .modal-dialog{
+    #addUsersPopup .modal-dialog {
         max-width: 650px;
     }
-    #addUsersTipPanel{
-        width: 215px; 
+
+    #addUsersTipPanel {
+        width: 215px;
         min-width: 215px;
     }
-</style> 
+</style>
 
-<div class="modal fade" id="addUsersPopup" tabindex="-1" role="dialog" aria-labelledby="addUsersPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="addUsersPopup" tabindex="-1" role="dialog" aria-labelledby="addUsersPopupCenterTitle"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content d-flex flex-row overflow-hidden">
-            <div id="addUsersTipPanel" class="d-none d-sm-flex bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
+            <div id="addUsersTipPanel"
+                class="d-none d-sm-flex bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
                 <span class="fw-bold fs-4 mb-1">Dodawanie</span>
-                <p>Możesz dodać do swojej grupy członków podając ich adresy email. Otrzymają oni wtedy w swojej skrzynce zaproszenia do grupy, a po zaakceptowaniu staną się jej częścią!</p>
+                <p>Możesz dodać do swojej grupy członków podając ich adresy email. Otrzymają oni wtedy w swojej skrzynce
+                    zaproszenia do grupy, a po zaakceptowaniu staną się jej częścią!</p>
             </div>
 
             <div class="flex-grow-1 d-flex flex-column">
@@ -39,7 +45,8 @@ ATRYBUTY:
                         <hr class="m-0 border border-1" />
 
                         <div class="p-2">
-                            <input id="addEmailInput" class="form-control" type="email" placeholder="user@example.com" required />
+                            <input id="addEmailInput" class="form-control" type="email" placeholder="user@example.com"
+                                required />
                         </div>
                     </div>
 
@@ -63,7 +70,8 @@ ATRYBUTY:
 
 
                 <div class="modal-footer justify-content-center align-items-center">
-                    <button type="button" class="btn btn-secondary btn-sm-width" id="addCancelButton" data-bs-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-secondary btn-sm-width" id="addCancelButton"
+                        data-bs-dismiss="modal">Anuluj</button>
                     <button type="button" class="btn btn-primary btn-sm-width" id="addUserButton">Dodaj</button>
                 </div>
             </div>
@@ -94,34 +102,39 @@ ATRYBUTY:
     });
 
     addUsersPopup.addEventListener('show.bs.modal', function (event) {
+        clearEmailsList();
+
         assignModalButton = event.relatedTarget;
-
         addingAdmins = assignModalButton.getAttribute('data-adding-admins') === "true";
-        assignedEmails = [];
-        wrongEmails = [];
-
-        updateEmailsList();
-
         addUsersPopup.querySelector('#addUsersTitle').innerText = addingAdmins ? "Dodaj adminów grupy" : "Dodaj uczestników grupy";
         addUsersPopup.querySelector('#newUsersTitle').innerText = addingAdmins ? "Nowi admini" : "Nowi uczestnicy";;
-
     });
+
+    function clearEmailsList() {
+        assignedEmails = [];
+        wrongEmails = [];
+        const emailListContainer = document.getElementById("emailListContainer");
+        const emailsNumber = document.getElementById("emailsNumber");
+
+        emailListContainer.innerHTML = "";
+        emailsNumber.innerText = "(0)";
+    }
 
     addUserButton.addEventListener('click', async function (event) {
         const closebutton = document.getElementById('addCancelButton');
+        const callbackName = assignModalButton.getAttribute('data-callback-name');
 
-        let callbackName = assignModalButton.getAttribute('data-callback-name');
-
-        if (assignedEmails.length == 0)
+        if (assignedEmails.length == 0) {
             return;
+        }
 
         if (typeof window[callbackName] === 'function') {
             wrongEmails = await window[callbackName](assignedEmails, addingAdmins);
 
-            if (wrongEmails == null || wrongEmails.length == 0){
+            if (wrongEmails == null || wrongEmails.length == 0) {
                 closebutton.click();
             } else {
-                updateEmailsList();
+                showWrongEmails();
             }
         } else {
             console.error("Callback function not found:", callbackName);
@@ -142,17 +155,56 @@ ATRYBUTY:
 
         if (isValidEmail(email)) {
             assignedEmails.push(emailInput.value);
+            addEmailToEmailsList(email);
 
             emailInput.value = "";
             emailInput.classList.remove("input-error");
-
-            updateEmailsList()
+            emailInput.focus();
         } else {
             emailInput.classList.add("input-error");
         }
     }
 
-    function updateEmailsList() {
+    function addEmailToEmailsList(email, isWrong = false) {
+        const emailListContainer = document.getElementById("emailListContainer");
+        const emailsNumber = document.getElementById("emailsNumber");
+        emailsNumber.innerText = `(${assignedEmails.length})`;
+
+        const emailDiv = document.createElement("div");
+        emailDiv.className = `rounded d-flex flex-row p-2 ${assignedEmails.length != 1 ? "mt-2" : ""} ${isWrong ? "input-error" : "border"}`;
+        emailDiv.innerHTML = `
+                <span class="text-truncate me-2">${email}</span>
+                <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+            `;
+
+        const deleteButton = emailDiv.querySelector("button");
+        deleteButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const indexToRemove = assignedEmails.indexOf(email);
+            if (indexToRemove !== -1) {
+                assignedEmails.splice(indexToRemove, 1);
+                emailDiv.remove();
+            }
+            removeFromWrongEmails(email);
+            emailsNumber.innerText = `(${assignedEmails.length})`
+        });
+
+        emailListContainer.appendChild(emailDiv);
+    }
+
+    function removeFromWrongEmails(email) {
+        const indexToRemove = wrongEmails.indexOf(email);
+        if (indexToRemove !== -1) {
+            wrongEmails.splice(indexToRemove, 1);
+
+            if (wrongEmails.length === 0) {
+                validationText.classList.add('d-none');
+            }
+        }
+    }
+
+    function showWrongEmails() {
         const emailListContainer = document.getElementById("emailListContainer");
         const emailsNumber = document.getElementById("emailsNumber");
         emailListContainer.innerHTML = "";
@@ -163,31 +215,11 @@ ATRYBUTY:
             const isWrong = wrongEmails.includes(email);
             if (isWrong) anyWrong = true;
 
-            const emailDiv = document.createElement("div");
-            emailDiv.className = `rounded d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""} ${isWrong ? "input-error" : "border"}`;
-            emailDiv.innerHTML = `
-                <span class="text-truncate me-2">${email}</span>
-                <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
-            `;
-
-            emailListContainer.appendChild(emailDiv);
-
-            const deleteButton = emailDiv.querySelector("button");
-            deleteButton.addEventListener("click", function (event) {
-                event.preventDefault();
-
-                const indexToRemove = parseInt(deleteButton.getAttribute("data-index"));
-                assignedEmails.splice(indexToRemove, 1);
-                updateEmailsList();
-            });
-
-            emailListContainer.appendChild(emailDiv);
+            addEmailToEmailsList(email, isWrong);
         });
 
         if (anyWrong)
-            validationText.classList.remove('d-none')
-        else 
-            validationText.classList.add('d-none')
+            validationText.classList.remove('d-none');
     }
 
 </script>

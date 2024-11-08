@@ -2,7 +2,7 @@
 {
     public abstract class Mistake
     {
-        public string Description { get; protected set; } = "Niesprecyzowany błąd.";
+        public string Description { get; protected set; } = "Niesprecyzowany błąd";
         public abstract int Quantity { get; }
 
         public abstract void GenerateDescription();
@@ -24,13 +24,11 @@
             return result;
         }
 
-        public static string GenerateNoteMistakeDescription(List<string> voices, int barIndex, int verticalIndex)
+        public static string GenerateNoteMistakeDescription(string voice, int barIndex, int verticalIndex)
         {
-            if (voices.Count == 0)
-                return "";
-
-            string postfix = voices.Count == 1 ? "u" : "ów";
-            return $"Błędy głos{postfix} [{string.Join(", ", voices)}] w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}.";
-        }
+            return voice == string.Empty ?
+                $"Brakujący głos w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}." : 
+                $"Błędy głos {voice} w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}.";
+        }            
     }
 }

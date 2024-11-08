@@ -2,33 +2,35 @@
 @model Main.Pages.GroupDetailsModel
 @{
     var teacherRequests = Model.Group.Requests.Where(q => q.ForTeacher).Select(q => q.User);
-
     var studentRequests = Model.Group.Requests.Where(q => !q.ForTeacher).Select(q => q.User);
-
     var teachers = Model.Group.Teachers;
-
     var students = Model.Group.Students;
 }
 
+
 <div class="h-100 w-100 d-flex flex-row pb-3">
     <form method="post" asp-page-handler="DeleteUser" id="formForDeleteUser">
-        <input type="hidden" asp-for="GroupId" value="@Model.Group.Id"/>
-        <input type="hidden" asp-for="UserId" value="" id="userToRemoveId"/>
+        <input type="hidden" asp-for="GroupId" value="@Model.Group.Id" />
+        <input type="hidden" asp-for="RemoveFromStudents" value="" id="deleteUserFromStudents" />
+        <input type="hidden" asp-for="UserId" value="" id="deleteUserId" />
     </form>
     <form method="post" asp-page-handler="AddUsers" id="formForAddUsers">
-        <input type="hidden" asp-for="GroupId" value="@Model.Group.Id"/>
-        <input type="hidden" asp-for="AsAdmins" value="" id="addUserAsAdmins"/>
-        <input type="hidden" asp-for="EmailsAsString" value="" id="addUsersEmails"/>
+        <input type="hidden" asp-for="GroupId" value="@Model.Group.Id" />
+        <input type="hidden" asp-for="AsAdmins" value="" id="addUserAsAdmins" />
+        <input type="hidden" asp-for="EmailsAsString" value="" id="addUsersEmails" />
     </form>
-    <div class="d-none d-lg-inline h-100 bg-white shadow rounded d-flex flex-column p-3 me-3" style="width: 250px; min-width: 250px;">
+    <div class="d-none d-lg-inline h-100 bg-white shadow rounded d-flex flex-column p-3 me-3"
+        style="width: 250px; min-width: 250px;">
         <form method="post" asp-page-handler="RedirectToIndexOwned" class="mb-2">
-            <button type="submit" class="w-100 btn d-flex align-items-center justify-content-start p-3 @(Model.IsAdmin ? "btn-primary" : "btn-outline-dark hover-primary")">
+            <button type="submit"
+                class="w-100 btn d-flex align-items-center justify-content-start p-3 @(Model.IsAdmin ? "btn-primary" : "btn-outline-dark hover-primary")">
                 <i class="fas fa-user icon-sm me-2"></i>
                 <span>Posiadane grupy</span>
             </button>
         </form>
         <form method="post" asp-page-handler="RedirectToIndexJoined">
-            <button type="submit" class="w-100 btn d-flex align-items-center justify-content-start p-3 @(!Model.IsAdmin ? "btn-primary" : "btn-outline-dark hover-primary")">
+            <button type="submit"
+                class="w-100 btn d-flex align-items-center justify-content-start p-3 @(!Model.IsAdmin ? "btn-primary" : "btn-outline-dark hover-primary")">
                 <i class="fas fa-user-group icon-sm me-2"></i>
                 <span>Dołączone grupy</span>
             </button>
@@ -41,12 +43,12 @@
 
             <div class="d-none d-md-flex flex-row">
                 <button id="usersButton" onclick="switchTab(0)"
-                        class="btn btn-primary d-flex align-items-center p-3 me-3">
+                    class="btn btn-primary d-flex align-items-center p-3 me-3">
                     <i class="fas fa-user-group icon-sm me-2"></i>
                     <span>Uczestnicy</span>
                 </button>
                 <button id="quizesButton" onclick="switchTab(1)"
-                        class="btn btn-outline-dark hover-primary d-flex align-items-center p-3">
+                    class="btn btn-outline-dark hover-primary d-flex align-items-center p-3">
                     <i class="fas fa-music icon-sm me-2"></i>
                     <span>Quizy</span>
                 </button>
@@ -61,7 +63,8 @@
         </div>
 
         <div id="usersSection" class="h-100 d-flex flex-row overflow-auto px-3">
-            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3" style="min-width: 200px">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3"
+                style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Uczestnicy</span>
                 </div>
@@ -71,49 +74,64 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto">(@(students.Count()))</span>
+                        <span class="me-auto" id="student-list-count">(@(students.Count()))</span>
                     </div>
 
                     <div class="d-flex flex-column">
+                        @{
+                            int studentIndex = 0;
+                        }
                         @foreach (var student in students)
                         {
-                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
+                                id="students-list-element-@(studentIndex)">
                                 <span class="text-truncate me-2">@(student.FullName)</span>
-                                <button type="button" class="ms-auto btn-close" aria-label="Close"
-                                        data-bs-toggle="modal" data-bs-target="#deleteUserPopup"
-                                        data-user-mail="@(student.Email)" data-on-delete="deleteUser(@(student.Id))"></button>
-                                    </div>
+                                @if (Model.IsAdmin)
+                                {
+                                    <button type="button" class="ms-auto btn-close" aria-label="Close" data-bs-toggle="modal"
+                                        data-bs-target="#deleteUserPopup" data-user-mail="@(student.Email)"
+                                        data-on-delete="deleteUser(`@(student.Id)`, true, @(studentIndex))"></button>
                                 }
-                    </div>
-
-                    <div class="d-flex flex-row fw-bold mb-2">
-                        <span class="me-1">Oczekujący</span>
-                        <span class="me-auto">(@(studentRequests.Count()))</span>
-                    </div>
-
-                    <div class="d-flex flex-column">
-                        @foreach (var studentRequest in studentRequests)
-                        {
-                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
-                                <span class="text-truncate me-2">@(studentRequest.Email)</span>
                             </div>
+                            studentIndex++;
                         }
                     </div>
 
+
+                    @if (Model.IsAdmin)
+                    {
+                        <div class="d-flex flex-row fw-bold mb-2">
+                            <span class="me-1">Oczekujący</span>
+                            <span class="me-auto" id="student-requests-count">(@(studentRequests.Count()))</span>
+                        </div>
+
+                        <div class="d-flex flex-column" id="student-requests-list">
+                            @foreach (var studentRequest in studentRequests)
+                            {
+                                <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                                    <span class="text-truncate me-2">@(studentRequest.Email)</span>
+                                </div>
+                            }
+                        </div>
+
+                    }
+
                 </div>
 
-                <hr class="m-0 border border-1" />
-
-                <div class="rounded-bottom d-flex flex-row fw-bold p-2">
-                    <button class="btn btn-primary mx-auto"
-                            data-bs-toggle="modal" data-bs-target="#addUsersPopup"
+                @if (Model.IsAdmin)
+                {
+                    <hr class="m-0 border border-1" />
+                    <div class="rounded-bottom d-flex flex-row fw-bold p-2">
+                        <button class="btn btn-primary mx-auto" data-bs-toggle="modal" data-bs-target="#addUsersPopup"
                             data-adding-admins="false" data-callback-name="addUsers">
-                        Dodaj uczestników
-                    </button>
-                </div>
+                            Dodaj uczestników
+                        </button>
+                    </div>
+                }
             </div>
 
-            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column" style="min-width: 200px">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column"
+                style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Administratorzy</span>
                 </div>
@@ -123,7 +141,7 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto">(@(teachers.Count()+1))</span>
+                        <span class="me-auto" id="teacher-list-count">(@(teachers.Count() + 1))</span>
                     </div>
 
                     <div class="d-flex flex-column">
@@ -132,47 +150,61 @@
 
                             <span class="text-truncate me-2">@(Model.GroupMaster.FullName)</span>
                         </div>
+                        @{
+                            int teacherIndex = 0;
+                        }
                         @foreach (var teacher in teachers)
                         {
-                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
+                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
+                                id="teachers-list-element-@(teacherIndex)">
                                 <span class="text-truncate me-2">@(teacher.FullName)</span>
 
-                                <button type="button" class="ms-auto btn-close" aria-label="Close"
-                                            data-bs-toggle="modal" data-bs-target="#deleteUserPopup"
-                                            data-user-mail="@(teacher.Email)" data-on-delete="deleteUser(@(teacher.Id))"></button>
+                                @if (Model.IsMaster)
+                                {
+                                    <button type="button" class="ms-auto btn-close" aria-label="Close" data-bs-toggle="modal"
+                                        data-bs-target="#deleteUserPopup" data-user-mail="@(teacher.Email)"
+                                        data-on-delete="deleteUser(`@(teacher.Id)`, false, @(teacherIndex))"></button>
+                                }
                             </div>
+                            teacherIndex++;
                         }
                     </div>
 
-                    <div class="d-flex flex-row fw-bold mb-2">
-                        <span class="me-1">Oczekujący</span>
-                        <span class="me-auto">(@(teacherRequests.Count()))</span>
-                    </div>
+                    @if (Model.IsMaster)
+                    {
+                        <div class="d-flex flex-row fw-bold mb-2">
+                            <span class="me-1">Oczekujący</span>
+                            <span class="me-auto" id="teacher-requests-count">(@(teacherRequests.Count()))</span>
+                        </div>
 
-                    <div class="d-flex flex-column">
-                        @foreach (var teacherRequest in teacherRequests)
-                        {
-                            <div class="bg-transparent rounded-bottom rounded border d-flex flex-row p-2 mb-2">
-                                <span class="text-truncate me-2">@(teacherRequest.Email)</span>
-                            </div>
-                        }
-                    </div>
+                        <div class="d-flex flex-column" id="teacher-requests-list">
+                            @foreach (var teacherRequest in teacherRequests)
+                            {
+                                <div class="bg-transparent rounded-bottom rounded border d-flex flex-row p-2 mb-2">
+                                    <span class="text-truncate me-2">@(teacherRequest.Email)</span>
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
 
-                <hr class="m-0 border border-1" />
+                @if (Model.IsMaster)
+                {
+                    <hr class="m-0 border border-1" />
 
-                <div class="bg-transparent d-flex flex-row fw-bold p-2">
-                    <button class="btn btn-primary mx-auto"
-                            data-bs-toggle="modal" data-bs-target="#addUsersPopup"
+                    <div class="bg-transparent d-flex flex-row fw-bold p-2">
+                        <button class="btn btn-primary mx-auto" data-bs-toggle="modal" data-bs-target="#addUsersPopup"
                             data-adding-admins="true" data-callback-name="addUsers">
-                        Dodaj administratorów
-                    </button>
-                </div>
+                            Dodaj administratorów
+                        </button>
+                    </div>
+                }
             </div>
         </div>
 
         <div id="quizesSection" class="h-100 d-flex flex-row overflow-auto px-3 d-none">
-            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3" style="min-width: 200px">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3"
+                style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Aktywne</span>
                 </div>
@@ -180,10 +212,13 @@
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @{var first = true;}
+                    @{
+                        var first = true;
+                    }
                     @foreach (var quiz in Model.Group.Quizzes)
                     {
-                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
+                        <div
+                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
                             <div class="flex-grow-1 d-flex flex-column">
                                 <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
@@ -191,7 +226,8 @@
                                     <i class="far fa-clock icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Pozostało:</span>
                                     <span id="to-solve-time-@(quiz.Id)">
-                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
+                                    PRZEKOPIOWAĆ Z EKRANU CREATED*@
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
@@ -209,7 +245,8 @@
                             @if (!Model.IsAdmin)
                             {
                                 <div class="d-flex flex-column h-100">
-                                    <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
+                                    <a asp-page="/Solve" asp-route-code="@(quiz.Code)"
+                                        class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
                                 </div>
                             }
                         </div>
@@ -218,7 +255,8 @@
                 </div>
             </div>
 
-            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column" style="min-width: 200px">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column"
+                style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
                     <span class="mx-auto">Zaplanowane</span>
                 </div>
@@ -226,10 +264,13 @@
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @{first = true;}
-                    @foreach(var quiz in Model.Group.Quizzes)
+                    @{
+                        first = true;
+                    }
+                    @foreach (var quiz in Model.Group.Quizzes)
                     {
-                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first? "mt-2" : "")">
+                        <div
+                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first? "mt-2" : "")">
                             <div class="flex-grow-1 d-flex flex-column">
                                 <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
@@ -237,7 +278,8 @@
                                     <i class="far fa-clock icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Dostępne za:</span>
                                     <span id="future-quiz-time-@(quiz.Id)">
-                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
+                                    PRZEKOPIOWAĆ Z EKRANU CREATED*@
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
@@ -256,7 +298,8 @@
                             @if (Model.IsAdmin)
                             {
                                 <div class="d-flex flex-column h-100">
-                                    <a asp-page="/Creator" asp-route-id="@(quiz.Id)" class="btn btn-primary ms-auto mt-auto">Edytuj</a>
+                                    <a asp-page="/Creator" asp-route-id="@(quiz.Id)"
+                                        class="btn btn-primary ms-auto mt-auto">Edytuj</a>
                                 </div>
                             }
                         </div>
@@ -302,60 +345,122 @@
         smallTabSelect.value = tabIndex;
     }
 
-    function deleteUser(userId) {
-        //TODO: DELETE USER WITH ID, REFRESH PAGE
+    async function deleteUser(userId, fromStudents, divIndex) {
+        document.getElementById("deleteUserId").value = userId;
+        document.getElementById("deleteUserFromStudents").value = fromStudents;
 
-        document.getElementById("userToRemoveId").value = userId;
-        document.getElementById("formForDeleteUser").submit();
-
-        console.log("deleting user " + userId);
-    }
-
-    async function addUsers(userEmails, areAdmins) {
-
-        document.getElementById("addUserAsAdmins").value = areAdmins;
-        document.getElementById("addUsersEmails").value = userEmails;
-        form = document.getElementById("formForAddUsers");
-
+        const form = document.getElementById("formForDeleteUser");
         const formData = new FormData(form);
 
-        console.log("admins " + areAdmins)
-        console.log("users " + userEmails);
-
         try {
-            
             const response = await fetch(form.action, {
                 method: form.method,
                 body: formData,
-                redirect: 'manual'
+                redirect: 'follow'
             });
 
-            if (response.status >= 300 && response.status < 400) {
-                const redirectUrl = response.headers.get('Location');
-                if (redirectUrl) {
-                    console.log('Redirect to:', redirectUrl);
-                    // Optionally navigate to the new page
-                    window.location.href = redirectUrl;
-                }
-                else {
-                    console.log('Redirect detected, but no Location header found');
-                }
-            }
-            else {
-                // Handle non-redirect response as usual
-                const result = await response.json();
-                console.log(result);
-                return result;
+            if (response.status === 403) {
+                window.location.href = '/Identity/Account/Login';
             }
 
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+
+            // Handle JSON responses (for normal operation)
+            if (response.headers.get('content-type')?.includes('application/json')) {
+                const result = await response.json();
+
+                if (result.success) {
+                    const listElementId = fromStudents ? "students-list-element-" + divIndex : "teachers-list-element-" + divIndex;
+                    const listElement = document.getElementById(listElementId);
+                    if (listElement) {
+                        listElement.remove();
+                    }
+
+                    const countElement = document.getElementById(fromStudents ? "student-list-count" : "teacher-list-count");
+                    const currentCount = parseInt(countElement.textContent.match(/\d+/)[0]);
+                    const newCount = currentCount - 1;
+                    countElement.textContent = `(${newCount})`;
+                }
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    }
+
+    async function addUsers(userEmails, areAdmins) {
+        document.getElementById("addUserAsAdmins").value = areAdmins;
+        document.getElementById("addUsersEmails").value = userEmails;
+
+        const form = document.getElementById("formForAddUsers");
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                redirect: 'follow'
+            });
+
+            // Handle Forbidden (403) response
+            if (response.status === 403) {
+                window.location.href = '/Identity/Account/Login';
+                return null;
+            }
+
+            // Handle redirect responses
+            if (response.redirected) {
+                window.location.href = response.url;
+                return null;
+            }
+
+            // Handle JSON responses (for normal operation)
+            if (response.headers.get('content-type')?.includes('application/json')) {
+                const result = await response.json();
+
+                if (result.notFoundEmails) {
+                    return result.notFoundEmails;
+                }
+
+                if (result.success) {
+                    console.log('Users added successfully');
+                    addEmailsToWaitList(userEmails, areAdmins);
+                    return null;
+                }
+            }
+
+            return null;
         }
         catch (error) {
             console.error('An error occurred:', error);
+            return null;
         }
+    }
 
-        return null;
+    function addEmailsToWaitList(userEmails, areAdmins) {
+        const countElement = document.getElementById(areAdmins ? "teacher-requests-count" : "student-requests-count");
+        const listElement = document.getElementById(areAdmins ? "teacher-requests-list" : "student-requests-list");
+
+        // Update count
+        const currentCount = parseInt(countElement.textContent.match(/\d+/)[0]);
+        const newCount = currentCount + userEmails.length;
+        countElement.textContent = `(${newCount})`;
+
+        // Add new elements
+        userEmails.forEach(email => {
+            const newRequestDiv = document.createElement('div');
+            newRequestDiv.className = 'bg-transparent rounded-bottom rounded border d-flex flex-row p-2 mb-2';
+
+            const emailSpan = document.createElement('span');
+            emailSpan.className = 'text-truncate me-2';
+            emailSpan.textContent = email;
+
+            newRequestDiv.appendChild(emailSpan);
+            listElement.appendChild(newRequestDiv);
+        });
+
     }
 
     switchTab(0);
-
 </script>
