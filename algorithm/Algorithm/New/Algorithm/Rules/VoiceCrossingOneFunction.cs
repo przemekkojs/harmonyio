@@ -19,8 +19,9 @@ namespace Algorithm.New.Algorithm.Rules
             bool sopranoAlto = Interval.IsLower(stack.Soprano, stack.Alto);
             bool altoTenore = Interval.IsLower(stack.Alto, stack.Tenore);
             bool tenoreBass = Interval.IsLower(stack.Tenore, stack.Bass);
+            bool bassNotNull = stack.Bass != null;
 
-            return sopranoAlto && altoTenore && tenoreBass;
+            return sopranoAlto && altoTenore && tenoreBass && bassNotNull;
         }
     }
 }

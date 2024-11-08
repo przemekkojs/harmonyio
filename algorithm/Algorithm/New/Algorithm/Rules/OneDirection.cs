@@ -36,7 +36,13 @@ namespace Algorithm.New.Algorithm.Rules
 
             for (int index = 1; index < length; index++)
             {
-                currentUp = Interval.IsLower(stack1.Notes[index], stack1.Notes[index]);
+                var note1 = stack1.Notes[index];
+                var note2 = stack2.Notes[index];
+
+                if (note1 == null || note2 == null)
+                    continue;
+
+                currentUp = Interval.IsLower(note1, note2);
 
                 if (currentUp != lastUp)
                     return true;

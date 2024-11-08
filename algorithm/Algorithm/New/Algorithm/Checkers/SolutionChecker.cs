@@ -70,7 +70,7 @@ namespace Algorithm.New.Algorithm.Checkers
                     {
                         var stack = solution.Stacks[index];
                         
-                        if (!rule.IsSatisfied(stack))
+                        if (!rule.IsSatisfied(stacks: stack))
                         {
                             var toAdd = new StackMistake([stack], rule);
                             result.Add(toAdd);
@@ -84,7 +84,7 @@ namespace Algorithm.New.Algorithm.Checkers
                         var stack1 = solution.Stacks[index];
                         var stack2 = solution.Stacks[index + 1];
 
-                        if (!rule.IsSatisfied(stack1, stack2))
+                        if (!rule.IsSatisfied(stacks: [stack1, stack2]))
                         {
                             var toAdd = new StackMistake([stack1, stack2], rule);
                             result.Add(toAdd);

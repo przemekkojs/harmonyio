@@ -34,9 +34,18 @@ namespace Algorithm.New.Algorithm.Rules
                 var pair1Interval = Interval.SemitonesBetween(pair1.Item1, pair1.Item2);
                 var pair2Interval = Interval.SemitonesBetween(pair2.Item1, pair2.Item2);
 
+                var note1_1 = pair1.Item1;
+                var note1_2 = pair1.Item2;
+                var note2_1 = pair2.Item1;
+                var note2_2 = pair2.Item2;
+
+                if (new List<Note?>() { note1_1, note1_2, note2_1, note2_2 }.Contains(null))
+                    continue;
+
                 // Wsm tu jest jedyna zmiana między tą zasadą a ParallelFifths, trzeba by coś
                 // z tym zrobić, ale bardzo nie kłuje w oczy, więc na razie zostawiam
                 // Do zobaczenia za 1000 PR-ów XDDDDD
+                // 8.11.2024: Na razie jestem na 4., spoko idzie
                 if (pair1Interval == 12 && pair2Interval == 12)
                     return false;
             }

@@ -30,7 +30,7 @@ namespace Algorithm.New.Algorithm.Rules
                 tenoreSatisfied1 && tenoreSatisfied2;
         }
 
-        private bool NoteCheckResult(Note? note1, Note? note2)
+        private static bool NoteCheckResult(Note? note1, Note? note2)
         {
             if (note1 != null && note2 != null)
                 return Interval.IsLower(note1, note2);

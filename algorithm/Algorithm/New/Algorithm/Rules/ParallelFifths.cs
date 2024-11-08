@@ -31,8 +31,16 @@ namespace Algorithm.New.Algorithm.Rules
                 var pair1 = pair.Item1;
                 var pair2 = pair.Item2;
 
-                var pair1Interval = Interval.SemitonesBetween(pair1.Item1, pair1.Item2);
-                var pair2Interval = Interval.SemitonesBetween(pair2.Item1, pair2.Item2);
+                var note1_1 = pair1.Item1;
+                var note1_2 = pair1.Item2;
+                var note2_1 = pair2.Item1;
+                var note2_2 = pair2.Item2;
+
+                if (new List<Note?>() { note1_1, note1_2, note2_1, note2_2 }.Contains(null))
+                    continue;
+
+                var pair1Interval = Interval.SemitonesBetween(note1_1, note1_2);
+                var pair2Interval = Interval.SemitonesBetween(note2_1, note2_2);
 
                 if (pair1Interval == 7 && pair2Interval == 7)
                     return false;
