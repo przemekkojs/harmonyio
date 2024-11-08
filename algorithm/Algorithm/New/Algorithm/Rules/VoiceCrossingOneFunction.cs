@@ -9,12 +9,12 @@ namespace Algorithm.New.Algorithm.Rules
             description: "Czy nuty w ramach jednej funkcji nie krzyżują się wysokościami w ramach sąsiednich głosów?",
             oneFunction: true) { }
 
-        public override bool IsSatisfied(params Music.Stack[] functions)
+        public override bool IsSatisfied(params Music.Stack[] stacks)
         {
-            if (!ValidateParametersCount(functions))
+            if (!ValidateParametersCount(stacks))
                 return false;
 
-            var stack = functions[0];
+            var stack = stacks[0];
 
             bool sopranoAlto = Interval.IsLower(stack.Soprano, stack.Alto);
             bool altoTenore = Interval.IsLower(stack.Alto, stack.Tenore);

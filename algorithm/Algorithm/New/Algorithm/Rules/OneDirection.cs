@@ -15,13 +15,13 @@ namespace Algorithm.New.Algorithm.Rules
             name: "Ruch jednokierunkowy",
             description: "Czy w ramach dwóch funkcji, wszystkie głosy wykonały ruch w jednym kierunku?") { }
 
-        public override bool IsSatisfied(params Stack[] functions)
+        public override bool IsSatisfied(params Stack[] stacks)
         {
-            if (!ValidateParametersCount(functions))
+            if (!ValidateParametersCount(stacks))
                 return false;
 
-            var stack1 = functions[0];
-            var stack2 = functions[1];
+            var stack1 = stacks[0];
+            var stack2 = stacks[1];
 
             int length = stack1.Notes.Count;
 

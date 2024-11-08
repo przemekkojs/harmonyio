@@ -32,12 +32,17 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
             // Ustawienie nut w stosach
             foreach (var key in noteVerticals.Keys)
             {
-                var noteList = noteVerticals[key];
+                var noteList = noteVerticals[key] ?? [];
 
                 var soprano = GetNoteByVoice(Constants.SOPRANO, noteList);
                 var alto = GetNoteByVoice(Constants.ALTO, noteList);
                 var tenore = GetNoteByVoice(Constants.TENORE, noteList);
-                var bass = GetNoteByVoice(Constants.BASS, noteList);                
+                var bass = GetNoteByVoice(Constants.BASS, noteList);
+
+                var parsedSoprano = NoteParser.Parser.ParseJsonNoteToNote(soprano);
+                var parserAlto = NoteParser.Parser.ParseJsonNoteToNote(alto);
+                var parsedTenore = NoteParser.Parser.ParseJsonNoteToNote(tenore);
+                var parsedBass = NoteParser.Parser.ParseJsonNoteToNote(bass);
 
                 var toAdd = new Stack(
                     new Music.Index()
@@ -46,10 +51,11 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                         Position = key.Item2,
                         Duration = noteList[0].Value
                     },
-                    soprano != null ? NoteParser.Parser.ParseJsonNoteToNote(soprano).Note : null,
-                    alto != null ? NoteParser.Parser.ParseJsonNoteToNote(alto).Note : null,
-                    tenore != null ? NoteParser.Parser.ParseJsonNoteToNote(tenore).Note : null,
-                    bass != null ? NoteParser.Parser.ParseJsonNoteToNote(bass).Note : null
+
+                    parsedSoprano?.Note,
+                    parserAlto?.Note,
+                    parsedTenore?.Note,
+                    parsedBass?.Note
                 );
 
                 stacks.Add(toAdd);
@@ -69,10 +75,16 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
         }
 
         // TODO: Make a one-liner using FirstOrDefault<>()
-        private static JsonNote? GetNoteByVoice(string voice, List<JsonNote> notes)
+        private static JsonNote? GetNoteByVoice(string voice, List<JsonNote>? notes)
         {
+            if (notes == null)
+                return null;
+
             foreach(var note in notes)
             {
+                if (note == null)
+                    continue;
+
                 if (note.Voice == voice)
                     return note;
             }

@@ -9,13 +9,13 @@ namespace Algorithm.New.Algorithm.Rules
             name: "Krzyżowanie głosów",
             description: "Czy nuty w obu funkcjach nie krzyżują się wysokościami w ramach tego samego głosu?") { }
 
-        public override bool IsSatisfied(params Stack[] functions)
+        public override bool IsSatisfied(params Stack[] stacks)
         {
-            if (!ValidateParametersCount(functions))
+            if (!ValidateParametersCount(stacks))
                 return false;
 
-            var stack1 = functions[0];
-            var stack2 = functions[1];
+            var stack1 = stacks[0];
+            var stack2 = stacks[1];
 
             bool sopranoSatisfied1 = NoteCheckResult(stack1.Soprano, stack2.Alto);
             bool altoSatisfied1 = NoteCheckResult(stack1.Alto, stack2.Tenore);

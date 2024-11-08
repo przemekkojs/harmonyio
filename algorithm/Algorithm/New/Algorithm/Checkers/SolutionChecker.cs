@@ -41,7 +41,8 @@ namespace Algorithm.New.Algorithm.Checkers
                         continue;
 
                     List<Note?> tmpList = [];
-                    var noteName = note.Name;
+                    var noteName = note?.Name;
+                    noteName ??= string.Empty;
 
                     if (!uniqueNotes.Contains(noteName))
                         tmpList.Add(note);
