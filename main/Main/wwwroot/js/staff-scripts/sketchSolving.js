@@ -1,5 +1,5 @@
 let canvas;
-let canvasWidth = 1264;
+let canvasWidth = 1023;
 let canvasHeight = 800;
 let sketchFont;
 

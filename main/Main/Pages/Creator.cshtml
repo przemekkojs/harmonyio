@@ -6,16 +6,27 @@
     <link rel="stylesheet" href="~/css/creator-style.css" />
 </head>
 
-<form method="post" class="h-100 w-100">
-    <div class="h-100 w-100 d-flex flex-column">
-        <div class="flex-grow-1 d-flex flex-row overflow-auto" style="margin: -20px; padding: 20px">
-            <div class="left-panel bg-white rounded shadow me-3 p-3">
-                <div class="mb-3">
+<form method="post" class="h-100 w-100 d-flex flex-column">
+    <div class="flex-grow-1 d-flex flex-column mb-3">
+        <div class="flex-grow-1 d-flex flex-row overflow-auto">
+            <div class="sidebar d-flex flex-column bg-white rounded shadow me-3 p-3">
+                <div class="mb-auto">
                     <label asp-for="QuizName" class="form-label fw-bold"></label>
                     <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly"
                         placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger"></span>
                 </div>
+
+                <input class="mx-2 p-1 rounded" type="button" value="Test" onclick="confirmExcersises()" />
+                @if (!Model.BrowseOnly)
+                {
+                    <button type="submit" asp-page-handler="Save" class="btn btn-primary btn-std-width mx-auto mt-2"
+                        onclick="confirmExcersises()">Zapisz</button>
+                    @* TODO: DODAĆ ŻEBY BUTTON PUBLIKUJ DZIAŁAŁ (TAK JAK ZAPISZ, ALE OD RAZU OTWIERA POPUP) *@
+                    @* <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
+                        onclick="confirmExcersises()">Opublikuj</button> *@
+                }
+                <a asp-page="Created" class="btn btn-danger btn-std-width mx-auto mt-2">Wyjdź</a>
             </div>
 
             <div class="flex-grow-1 bg-white rounded shadow p-3 d-flex flex-column overflow-auto">
@@ -37,6 +48,7 @@
         </div>
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
+
         <div class="py-3 d-flex align-items-center">
             <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
             @* <input type="button" value="Test" onclick="confirmExcersises()" /> *@

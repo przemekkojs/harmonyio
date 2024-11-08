@@ -1,9 +1,4 @@
-﻿.left-panel {
-    width: 250px;
-    min-width: 250px;
-}
-
-.student-row {
+﻿.student-row {
     width: 100%;
     height: 40px;
     cursor: pointer;
@@ -22,16 +17,16 @@
 }
 
 .focused-student .student-div {
-    background-color: #0d6efd;
+    background-color: var(--bs-secondary);
     color: white;
 }
 .unfocused-student .student-div {
     background-color: white;
-    border: 1px solid #0d6efd;
-    color: #0d6efd;
+    border: 1px solid var(--bs-secondary);
+    color: var(--bs-secondary);
 }
 .student-row:hover .student-div {
-    background-color: #0d6efd;
+    background-color: var(--bs-secondary);
     color: white;
 }
 
@@ -59,5 +54,5 @@ input.points-input::-webkit-outer-spin-button {
 input.points-input {
     -moz-appearance: textfield;
     text-align: center;
-    width: 60px;
+    width: 50px;
 }
