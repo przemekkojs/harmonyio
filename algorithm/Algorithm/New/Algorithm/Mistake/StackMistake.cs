@@ -16,6 +16,7 @@ namespace Algorithm.New.Algorithm.Mistake
             BarIndexes = barIndexes;
             VerticalIndexes = verticalIndexes;
             RuleName = ruleName;
+            GenerateDescription();
         }
 
         public StackMistake(List<Stack> stacks, Rule? rule)
@@ -41,6 +42,8 @@ namespace Algorithm.New.Algorithm.Mistake
             VerticalIndexes = VerticalIndexes
                 .Distinct()
                 .ToList();
+
+            GenerateDescription();
         }
 
         public override int Quantity => VerticalIndexes.Count;

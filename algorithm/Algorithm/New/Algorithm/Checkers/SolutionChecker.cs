@@ -1,6 +1,7 @@
 ﻿using Algorithm.New.Algorithm.Mistake;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
+using System.Diagnostics;
 
 namespace Algorithm.New.Algorithm.Checkers
 {
@@ -35,22 +36,29 @@ namespace Algorithm.New.Algorithm.Checkers
                     .Distinct()
                     .ToList();
 
+                int noteIndex = 0;
+
                 foreach (var note in stackNotes)
                 {
                     if (note == null)
-                        continue;
-
-                    List<Note?> tmpList = [];
-                    var noteName = note.Name;
-
-                    if (!uniqueNotes.Contains(noteName))
-                        tmpList.Add(note);
-
-                    if (tmpList.Count > 0)
                     {
-                        var toAppend = new NoteMistake(tmpList, stack);
+                        var voice = noteIndex switch { 0 => "S", 1 => "A", 2 => "T", _ => "B" };
+                        var toAppend = NoteMistake.CreateEmptyNoteMistake(stack.Index.Bar, stack.Index.Position, voice);
                         result.Add(toAppend);
                     }
+                    else
+                    {
+                        var noteName = note?.Name;
+                        noteName ??= string.Empty;
+
+                        if (!uniqueNotes.Contains(noteName))
+                        {
+                            var toAppend = new NoteMistake(note, stack);
+                            result.Add(toAppend);
+                        }
+                    }
+
+                    noteIndex++;
                 }
             }
 
@@ -69,7 +77,7 @@ namespace Algorithm.New.Algorithm.Checkers
                     {
                         var stack = solution.Stacks[index];
                         
-                        if (!rule.IsSatisfied(stack))
+                        if (!rule.IsSatisfied(stacks: stack))
                         {
                             var toAdd = new StackMistake([stack], rule);
                             result.Add(toAdd);
@@ -83,7 +91,7 @@ namespace Algorithm.New.Algorithm.Checkers
                         var stack1 = solution.Stacks[index];
                         var stack2 = solution.Stacks[index + 1];
 
-                        if (!rule.IsSatisfied(stack1, stack2))
+                        if (!rule.IsSatisfied(stacks: [stack1, stack2]))
                         {
                             var toAdd = new StackMistake([stack1, stack2], rule);
                             result.Add(toAdd);

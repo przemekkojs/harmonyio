@@ -77,6 +77,9 @@
     };
     const excersises = @Json.Serialize(Model.Quiz.Excersises);
     const questions = excersises.map(e => JSON.parse(e.question));
+
+    console.log(excersises); // TODO: Wywalić, jak się naprawi parsowanie
+    console.log(questions); // TODO: Wywalić
 </script>
 
 <script src="~/lib/p5/p5.min.js"></script>

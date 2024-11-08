@@ -559,14 +559,23 @@ class TwoNotes {
   }
 
   #drawHintArea() {
-    if(this.note1 !== null && this.note2 !== null) {
+    if (this.note1 !== null && this.note2 !== null) {
       return;
     }
-    if((this.note1 !== null && this.note2 === null) || this.parent.shouldDrawHintArea(this.isUpperStaff)) {
+    if (
+      (this.note1 !== null && this.note2 === null) ||
+      this.parent.shouldDrawHintArea(this.isUpperStaff)
+    ) {
       push();
-      fill(0,255,0, 15);
+      fill(0, 255, 0, 15);
       noStroke();
-      rect(this.x, this.y, this.getWidth(), this.height)
+      const thirdW = this.getWidth() / 3;
+      rect(
+        this.parent.getNotesCenterLineX() - thirdW,
+        this.y,
+        thirdW * 2,
+        this.height
+      );
       pop();
     }
   }

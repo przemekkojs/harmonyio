@@ -5,15 +5,20 @@ namespace Algorithm.New.Algorithm.Parsers.NoteParser
 {
     public static class Parser
     {
-        public static NoteParseResult ParseJsonToNote(string jsonString)
+        public static NoteParseResult? ParseJsonToNote(string jsonString)
         {
-            JsonNote? parsedNote = JsonConvert.DeserializeObject<JsonNote>(jsonString) ?? throw new ArgumentException("Parse error.");
+            JsonNote? parsedNote = JsonConvert
+                .DeserializeObject<JsonNote>(jsonString) ??
+                throw new ArgumentException("Parse error.");
 
             return ParseJsonNoteToNote(parsedNote);
         }
 
-        public static NoteParseResult ParseJsonNoteToNote(JsonNote parsedNote)
+        public static NoteParseResult? ParseJsonNoteToNote(JsonNote? parsedNote)
         {
+            if (parsedNote == null)
+                return null;
+
             var accidental = parsedNote.AccidentalName;
             var (name, octave) = Constants.NoteMappings[(parsedNote.Line, parsedNote.Voice)];
 
@@ -26,10 +31,13 @@ namespace Algorithm.New.Algorithm.Parsers.NoteParser
             return new NoteParseResult(noteResult, parsedNote.Value, parsedNote.BarIndex, parsedNote.VerticalIndex);
         }
 
-        public static JsonNote ParseNoteToJsonNote(Note note, string voice, int rhytmicValue, int bar, int stackInBar)
+        public static JsonNote? ParseNoteToJsonNote(Note? note, string voice, int rhytmicValue, int bar, int stackInBar)
         {
-            if (note == null || rhytmicValue <= 0)
-                throw new ArgumentException("Arguments cannot be null or 0.");
+            if (note == null)
+                return null;
+
+            if (rhytmicValue <= 0)
+                throw new ArgumentException("Arguments cannot be 0.");
 
             // Ta zmienna zwraca wszystkie nuty, które mają określoną wysokość - są na danej linii. Np. nuta G4 może należeć
             // do altu i sopranu jednocześnie.

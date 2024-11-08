@@ -30,15 +30,23 @@ namespace Algorithm.New.Music
         {
             if (soprano != string.Empty)
                 Soprano = new Note(soprano, 4);
+            else
+                Soprano = null;
 
             if (alto != string.Empty)
                 Alto = new Note(alto, 4);
+            else
+                Alto = null;
 
             if (tenore != string.Empty)
                 Tenore = new Note(tenore, 3);
+            else
+                Tenore = null;
 
             if (bass != string.Empty)
                 Bass = new Note(bass, 3);
+            else
+                Bass = null;
 
 
             Index = index;

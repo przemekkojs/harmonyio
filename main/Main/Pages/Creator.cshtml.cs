@@ -18,8 +18,8 @@ namespace Main.Pages
         private readonly ApplicationRepository _repository;
 
         [BindProperty]
-        [Display(Name = "Quiz Name")]
-        [Required(ErrorMessage = "Quiz name is required.")]
+        [Display(Name = "Nazwa quizu")]
+        [Required(ErrorMessage = "Nazwa quizu jest wymagana")]
         public string QuizName { get; set; } = null!;
 
         [BindProperty]
@@ -47,6 +47,7 @@ namespace Main.Pages
             }
 
             var appUser = await _userManager.GetUserAsync(User);
+
             var quiz = await _repository.GetAsync<Quiz>(
                 filter: q => q.Id == id,
                 modifier: q => q.Include(r => r.Excersises)
@@ -76,7 +77,7 @@ namespace Main.Pages
         {
             var currentUser = (await _userManager.GetUserAsync(User))!;
             if (currentUser == null)
-                return RedirectToPage("Error");
+                return RedirectToPage("Login");
 
             if (EditedQuizId == null)
             {
@@ -120,6 +121,12 @@ namespace Main.Pages
                     _repository.Delete(question);
                 }
 
+                if (Questions.Any(q => q == null))
+                {
+                    ModelState.AddModelError(nameof(Questions), "Nie mo¿na dodaæ pustych zadañ.");
+                    return Page();
+                }
+
                 foreach (var question in Questions)
                 {
                     _repository.Add(new Excersise()
@@ -139,11 +146,11 @@ namespace Main.Pages
         {
             if (Questions!.Count == 0)
             {
-                ModelState.AddModelError(nameof(Questions), "At least one excersise is required.");
+                ModelState.AddModelError(nameof(Questions), "Wymagane jest przynajmniej jedno zadanie.");
             }
-            else if (Questions.Any(q => (q == "" || q == null)))
+            else if (Questions.Any(q => q == "" || q == null))
             {
-                ModelState.AddModelError(nameof(Questions), "No excersise can be empty.");
+                ModelState.AddModelError(nameof(Questions), "Nie mo¿na dodaæ pustych zadañ.");
             }
 
             if (!ModelState.IsValid)
