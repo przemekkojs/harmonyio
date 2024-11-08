@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model Main.Pages.GradeModel
 @using Main.Enumerations;
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
@@ -18,26 +18,25 @@
             <div class="fw-bold fs-4 overflow-hidden px-3 flex-shrink-0" style="text-overflow: ellipsis;">
                 @Model.Quiz.Name
             </div>
-            
-            <hr class="m-0 mt-3"/>
+
+            <hr class="m-0 mt-3" />
 
             <div class="overflow-auto flex-grow-1 p-3">
                 @for (int i = 0; i < Model.Users.Count; i++)
                 {
                     <div onclick="selectUser(@i)" class="student-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
-                        <div
-                            class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                        <div class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
                             @Model.Users[i].FullName
                         </div>
                         <div id="user-grade-@i"
-                            class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
+                             class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
                             -
                         </div>
                     </div>
                 }
             </div>
 
-            <hr class="m-0 mb-3"/>
+            <hr class="m-0 mb-3" />
 
             <button type="submit" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz oceny</button>
             <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
@@ -60,9 +59,9 @@
                         </div>
                         <span class="fw-bold me-2">Ocena</span>
                         <select id="grade-select"
-                            onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
-                            class="grade-select bg-transparent form-select border border-secondary text-secondary"
-                            aria-label="Wybierz ocenę">
+                                onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
+                                class="grade-select bg-transparent form-select border border-secondary text-secondary"
+                                aria-label="Wybierz ocenę">
                             <option selected disabled>-</option>
                             @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
                             {
@@ -75,61 +74,68 @@
                             <input id="grade-hidden-@i" type="hidden" asp-for="Grades[i]" />
                         }
                     </div>
-                </div>
 
-                <hr class="my-3"/>
+                    <hr class="my-3" />
 
-                <div class="d-flex flex-row align-items-center">
-                    <div id="excersises-buttons" class="d-flex flex-row align-items-center">
+                    <div class="d-flex flex-row align-items-center">
+                        <div id="excersises-buttons" class="d-flex flex-row align-items-center">
+                        </div>
+                        <div id="div-last-ex">
+                            <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
+                            <button id="btn-last-ex" type="button" onclick="lastQuestion()"
+                                    class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+                        </div>
 
+                        <span class="fw-bold ms-auto me-2">Punkty</span>
+                        <input type="number" id="points" onchange="onPointsChange(this.value)"
+                               onKeyPress="integerKeyPress(event)"
+                               class="form-control points-input border-secondary bg-white" />
+
+                        <span class="fw-bold ms-3 me-2">Max</span>
+                        <input type="number" id="max" onchange="onMaxChange(this.value)"
+                               onKeyPress="integerKeyPress(event)"
+                               class="form-control points-input border-secondary bg-white" />
+
+                        <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
+                            Komentarz
+                        </a>
                     </div>
-                    <div id="div-last-ex">
-                        <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-                        <button id="btn-last-ex" type="button" onclick="lastQuestion()"
-                            class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+                </div>
+
+                <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto">
+                    <div class="flex-grow-1" id="question-area">
+                        <p class="m-0 fw-semibold" id="question">
+                            @* FILLED VIA JS *@
+                        </p>
                     </div>
 
-                    <span class="fw-bold ms-auto me-2">Punkty</span>
-                    <input type="number" id="points" onchange="onPointsChange(this.value)"
-                            onKeyPress="integerKeyPress(event)"
-                            class="form-control points-input border-secondary bg-white" />
-
-                    <span class="fw-bold ms-3 me-2">Max</span>
-                    <input type="number" id="max" onchange="onMaxChange(this.value)"
-                            onKeyPress="integerKeyPress(event)"
-                            class="form-control points-input border-secondary bg-white" />
-
-                    <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
-                        Komentarz
-                    </a>
-                </div>
-            </div>
-
-            <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto">
-                <div class="flex-grow-1" id="question-area">
-                    <p class="m-0 fw-semibold" id="question">
-                        @* FILLED VIA JS *@
-                    </p>
-                </div>
-
-                <div class="mt-3 d-flex flex-row">
-                    @for (int i = 0; i < Model.Excersises.Count; i++)
-                    {
-                        @for (int j = 0; j < Model.Users.Count; j++)
+                    <div class="mt-3 d-flex flex-row">
+                       
+                        @for (int exId = 0; exId < Model.Excersises.Count; exId++)
                         {
-                            <input id="points-hidden-@i-@j" type="hidden" asp-for="Points[j][i]" value="0" />
-                            <input id="max-hidden-@i-@j" type="hidden" asp-for="Maxes[j][i]" value="0" />
-                            <input id="comment-hidden-@i-@j" type="hidden" asp-for="Comments[j][i]" value="" />
+                            @for (int usrId = 0; usrId < Model.Users.Count; usrId++)
+                            {
+                                <input id="points-hidden-@exId-@usrId" type="hidden" asp-for="Points[usrId][exId]" value="0" />
+                                <input id="max-hidden-@exId-@usrId" type="hidden" asp-for="Maxes[usrId][exId]" value="0" />
+                                <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]" value="" />
+                            }
                         }
-                    }
 
-                    <div id="music-staff-div" class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
-                        @* MUSIC STAFF DIV SET VIA JS *@
+                        <div id="music-staff-div" class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+                            @* MUSIC STAFF DIV SET VIA JS *@
+                        </div>
+
+                    </div>
+                    @* TODO: Stylowanie trochę porządniej XD *@
+                    <div style="width: 100%; height: 100%;">
+                        <span>Opinia algorytmu</span>
+                        <textarea readonly id="algorithm-opinions" style="width: 100%; height: 100%; resize: none;" placeholder="Bezbłędnie, gratulacje!">
+
+                        </textarea>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </form>
 
 <div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -141,15 +147,15 @@
             </div>
             <div class="modal-body">
                 <textarea id="comment" rows="8" placeholder="Dodaj komentarz..."
-                    onchange="onCommentChange(this.value)"
-                    class="form-control"></textarea>
+                          onchange="onCommentChange(this.value)"
+                          class="form-control"></textarea>
             </div>
             <div class="modal-footer justify-content-center align-items-center">
                 <button type="button" class="btn btn-secondary btn-sm-width focus-ring" data-bs-dismiss="modal">Zamknij</button>
             </div>
         </div>
     </div>
-</div> 
+</div>
 
 
 <script>
@@ -180,6 +186,7 @@
     const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
     const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToSolutions[u].Select(es => es.Answer))));
+    const algorithmOpinions = null; //TODO;
 
     console.log(questions);
     console.log(userSolutions);
@@ -216,10 +223,10 @@
         );
 
     const userComments = @Html.Raw(JsonConvert.SerializeObject(Model.Comments))
-        ?? Array.from({ length: usernames.length }, () => Array(@Model.Excersises.Count).fill(""));
+            ?? Array.from({ length: usernames.length }, () => Array(@Model.Excersises.Count).fill(""));
 
     const userGrades = @Html.Raw(JsonConvert.SerializeObject(Model.Grades?.Select(g => new[] { g?.ToString() ?? "-", g?.AsString() ?? "-" }) ?? null))
-        ?? Array.from({ length: usernames.length }, () => ["-", "-"]);
+            ?? Array.from({ length: usernames.length }, () => ["-", "-"]);
 
     const studentRows = Array.from(document.querySelectorAll('div.student-row'));
     const currentUserText = document.getElementById("current-user-text");
@@ -299,7 +306,7 @@
         document.getElementById(`user-grade-${currentUserIndex}`).innerText = strValue;
         document.getElementById(`grade-hidden-${currentUserIndex}`).value = value;
     @* document.getElementById("grades-validation-text").innerText = ''; *@
-    }
+        }
 
     function onPointsChange(value) {
         var numValue = Number(value);
@@ -353,7 +360,7 @@
             questionElement.innerText = questions[currentQuestionIndex].question;
             if (questions[currentQuestionIndex].question == '')
                 document.getElementById('question-area').classList.add('d-none');
-            else 
+            else
                 document.getElementById('question-area').classList.remove('d-none');
 
             var score = userScores[currentUserIndex][currentQuestionIndex];
