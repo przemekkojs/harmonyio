@@ -1,9 +1,4 @@
-﻿.left-panel {
-    width: 250px;
-    min-width: 250px;
-}
-
-.student-row {
+﻿.student-row {
     width: 100%;
     height: 40px;
     cursor: pointer;
@@ -59,5 +54,5 @@ input.points-input::-webkit-outer-spin-button {
 input.points-input {
     -moz-appearance: textfield;
     text-align: center;
-    width: 60px;
+    width: 50px;
 }

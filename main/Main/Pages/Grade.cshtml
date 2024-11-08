@@ -3,25 +3,28 @@
 @using Main.Enumerations;
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 
+@{
+    Model.Users = Model.Users.SelectMany(q => Enumerable.Repeat(q, 10)).ToList();
+}
+
 <head>
     <link rel="stylesheet" href="~/css/grade-style.css" />
 </head>
 
 <form method="post" class="h-100 w-100 d-flex flex-column overflow-auto">
     <div class="flex-grow-1 d-flex mb-3 overflow-auto">
-        <div class="left-panel d-flex flex-column bg-white shadow rounded p-3 me-3">
+        <div class="sidebar d-flex flex-column bg-white shadow rounded py-3 me-3">
             <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
-            <div class="fw-bold fs-4 overflow-hidden" style="text-overflow: ellipsis;">
-                Kartkówka 2A
-                @*todo: @Model.Quiz.Name *@
+            <div class="fw-bold fs-4 overflow-hidden px-3 flex-shrink-0" style="text-overflow: ellipsis;">
+                @Model.Quiz.Name
             </div>
             
-            <hr class="m-0 mt-2"/>
+            <hr class="m-0 mt-3"/>
 
-            <div class="overflow-auto flex-grow-1 py-2">
+            <div class="overflow-auto flex-grow-1 p-3">
                 @for (int i = 0; i < Model.Users.Count; i++)
                 {
-                    <div onclick="selectUser(@i)" class="student-row d-flex flex-row mb-2">
+                    <div onclick="selectUser(@i)" class="student-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
                         <div
                             class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
                             @Model.Users[i].FullName
@@ -47,20 +50,18 @@
                         @*SET VIA JS*@
                     </div>
 
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center h-100">
                         <span class="fw-bold me-2">Wynik</span>
-                        <div id="points-text"
-                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap">
+                        <div id="points-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap h-100 align-items-center d-flex">
                             @*SET VIA JS*@
                         </div>
-                        <div id="percentage-text"
-                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4">
+                        <div id="percentage-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4 h-100 align-items-center d-flex">
                             @*SET VIA JS*@
                         </div>
                         <span class="fw-bold me-2">Ocena</span>
                         <select id="grade-select"
                             onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
-                            class="grade-select bg-transparent fw-bold form-select border border-secondary text-secondary rounded px-2 py-1"
+                            class="grade-select bg-transparent form-select border border-secondary text-secondary"
                             aria-label="Wybierz ocenę">
                             <option selected disabled>-</option>
                             @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
@@ -98,7 +99,9 @@
                             onKeyPress="integerKeyPress(event)"
                             class="form-control points-input border-secondary bg-white" />
 
-                    <button class="ms-3 btn btn-secondary">Komentarz</button>
+                    <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
+                        Komentarz
+                    </a>
                 </div>
             </div>
 
@@ -120,30 +123,33 @@
                         }
                     }
 
-                    <div id="music-staff-div"
-                        class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+                    <div id="music-staff-div" class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
                         @* MUSIC STAFF DIV SET VIA JS *@
                     </div>
                 </div>
-
-                @* <div class="mt-3">
-                    <span class="fw-bold">Komentarz</span>
-                    <textarea id="comment" rows="1" placeholder="Dodaj komentarz..." oninput="resizeTextArea(this)"
-                        onchange="onCommentChange(this.value)"
-                        class="form-control shadow border-white rounded overflow-hidden mt-2"></textarea>
-                </div> *@
             </div>
         </div>
     </div>
 </form>
 
-
-
-@* <div class="flex-grow-1 me-2 h-100">
-    <textarea id="comment" rows="1" placeholder="Dodaj komentarz..." oninput="resizeTextArea(this)"
-        onchange="onCommentChange(this.value)"
-        class="form-control shadow border-white rounded overflow-hidden h-100"></textarea>
-</div> *@
+<div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold fs-4" id="deletePopupLongTitle">Komentarz</h5>
+                <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="comment" rows="8" placeholder="Dodaj komentarz..."
+                    onchange="onCommentChange(this.value)"
+                    class="form-control"></textarea>
+            </div>
+            <div class="modal-footer justify-content-center align-items-center">
+                <button type="button" class="btn btn-secondary btn-sm-width focus-ring" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div> 
 
 
 <script>
@@ -301,11 +307,11 @@
 
         if (value === "") {
             numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item1;
-            document.getElementById(`points-${currentQuestionIndex}`).value = numValue;
+            document.getElementById(`points`).value = numValue;
         }
         if (numValue > maxValue) {
             numValue = maxValue;
-            document.getElementById(`points-${currentQuestionIndex}`).value = numValue;
+            document.getElementById(`points`).value = numValue;
         }
 
         userScores[currentUserIndex][currentQuestionIndex].Item1 = numValue;
@@ -319,7 +325,7 @@
 
         if (value === "") {
             numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item2;
-            document.getElementById(`points-${currentQuestionIndex}`).value = numValue;
+            document.getElementById(`max`).value = numValue;
         }
 
         userScores[currentUserIndex][currentQuestionIndex].Item2 = numValue;
@@ -333,11 +339,6 @@
         document.getElementById(`comment-hidden-${currentQuestionIndex}-${currentUserIndex}`).value = value;
     }
 
-    function resizeTextArea(textArea) {
-        @* textArea.style.height = ''; *@
-        @* textArea.style.height = textArea.scrollHeight + 'px'; *@
-    }
-
     function integerKeyPress(e) {
         if (!/\d/.test(e.key)) {
             e.preventDefault();
@@ -348,7 +349,6 @@
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
-
 
             questionElement.innerText = questions[currentQuestionIndex].question;
             if (questions[currentQuestionIndex].question == '')
@@ -369,8 +369,7 @@
                 grandStaff.loadFromJson(questions[currentQuestionIndex], userSolutions[currentUserIndex][currentQuestionIndex])
             }
 
-            @* commentElement.value = userComments[currentUserIndex][currentQuestionIndex]; *@
-            resizeTextArea(commentElement);
+            commentElement.value = userComments[currentUserIndex][currentQuestionIndex];
 
             generateButtons(currentQuestionIndex);
         }

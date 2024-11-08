@@ -8,20 +8,23 @@
 
 <form id="solve-form" method="post" class="h-100 w-100">
     <div class="h-100 w-100 d-flex flex-row pb-3">
-        <div class="bg-white rounded d-flex flex-column shadow p-3 me-3" style="width: 250px; min-width: 250px;">
-            <div class="fw-bold fs-4 overflow-hidden" style="text-overflow: ellipsis;">
+        <div class="bg-white rounded d-flex flex-column shadow py-3 me-3 sidebar">
+            <div class="fw-bold fs-4 overflow-hidden px-3 flex-shrink-0" style="text-overflow: ellipsis;">
                 @Model.Quiz.Name
             </div>
 
-            <div class="d-flex align-items-center">
-                <i class="far fa-clock icon-lg me-2"></i>
-                <span id="timer" class="fw-bold">10h 13min</span>
+            <div class="d-flex flex-row align-items-center mt-1 px-3">
+                <i class="far fa-clock icon-sm me-1"></i>
+                <span id="timer" class="fw-semibold">10h 13min</span>
             </div>
 
-            <div class="fw-semibold mt-4">Zadania</div>
-            <div id="excersises-buttons" class="w-100 mt-1 mb-auto" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px;">
+            <hr class="mb-0"/>
+
+            <div id="excersises-buttons" class="w-100 py-3 mb-auto px-3 overflow-auto" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px;">
                 @* FILLED VIA JS *@
             </div>
+
+            <hr class="mt-0"/>
 
             <button id="btn-next" type="button" onclick="nextQuestion()" class="btn btn-secondary btn-std-width mx-auto">Następne</button>
             <button id="btn-finish" onclick="submitFormClicked()" class="btn btn-primary btn-std-width mx-auto">Zakończ</button>

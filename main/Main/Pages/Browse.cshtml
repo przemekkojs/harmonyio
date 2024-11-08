@@ -13,13 +13,14 @@
 </head>
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
-    <div class="bg-white rounded d-flex flex-column shadow p-3 me-3" style="width: 250px; min-width: 250px;">
-        <div class="fw-bold fs-4 overflow-hidden" style="text-overflow: ellipsis;">
-            @*todo @Model.QuizResult.Quiz.Name *@
-            Kartkówka 2A
+    <div class="bg-white rounded d-flex flex-column bor shadow py-3 me-3 sidebar">
+        <div class="fw-bold fs-4 overflow-hidden flex-shrink-0 px-3" style="text-overflow: ellipsis;">
+            @Model.QuizResult.Quiz.Name
         </div>
 
-        <div class="d-flex flex-row mt-3">
+        <hr/>
+
+        <div class="d-flex flex-row px-3">
             <div class="d-flex flex-column me-4">
                 <span class="fw-semibold">Ocena</span>
                 <div class="d-flex flex-row align-items-center mt-1">
@@ -32,7 +33,7 @@
             <div class="d-flex flex-column">
                 <span class="fw-semibold">Wynik</span>
                 <div class="d-flex flex-row align-items-center mt-1">
-                    <div class="border border-secondary text-secondary fw-bold rounded px-2 py-1 me-2">
+                    <div class="border border-secondary text-nowrap text-secondary fw-bold rounded px-2 py-1 me-2">
                         @totalPoints / @totalMax
                     </div>
                     <div class="border border-secondary text-secondary fw-bold rounded px-2 py-1">
@@ -42,10 +43,13 @@
             </div>
         </div>
 
-        <div class="fw-semibold mt-4">Zadania</div>
-        <div id="excersises-buttons" class="w-100 mt-1 mb-auto" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px;">
+        <hr class="mb-0"/>
+
+        <div id="excersises-buttons" class="w-100 mt-1 mb-auto p-3" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px;">
             @* FILLED VIA JS *@
         </div>
+
+        <hr class="mt-0"/>
 
         <button id="btn-next" type="button" onclick="nextQuestion()" class="btn btn-secondary btn-std-width mx-auto">Następne</button>
         <a asp-page="Assigned" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
@@ -53,16 +57,22 @@
 
     <div class="flex-grow-1 w-100 d-flex flex-column overflow-auto">
         <div class="w-100 bg-white rounded shadow d-flex flex-row align-items-center mb-3 p-3">
+            <div class="fs-4 fw-bold me-1">Zadanie</div>
             <div id="excersise-number" class="fs-4 fw-bold me-auto">
                 
             </div>
 
             <span class="fw-bold me-2 ms-3">Punkty</span>
-            <div id="points-text" class="border px-2 py-1 border-secondary rounded fw-bold">
+            <div id="points-text" class="border py-1 px-2 border-secondary rounded fw-bold h-100 d-flex align-items-center">
                 5 / 15
             </div>
 
-            <button id="commentButton" class="btn btn-secondary ms-2">Zobacz komentarz</button>
+            <a href="#" id="commentButton" class="ms-2 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
+                Komentarz
+            </a>    
+            <div href="#" id="noCommentElement" class="ms-2 btn btn-outline-secondary non-interactive">
+                Brak komentarza
+            </div>   
         </div>
 
         <div class="bg-white rounded shadow p-3 d-flex flex-column overflow-auto">
@@ -81,17 +91,24 @@
     </div>
 </div>
 
- @* <div class="d-flex flex-row align-items-start question-area">   
-            <div class="border border-secondary flex-grow-1 h-100 rounded me-2 px-2 py-1 overflow-auto">
-                <div id="comment-div">
-                    <div class="fw-bold">Komentarz oceniającego</div>
-                    <div id="comment-text"></div>
-                </div>
-                <div id="no-comment-div" class="fw-bold h-100 d-flex flex-column justify-content-center">Oceniający nie zamieścił komentarza</div>
+<div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold fs-4" id="deletePopupLongTitle">Komentarz</h5>
+                <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body overflow-auto" style="max-height: 250px; min-height: 150px;">
+                <div id="comment-text">
 
-        </div> *@
-
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center align-items-center">
+                <button type="button" class="btn btn-secondary btn-sm-width focus-ring" data-bs-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div> 
 
 
 <script>
@@ -150,7 +167,7 @@
 
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
-            document.getElementById("excersise-number").innerText = "" + (index + 1) + "/" + (questions.length);
+            document.getElementById("excersise-number").innerText = index + 1;
             document.getElementById("excersise-question").innerText = questions[index].question;
 
             if (questions[index].question == '')
@@ -165,9 +182,8 @@
 
             var isComment = results[index].comment != '';
             document.getElementById("commentButton").style.display = isComment ? "inline-block" : "none";
-            @* document.getElementById("comment-div").style.display = isComment ? "inline-block" : "none";
-            document.getElementById("no-comment-div").style.display = isComment ? "none" : "inline-block";
-            document.getElementById("comment-text").innerText = results[index].comment; *@
+            document.getElementById("noCommentElement").style.display = isComment ? "none" : "flex";
+            document.getElementById("comment-text").innerText = results[index].comment;
 
             generateButtons(index);
         }

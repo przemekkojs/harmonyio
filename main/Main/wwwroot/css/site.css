@@ -181,4 +181,20 @@ body {
     }
 }
 
+.sidebar{
+    width: 255px; 
+    min-width: 255px;
+}
+
+.non-interactive {
+    pointer-events: none;      
+    color: inherit;         
+}
+
+.non-interactive:hover, .non-interactive:focus {
+    background-color: inherit; 
+    color: inherit;
+    border-color: inherit;
+}
+
 
