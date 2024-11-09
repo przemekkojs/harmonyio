@@ -15,7 +15,11 @@ namespace Algorithm.New.Algorithm.Mistake
         {
             return new NoteMistake(barIndex, verticalIndex, voice)
             {
-                Description = $"Brakuje nuty w głosie {voice}."
+                Description = (
+                    [barIndex],
+                    [verticalIndex],
+                    $"Brakuje nuty w głosie {voice}."
+                )
             };
         }
 

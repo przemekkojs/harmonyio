@@ -24,8 +24,8 @@ namespace Main.Pages
         public List<ApplicationUser> Users { get; set; } = null!;
         public List<Excersise> Excersises { get; set; } = null!;
         public Dictionary<ApplicationUser, List<ExcersiseSolution>> UsersToSolutions { get; set; } = null!;
-        public Dictionary<ExcersiseSolution, (int, int)> SolutionsToGradings { get; set; } = null!;
-        public Dictionary<ApplicationUser, List<(int, int)>> UsersToGradings { get; set; } = null!;
+        public Dictionary<ExcersiseSolution, (int, int, string)> SolutionsToGradings { get; set; } = null!;
+        public Dictionary<ApplicationUser, List<(int, int, string)>> UsersToGradings { get; set; } = null!;
 
         [BindProperty]
         public int QuizId { get; set; }
@@ -98,8 +98,8 @@ namespace Main.Pages
                         .ToList()
                 );
 
-            Users = UsersToSolutions.Keys.ToList();
-            Excersises = Quiz.Excersises.ToList();
+            Users = [.. UsersToSolutions.Keys];
+            Excersises = [.. Quiz.Excersises];
 
             return true;
         }
@@ -146,10 +146,12 @@ namespace Main.Pages
                     var maxesToAdd = new List<int>();
                     var commentsToAdd = new List<string>();
 
-                    foreach (var ex in Quiz.Excersises)
+                    foreach (var ex in SolutionsToGradings.Keys)
                     {
-                        pointsToAdd.Add(0);
-                        maxesToAdd.Add(0);
+                        var mark = SolutionsToGradings[ex];
+
+                        pointsToAdd.Add(mark.Item1);
+                        maxesToAdd.Add(mark.Item2);
                         commentsToAdd.Add("");
                     }
 
