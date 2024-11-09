@@ -2,14 +2,6 @@
 @model Main.Pages.CreatedModel
 @using Main.Enumerations;
 @using NuGet.Protocol
-@{
-    var sketches = Model.UsersQuizes.Where(q => !q.IsCreated).ToList();
-    var allPublished = Model.UsersQuizes.Where(q => q.IsCreated).ToList();
-
-    var readyToGrade = allPublished.Where(q => Model.IsReadyToGrade(q)).ToList();
-    var closed = allPublished.Except(readyToGrade).Where(q => q.QuizResults.Count > 0).ToList();
-    var published = allPublished.Except(readyToGrade).Except(closed).ToList();
-}
 
 <head>
     <link rel="stylesheet" href="~/css/quiz-lists-style.css" />
@@ -17,180 +9,258 @@
 
 <div class="h-100 w-100 d-flex flex-column flex-md-row mb-3">
     <form method="post" asp-page-handler="Delete" id="deleteFormForQuiz">
-        <input type="hidden" asp-for="QuizId" value="" id="deleteFormQuizId"/>
+        <input type="hidden" asp-for="QuizId" value="" id="deleteFormQuizId" />
     </form>
 
     <form method="post" asp-page-handler="Publish" id="publishFormForQuiz">
-        <input type="hidden" asp-for="QuizId" value="" id="publishFormQuizId"/>
+        <input type="hidden" asp-for="QuizId" value="" id="publishFormQuizId" />
         <input type="hidden" asp-for="OpenDate" value="" id="publishFormOpenDateForQuiz" />
         <input type="hidden" asp-for="CloseDate" value="" id="publishFormCloseDateForQuiz" />
     </form>
 
     <form method="post" asp-page-handler="Assign" id="assignFormForQuiz">
-        <input type="hidden" asp-for="QuizId" value="" id="assignFormQuizId"/>
+        <input type="hidden" asp-for="QuizId" value="" id="assignFormQuizId" />
         <input type="hidden" asp-for="Emails" value="" id="assignFormEmailsForQuiz" />
         <input type="hidden" asp-for="GroupsIds" value="" id="assignFormGroupsForQuiz" />
     </form>
-    
 
-    <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto flex-column d-flex bg-white rounded shadow px-3 pt-3 me-3 mb-3">
 
-        @if (allPublished.Count > 0)
+    <div
+        class="w-100 w-md-50 flex-grow-1 overflow-md-auto flex-column d-flex bg-white rounded shadow px-3 pt-3 me-3 mb-3">
+
+        @if (
+        Model.ReadyToGrade.Count != 0 ||
+        Model.Opened.Count != 0 ||
+        Model.NotOpened.Count != 0 ||
+        Model.Closed.Count != 0
+        )
         {
-            @if (readyToGrade.Count > 0)
+            @if (Model.ReadyToGrade.Count > 0)
             {
                 <div class="fw-bold fs-4 mb-3">Do Oceny</div>
-            }
-            @foreach (var quiz in readyToGrade)
-            {
-                <div class="border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
-                    <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
-                        <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
-                        <div class="d-flex flex-row align-items-center mb-2">
-                            <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Otwarcie:</span> 
-                                @quiz.OpenDate
-                            </span>
-                        </div>
-                        <div class="d-flex flex-row align-items-center mb-2">
-                            <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Zamknięcie:</span> 
-                                @quiz.CloseDate
-                            </span>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                            <i class="fas fa-user-group icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Wypełniono:</span> 
-                                @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
-                            </span>
-                        </div>
-                    </div>
+                @foreach (var quiz in Model.ReadyToGrade)
+                {
+                    <div class="border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
+                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                            <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
-                    <div class="d-flex flex-column h-100 ms-2">
-                        <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
-                    </div>
-                </div>
-            }
-
-            @if (published.Count > 0)
-            {
-                <div class="fw-bold fs-4 mb-3">Opublikowane</div>
-            }
-            @foreach (var quiz in published)
-            {
-                var callbackUrl = Url.Page(
-                        "/Solve",
-                        pageHandler: null,
-                        values: new { code = quiz.Code },
-                        protocol: Request.Scheme);
-                
-                <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
-                    <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
-                        <div class="fw-bold fs-5 mb-3 text-truncate" style="max-width: 100%;">@quiz.Name</div>
-
-                        <div class="d-flex flex-row align-items-center mb-2">
-                            <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Otwarcie:</span> 
-                                @quiz.OpenDate
-                            </span>
-                        </div>
-                        <div class="d-flex flex-row align-items-center mb-2">
-                            <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Zamknięcie:</span> 
-                                @quiz.CloseDate
-                            </span>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                            <i class="fas fa-user-group icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Wypełniono:</span> 
-                                @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="d-flex flex-column h-100 ms-2">
-                        <div class="d-flex flex-row">
-                            <a asp-page="Creator" asp-route-id="@quiz.Id" class="btn-icon ms-auto">
-                                <i class="fas fa-magnifying-glass icon-sm"></i>
-                            </a>
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Otwarcie:</span>
+                                    @quiz.OpenDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Zamknięcie:</span>
+                                    @quiz.CloseDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <i class="fas fa-user-group icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Wypełniono:</span>
+                                    @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                                </span>
+                            </div>
                         </div>
 
-                        <div class="d-flex flex-row ms-auto mt-auto">
-                            @if (quiz.State != QuizState.NotStarted)
-                            {
-                                <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
+                        <div class="d-flex flex-column h-100 ms-2">
+                            @if(quiz.State == QuizState.Open) {
+                            var callbackUrl = Url.Page(
+                                                "/Solve",
+                                                pageHandler: null,
+                                                values: new { code = quiz.Code },
+                                                protocol: Request.Scheme);
+                            <div class="d-flex flex-row">
+                                <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
+                                    data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
+                                    data-pin="@quiz.Code" data-url="@(callbackUrl)" data-emails='@(new List<string>().ToJson())'
+                                    data-all-groups='@(Model.Groups.ToJson())'
+                                    data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
+                                    data-callback-name="assign">
+                                    <i class="fas fa-share-alt icon-sm"></i>
+                                </a>
+                            </div>
                             }
-                            <a href="#" class="btn btn-primary ms-2 mt-auto" data-bs-toggle="modal" data-bs-target="#assignPopup"
-                            data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-pin="@quiz.Code"
-                            data-url="@(callbackUrl)"
-                            data-emails='@(new List<string>().ToJson())'
-                            data-all-groups='@(Model.Groups.ToJson())'
-                            data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
-                            data-callback-name="assign">
-                                Udostępnij
-                            </a>
+
+                            <div class="d-flex flex-row ms-auto mt-auto">
+                                <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
+                            </div>
                         </div>
-                        
                     </div>
-                </div>
+                }
             }
 
-            @if (closed.Count > 0)
+
+            @if (Model.Opened.Count > 0)
+            {
+                <div class="fw-bold fs-4 mb-3">Otwarte</div>
+
+                @foreach (var quiz in Model.Opened)
+                {
+                    var callbackUrl = Url.Page(
+                                        "/Solve",
+                                        pageHandler: null,
+                                        values: new { code = quiz.Code },
+                                        protocol: Request.Scheme);
+
+                    <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
+                        <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
+                            <div class="fw-bold fs-5 mb-3 text-truncate" style="max-width: 100%;">@quiz.Name</div>
+
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Otwarcie:</span>
+                                    @quiz.OpenDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Zamknięcie:</span>
+                                    @quiz.CloseDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <i class="fas fa-user-group icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Wypełniono:</span>
+                                    @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column h-100 ms-2">
+                            <div class="d-flex flex-row">
+                                <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
+                                    data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
+                                    data-pin="@quiz.Code" data-url="@(callbackUrl)" data-emails='@(new List<string>().ToJson())'
+                                    data-all-groups='@(Model.Groups.ToJson())'
+                                    data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
+                                    data-callback-name="assign">
+                                    <i class="fas fa-share-alt icon-sm"></i>
+                                </a>
+                            </div>
+
+                            @if(@Model.QuizesToUsersCompleted[quiz].Item1 != 0) {
+                                <div class="d-flex flex-row ms-auto mt-auto">
+                                    <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+
+
+            @if (Model.NotOpened.Count > 0)
+            {
+                <div class="fw-bold fs-4 mb-3">Zaplanowane</div>
+
+                @foreach (var quiz in Model.NotOpened)
+                {
+                    var callbackUrl = Url.Page(
+                    "/Solve",
+                    pageHandler: null,
+                    values: new { code = quiz.Code },
+                    protocol: Request.Scheme);
+
+                    <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
+                        <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
+                            <div class="fw-bold fs-5 mb-3 text-truncate" style="max-width: 100%;">@quiz.Name</div>
+
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Otwarcie:</span>
+                                    @quiz.OpenDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Zamknięcie:</span>
+                                    @quiz.CloseDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <i class="fas fa-user-group icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Przypisani:</span>
+                                    @Model.QuizesToUsersCompleted[quiz].Item2
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column h-100 ms-2"> 
+                            <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
+                                data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
+                                data-pin="@quiz.Code" data-url="@(callbackUrl)" data-emails='@(new List<string>().ToJson())'
+                                data-all-groups='@(Model.Groups.ToJson())'
+                                data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
+                                data-callback-name="assign">
+                                <i class="fas fa-share-alt icon-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+
+            @if (Model.Closed.Count > 0)
             {
                 <div class="fw-bold fs-4 mb-3">Zamknięte</div>
-            }
-            @foreach (var quiz in closed)
-            {
-                <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
-                    <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
-                        <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
-                        <div class="d-flex flex-row align-items-center mb-2">
-                            <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Otwarcie:</span> 
-                                @quiz.OpenDate
-                            </span>
+                @foreach (var quiz in Model.Closed)
+                {
+                    <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
+                        <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
+                            <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
+
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Otwarcie:</span>
+                                    @quiz.OpenDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center mb-2">
+                                <i class="far fa-clock icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Zamknięcie:</span>
+                                    @quiz.CloseDate
+                                </span>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <i class="fas fa-user-group icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Wypełniono:</span>
+                                    @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                                </span>
+                            </div>
                         </div>
-                        <div class="d-flex flex-row align-items-center mb-2">
-                            <i class="far fa-clock icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Zamknięcie:</span> 
-                                @quiz.CloseDate
-                            </span>
-                        </div>
-                        <div class="d-flex flex-row align-items-center">
-                            <i class="fas fa-user-group icon-sm me-2"></i>
-                            <span class="text-truncate">
-                                <span class="fw-bold">Wypełniono:</span> 
-                                @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
-                            </span>
+
+                        <div class="d-flex flex-column h-100 ms-2">
+                            <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
                         </div>
                     </div>
-
-                    <div class="d-flex flex-column h-100 ms-2">
-                        <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
-                    </div>
-                </div>
+                }
             }
         }
         else
         {
             <div class="fw-bold fs-4 mb-3">Opublikowane</div>
-            <p>Nie masz jeszcze żadnych opublikowanych quizów... Utwórz szkic oraz go opublikuj, a pojawi się on tutaj!</p>
+            <p>Nie masz jeszcze żadnych opublikowanych quizów... Utwórz szkic a następnie go opublikuj, a pojawi się on tutaj!</p>
         }
     </div>
 
-    <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3"> 
+    <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3">
         <div class="fw-bold fs-4 mb-3">Szkice</div>
-        @foreach (var quiz in sketches)
+        @foreach (var quiz in Model.Sketches)
         {
             <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
                 <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
@@ -202,7 +272,7 @@
                     <div class="d-flex flex-row align-items-center">
                         <i class="fas fa-music icon-sm me-2"></i>
                         <span class="text-truncate">
-                            <span class="fw-bold">Zadania:</span> 
+                            <span class="fw-bold">Zadania:</span>
                             @quiz.Excersises.Count
                         </span>
                     </div>
@@ -221,7 +291,7 @@
                     </div>
 
                     <a href="#" class="btn btn-primary mt-auto" data-bs-toggle="modal" data-bs-target="#publishPopup"
-                       data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-callback-name="publish">
+                        data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-callback-name="publish">
                         Opublikuj
                     </a>
                 </div>
@@ -231,7 +301,7 @@
         <a asp-page="Creator" class="no-style">
             <div class="quiz quiz-add rounded d-flex justify-content-center align-items-center">
                 <i class="fas fa-plus me-1"></i>
-                
+
                 <span class="fw-bold">Utwórz nowy quiz</span>
             </div>
         </a>
@@ -267,7 +337,7 @@
 
         form = document.getElementById("assignFormForQuiz");
         const formData = new FormData(form);
-      
+
         console.log("assigned quiz: " + quizId);
         console.log("assigned users: " + assignedEmails);
         console.log("assigned groups: " + assignedGroups);
