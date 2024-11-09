@@ -14,6 +14,9 @@ namespace Algorithm.New.Algorithm.Rules
             if (!ValidateParametersCount(stacks))
                 return false;
 
+            if (!ValidateEmptyStacks(stacks))
+                return false;
+
             var stack1 = stacks[0];
             var stack2 = stacks[1];
 

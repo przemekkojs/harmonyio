@@ -13,12 +13,20 @@ namespace Algorithm.New.Algorithm.Mistake
 
         public static NoteMistake CreateEmptyNoteMistake(int barIndex, int verticalIndex, string voice)
         {
+            voice = voice switch
+            {
+                "S" => "sopranie",
+                "A" => "alcie",
+                "T" => "tenorze",
+                _ => "basie"
+            };
+
             return new NoteMistake(barIndex, verticalIndex, voice)
             {
                 Description = (
                     [barIndex],
                     [verticalIndex],
-                    $"Brakuje nuty w głosie {voice}."
+                    $"Brakuje nuty w {voice}."
                 )
             };
         }

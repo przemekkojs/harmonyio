@@ -1,4 +1,7 @@
-﻿namespace Algorithm.New
+﻿using Algorithm.New.Algorithm.Rules;
+using Algorithm.New.Algorithm;
+
+namespace Algorithm.New
 {
     public static class Constants
     {
@@ -27,6 +30,15 @@
         public static readonly List<string> SharpsQueue = ["F", "C", "G", "D", "A", "E", "B"];
         public static readonly List<string> FlatsQueue = ["B", "E", "A", "D", "G", "C", "F"];
         public static readonly List<string> AllNotes = ["C", "D", "E", "F", "G", "A", "B"];
+
+        public static readonly Settings Settings = new([
+            new VoiceCrossing(),
+            new OneDirection(),
+            new ParallelFifths(),
+            new ParallelOctaves(),
+            new VoiceCrossingOneFunction(),
+            new DoubledFifthOnStrongBarPart()
+        ]);
 
         // public static readonly VoiceDistance VoiceDistance = new();
 

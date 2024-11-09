@@ -14,16 +14,13 @@ namespace Algorithm.New.Algorithm.Rules
             if (!ValidateParametersCount(stacks))
                 return false;
 
+            if (!ValidateEmptyStacks(stacks))
+                return false;
+
             var stack1 = stacks[0];
             var stack2 = stacks[1];
 
             int length = stack1.Notes.Count;
-
-            if (stack1.Notes.Count != stack2.Notes.Count)
-                length = Math.Min(stack1.Notes.Count, stack2.Notes.Count);
-
-            if (length == 0)
-                return true;
 
             bool currentUp = Interval.IsLower(stack1.Notes[0], stack1.Notes[0]);
             bool lastUp = currentUp;
