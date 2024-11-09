@@ -16,27 +16,22 @@
 </head>
 
 <div class="h-100 w-100 d-flex flex-column flex-md-row mb-3">
-    @foreach(var quiz in Model.UsersQuizes)
-    {
-        <form method="post" asp-page-handler="Delete" id="deleteFormForQuiz@(quiz.Id)">
-            <input type="hidden" asp-for="QuizId" value=@(quiz.Id) />
-            <input type="hidden" asp-for="Groups" value="@(Model.Groups)" /> @* nie usuwać, bez tego nie działa *@
-        </form>
+    <form method="post" asp-page-handler="Delete" id="deleteFormForQuiz">
+        <input type="hidden" asp-for="QuizId" value="" id="deleteFormQuizId"/>
+    </form>
 
-        <form method="post" asp-page-handler="Publish" id="publishFormForQuiz@(quiz.Id)">
-            <input type="hidden" asp-for="QuizId" value=@(quiz.Id) />
-            <input type="hidden" asp-for="OpenDate" value="" id="openDateForQuiz@(quiz.Id)" />
-            <input type="hidden" asp-for="CloseDate" value="" id="closeDateForQuiz@(quiz.Id)" />
-            <input type="hidden" asp-for="Groups" value="@(Model.Groups)" /> @* nie usuwać, bez tego nie działa *@
-        </form>
-        
-        <form method="post" asp-page-handler="Assign" id="assignFormForQuiz@(quiz.Id)">
-            <input type="hidden" asp-for="QuizId" value=@(quiz.Id) />
-            <input type="hidden" asp-for="Emails" value="" id="emailsForQuiz@(quiz.Id)" />
-            <input type="hidden" asp-for="GroupsIds" value="" id="groupsForQuiz@(quiz.Id)" />
-            <input type="hidden" asp-for="Groups" value="@(Model.Groups)" />
-        </form>
-    }
+    <form method="post" asp-page-handler="Publish" id="publishFormForQuiz">
+        <input type="hidden" asp-for="QuizId" value="" id="publishFormQuizId"/>
+        <input type="hidden" asp-for="OpenDate" value="" id="publishFormOpenDateForQuiz" />
+        <input type="hidden" asp-for="CloseDate" value="" id="publishFormCloseDateForQuiz" />
+    </form>
+
+    <form method="post" asp-page-handler="Assign" id="assignFormForQuiz">
+        <input type="hidden" asp-for="QuizId" value="" id="assignFormQuizId"/>
+        <input type="hidden" asp-for="Emails" value="" id="assignFormEmailsForQuiz" />
+        <input type="hidden" asp-for="GroupsIds" value="" id="assignFormGroupsForQuiz" />
+    </form>
+    
 
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto flex-column d-flex bg-white rounded shadow px-3 pt-3 me-3 mb-3">
 
@@ -240,22 +235,6 @@
                 <span class="fw-bold">Utwórz nowy quiz</span>
             </div>
         </a>
-
-        @*TODO: Remove this*@
-        @* <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignPopup"
-           data-quiz-id="3" data-quiz-name="Dummy quiz" data-pin="069 420"
-           data-url="https://harmony.io/join?q=069420"
-           data-emails='["email1@example.com", "email2@example.com"]'
-           data-all-groups='["Klasa 2A", "Klasa 3A", "Klasa 1B"]'
-           data-added-groups='["Klasa 3A"]' data-callback-name="assign">
-            Test Assign
-        </a> *@
-
-        @*TODO: Remove this*@
-        @* <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishPopup"
-           data-quiz-id="3" data-quiz-name="Dummy quiz" data-callback-name="publish">
-            Test Publish
-        </a> *@
     </div>
 </div>
 
@@ -265,40 +244,35 @@
 
 <script>
     function deleteQuiz(quizId) {
-        document.getElementById(`deleteFormForQuiz${quizId}`).submit();
+        document.getElementById("deleteFormQuizId").value = quizId;
+        document.getElementById("deleteFormForQuiz").submit();
     }
 
     function publish(quizId, openDateTime, closeDateTime) {
         //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
 
-        document.getElementById(`openDateForQuiz${quizId}`).value = openDateTime;
-        document.getElementById(`closeDateForQuiz${quizId}`).value = closeDateTime;
-        document.getElementById(`publishFormForQuiz${quizId}`).submit();
-
-        console.log("publishing quiz: " + quizId);
-        console.log("open datetime: " + openDateTime);
-        console.log("close datetime: " + closeDateTime);
+        document.getElementById("publishFormQuizId").value = quizId;
+        document.getElementById("publishFormOpenDateForQuiz").value = openDateTime;
+        document.getElementById("publishFormCloseDateForQuiz").value = closeDateTime;
+        document.getElementById("publishFormForQuiz").submit();
 
         //TODO: Po opublikowaniu powinien od razu włączyć się assign popup
         // (można go włączyć przyciskiem Udostępnij, ale dobrze jakby włączał się też automatycznie)
     }
 
     async function assign(quizId, assignedEmails, assignedGroups) {
-        //TODO: Assign this quiz to users
+        document.getElementById("assignFormQuizId").value = quizId;
+        document.getElementById("assignFormEmailsForQuiz").value = assignedEmails;
+        document.getElementById("assignFormGroupsForQuiz").value = JSON.stringify(assignedGroups);
 
-        document.getElementById(`emailsForQuiz${quizId}`).value = assignedEmails;
-        document.getElementById(`groupsForQuiz${quizId}`).value = JSON.stringify(assignedGroups);
-        form = document.getElementById(`assignFormForQuiz${quizId}`);
-
+        form = document.getElementById("assignFormForQuiz");
         const formData = new FormData(form);
       
-
         console.log("assigned quiz: " + quizId);
         console.log("assigned users: " + assignedEmails);
         console.log("assigned groups: " + assignedGroups);
 
         try {
-
             const response = await fetch(form.action, {
                 method: form.method,
                 body: formData,
@@ -336,9 +310,8 @@
         }
         catch (error) {
             console.error('An error occurred:', error);
+            return null;
         }
-
-        return null;
     }
 
 </script>
