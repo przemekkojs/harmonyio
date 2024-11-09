@@ -7,17 +7,15 @@ namespace Main.Models
 	{
 		public int Id { get; set; }
 
-		public DateTime ExpirationDate { get; set; }
-
-        public string UserId { get; set; } = null!;
+		public string UserId { get; set; } = null!;
 
 		public ApplicationUser User { get; set; } = null!;
 
-        public int GroupId { get; set; }
+		public int GroupId { get; set; }
 
-        public UsersGroup Group { get; set; } = null!;
+		public UsersGroup Group { get; set; } = null!;
 
-        public bool ForTeacher { get; set; } = false;
+		public bool ForTeacher { get; set; } = false;
 	}
 }
 
