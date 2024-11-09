@@ -3,6 +3,7 @@ using System;
 using Main.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108153218_RemovedRolesQuizzesSharedToUsersNotMails")]
+    partial class RemovedRolesQuizzesSharedToUsersNotMails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -30,6 +33,21 @@ namespace Main.Migrations
                     b.HasIndex("ParticipatedQuizesId");
 
                     b.ToTable("QuizParticipants", (string)null);
+                });
+
+            modelBuilder.Entity("ApplicationUserQuiz1", b =>
+                {
+                    b.Property<string>("PublishedToUsersId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("QuizSharedToUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PublishedToUsersId", "QuizSharedToUserId");
+
+                    b.HasIndex("QuizSharedToUserId");
+
+                    b.ToTable("PublishedToUsers", (string)null);
                 });
 
             modelBuilder.Entity("ApplicationUserUsersGroup", b =>
@@ -480,6 +498,21 @@ namespace Main.Migrations
                     b.HasOne("Main.Models.Quiz", null)
                         .WithMany()
                         .HasForeignKey("ParticipatedQuizesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ApplicationUserQuiz1", b =>
+                {
+                    b.HasOne("Main.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("PublishedToUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Main.Models.Quiz", null)
+                        .WithMany()
+                        .HasForeignKey("QuizSharedToUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

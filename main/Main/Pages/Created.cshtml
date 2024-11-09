@@ -87,6 +87,12 @@
             }
             @foreach (var quiz in published)
             {
+                var callbackUrl = Url.Page(
+                        "/Solve",
+                        pageHandler: null,
+                        values: new { code = quiz.Code },
+                        protocol: Request.Scheme);
+                
                 <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
                     <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
                         <div class="fw-bold fs-5 mb-3 text-truncate" style="max-width: 100%;">@quiz.Name</div>
@@ -121,15 +127,21 @@
                             </a>
                         </div>
 
-                        <a href="#" class="btn btn-primary ms-auto mt-auto" data-bs-toggle="modal" data-bs-target="#assignPopup"
-                           data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-pin="@quiz.Code"
-                           data-url="/Solve?code=@(quiz.Code)"
-                           data-emails='@(quiz.PublishedToEmails.ToJson())'
-                           data-all-groups='@(Model.Groups.ToJson())'
-                           data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
-                           data-callback-name="assign">
-                            Udostępnij
-                        </a>
+                        <div class="d-flex flex-row ms-auto mt-auto">
+                            @if (quiz.State != QuizState.NotStarted)
+                            {
+                                <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
+                            }
+                            <a href="#" class="btn btn-primary ms-2 mt-auto" data-bs-toggle="modal" data-bs-target="#assignPopup"
+                            data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-pin="@quiz.Code"
+                            data-url="@(callbackUrl)"
+                            data-emails='@(new List<string>().ToJson())'
+                            data-all-groups='@(Model.Groups.ToJson())'
+                            data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
+                            data-callback-name="assign">
+                                Udostępnij
+                            </a>
+                        </div>
                         
                     </div>
                 </div>
@@ -286,30 +298,40 @@
         console.log("assigned groups: " + assignedGroups);
 
         try {
-            
+
             const response = await fetch(form.action, {
                 method: form.method,
                 body: formData,
-                redirect: 'manual'
+                redirect: 'follow'
             });
 
-            if (response.status >= 300 && response.status < 400) {
-                const redirectUrl = response.headers.get('Location');
-                if (redirectUrl) {
-                    console.log('Redirect to:', redirectUrl);
-                    // Optionally navigate to the new page
-                    window.location.href = redirectUrl;
-                }
-                else {
-                    console.log('Redirect detected, but no Location header found');
-                }
+            // Handle Forbidden (403) response
+            if (response.status === 403) {
+                window.location.href = '/Identity/Account/Login';
+                return null;
             }
-            else {
-                // Handle non-redirect response as usual
+
+            // Handle redirect responses
+            if (response.redirected) {
+                window.location.href = response.url;
+                return null;
+            }
+
+            // Handle JSON responses (for normal operation)
+            if (response.headers.get('content-type')?.includes('application/json')) {
                 const result = await response.json();
-                console.log(result);
-                return result;
+
+                if (result.notFoundEmails) {
+                    return result.notFoundEmails;
+                }
+
+                if (result.success) {
+                    console.log('Users added successfully');
+                    return null;
+                }
             }
+
+            return null;
 
         }
         catch (error) {

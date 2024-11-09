@@ -221,8 +221,7 @@ namespace Main.Pages
                 {
                     Group = group,
                     ForTeacher = AsAdmins,
-                    User = user,
-                    ExpirationDate = DateTime.Now.AddDays(7)
+                    User = user
                 });
             }
 

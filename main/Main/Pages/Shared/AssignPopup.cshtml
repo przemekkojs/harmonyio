@@ -94,7 +94,7 @@ ATRYBUTY:
                     </div>
                     
                     <div id="assignValidationText" class="text-danger mx-3 mt-3 d-none">
-                        Niektórzy z podanych użytkowników nie istnieją lub są już dodani do quizu!
+                        Niektórzy z podanych użytkowników nie istnieją!
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@ ATRYBUTY:
 
         nameElement.textContent = quizName;
         pinElement.textContent = quizPin;
-        quizUrl.textContent = quizUrl;
+        urlElement.textContent = quizUrl;
 
         wrongEmails = [];
         assignedEmails = JSON.parse(assignModalButton.getAttribute('data-emails'));
