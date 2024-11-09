@@ -14,6 +14,9 @@ namespace Algorithm.New.Algorithm.Rules
             if (!ValidateParametersCount(stacks))
                 return false;
 
+            if (!ValidateEmptyStacks(stacks))
+                return false;
+
             var stack = stacks[0];
 
             bool sopranoAlto = Interval.IsLower(stack.Soprano, stack.Alto);

@@ -60,7 +60,7 @@ namespace Algorithm.New.Music
         public Stack(int bar, int beat, int duration, string soprano, string alto, string tenore, string bass) : 
             this(new Index() { Bar = bar, Position = beat, Duration = duration }, soprano, alto, tenore, bass) { }
 
-        public Stack(Index index, List<string> notes) : this(index, notes[0], notes[1], notes[2], notes[3]) { }
+        public Stack(Index index, List<string> noteNames) : this(index, noteNames[0], noteNames[1], noteNames[2], noteNames[3]) { }
         public Stack(Index index, List<Note?> notes) : this(index, notes[0], notes[1], notes[2], notes[3]) { }
         public Stack (Index index, List<Component> components, Function function)
         {
