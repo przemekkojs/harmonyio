@@ -15,7 +15,11 @@ namespace Algorithm.New.Algorithm.Mistake
         {
             return new NoteMistake(barIndex, verticalIndex, voice)
             {
-                Description = $"Brakuje nuty w głosie {voice}. Takt {barIndex + 1}, Funkcja {verticalIndex + 1}."
+                Description = (
+                    [barIndex],
+                    [verticalIndex],
+                    $"Brakuje nuty w głosie {voice}."
+                )
             };
         }
 
@@ -73,6 +77,6 @@ namespace Algorithm.New.Algorithm.Mistake
         }
 
         public override void GenerateDescription() => 
-            Description = Mistake.GenerateNoteMistakeDescription(Voice, BarIndex + 1, VerticalIndex + 1);
+            Description = Mistake.GenerateNoteMistakeDescription(Voice, BarIndex, VerticalIndex);
     }
 }

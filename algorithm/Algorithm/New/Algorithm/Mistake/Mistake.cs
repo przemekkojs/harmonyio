@@ -2,43 +2,30 @@
 {
     public abstract class Mistake
     {
-        public string Description { get; protected set; } = "Niesprecyzowany błąd";
+        public const string UNKNOWN_MISTAKE = "Niesprecyzowany błąd";
+
+        public (List<int>, List<int>, string) Description { get; protected set; } = ([], [], UNKNOWN_MISTAKE);
         public abstract int Quantity { get; }
 
         public abstract void GenerateDescription();
 
-        public static string GenerateStackMistakeDescription(List<int> barIndexes, List<int> verticalIndexes, string ruleName)
+        public static (List<int>, List<int>, string) GenerateStackMistakeDescription(List<int> barIndexes, List<int> verticalIndexes, string ruleName)
         {
             if (barIndexes.Count == 0 || verticalIndexes.Count == 0 || ruleName == null)
-                return "";
+                return ([], [], UNKNOWN_MISTAKE);
 
-            var count = verticalIndexes.Count;
-            var postfix = count == 1 ? "i" : "ach";
-            var result = $"Błąd w funkcj{postfix}: ";
-
-            if (count == 1)
-                result += $"Takt: {barIndexes[0]}, Miara: {verticalIndexes[0]}. Niespełniona zasada: {ruleName}.";
-            else
-            {
-                var barCount = barIndexes.Count;
-
-                if (barCount == 1)
-                    result += $"Takt {barIndexes[0]}, Funkcje {verticalIndexes[0]}, {verticalIndexes[1]}. Niespełniona zasada {ruleName}.";
-                else
-                    result += $"(Takt {barIndexes[0]}, Funkcja {verticalIndexes[0]}), (Takt {barIndexes[1]}, Funkcja {verticalIndexes[1]}). Niespełniona zasada {ruleName}.";
-            }
-                
-
-            return result;
+            return (barIndexes, verticalIndexes, $"Niespełniona zasada: {ruleName}.");
         }
 
-        public static string GenerateNoteMistakeDescription(string voice, int barIndex, int verticalIndex)
+        public static (List<int>, List<int>, string) GenerateNoteMistakeDescription(string voice, int barIndex, int verticalIndex)
         {
-            return voice == string.Empty ?
-                $"Brakujący głos w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}." : 
-                $"Błędny głos {voice} w funkcji: Takt: {barIndex}, Funkcja: {verticalIndex}.";
+            var result = voice == string.Empty ?
+                $"Brakujący głos w funkcji." :
+                $"Błędny głos {voice} w funkcji.";
+
+            return ([barIndex], [verticalIndex], result);
         }
 
-        public override string ToString() => Description;
+        public override string ToString() => $"Takty {string.Join(',', Description.Item1)}, Funkcje {string.Join(',', Description.Item2)}, {Description.Item3}.";
     }
 }

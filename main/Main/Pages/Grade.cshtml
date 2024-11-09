@@ -123,12 +123,8 @@
 
                     </div>
                     @* TODO: Stylowanie trochę porządniej XD *@
-                    <div style="width: 100%; height: 100%;">
-                        <span>Opinia algorytmu</span>
-                        <textarea readonly
-                            id="algorithm-opinions"
-                            style="width: 100%; height: 100%; resize: none; border: none;"
-                            placeholder="Bezbłędnie, gratulacje!"></textarea>
+                    <div id="algorithm-opinions" style="width: 100%; height: 100%;">
+
                     </div>
                 </div>
             </div>
@@ -364,7 +360,7 @@
             let scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
             let opinion = scoreSuggestions.Item3;
 
-            document.getElementById('algorithm-opinions').value = opinion;
+            document.getElementById('algorithm-opinions').innerHTML = opinion;
 
             pointsElement.placeholder = scoreSuggestions.Item1;
             maxElement.placeholder = scoreSuggestions.Item2;
