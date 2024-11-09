@@ -15,7 +15,12 @@ namespace Main.GradingAlgorithm
 
             // TODO: Make some constant rules and rules list
             var settings = new Settings([
-                new VoiceCrossing()
+                new VoiceCrossing(),
+                new OneDirection(),
+                new ParallelFifths(),
+                new ParallelOctaves(),
+                new VoiceCrossingOneFunction(),
+                new DoubledFifthOnStrongBarPart()
             ]);
 
             var checkResult = SolutionChecker.CheckSolution(solution, settings);
@@ -67,35 +72,40 @@ namespace Main.GradingAlgorithm
 
                     if (bar1 == bar2)
                     {
-                        opinion += $"Takt {bar1}:\n<br>";                        
+                        opinion += $"<summary>Takt {bar1}</summary>";
                     }
                 }
 
                 if (bar1 != bar2)
                 {
-                    opinion += $"Takty {bar1}, {bar2}:\n<br>";
+                    opinion += $"<summary>Takty {bar1}, {bar2}</summary>";
                 }
 
                 if (function1 == function2)
                 {
-                    opinion += $"   Funkcja na miarę {function1}:\n<br>";
+                    opinion += $"<summary>Funkcja na miarę {function1}</summary>";
                 }
                 else
                 {
                     if (bar1 != bar2)
-                        opinion += $"   Funkcje na miary {function1} (takt {bar1}), {function2} (takt {bar2}):\n<br>";
+                    {
+                        opinion += $"<summary>Funkcje na miary {function1} (takt {bar1}), {function2} (takt {bar2})</summary>";
+                    }                        
                     else
-                        opinion += $"   Funkcje na miary {function1}, {function2}:\n<br>";
+                    {
+                        opinion += $"<summary>Funkcje na miary {function1}, {function2}</summary>";
+                    }                        
                 }
 
-                opinion += "        " + tmp[key] + "\n<br>";
+                opinion += $"<p>{tmp[key]}</p>";
             }
 
-            var maxMistakesCount = solution.Stacks.Count * 4;
+            var functionsCount = problem.Functions.Count;
+            var maxMistakesCount = functionsCount * 4;
 
             foreach (var setting in settings.ActiveRules)
             {
-                maxMistakesCount += (setting.OneFunction ? 1 : 2) * solution.Stacks.Count;
+                maxMistakesCount += (setting.OneFunction ? 1 : 2) * functionsCount;
             }
 
             var mistakesCount = checkResult.Sum(x => x.Quantity);
