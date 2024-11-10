@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Frozen;
 using System.Security.Claims;
 using System.Text.Json;
 using Main.Data;
@@ -32,10 +33,10 @@ public class CreatedModel : PageModel
     public int QuizId { get; set; }
 
     [BindProperty]
-    public string Emails { get; set; } = "";
+    public string? Emails { get; set; } = "";
 
     [BindProperty]
-    public string GroupsIds { get; set; } = "";
+    public string? GroupsIds { get; set; } = "";
 
 
     public List<Quiz> Sketches { get; set; } = [];
@@ -68,6 +69,8 @@ public class CreatedModel : PageModel
                 .Include(u => u.CreatedQuizes)
                     .ThenInclude(q => q.Participants)
                 .Include(u => u.CreatedQuizes)
+                    .ThenInclude(q => q.PublishedToGroup)
+                .Include(u => u.CreatedQuizes)
                     .ThenInclude(q => q.Excersises)
                         .ThenInclude(e => e.ExcersiseSolutions)
                             .ThenInclude(es => es.ExcersiseResult)
@@ -81,7 +84,7 @@ public class CreatedModel : PageModel
             return RedirectToPage("/Error");
         };
 
-        var allCreated = user.CreatedQuizes;
+        var allCreated = user.CreatedQuizes.Reverse();
 
         Sketches = allCreated.Where(q => !q.IsCreated).ToList();
         var published = allCreated.Where(q => q.IsCreated);
@@ -106,120 +109,128 @@ public class CreatedModel : PageModel
                 q.Participants.Count)
         );
 
-        Groups = user.TeacherInGroups.ToDictionary(
-            g => g.Id,
-            g => g.Name
-        );
+        Groups = user.TeacherInGroups
+            .Concat(user.MasterInGroups)
+            .DistinctBy(g => g.Id)
+            .ToDictionary(
+                g => g.Id,
+                g => g.Name
+            );
 
         return Page();
     }
 
     public async Task<IActionResult> OnPostAssign()
     {
-        var groupsIdsStrings = JsonSerializer.Deserialize<List<string>>(GroupsIds)!;
-
-        var groupsIds = groupsIdsStrings.Select(int.Parse).ToList();
-
-        var emails = new HashSet<string>();
-
-        if (Emails != "" && Emails != null)
+        var appUser = await _userManager.GetUserAsync(User);
+        if (appUser == null)
         {
-            if (Emails.Contains(','))
-            {
-                foreach (var email in Emails.Split(','))
-                {
-                    emails.Add(email);
-                }
-            }
-            else
-            {
-                emails.Add(Emails);
-            }
+            return Forbid();
         }
 
         var quizToAssign = await _repository.GetAsync<Quiz>(
             q => q.Id == QuizId,
             q => q
-                .Include(a => a.Participants)
-                .Include(a => a.PublishedToGroup)
+                .Include(q => q.Participants)
+                .Include(q => q.PublishedToGroup)
         );
 
-        if (quizToAssign == null)
+        // check if user is creator of quiz, if not then he cant assign to this quiz
+        if (quizToAssign == null || appUser.Id != quizToAssign.CreatorId)
         {
             return RedirectToPage("Error");
         }
 
-        var usersToAsign = new List<ApplicationUser>();
+        var userGroups = await _repository.GetAsync<ApplicationUser>(
+            u => u.Id == appUser.Id,
+            u => u
+                .Include(u => u.TeacherInGroups)
+                .Include(u => u.MasterInGroups)
+        );
 
-        var notFoundMails = new List<string>();
-
-        foreach (var email in emails)
+        if (userGroups == null)
         {
-            var user = await _repository.GetAsync<ApplicationUser>(
-                u => u.Email == email
-            );
-            if (user == null)
-            {
-                notFoundMails.Add(email);
-            }
-            else
-            {
-                usersToAsign.Add(user);
-            }
+            return RedirectToPage("Error");
         }
 
-        if (notFoundMails.Any())
+        // parse groupIds as int, delete those that cant be parsed, can also return error
+        var groupIds = GroupsIds != null ?
+            GroupsIds
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(e => e.Trim())
+            .Where(e => int.TryParse(e, out _))
+            .Select(int.Parse)
+            .ToHashSet() : [];
+
+        var emails = Emails != null ?
+            Emails
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(e => e.Trim())
+            .ToHashSet() : [];
+
+        if (emails.Count == 0 && groupIds.Count == 0)
+        {
+            return RedirectToPage("Error");
+        }
+
+        var validUserGroupIds = userGroups.TeacherInGroups
+            .Select(g => g.Id)
+            .Concat(userGroups.MasterInGroups.Select(g => g.Id))
+            .ToHashSet();
+
+        // check if user is teacher or master in all groups hes trying to assign
+        if (!groupIds.All(id => validUserGroupIds.Contains(id)))
+        {
+            return RedirectToPage("Error");
+        }
+
+        var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
+            u => u.Where(u => u.Email != null && emails.Contains(u.Email))
+        );
+
+        var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
+        var notFoundMails = emails
+                .Where(email => !usersByEmail.ContainsKey(email))
+                .ToList();
+
+        if (notFoundMails.Count() != 0)
         {
             return new JsonResult(new { notFoundEmails = notFoundMails });
         }
 
-        foreach (var user in usersToAsign)
-        {
-            if (!quizToAssign.Participants.Contains(user))
-            {
-                quizToAssign.Participants.Add(user);
-            }
-        }
+        // at this point emails and groupIds are valid
 
-
-        var groupsToAsign = await _repository.GetAllAsync<UsersGroup>(
-            q => q
-                .Where(
-                    g =>
-                    !Groups.Keys.Contains(g.Id) &&
-                    groupsIds.Contains(g.Id)
-                )
+        var newGroups = await _repository.GetAllAsync<UsersGroup>(
+            g => g.Where(
+                g => groupIds.Contains(g.Id) &&
+                !quizToAssign.PublishedToGroup.Contains(g))
                 .Include(g => g.Students)
         );
+        quizToAssign.PublishedToGroup.AddRange(newGroups);
 
-        foreach (var group in groupsToAsign)
-        {
-            foreach (var user in group.Students)
-            {
-                if (!quizToAssign.Participants.Contains(user))
-                {
-                    quizToAssign.Participants.Add(user);
-                }
-            }
-        }
+        var allUsersFromNewGroups = newGroups.SelectMany(
+            g => g.Students
+        );
 
-        quizToAssign.PublishedToGroup.Clear();
+        var existingParticipantIds = quizToAssign.Participants.Select(p => p.Id).ToHashSet();
+        var allNewQuizParticipants = foundUsers
+            .Concat(allUsersFromNewGroups)
+            .Where(u => !existingParticipantIds.Contains(u.Id))
+            .ToHashSet();
 
-        foreach (var groupId in groupsIds)
-        {
-            var group = await _repository.GetAsync<UsersGroup>(q => q.Id == groupId);
-            if (group == null)
-            {
-                return RedirectToPage("Error");
-            }
-            quizToAssign.PublishedToGroup.Add(group);
-        }
+        quizToAssign.Participants.AddRange(allNewQuizParticipants);
 
         _repository.Update(quizToAssign);
-
         await _repository.SaveChangesAsync();
 
-        return new JsonResult(new { success = true });
+        return new JsonResult(
+            new
+            {
+                success = true,
+                addedParticipantsCount = allNewQuizParticipants.Count,
+                newGroupIds = newGroups.Select(g => g.Id).ToList()
+            }
+            );
     }
 
     public async Task<IActionResult> OnPostPublish()
@@ -267,9 +278,4 @@ public class CreatedModel : PageModel
 
         return RedirectToPage();
     }
-
-    public bool IsReadyToGrade(Quiz quiz) =>
-        quiz.QuizResults.Count == 0 && (quiz.State == QuizState.Closed ||
-            (QuizesToUsersCompleted[quiz].Item2 > 0 &&
-                QuizesToUsersCompleted[quiz].Item1 == QuizesToUsersCompleted[quiz].Item2));
 }

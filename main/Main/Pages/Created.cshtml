@@ -63,28 +63,28 @@
                                 <i class="fas fa-user-group icon-sm me-2"></i>
                                 <span class="text-truncate">
                                     <span class="fw-bold">Wypełniono:</span>
-                                    @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                                    @Model.QuizesToUsersCompleted[quiz].Item1 / <span id="gradeParticipantsCount@(quiz.Id)">@Model.QuizesToUsersCompleted[quiz].Item2</span>
                                 </span>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column h-100 ms-2">
                             @if(quiz.State == QuizState.Open) {
-                            var callbackUrl = Url.Page(
-                                                "/Solve",
-                                                pageHandler: null,
-                                                values: new { code = quiz.Code },
-                                                protocol: Request.Scheme);
-                            <div class="d-flex flex-row">
-                                <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
-                                    data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
-                                    data-pin="@quiz.Code" data-url="@(callbackUrl)" data-emails='@(new List<string>().ToJson())'
-                                    data-all-groups='@(Model.Groups.ToJson())'
-                                    data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
-                                    data-callback-name="assign">
-                                    <i class="fas fa-share-alt icon-sm"></i>
-                                </a>
-                            </div>
+                                var callbackUrl = Url.Page(
+                                                    "/Solve",
+                                                    pageHandler: null,
+                                                    values: new { code = quiz.Code },
+                                                    protocol: Request.Scheme);
+                                <div class="d-flex flex-row">
+                                    <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
+                                        data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
+                                        data-pin="@quiz.Code" data-url="@(callbackUrl)"
+                                        data-all-groups='@(Model.Groups.ToJson())'
+                                        data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
+                                        data-callback-name="assign">
+                                        <i class="fas fa-share-alt icon-sm"></i>
+                                    </a>
+                                </div>
                             }
 
                             <div class="d-flex flex-row ms-auto mt-auto">
@@ -130,7 +130,7 @@
                                 <i class="fas fa-user-group icon-sm me-2"></i>
                                 <span class="text-truncate">
                                     <span class="fw-bold">Wypełniono:</span>
-                                    @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                                    @Model.QuizesToUsersCompleted[quiz].Item1 / <span id="participantsCount@(quiz.Id)">@Model.QuizesToUsersCompleted[quiz].Item2</span>
                                 </span>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                             <div class="d-flex flex-row">
                                 <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
                                     data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
-                                    data-pin="@quiz.Code" data-url="@(callbackUrl)" data-emails='@(new List<string>().ToJson())'
+                                    data-pin="@quiz.Code" data-url="@(callbackUrl)"
                                     data-all-groups='@(Model.Groups.ToJson())'
                                     data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
                                     data-callback-name="assign">
@@ -192,7 +192,7 @@
                                 <i class="fas fa-user-group icon-sm me-2"></i>
                                 <span class="text-truncate">
                                     <span class="fw-bold">Przypisani:</span>
-                                    @Model.QuizesToUsersCompleted[quiz].Item2
+                                    <span id="participantsCount@(quiz.Id)">@Model.QuizesToUsersCompleted[quiz].Item2</span>
                                 </span>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
                         <div class="d-flex flex-column h-100 ms-2"> 
                             <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
                                 data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
-                                data-pin="@quiz.Code" data-url="@(callbackUrl)" data-emails='@(new List<string>().ToJson())'
+                                data-pin="@quiz.Code" data-url="@(callbackUrl)"
                                 data-all-groups='@(Model.Groups.ToJson())'
                                 data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
                                 data-callback-name="assign">
@@ -260,6 +260,15 @@
 
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3">
         <div class="fw-bold fs-4 mb-3">Szkice</div>
+        
+        <a asp-page="Creator" class="no-style mb-3">
+            <div class="quiz quiz-add rounded d-flex justify-content-center align-items-center">
+                <i class="fas fa-plus me-1"></i>
+
+                <span class="fw-bold">Utwórz nowy quiz</span>
+            </div>
+        </a>
+
         @foreach (var quiz in Model.Sketches)
         {
             <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
@@ -297,14 +306,6 @@
                 </div>
             </div>
         }
-
-        <a asp-page="Creator" class="no-style">
-            <div class="quiz quiz-add rounded d-flex justify-content-center align-items-center">
-                <i class="fas fa-plus me-1"></i>
-
-                <span class="fw-bold">Utwórz nowy quiz</span>
-            </div>
-        </a>
     </div>
 </div>
 
@@ -331,16 +332,18 @@
     }
 
     async function assign(quizId, assignedEmails, assignedGroups) {
+        // no new email or groups so just return null and close modal
+        if(assignedEmails.length === 0 && assignedGroups.length === 0) {
+            console.log("early return");
+            return null;
+        }
+
         document.getElementById("assignFormQuizId").value = quizId;
         document.getElementById("assignFormEmailsForQuiz").value = assignedEmails;
-        document.getElementById("assignFormGroupsForQuiz").value = JSON.stringify(assignedGroups);
+        document.getElementById("assignFormGroupsForQuiz").value = assignedGroups;
 
         form = document.getElementById("assignFormForQuiz");
         const formData = new FormData(form);
-
-        console.log("assigned quiz: " + quizId);
-        console.log("assigned users: " + assignedEmails);
-        console.log("assigned groups: " + assignedGroups);
 
         try {
             const response = await fetch(form.action, {
@@ -371,17 +374,43 @@
 
                 if (result.success) {
                     console.log('Users added successfully');
+                    updateQuizElements(quizId, result);
                     return null;
                 }
             }
-
             return null;
-
         }
         catch (error) {
             console.error('An error occurred:', error);
             return null;
         }
+    }
+
+    function updateQuizElements(quizId, result){
+        // update participants count for quiz
+        const gradeParticipantsCount = document.getElementById("gradeParticipantsCount" + quizId);
+        const participantsCount = document.getElementById("participantsCount" + quizId);
+        if(gradeParticipantsCount) {
+            const curCount = parseInt(gradeParticipantsCount.innerHTML);
+            gradeParticipantsCount.innerHTML = curCount + result.addedParticipantsCount;
+        }
+        if(participantsCount) {
+            const curCount = parseInt(participantsCount.innerHTML);
+            participantsCount.innerHTML = curCount + result.addedParticipantsCount;
+        }
+
+        // update added groups for quiz share button
+        const links = document.querySelectorAll(`a[data-quiz-id='${quizId}']`);
+        links.forEach(link => {
+            const addedGroupsAttribute = link.getAttribute('data-added-groups')
+            let addedGroups = JSON.parse(addedGroupsAttribute);
+
+            if (addedGroups && Array.isArray(addedGroups)) {
+                addedGroups = [...new Set([...result.newGroupIds, ...addedGroups])];
+                link.setAttribute('data-added-groups', JSON.stringify(addedGroups));
+            }
+        });
+
     }
 
 </script>

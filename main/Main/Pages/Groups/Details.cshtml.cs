@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using NuGet.Protocol;
 
 namespace Main.Pages
@@ -202,17 +203,46 @@ namespace Main.Pages
                 .ToHashSet();
 
             var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
-                q => q.Where(u => u.Email != null && emails.Contains(u.Email))
+                u => u.Where(u => u.Email != null && emails.Contains(u.Email))
             );
+
+            HashSet<string> wrongEmails = new HashSet<string>();
 
             var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
             var notFoundMails = emails
-                    .Where(email => !usersByEmail.ContainsKey(email))
-                    .ToList();
+                    .Where(email => !usersByEmail.ContainsKey(email));
+            wrongEmails.AddRange(notFoundMails);
 
-            if (notFoundMails.Count() != 0)
+
+            // check if users are already added to group
+            if (AsAdmins)
             {
-                return new JsonResult(new { notFoundEmails = notFoundMails });
+                var addedTeachersEmails = group.Teachers.Where(u => usersByEmail.ContainsKey(u.Email!)).Select(u => u.Email!);
+                wrongEmails.AddRange(addedTeachersEmails);
+
+                if (usersByEmail.ContainsKey(appUser.Email!))
+                {
+                    wrongEmails.Add(appUser.Email!);
+                }
+            }
+            else
+            {
+                var addedStudents = group.Students.Where(u => usersByEmail.ContainsKey(u.Email!)).Select(u => u.Email!);
+                wrongEmails.AddRange(addedStudents);
+            }
+
+            // check if users have request sent 
+            var requestSentEmails = (await _repository.GetAllAsync<GroupRequest>(
+                gr => gr
+                    .Where(gr => gr.GroupId == GroupId && gr.ForTeacher == AsAdmins)
+                    .Include(gr => gr.User)
+                )).Where(gr => usersByEmail.ContainsKey(gr.User.Email!))
+                .Select(gr => gr.User.Email!);
+            wrongEmails.AddRange(requestSentEmails);
+
+            if (wrongEmails.Count() != 0)
+            {
+                return new JsonResult(new { wrongEmails = wrongEmails.ToList() });
             }
 
             foreach (var user in foundUsers)
