@@ -20,12 +20,14 @@
             <div class="overflow-auto flex-grow-1 p-3">
                 @for (int i = 0; i < Model.Users.Count; i++)
                 {
-                    <div onclick="selectUser(@i)" class="student-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
-                        <div class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                    <div onclick="selectUser(@i)"
+                        class="student-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
+                        <div
+                            class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
                             @Model.Users[i].FullName
                         </div>
                         <div id="user-grade-@i"
-                             class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
+                            class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
                             -
                         </div>
                     </div>
@@ -47,17 +49,19 @@
 
                     <div class="d-flex align-items-center h-100">
                         <span class="fw-bold me-2">Wynik</span>
-                        <div id="points-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap h-100 align-items-center d-flex">
+                        <div id="points-text"
+                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap h-100 align-items-center d-flex">
                             @*SET VIA JS*@
                         </div>
-                        <div id="percentage-text" class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4 h-100 align-items-center d-flex">
+                        <div id="percentage-text"
+                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4 h-100 align-items-center d-flex">
                             @*SET VIA JS*@
                         </div>
                         <span class="fw-bold me-2">Ocena</span>
                         <select id="grade-select"
-                                onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
-                                class="grade-select bg-transparent form-select border border-secondary text-secondary"
-                                aria-label="Wybierz ocenę">
+                            onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
+                            class="grade-select bg-transparent form-select border border-secondary text-secondary"
+                            aria-label="Wybierz ocenę">
                             <option selected disabled>-</option>
                             @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
                             {
@@ -79,20 +83,21 @@
                         <div id="div-last-ex">
                             <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
                             <button id="btn-last-ex" type="button" onclick="lastQuestion()"
-                                    class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+                                class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
                         </div>
 
                         <span class="fw-bold ms-auto me-2">Punkty</span>
                         <input type="number" id="points" onchange="onPointsChange(this.value)"
-                               onKeyPress="integerKeyPress(event)"
-                               class="form-control points-input border-secondary bg-white" />
+                            onKeyPress="integerKeyPress(event)"
+                            class="form-control points-input border-secondary bg-white" />
 
                         <span class="fw-bold ms-3 me-2">Max</span>
                         <input type="number" id="max" onchange="onMaxChange(this.value)"
-                               onKeyPress="integerKeyPress(event)"
-                               class="form-control points-input border-secondary bg-white" />
+                            onKeyPress="integerKeyPress(event)"
+                            class="form-control points-input border-secondary bg-white" />
 
-                        <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
+                        <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal"
+                            data-bs-target="#commentPopup">
                             Komentarz
                         </a>
                     </div>
@@ -106,19 +111,23 @@
                     </div>
 
                     <div class="mt-3 d-flex flex-row">
-                       
+
                         @for (int exId = 0; exId < Model.Excersises.Count; exId++)
                         {
                             @for (int usrId = 0; usrId < Model.Users.Count; usrId++)
                             {
                                 <input id="points-hidden-@exId-@usrId" type="hidden" asp-for="Points[usrId][exId]" value="0" />
                                 <input id="max-hidden-@exId-@usrId" type="hidden" asp-for="Maxes[usrId][exId]" value="0" />
-                                <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]" value="" />
+                                <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]"
+                                    value="" />
                             }
                         }
 
-                        <div id="music-staff-div" class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+                        <div id="music-staff-div"
+                            class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
+                            <div id="p5_loading">Ładowanie pięciolinii</div>
                             @* MUSIC STAFF DIV SET VIA JS *@
+
                         </div>
 
                     </div>
@@ -131,7 +140,8 @@
         </div>
 </form>
 
-<div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -139,12 +149,12 @@
                 <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <textarea id="comment" rows="8" placeholder="Dodaj komentarz..."
-                          onchange="onCommentChange(this.value)"
-                          class="form-control"></textarea>
+                <textarea id="comment" rows="8" placeholder="Dodaj komentarz..." onchange="onCommentChange(this.value)"
+                    class="form-control"></textarea>
             </div>
             <div class="modal-footer justify-content-center align-items-center">
-                <button type="button" class="btn btn-secondary btn-sm-width focus-ring" data-bs-dismiss="modal">Zamknij</button>
+                <button type="button" class="btn btn-secondary btn-sm-width focus-ring"
+                    data-bs-dismiss="modal">Zamknij</button>
             </div>
         </div>
     </div>
