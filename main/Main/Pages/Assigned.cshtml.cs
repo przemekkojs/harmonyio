@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Main.Data;
+using Main.Enumerations;
 using Main.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,35 +15,72 @@ public class AssignedModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationRepository _repository;
-    
+
+    public ApplicationUser AppUser { get; set; } = null!;
+    public List<Quiz> SolvedOpen = [];
+    public List<Quiz> NotSolvedOpen = [];
+    public List<Quiz> NotSolvedPlanned = [];
+    public List<Quiz> Closed = [];
+    public Dictionary<int, QuizResult> GradedQuizes = [];
+
     public AssignedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
         _repository = repository;
     }
 
-    public ApplicationUser AppUser { get; set; } = null!;
-    public ICollection<Quiz> Joined { get; set; } = new List<Quiz>();
-
     public async Task<IActionResult> OnGetAsync()
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
+        var appUser = await _userManager.GetUserAsync(User);
+        if (appUser == null)
         {
             return Forbid();
         }
 
-        AppUser = user;
-        Joined = (await _repository.GetAsync<ApplicationUser>(
-            q => q.Id == AppUser!.Id,
-            q => q
-                .Include(u => u.ParticipatedQuizes)
-                    .ThenInclude(q => q.QuizResults)
+        AppUser = appUser;
+
+        var user = await _repository.GetAsync<ApplicationUser>(
+            u => u.Id == appUser.Id,
+            u => u
+                .Include(u => u.QuizResults)
                 .Include(u => u.ParticipatedQuizes)
                     .ThenInclude(q => q.Excersises)
-                        .ThenInclude(e => e.ExcersiseSolutions)
-        ))!.ParticipatedQuizes;
+                        .ThenInclude(e => e.ExcersiseSolutions.Where(es => es.UserId == appUser.Id))
+                .Include(u => u.ParticipatedQuizes)
+                    .ThenInclude(q => q.Creator)
+        );
 
+
+        if (user == null)
+        {
+            return RedirectToPage("/Error");
+        };
+
+        GradedQuizes = user.QuizResults
+            .Where(qr => qr.Grade != null)
+            .ToDictionary(qr => qr.QuizId);
+
+        foreach (var quiz in user.ParticipatedQuizes.Reverse())
+        {
+            bool isSolved = quiz.Excersises.Any(e => e.ExcersiseSolutions.Any());
+
+            if (isSolved)
+            {
+                if (quiz.State == QuizState.Open)
+                    SolvedOpen.Add(quiz);
+                else if (quiz.State == QuizState.Closed)
+                    Closed.Add(quiz);
+            }
+            else
+            {
+                if (quiz.State == QuizState.Open)
+                    NotSolvedOpen.Add(quiz);
+                else if (quiz.State == QuizState.NotStarted)
+                    NotSolvedPlanned.Add(quiz);
+                else if (quiz.State == QuizState.Closed)
+                    Closed.Add(quiz);
+            }
+        }
         return Page();
     }
 }
