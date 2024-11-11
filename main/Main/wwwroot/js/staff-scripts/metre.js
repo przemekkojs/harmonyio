@@ -10,6 +10,12 @@ class Metre {
     return Note.baseValueToSlots(this.value) * this.count;
   }
 
+  clearGraphics() {
+    if (this.metreGraphic) {
+      this.metreGraphic.remove();
+    }
+  }
+
   #renderGraphic(letterSize) {
     textSize(letterSize);
 

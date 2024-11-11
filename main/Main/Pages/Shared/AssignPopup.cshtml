@@ -2,32 +2,38 @@
 ASSIGN MODAL POPUP
 
 ATRYBUTY:
-    - data-quiz-id: Id quizu
-    - data-quiz-name: Nazwa quizu
-    - data-pin: Pin quizu
-    - data-url: URL quizu
-    - data-emails: Emaile użytkowników, przypisanych już do quizu. Będą one nieusuwalne.
-    - data-all-groups: Wszystkie grupy tworzącego quiz. Quiz może być przypisany do tych grup.
-    - data-added-groups: Wszystkie przypisane już do tego quizu grupy. Będą one nieusuwalne.
-    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3 argumenty - quizId, assignedEmails i assignedGroups oraz zwracać null w przypadku powodzenia lub listę błędnych emaili w przypadku niepowodzenia
+- data-quiz-id: Id quizu
+- data-quiz-name: Nazwa quizu
+- data-pin: Pin quizu
+- data-url: URL quizu
+- data-all-groups: Wszystkie grupy tworzącego quiz. Quiz może być przypisany do tych grup.
+- data-added-groups: Wszystkie przypisane już do tego quizu grupy. Będą one nieusuwalne.
+- data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3
+argumenty - quizId, assignedEmails i assignedGroups oraz zwracać null w przypadku powodzenia lub listę błędnych emaili w
+przypadku niepowodzenia
 *@
 
 <style>
-    #assignPopup .modal-dialog{
+    #assignPopup .modal-dialog {
         max-width: 850px;
     }
-    #assignTipPanel{
-        width: 215px; 
+
+    #assignTipPanel {
+        width: 215px;
         min-width: 215px;
     }
-</style> 
+</style>
 
-<div class="modal fade" id="assignPopup" tabindex="-1" role="dialog" aria-labelledby="assignPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="assignPopup" tabindex="-1" role="dialog" aria-labelledby="assignPopupCenterTitle"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content d-flex flex-row overflow-hidden">
-            <div id="assignTipPanel" class="d-none d-sm-flex bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
+            <div id="assignTipPanel"
+                class="d-none d-sm-flex bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
                 <span class="fw-bold fs-4 mb-1">Udostępnianie</span>
-                <p>Quiz udostepnić możesz za pomocą kodu lub linku, poprzez które użytkownicy dołączyć mogą samodzielnie. Możesz również zaprosić do quizu indywidualnych użytkowników lub  przypisać go do swoich grup. </p>
+                <p>Quiz udostepnić możesz za pomocą kodu lub linku, poprzez które użytkownicy dołączyć mogą
+                    samodzielnie. Możesz również zaprosić do quizu indywidualnych użytkowników lub przypisać go do
+                    swoich grup. </p>
             </div>
 
             <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
@@ -40,25 +46,29 @@ ATRYBUTY:
                     <div class="mb-3 mx-3" id="pinUrlArea">
                         <div class="bg-white rounded shadow-sm p-2 d-flex flex-row">
                             <div class="overflow-hidden text-truncate me-auto">
-                                <span class="fw-bold">PIN</span> <br/>
+                                <span class="fw-bold">PIN</span> <br />
                                 <span id="assignedQuizPin">027 312</span>
                             </div>
-                            <button type="button" id="copyPinBtn" class="btn btn-secondary ms-2 my-auto" onclick="copyPin()">Kopiuj</button>
+                            <button type="button" id="copyPinBtn" class="btn btn-secondary ms-2 my-auto"
+                                onclick="copyPin()">Kopiuj</button>
                         </div>
 
                         <div class="bg-white rounded shadow-sm p-2 d-flex flex-row">
                             <div class="overflow-hidden text-truncate me-auto">
-                                <span class="fw-bold">URL</span> <br/>
+                                <span class="fw-bold">URL</span> <br />
                                 <span id="assignedQuizUrl">https://harmony.io/join?q=021367</span>
                             </div>
-                            <button type="button" id="copyUrlBtn" class="btn btn-secondary ms-2 my-auto" onclick="copyUrl()">Kopiuj</button>
+                            <button type="button" id="copyUrlBtn" class="btn btn-secondary ms-2 my-auto"
+                                onclick="copyUrl()">Kopiuj</button>
                         </div>
                     </div>
 
                     <hr class="m-0" style="border: none; border-top: 0.5px solid #ced4da; opacity: 1;" />
 
-                    <div class="d-flex flex-row flex-grow-1 p-3 overflow-auto" style="height: 265px; max-height: 265px;">
-                        <div class="h-100 w-50 bg-white rounded shadow-sm border border-light d-flex flex-column me-3 overflow-auto" style="min-width: 200px;">
+                    <div class="d-flex flex-row flex-grow-1 p-3 overflow-auto"
+                        style="height: 265px; max-height: 265px;">
+                        <div class="h-100 w-50 bg-white rounded shadow-sm border border-light d-flex flex-column me-3 overflow-auto"
+                            style="min-width: 200px;">
                             <div class="bg-light d-flex flex-row fw-bold p-2">
                                 <span class="ms-auto me-1">Użytkownicy</span>
                                 <span id="emailsNumber" class="me-auto">(2)</span>
@@ -67,18 +77,20 @@ ATRYBUTY:
                             <hr class="m-0 border border-1" />
 
                             <div class="m-2">
-                                <input id="assignEmailInput" class="form-control" type="email" placeholder="Dodaj email użytkownika" required />
+                                <input id="assignEmailInput" class="form-control" type="email"
+                                    placeholder="Dodaj email użytkownika" required />
                             </div>
 
                             <hr class="m-0 border border-1" />
 
                             <div id="emailListContainer" class="p-2 overflow-auto">
-
+                                @*FILLED VIA JS*@
                             </div>
 
                         </div>
 
-                        <div class="h-100 w-50 bg-white rounded shadow-sm d-flex flex-column overflow-auto" style="min-width: 200px;">
+                        <div class="h-100 w-50 bg-white rounded shadow-sm d-flex flex-column overflow-auto"
+                            style="min-width: 200px;">
                             <div class="bg-light d-flex flex-row fw-bold p-2">
                                 <span class="ms-auto me-1">Grupy</span>
                                 <span id="groupsNumber" class="me-auto">(1)</span>
@@ -87,19 +99,20 @@ ATRYBUTY:
                             <hr class="m-0 border border-1" />
 
                             <div id="groupListContainer" class="p-2 overflow-auto">
-
+                                @*FILLED VIA JS*@
                             </div>
 
                         </div>
                     </div>
-                    
+
                     <div id="assignValidationText" class="text-danger mx-3 mt-3 d-none">
                         Niektórzy z podanych użytkowników nie istnieją!
                     </div>
                 </div>
 
                 <div class="modal-footer justify-content-center align-items-center">
-                    <button type="button" class="btn btn-secondary btn-sm-width" id="assignCancelButton" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="button" class="btn btn-secondary btn-sm-width" id="assignCancelButton"
+                        data-bs-dismiss="modal">Zamknij</button>
                     <button type="button" class="btn btn-primary btn-sm-width" id="assignSaveButton">Zapisz</button>
                 </div>
             </div>
@@ -110,17 +123,18 @@ ATRYBUTY:
 
 <script>
 
-    let assignPopup = document.getElementById('assignPopup');
-    let assignSaveButton = assignPopup.querySelector('#assignSaveButton');
+    const assignPopup = document.getElementById('assignPopup');
+    const assignSaveButton = assignPopup.querySelector('#assignSaveButton');
+    const emailListContainer = document.getElementById("emailListContainer");
+    const emailsNumber = document.getElementById("emailsNumber");
     let assignModalButton;
     let assignPinTimeoutId;
     let assignUrlTimeoutId;
 
     let assignedEmails = [];
-    let uneditableEmails = [];
+    let wrongEmails = [];
     let allGroups = [];
     let uneditableGroups = [];
-    let wrongEmails = [];
 
     const validationText = assignPopup.querySelector('#assignValidationText');
     const emailInput = document.getElementById("assignEmailInput");
@@ -135,84 +149,53 @@ ATRYBUTY:
 
     assignPopup.addEventListener('show.bs.modal', function (event) {
         assignModalButton = event.relatedTarget;
-        let quizName = assignModalButton.getAttribute('data-quiz-name');
-        let quizPin = assignModalButton.getAttribute('data-pin');
-        let quizUrl = assignModalButton.getAttribute('data-url');
+        const quizName = assignModalButton.getAttribute('data-quiz-name');
+        const quizPin = assignModalButton.getAttribute('data-pin');
+        const quizUrl = assignModalButton.getAttribute('data-url');
 
-        let nameElement = assignPopup.querySelector('#assignedQuizName');
-        let pinElement = assignPopup.querySelector('#assignedQuizPin');
-        let urlElement = assignPopup.querySelector('#assignedQuizUrl');
+        const nameElement = assignPopup.querySelector('#assignedQuizName');
+        const pinElement = assignPopup.querySelector('#assignedQuizPin');
+        const urlElement = assignPopup.querySelector('#assignedQuizUrl');
 
         nameElement.textContent = quizName;
         pinElement.textContent = quizPin;
         urlElement.textContent = quizUrl;
 
-        wrongEmails = [];
-        assignedEmails = JSON.parse(assignModalButton.getAttribute('data-emails'));
-        uneditableEmails = [...assignedEmails];
-        updateEmailsList();
+        clearEmailsList();
 
         allGroups = JSON.parse(assignModalButton.getAttribute('data-all-groups'));
-        uneditableGroups = JSON.parse(assignModalButton.getAttribute('data-added-groups')).map(n => n+'');
+        uneditableGroups = JSON.parse(assignModalButton.getAttribute('data-added-groups')).map(n => n + '');
         initGroups();
     });
 
-    assignSaveButton.addEventListener('click', async function (event) {
-        const checkedCheckboxes = groupListContainer.querySelectorAll('input[type="checkbox"]:checked');
-        const groups = Array.from(checkedCheckboxes).map(checkbox => checkbox.getAttribute('data-group'));
-        const closebutton = document.getElementById('assignCancelButton');
+    function clearEmailsList() {
+        wrongEmails = [];
+        assignedEmails = [];
+        emailListContainer.innerHTML = "";
+        emailsNumber.innerHTML = "(0)";
+    }
 
+    assignSaveButton.addEventListener('click', async function (event) {
         const callbackName = assignModalButton.getAttribute('data-callback-name');
-        const quizId = assignModalButton.getAttribute('data-quiz-id');
 
         if (typeof window[callbackName] === 'function') {
-            wrongEmails = await window[callbackName](quizId, assignedEmails, groups);
-            
-            if (wrongEmails == null || wrongEmails.length == 0){
+            const quizId = assignModalButton.getAttribute('data-quiz-id');
+            const checkedCheckboxes = groupListContainer.querySelectorAll('input[type="checkbox"]:checked');
+            const groups = Array.from(checkedCheckboxes).map(checkbox => checkbox.getAttribute('data-group'));
+
+            const newGroups = groups.filter(g => !uneditableGroups.includes(g));
+            wrongEmails = await window[callbackName](quizId, assignedEmails, newGroups);
+
+            if (wrongEmails == null || wrongEmails.length == 0) {
+                const closebutton = document.getElementById('assignCancelButton');
                 closebutton.click();
             } else {
-                updateEmailsList();
+                showWrongEmails();
             }
         } else {
             console.error("Callback function not found:", callbackName);
         }
     });
-
-    function copyPin() {
-        let pinElement = document.getElementById("assignedQuizPin");
-        let copyButton = document.getElementById("copyPinBtn");
-
-        navigator.clipboard.writeText(pinElement.textContent);
-
-        copyButton.classList.remove('btn-secondary');
-        copyButton.classList.add('btn-primary');
-        copyButton.innerText = "Skopiowano";
-
-        clearTimeout(assignPinTimeoutId);
-        assignPinTimeoutId = setTimeout(function () {
-            copyButton.classList.remove('btn-primary');
-            copyButton.classList.add('btn-secondary');
-            copyButton.innerText = "Kopiuj";
-        }, 5000);
-    }
-
-    function copyUrl() {
-        let urlElement = document.getElementById("assignedQuizUrl");
-        let copyButton = document.getElementById("copyUrlBtn");
-
-        navigator.clipboard.writeText(urlElement.textContent);
-
-        copyButton.classList.remove('btn-secondary');
-        copyButton.classList.add('btn-primary');
-        copyButton.innerText = "Skopiowano";
-
-        clearTimeout(assignUrlTimeoutId);
-        assignUrlTimeoutId = setTimeout(function () {
-            copyButton.classList.remove('btn-primary');
-            copyButton.classList.add('btn-secondary');
-            copyButton.innerText = "Kopiuj";
-        }, 5000);
-    }
 
     function isValidEmail(email) {
         return emailReg.test(email) && !assignedEmails.includes(email);
@@ -228,60 +211,67 @@ ATRYBUTY:
 
         if (isValidEmail(email)) {
             assignedEmails.push(emailInput.value);
+            addEmailToEmailsList(email);
 
             emailInput.value = "";
             emailInput.classList.remove("input-error");
-
-            updateEmailsList()
+            emailInput.focus();
         } else {
             emailInput.classList.add("input-error");
         }
     }
 
-    function updateEmailsList() {
-        const emailListContainer = document.getElementById("emailListContainer");
-        const emailsNumber = document.getElementById("emailsNumber");
-        emailListContainer.innerHTML = "";
+    function addEmailToEmailsList(email, isWrong = false) {
         emailsNumber.innerText = `(${assignedEmails.length})`;
 
-        assignedEmails = assignedEmails.filter(email => !uneditableEmails.includes(email));
-        assignedEmails = assignedEmails.concat(uneditableEmails);
+        const emailDiv = document.createElement("div");
+        emailDiv.className = `rounded d-flex flex-row p-2 ${assignedEmails.length != 1 ? "mt-2" : ""} ${isWrong ? "input-error" : "border"}`;
+        emailDiv.innerHTML = `
+                <span class="text-truncate me-2">${email}</span>
+                <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
+            `;
+
+        const deleteButton = emailDiv.querySelector("button");
+        deleteButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const indexToRemove = assignedEmails.indexOf(email);
+            if (indexToRemove !== -1) {
+                assignedEmails.splice(indexToRemove, 1);
+                emailDiv.remove();
+            }
+            removeFromWrongEmails(email);
+            emailsNumber.innerText = `(${assignedEmails.length})`
+        });
+
+        emailListContainer.appendChild(emailDiv);
+    }
+
+    function removeFromWrongEmails(email) {
+        const indexToRemove = wrongEmails.indexOf(email);
+        if (indexToRemove !== -1) {
+            wrongEmails.splice(indexToRemove, 1);
+
+            if (wrongEmails.length === 0) {
+                validationText.classList.add('d-none');
+            }
+        }
+    }
+
+    function showWrongEmails() {
+        emailListContainer.innerHTML = "";
+        emailsNumber.innerText = `(${assignedEmails.length})`;
 
         let anyWrong = false;
         assignedEmails.forEach((email, index) => {
             const isWrong = wrongEmails.includes(email);
             if (isWrong) anyWrong = true;
 
-            const emailDiv = document.createElement("div");
-            emailDiv.className = `rounded d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""} ${isWrong ? "input-error" : "border"}`;
-            emailDiv.innerHTML = `
-                <span class="text-truncate me-2">${email}</span>
-            `;
-
-            if (!uneditableEmails.includes(email)) {
-                emailDiv.innerHTML += `
-                    <button type="button" class="ms-auto btn-close" aria-label="Close"></button>
-                `;
-
-                emailListContainer.appendChild(emailDiv);
-
-                const deleteButton = emailDiv.querySelector("button");
-                deleteButton.addEventListener("click", function (event) {
-                    event.preventDefault();
-
-                    const indexToRemove = parseInt(deleteButton.getAttribute("data-index"));
-                    assignedEmails.splice(indexToRemove, 1);
-                    updateEmailsList();
-                });
-            }
-
-            emailListContainer.appendChild(emailDiv);
+            addEmailToEmailsList(email, isWrong);
         });
 
         if (anyWrong)
-            validationText.classList.remove('d-none')
-        else 
-            validationText.classList.add('d-none')
+            validationText.classList.remove('d-none');
     }
 
     function initGroups() {
@@ -292,22 +282,48 @@ ATRYBUTY:
             const groupDiv = document.createElement("div");
             groupDiv.className = `bg-transparent rounded border d-flex flex-row p-2 ${index != 0 ? "mt-2" : ""}`;
             groupDiv.innerHTML = `
-                <input data-group="${group[0]}" type="checkbox" onchange="updateGroups()" class="form-check-input me-2" ${uneditableGroups.includes(group[0]) ? "checked disabled" : ""}>
+                <input data-group="${group[0]}" type="checkbox" onchange="updateGroupsNumber()" class="form-check-input me-2" ${uneditableGroups.includes(group[0]) ? "checked disabled" : ""}>
                 <span class="text-truncate">${group[1]}</span>
             `;
 
             groupListContainer.appendChild(groupDiv);
         });
 
-        updateGroups();
+        updateGroupsNumber();
     }
 
-    function updateGroups() {
+    function updateGroupsNumber() {
         const groupListContainer = document.getElementById("groupListContainer");
         const groupsNumber = document.getElementById("groupsNumber");
 
         const checkedCheckboxes = groupListContainer.querySelectorAll('input[type="checkbox"]:checked');
         groupsNumber.innerText = `(${checkedCheckboxes.length})`;
+    }
+
+    function copyPin() {
+        const pinElement = document.getElementById("assignedQuizPin");
+        navigator.clipboard.writeText(pinElement.textContent);
+
+        toggleCopyButton("copyPinBtn", assignPinTimeoutId);
+    }
+
+    function copyUrl() {
+        const urlElement = document.getElementById("assignedQuizUrl");
+        navigator.clipboard.writeText(urlElement.textContent);
+
+        toggleCopyButton("copyUrlBtn", assignUrlTimeoutId);
+    }
+
+    function toggleCopyButton(buttonId, timeoutId) {
+        const copyButton = document.getElementById(buttonId);
+        copyButton.classList.replace('btn-secondary', 'btn-primary');
+        copyButton.innerText = "Skopiowano";
+
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            copyButton.classList.replace('btn-primary', 'btn-secondary');
+            copyButton.innerText = "Kopiuj";
+        }, 5000);
     }
 
 </script>

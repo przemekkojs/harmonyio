@@ -3,8 +3,8 @@
     cursor: pointer;
     color: var(--bs-gray-600);
     border-style: dashed;
-    height: 168px;
-    min-height: 168px;
+    height: 80px;
+    min-height: 80px;
     background-color: transparent;
 }
 

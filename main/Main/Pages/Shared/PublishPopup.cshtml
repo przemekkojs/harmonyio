@@ -2,31 +2,43 @@
 PUBLISH MODAL POPUP
 
 ATRYBUTY:
-    - data-quiz-id: Id quizu
-    - data-quiz-name: Nazwa quizu
-    - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3 argumenty - quizId, openDate i closeDate
+- data-quiz-id: Id quizu
+- data-quiz-name: Nazwa quizu
+- data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3
+argumenty - quizId, openDate i closeDate
 *@
 
 <style>
-    #publishPopup .modal-dialog{
+    #publishPopup .modal-dialog {
         max-width: 650px;
     }
-    #publishTipPanel{
-        width: 215px; 
+
+    #publishTipPanel {
+        width: 215px;
         min-width: 215px;
     }
-</style> 
+</style>
 
-<div class="modal fade" id="publishPopup" tabindex="-1" role="dialog" aria-labelledby="publishPopupCenterTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"">
+<div class="modal fade" id="publishPopup" tabindex="-1" role="dialog" aria-labelledby="publishPopupCenterTitle"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     @{
         var textInfo = System.Globalization.CultureInfo.CurrentCulture.TextInfo;
+        var today = DateTime.Today;
+        var days = Enumerable.Range(0, 30).Select(offset => today.AddDays(offset)).ToList();
+
+        var currentDay = DateTime.Now.Date;
+        var nextWeekDay = currentDay.AddDays(7).Date;
+
+        var currentHour = DateTime.Now.Hour;
     }
 
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class=" modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content d-flex flex-row overflow-hidden">
-            <div id="publishTipPanel" class="d-none d-sm-flex bg-pattern-sm text-white flex-column text-center align-items-center justify-content-center p-3">
+            <div id="publishTipPanel"
+                class="d-none d-sm-flex bg-pattern-sm text-white flex-column text-center align-items-center justify-content-center p-3">
                 <span class="fw-bold fs-4 mb-1">Publikacja quizu</span>
-                <p>W momencie opublikowania quizu nie będziesz miał już możliwości jego edycji, ani usunięcia. Dostęp do niego uzyskają wszyscy użytkownicy, z którymi podzielisz się quizem.</p>
+                <p>W momencie opublikowania quizu nie będziesz miał już możliwości jego edycji, ani usunięcia. Dostęp do
+                    niego uzyskają wszyscy użytkownicy, z którymi podzielisz się quizem.</p>
             </div>
 
             <div class="flex-grow-1 d-flex flex-column">
@@ -34,16 +46,6 @@ ATRYBUTY:
                     <span id="publishedQuizName" class="fw-bold fs-4">Kartkówka 2A</span>
                     <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
-                @{
-                    var today = DateTime.Today;
-                    var days = Enumerable.Range(0, 30).Select(offset => today.AddDays(offset)).ToList();
-
-                    var currentDay = DateTime.Now.Date;
-                    var nextWeekDay = currentDay.AddDays(7).Date;
-
-                    var currentHour = DateTime.Now.Hour;
-                }
 
                 <div class="d-flex flex-column p-3">
                     <span class="mb-2">Użytkownicy uzyskają dostęp do quizu od:</span>
@@ -96,7 +98,8 @@ ATRYBUTY:
                 </div>
 
                 <div class="modal-footer justify-content-center align-items-center">
-                    <button type="button" class="btn btn-secondary btn-sm-width" data-bs-dismiss="modal" id="publishCancelButton">Anuluj</button>
+                    <button type="button" class="btn btn-secondary btn-sm-width" data-bs-dismiss="modal"
+                        id="publishCancelButton">Anuluj</button>
                     <button type="button" class="btn btn-primary btn-sm-width" id="publishButton">Opublikuj</button>
                 </div>
             </div>
@@ -105,15 +108,15 @@ ATRYBUTY:
 </div>
 
 <script>
-    var publishPopup = document.getElementById('publishPopup');
-    var publishButton = publishPopup.querySelector('#publishButton');
+    const publishPopup = document.getElementById('publishPopup');
+    const publishButton = publishPopup.querySelector('#publishButton');
     let publishModalButton;
 
     publishPopup.addEventListener('show.bs.modal', function (event) {
         publishModalButton = event.relatedTarget;
-        var quizName = publishModalButton.getAttribute('data-quiz-name');
+        const quizName = publishModalButton.getAttribute('data-quiz-name');
 
-        var nameElement = publishPopup.querySelector('#publishedQuizName');
+        const nameElement = publishPopup.querySelector('#publishedQuizName');
         nameElement.textContent = quizName;
     });
 
@@ -122,26 +125,23 @@ ATRYBUTY:
     });
 
     publishButton.addEventListener('click', function (event) {
-        var valid = validatePublishButton();
-        if (!valid) return;
+        if (!validatePublishButton()) return;
 
-        var openDate = publishPopup.querySelector('#openDateSelect').value;
-        var openHour = publishPopup.querySelector('#openHourSelect').value;
-        var closeDate = publishPopup.querySelector('#closeDateSelect').value;
-        var closeHour = publishPopup.querySelector('#closeHourSelect').value;
+        const openDate = publishPopup.querySelector('#openDateSelect').value;
+        const openHour = publishPopup.querySelector('#openHourSelect').value.padStart(2, '0');
 
-        openHour = openHour.padStart(2, '0');
-        closeHour = closeHour.padStart(2, '0');
+        const closeDate = publishPopup.querySelector('#closeDateSelect').value;
+        const closeHour = publishPopup.querySelector('#closeHourSelect').value.padStart(2, '0');
 
-        var openDateTime = (new Date(`${openDate}T${openHour}:00`)).toJSON();
-        var closeDateTime = (new Date(`${closeDate}T${closeHour}:00`)).toJSON();
+        // need to be like this because of time zone converts
+        const openDateTimeString = `${openDate}T${openHour}:00:00.000Z`;
+        const closeDateTimeString = `${closeDate}T${closeHour}:00:00.000Z`;
 
-        var callbackName = publishModalButton.getAttribute('data-callback-name');
-        var quizId = publishModalButton.getAttribute('data-quiz-id');
-
+        const callbackName = publishModalButton.getAttribute('data-callback-name');
         if (typeof window[callbackName] === 'function') {
-            window[callbackName](quizId, openDateTime, closeDateTime);
-            var closebutton = document.getElementById('publishCancelButton');
+            const quizId = publishModalButton.getAttribute('data-quiz-id');
+            window[callbackName](quizId, openDateTimeString, closeDateTimeString);
+            const closebutton = document.getElementById('publishCancelButton');
             closebutton.click();
         } else {
             console.error("Callback function not found:", callbackName);
@@ -149,22 +149,20 @@ ATRYBUTY:
     });
 
     function validatePublishButton() {
-        var openDateSelect = publishPopup.querySelector('#openDateSelect');
-        var openHourSelect = publishPopup.querySelector('#openHourSelect');
-        var closeDateSelect = publishPopup.querySelector('#closeDateSelect');
-        var closeHourSelect = publishPopup.querySelector('#closeHourSelect');
+        const openDateSelect = publishPopup.querySelector('#openDateSelect');
+        const openHourSelect = publishPopup.querySelector('#openHourSelect');
+        const closeDateSelect = publishPopup.querySelector('#closeDateSelect');
+        const closeHourSelect = publishPopup.querySelector('#closeHourSelect');
 
-        var openDate = openDateSelect.value;
-        var openHour = openHourSelect.value;
-        var closeDate = closeDateSelect.value;
-        var closeHour = closeHourSelect.value;
+        const openDate = publishPopup.querySelector('#openDateSelect').value;
+        const openHour = publishPopup.querySelector('#openHourSelect').value.padStart(2, '0');
 
-        openHour = openHour.padStart(2, '0');
-        closeHour = closeHour.padStart(2, '0');
+        const closeDate = publishPopup.querySelector('#closeDateSelect').value;
+        const closeHour = publishPopup.querySelector('#closeHourSelect').value.padStart(2, '0');
 
-        var openDateTime = new Date(`${openDate}T${openHour}:00`);
-        var closeDateTime = new Date(`${closeDate}T${closeHour}:00`);
-        var currentDateTime = new Date();
+        const openDateTime = new Date(`${openDate}T${openHour}:00`);
+        const closeDateTime = new Date(`${closeDate}T${closeHour}:00`);
+        const currentDateTime = new Date();
 
         openDateSelect.classList.remove('input-error');
         openHourSelect.classList.remove('input-error');

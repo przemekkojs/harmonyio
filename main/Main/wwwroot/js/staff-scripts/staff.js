@@ -128,10 +128,16 @@ class GrandStaff {
       }
     }
   }
+  #clearMetreGraphics() {
+    if (this.metre) {
+      this.metre.clearGraphics();
+    }
+  }
 
   loadFromJson(taskJson, notesJsonString) {
     this.isLoaded = false;
     this.#clearFunctionSymbolGraphics();
+    this.#clearMetreGraphics();
     this.#loadTaskFromJson(taskJson);
     this.#loadNotesFromJson(notesJsonString);
     this.init();
@@ -332,7 +338,7 @@ class GrandStaff {
     strokeWeight(2);
     for (let i = 0; i < 5; i++) {
       const lineOffset = GrandStaff.getLineOffset(i);
-      line(x, y + lineOffset, width, y + lineOffset);
+      line(x, y + lineOffset, x + width, y + lineOffset);
     }
   }
 

@@ -14,11 +14,13 @@ namespace Main.Models
 		//FOREIGN KEYS
 
 		public int ExcersiseSolutionId { get; set; }
-		[JsonIgnore]	//looping dependency, json converter goes crazy without it
-        public ExcersiseSolution ExcersiseSolution { get; set; } = null!;
+		[JsonIgnore]    //looping dependency, json converter goes crazy without it
+		public ExcersiseSolution ExcersiseSolution { get; set; } = null!;
 
-        public int QuizResultId { get; set; }
-        public QuizResult QuizResult { get; set; } = null!;
-    }
+		public int QuizResultId { get; set; }
+		// TODO quiz result should be nullable, when grading with algorithm, create new excersise result
+		// this result may not be linked to quiz result
+		public QuizResult QuizResult { get; set; } = null!;
+	}
 }
 

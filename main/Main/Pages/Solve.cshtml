@@ -6,55 +6,60 @@
     <link rel="stylesheet" href="~/css/solve-style.css" />
 </head>
 
-<form id="solve-form" method="post" class="h-100 w-100">
-    <div class="h-100 w-100 d-flex flex-row pb-3">
-        <div class="bg-white rounded d-flex flex-column shadow py-3 me-3 sidebar">
-            <div class="fw-bold fs-4 overflow-hidden px-3 flex-shrink-0" style="text-overflow: ellipsis;">
-                @Model.Quiz.Name
-            </div>
 
-            <div class="d-flex flex-row align-items-center mt-1 px-3">
-                <i class="far fa-clock icon-sm me-1"></i>
-                <span id="timer" class="fw-semibold">10h 13min</span>
-            </div>
-
-            <hr class="mb-0"/>
-
-            <div id="excersises-buttons" class="w-100 py-3 mb-auto px-3 overflow-auto" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px;">
-                @* FILLED VIA JS *@
-            </div>
-
-            <hr class="mt-0"/>
-
-            <button id="btn-next" type="button" onclick="nextQuestion()" class="btn btn-secondary btn-std-width mx-auto">Następne</button>
-            <button id="btn-finish" onclick="submitFormClicked()" class="btn btn-primary btn-std-width mx-auto">Zakończ</button>
-
-            <a asp-page="Assigned" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
+<div class="h-100 w-100 d-flex flex-row pb-3">
+    <form id="solve-form" method="post">
+        <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
+        @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
+        {
+            <input type="hidden" asp-for="@Model.Answers[@i]" value="@Model.Answers[@i]" />
+        }
+    </form>
+    <div class="bg-white rounded d-flex flex-column shadow py-3 me-3 sidebar">
+        <div class="fw-bold fs-4 overflow-hidden px-3 flex-shrink-0" style="text-overflow: ellipsis;">
+            @Model.Quiz.Name
         </div>
 
-        <div class="flex-grow-1 w-100 d-flex flex-column bg-white rounded shadow p-3 overflow-auto">
-            <div class="d-flex flex-row align-items-start">
-                <p id="excersise-question" class="m-0 fw-semibold">
-                    @*SET VIA JS*@
-                </p>
-            </div>
+        <div class="d-flex flex-row align-items-center mt-1 px-3">
+            <i class="far fa-clock icon-sm me-1"></i>
+            <span id="timer" class="fw-semibold">10h 13min</span>
+        </div>
 
-            <div id="music-staff-div" class="flex-grow-1 d-flex flex-row">
-                <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
-                @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
-                {
-                    <input type="hidden" asp-for="@Model.Answers[@i]" value="@Model.Answers[@i]" />
-                }
-            </div>
+        <hr class="mb-0" />
+
+        <div id="excersises-buttons" class="w-100 py-3 mb-auto px-3 overflow-auto"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px;">
+            @* FILLED VIA JS *@
+        </div>
+
+        <hr class="mt-0" />
+
+        <button id="btn-finish" onclick="submitFormClicked()"
+            class="btn btn-primary btn-std-width mx-auto">Zapisz</button>
+
+        <a asp-page="Assigned" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
+    </div>
+
+    <div class="flex-grow-1 w-100 d-flex flex-column bg-white rounded shadow p-3 overflow-auto" id="staff-section-div">
+        <div class="d-flex flex-row align-items-start">
+            <p id="excersise-question" class="m-0 fw-semibold">
+                @*SET VIA JS*@
+            </p>
+        </div>
+
+
+        <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white shadow rounded mt-3">
+            <div id="p5_loading">Ładowanie pięciolinii</div>
+            @*SET VIA JS*@
         </div>
     </div>
-</form>
-
-
-
+</div>
 
 <script>
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
+    const staffSectionDiv = document.getElementById("staff-section-div");
+    const staffSectionWidth = staffSectionDiv.offsetWidth - 32;
+    let canvasWidth = staffSectionWidth;
 
     const symbolPaths = {
         curlyBrace: '@Url.Content("~/images/staff-symbols/curly-brace.png")',
@@ -77,9 +82,6 @@
     };
     const excersises = @Json.Serialize(Model.Quiz.Excersises);
     const questions = excersises.map(e => JSON.parse(e.question));
-
-    console.log(excersises); // TODO: Wywalić, jak się naprawi parsowanie
-    console.log(questions); // TODO: Wywalić
 </script>
 
 <script src="~/lib/p5/p5.min.js"></script>
@@ -100,17 +102,9 @@
 <script>
     let currentIndex = 0;
 
-    function changeAnswer(value) {
-        let hiddenInput = document.querySelector(`input[name="Answers[${currentIndex}]"]`);
-        hiddenInput.value = value;
-    }
-
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             document.getElementById("excersise-question").innerText = questions[index].question;
-
-            document.getElementById("btn-next").style.display = index === questions.length - 1 ? 'none' : 'inline-block';
-            document.getElementById("btn-finish").style.display = index === questions.length - 1 ? 'inline-block' : 'none';
 
             if (loadToGrandStaff) {
                 grandStaff.loadFromJson(questions[index], document.querySelector(`input[name="Answers[${index}]"]`).value);
@@ -144,14 +138,6 @@
             })(i);
 
             questionButtonsContainer.appendChild(button);
-        }
-    }
-
-    function nextQuestion() {
-        if (currentIndex < questions.length - 1) {
-            safeStaffAnswer();
-            currentIndex++;
-            loadQuestion(currentIndex);
         }
     }
 
