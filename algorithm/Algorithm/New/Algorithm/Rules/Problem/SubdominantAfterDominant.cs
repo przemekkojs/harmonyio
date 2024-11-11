@@ -23,8 +23,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             var symbol1Type = symbol1[0];
             var symbol2Type = symbol2[0];
 
-            if (symbol1Type.Equals("D") && !function1.Minor)
-                return symbol2Type.Equals("T") || symbol2Type.Equals("D");
+            if (symbol1Type.Equals('D') && !function1.Minor)
+                return symbol2Type.Equals('T') || symbol2Type.Equals('D');
             else
                 return true;
         }
