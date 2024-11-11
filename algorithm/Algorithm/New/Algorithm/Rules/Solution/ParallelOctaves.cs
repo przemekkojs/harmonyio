@@ -1,13 +1,14 @@
 ﻿using Algorithm.New.Music;
 using Algorithm.New.Utils;
 
-namespace Algorithm.New.Algorithm.Rules
+namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public class ParallelOctaves : Rule
     {
         public ParallelOctaves() : base(
             name: "Oktawy równoległe",
-            description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale oktawy?") { }
+            description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale oktawy?")
+        { }
 
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {

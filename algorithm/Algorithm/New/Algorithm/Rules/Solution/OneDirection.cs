@@ -1,13 +1,14 @@
 ﻿using Algorithm.New.Music;
 using Algorithm.New.Utils;
 
-namespace Algorithm.New.Algorithm.Rules
+namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public class OneDirection : Rule
     {
         public OneDirection() : base(
             name: "Ruch jednokierunkowy",
-            description: "Czy w ramach dwóch funkcji, wszystkie głosy wykonały ruch w jednym kierunku?") { }
+            description: "Czy w ramach dwóch funkcji, wszystkie głosy wykonały ruch w jednym kierunku?")
+        { }
 
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {

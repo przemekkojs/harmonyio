@@ -1,7 +1,7 @@
 ﻿using Algorithm.New.Music;
 using System.Text.Json.Serialization;
 
-namespace Algorithm.New.Algorithm.Mistake
+namespace Algorithm.New.Algorithm.Mistake.Solution
 {
     public class NoteMistake : Mistake
     {
@@ -42,7 +42,7 @@ namespace Algorithm.New.Algorithm.Mistake
         }
 
         public NoteMistake(Note? note, Stack? stack)
-        {            
+        {
             if (note == null)
                 Voice = string.Empty;
             else
@@ -53,7 +53,7 @@ namespace Algorithm.New.Algorithm.Mistake
                     Voice = voice;
                 else
                     Voice = string.Empty;
-            }            
+            }
 
             BarIndex = stack != null ? stack.Index.Bar : 0;
             VerticalIndex = stack != null ? stack.Index.Position : 0;
@@ -84,7 +84,7 @@ namespace Algorithm.New.Algorithm.Mistake
             return null;
         }
 
-        public override void GenerateDescription() => 
-            Description = Mistake.GenerateNoteMistakeDescription(Voice, BarIndex, VerticalIndex);
+        public override void GenerateDescription() =>
+            Description = GenerateNoteMistakeDescription(Voice, BarIndex, VerticalIndex);
     }
 }

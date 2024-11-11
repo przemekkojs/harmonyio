@@ -1,5 +1,6 @@
-﻿using Algorithm.New.Algorithm.Rules;
+﻿using Algorithm.New.Algorithm.Rules.Solution;
 using Algorithm.New.Algorithm;
+using Algorithm.New.Algorithm.Rules.Problem;
 
 namespace Algorithm.New
 {
@@ -31,6 +32,7 @@ namespace Algorithm.New
         public static readonly List<string> FlatsQueue = ["B", "E", "A", "D", "G", "C", "F"];
         public static readonly List<string> AllNotes = ["C", "D", "E", "F", "G", "A", "B"];
 
+        // Ustawienia dla sprawdzania rozwiązania
         public static readonly Settings Settings = new([
             new VoiceCrossing(),
             new OneDirection(),
@@ -39,6 +41,13 @@ namespace Algorithm.New
             new VoiceCrossingOneFunction(),
             new DoubledFifthOnStrongBarPart()
         ]);
+
+        // Ustawienia dla sprawdzania zadania
+        // TODO: Klasa
+        public static readonly List<Algorithm.Rules.Problem.Rule> ProblemSettings =
+        [
+            new SubdominantAfterDominant()
+        ];
 
         // public static readonly VoiceDistance VoiceDistance = new();
 

@@ -1,8 +1,8 @@
-﻿using Algorithm.New.Algorithm.Rules;
+﻿using Algorithm.New.Algorithm.Rules.Solution;
 using Algorithm.New.Music;
 using System.Text.Json.Serialization;
 
-namespace Algorithm.New.Algorithm.Mistake
+namespace Algorithm.New.Algorithm.Mistake.Solution
 {
     public class StackMistake : Mistake
     {
@@ -49,6 +49,6 @@ namespace Algorithm.New.Algorithm.Mistake
         public override int Quantity => VerticalIndexes.Count;
 
         public override void GenerateDescription() =>
-            Description = Mistake.GenerateStackMistakeDescription(BarIndexes, VerticalIndexes, RuleName);
+            Description = GenerateStackMistakeDescription(BarIndexes, VerticalIndexes, RuleName);
     }
 }

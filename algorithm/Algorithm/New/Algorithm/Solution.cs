@@ -1,5 +1,4 @@
 ﻿using Algorithm.New.Music;
-using Algorithm.Old.Music;
 
 namespace Algorithm.New.Algorithm
 {

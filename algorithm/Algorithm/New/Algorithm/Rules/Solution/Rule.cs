@@ -1,6 +1,6 @@
 ﻿using Algorithm.New.Music;
 
-namespace Algorithm.New.Algorithm.Rules
+namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public abstract class Rule
     {
@@ -8,7 +8,7 @@ namespace Algorithm.New.Algorithm.Rules
         public string Description { get; protected set; }
         public bool OneFunction { get; protected set; }
 
-        protected Rule(string name, string description, bool oneFunction=false)
+        protected Rule(string name, string description, bool oneFunction = false)
         {
             Name = name;
             Description = description;
@@ -25,7 +25,7 @@ namespace Algorithm.New.Algorithm.Rules
                 return false;
             else if (!OneFunction && stacks.Length != 2)
                 return false;
-            
+
             return true;
         }
 

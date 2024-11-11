@@ -1,13 +1,14 @@
 ﻿using Algorithm.New.Music;
 using Algorithm.New.Utils;
 
-namespace Algorithm.New.Algorithm.Rules
+namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public class ParallelFifths : Rule
     {
         public ParallelFifths() : base(
             name: "Kwinty równoległe",
-            description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale kwinty?") { }
+            description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale kwinty?")
+        { }
 
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
@@ -20,7 +21,7 @@ namespace Algorithm.New.Algorithm.Rules
             var stack1 = stacks[0];
             var stack2 = stacks[1];
 
-            List<((Note?, Note?), (Note ?, Note ?))> pairs = [
+            List<((Note?, Note?), (Note?, Note?))> pairs = [
                 ((stack1.Soprano, stack1.Alto), (stack2.Soprano, stack2.Alto)),
                 ((stack1.Soprano, stack1.Tenore), (stack2.Soprano, stack2.Tenore)),
                 ((stack1.Soprano, stack1.Bass), (stack2.Soprano, stack2.Bass)),
