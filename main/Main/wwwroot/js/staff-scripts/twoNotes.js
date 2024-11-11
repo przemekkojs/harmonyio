@@ -559,6 +559,9 @@ class TwoNotes {
   }
 
   #drawHintArea() {
+    if (!drawAddNoteHint) {
+      return;
+    }
     if (this.note1 !== null && this.note2 !== null) {
       return;
     }

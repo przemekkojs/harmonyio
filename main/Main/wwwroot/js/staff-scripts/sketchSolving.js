@@ -5,6 +5,8 @@ let sketchFont;
 let grandStaff;
 let menu;
 
+const drawAddNoteHint = true;
+
 function resizeCanvasHorizontally() {
   if (menu) {
     canvasWidth = grandStaff.width + menu.width;
