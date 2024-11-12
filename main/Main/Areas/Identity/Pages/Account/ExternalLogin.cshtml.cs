@@ -78,6 +78,14 @@ namespace Main.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required(ErrorMessage = "Podanie imienia jest obowiązkowe")]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+            
+            [Required(ErrorMessage = "Podanie nazwiska jest obowiązkowe")]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -130,9 +138,30 @@ namespace Main.Areas.Identity.Pages.Account
                 ProviderDisplayName = info.ProviderDisplayName;
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
+                    var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                    email = _userManager.NormalizeEmail(email);
+
+                    var user = await _emailStore.FindByEmailAsync(email, CancellationToken.None);
+
+                    if (user != null)
+                    {
+                        var resultIdentity = await _userManager.AddLoginAsync(user, info);
+                        
+                        if (resultIdentity.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                            return LocalRedirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToPage("random 23");
+                        }
+                    }
+
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = email
                     };
                 }
                 return Page();
@@ -154,6 +183,9 @@ namespace Main.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
@@ -165,22 +197,30 @@ namespace Main.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-                        var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code },
-                            protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        // var userId = await _userManager.GetUserIdAsync(user);
 
-                        // If account confirmation is required, we need to show the link if we don't have a real email sender
-                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        // var callbackUrl = Url.Page(
+                        //     "/Account/ConfirmEmail",
+                        //     pageHandler: null,
+                        //     values: new { area = "Identity", userId = userId, code = code },
+                        //     protocol: Request.Scheme);
+
+                        // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        //     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        // // If account confirmation is required, we need to show the link if we don't have a real email sender
+                        // if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        // {
+                        //     return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                        // }
+
+                        var resultConfirmEmail = await _userManager.ConfirmEmailAsync(user, code);
+                        if (!resultConfirmEmail.Succeeded)
                         {
-                            return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                            return RedirectToPage("/Error");
                         }
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);

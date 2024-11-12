@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+@* <h1>@ViewData["Title"]</h1>
 <h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
 <hr />
 
@@ -12,18 +12,38 @@
     You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
     Please enter an email address for this site below and click the Register button to finish
     logging in.
-</p>
+</p> *@
 
-<div class="row">
-    <div class="col-md-4">
+<div class="d-flex justify-content-center" style="min-height: 100%;"> 
+    <div class="bg-white rounded shadow p-3 mb-3" style="width: 400px;">
+        <h2 class="text-center fw-bold mb-4">Dokończ tworzenie konta</h2>
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" placeholder="Please enter your email."/>
-                <label asp-for="Input.Email" class="form-label"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <div class="form-floating mb-3">
+                    <div class="mb-3">
+                    <label asp-for="Input.FirstName" class="fw-bold ps-1 pb-1">Imię</label>
+                    <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.LastName" class="fw-bold ps-1 pb-1">Nazwisko</label>
+                    <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" />
+                    <span asp-validation-for="Input.LastName" class="text-danger small"></span>
+                </div>
+                @if(Model.Input.Email == null || Model.Input.Email == "")
+                {
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="fw-bold ps-1 pb-1">Email</label>
+                        <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" asp-for="Input.Email" value="@Model.Input.Email"/>
+                }
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button type="submit" class="w-100 btn btn-primary p-2 mt-3">Zapisz</button>
         </form>
     </div>
 </div>
