@@ -261,14 +261,6 @@
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3">
         <div class="fw-bold fs-4 mb-3">Szkice</div>
         
-        <a asp-page="Creator" class="no-style mb-3">
-            <div class="quiz quiz-add rounded d-flex justify-content-center align-items-center">
-                <i class="fas fa-plus me-1"></i>
-
-                <span class="fw-bold">Utwórz nowy quiz</span>
-            </div>
-        </a>
-
         @foreach (var quiz in Model.Sketches)
         {
             <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
@@ -306,6 +298,14 @@
                 </div>
             </div>
         }
+
+        <a asp-page="Creator" class="no-style mb-3">
+            <div class="quiz quiz-add rounded d-flex justify-content-center align-items-center">
+                <i class="fas fa-plus me-1"></i>
+
+                <span class="fw-bold">Utwórz nowy quiz</span>
+            </div>
+        </a>
     </div>
 </div>
 

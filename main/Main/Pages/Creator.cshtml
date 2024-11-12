@@ -7,7 +7,7 @@
 </head>
 
 <form method="post" class="h-100 w-100 d-flex flex-column">
-    <div class="flex-grow-1 d-flex flex-column mb-3">
+    <div class="flex-grow-1 d-flex flex-column mb-3 overflow-auto">
         <div class="flex-grow-1 d-flex flex-row overflow-auto">
             <div class="sidebar d-flex flex-column bg-white rounded shadow me-3 p-3">
                 <div class="mb-auto">
@@ -48,32 +48,6 @@
         </div>
 
         <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
-
-        <div class="py-3 d-flex align-items-center">
-            <a asp-page="Created" class="btn btn-danger btn-std-width">Powrót</a>
-            @* <input type="button" value="Test" onclick="confirmExcersises()" /> *@
-            @if (!Model.BrowseOnly)
-            {
-                <button type="submit" asp-page-handler="Save" class="btn btn-secondary btn-std-width ms-auto" onclick="return confirmExcersises(event)">
-                    Zapisz
-                </button>
-
-                @* TODO: DODAĆ ŻEBY BUTTON PUBLIKUJ DZIAŁAŁ (TAK JAK ZAPISZ, ALE OD RAZU OTWIERA POPUP) *@
-                @* <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
-                    onclick="confirmExcersises()">Opublikuj</button> *@
-            }
-            else
-            {
-                <button type="button" class="btn btn-primary btn-std-width ms-auto">@(Model.Code == null ? "Quiz zakończony"
-                : "KOD: " + Model.Code)</button>
-                @if (Model.Code != null)
-                {
-                    <button type="button" class="btn btn-primary btn-std-width ms-auto"
-                        onclick="navigator.clipboard.writeText('harmony.io/solve?code=@Model.Code')">Skopiuj link quizu do
-                        schowka</button>
-                }
-            }
-        </div>
     </div>
 </form>
 

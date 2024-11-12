@@ -41,14 +41,12 @@
     </div>
 
     <div class="flex-grow-1 w-100 d-flex flex-column bg-white rounded shadow p-3 overflow-auto" id="staff-section-div">
-        <div class="d-flex flex-row align-items-start">
-            <p id="excersise-question" class="m-0 fw-semibold">
-                @*SET VIA JS*@
-            </p>
-        </div>
+        <p id="excersise-question" class="fw-semibold align-items-start mb-3">
+            @*SET VIA JS*@
+        </p>
 
 
-        <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white shadow rounded mt-3">
+        <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white rounded">
             <div id="p5_loading">Ładowanie pięciolinii</div>
             @*SET VIA JS*@
         </div>
@@ -105,6 +103,8 @@
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             document.getElementById("excersise-question").innerText = questions[index].question;
+            
+            document.getElementById("excersise-question").style.display = questions[index].question == '' ? 'none' : 'inline-block';
 
             if (loadToGrandStaff) {
                 grandStaff.loadFromJson(questions[index], document.querySelector(`input[name="Answers[${index}]"]`).value);
