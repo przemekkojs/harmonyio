@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Main.Pages
 {
@@ -146,6 +147,8 @@ namespace Main.Pages
         // Je¿eli ktoœ siê tym zajmuje, to w komentarzach jest tutorial
         public async Task<IActionResult> OnPostSave()
         {
+            Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0]);
+
             var currentUser = await _userManager.GetUserAsync(User);
 
             var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };
@@ -154,7 +157,7 @@ namespace Main.Pages
             var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera b³êdne zadania." };
 
             if (currentUser == null)
-                return new JsonResult(loginResult) { ContentType = "application/json" };
+                return new JsonResult(loginResult);
 
             Quiz? quiz;
 
@@ -176,7 +179,7 @@ namespace Main.Pages
                 );
 
                 if (quiz == null)
-                    return new JsonResult(errorResult) { ContentType = "application/json" };
+                    return new JsonResult(errorResult);
 
                 quiz.Name = QuizName;
                 _repository.Update(quiz);
@@ -188,7 +191,7 @@ namespace Main.Pages
             }
 
             if (!ValidateAndAddExercises())
-                return new JsonResult(invalidQuestionsResult) { ContentType = "application/json" };
+                return new JsonResult(invalidQuestionsResult);
 
             if (EditedQuizId == null)
                 await _repository.SaveChangesAsync();
@@ -206,7 +209,7 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
 
-            return new JsonResult(successResult) { ContentType = "application/json" };
+            return new JsonResult(successResult);
         }
 
         public async Task<IActionResult> OnPostSubmit()

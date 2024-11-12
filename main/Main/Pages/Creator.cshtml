@@ -13,7 +13,7 @@
                 <div class="mb-auto">
                     <label asp-for="QuizName" class="form-label fw-bold"></label>
                     <input id="QuizName" name="QuizName" asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
-                    <span asp-validation-for="QuizName" class="text-danger"></span>
+                    <span asp-validation-for="QuizName" class="text-danger" id="quiz-name-validation"></span>
                 </div>
 
                 @if (!Model.BrowseOnly)
@@ -79,6 +79,24 @@
             return;
         }
 
+        const questions = [];
+        const tasks = taskContainer.tasks;
+        console.log("Tasks", tasks);
+
+        if (tasks.length === 0) {
+            questionsValidationError.innerText = "Dodaj przynajmniej jedno zadanie.";
+            return;
+        }
+
+        tasks.forEach(t => {
+            const toAppend = t.hiddenInput.value;
+            console.log("Solution", toAppend);
+            console.log("Type", typeof (toAppend));
+            questions.push(toAppend);
+        });
+
+        console.log("Questions", questions);
+
         event.preventDefault();
 
         const form = document.getElementById('pageForm');
@@ -88,15 +106,23 @@
             .querySelector("[name='__RequestVerificationToken']")
             .value;
 
+        if (quizName == '') {
+            document.getElementById('quiz-name-validation').innerText = "Nazwa quizu jest wymagana";
+            return;
+        }
+
         const editedQuizId = form
             .querySelector("[name='EditedQuizId']")
-            .value;
+            .value;        
 
         const formData = new FormData();
         formData.append("__RequestVerificationToken", verificationToken);
         formData.append("QuizName", quizName);
-        formData.append("Questions", excersises);
+        formData.append("Questions", JSON.stringify(questions));
         formData.append("EditedQuizId", editedQuizId);
+
+        console.log(excersises);
+        console.log([...formData.entries()]);
 
         try {
             const response = await fetch(form.action, {
@@ -143,13 +169,14 @@
 
     window.addExcersise = function () {
         taskContainer.addTask();
-        questionsValidationError.innerText = '';
     }
 
     window.confirmExcersises = function (event) {
         questionsValidationError.innerText = '';
         answer.length = 0;
         const tasks = taskContainer.tasks;
+
+        console.log(tasks.length);
 
         for (let i = 0; i < tasks.length; i++) {
             const currentTask = tasks[i];
@@ -176,19 +203,21 @@
             if (taskResult.includes(null))
                 return false;
 
-            answer.push({
+
+            const toPush = {
                 question: questionText,
                 sharpsCount: Number(sharpsCount),
                 flatsCount: Number(flatsCount),
                 metreValue: Number(metreValue),
                 metreCount: Number(metreCount),
                 task: taskResult
-            });
+            }
 
-            hiddenInput.value = JSON.stringify(answer[i]);        
-            
-            return true;
+            answer.push(toPush);
+            hiddenInput.value = JSON.stringify(toPush);   
         }
+
+        return true;
     }        
 
     addExisting();
@@ -196,6 +225,6 @@
 
 @section Scripts {
     @{
-                <partial name="_ValidationScriptsPartial" />
+                        <partial name="_ValidationScriptsPartial" />
     }
 }
