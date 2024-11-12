@@ -51,10 +51,10 @@
             </select>
         </div>
 
-        <div id="ownedGroupsList">
+        <div id="ownedGroupsList" class="flex-grow-1 pb-3">
             @if (teacherRequests.Count() > 0)
             {
-                <h3 class="mt-3">Zaproszenia do administrowania grupą</h3>
+                <h4 class="mt-3 fw-semibold">Zaproszenia do administrowania</h4>
                 <div class="grid-quizes">
                     @foreach (var request in teacherRequests)
                     {
@@ -81,19 +81,24 @@
                                 </form>
 
                                 <!-- Decline Request Button -->
-                                <form method="post">
+                                <form method="post" class="mt-auto">
                                     <input type="hidden" asp-for="RequestId" value="@request.Id" />
                                     <button class="btn-icon mt-2" type="submit" asp-page-handler="DeclineRequest">
-                                        <i class="far fa-trash-can icon-sm"></i>
+                                        <i class="fas fa-xmark icon-md text-danger"></i>
                                     </button>
                                 </form>
                             </div>
                         </div>
                     }
                 </div>
+                
             }
 
-            <h3 class="mt-3"></h3>
+            <div class="mt-3"></div>
+            @if (ownedGroups.Count() > 0 && teacherRequests.Count() > 0)
+            {
+                <h4 class="fw-semibold">Grupy</h4>
+            }
             @if (ownedGroups.Count() > 0)
             {
                 <div class="grid-quizes">
@@ -143,19 +148,23 @@
                     }
                 </div>
             }
-            else
+            else if (teacherRequests.Count() == 0)
             {
-                <p>Nie posiadasz żadnej grupy. Utwórz grupę lub poproś o zostanie administratorem grupy, a pojawi się tutaj!
-                </p>
+                <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                    <i class="fas fa-user mb-4 icon-giant"></i>
+                    <div class="text-center fw-semibold" style="max-width: 400px;">
+                        Nie posiadasz żadnej grupy. Utwórz grupę lub poproś o zostanie administratorem grupy, a pojawi się tutaj!
+                    </div>
+                </div>
             }
 
         </div>
 
 
-        <div id="joinedGroupsList">
+        <div id="joinedGroupsList" class="flex-grow-1 pb-3">
             @if (studentRequests.Count() > 0)
             {
-                <h3 class="mt-3">Zaproszenia do grupy</h3>
+                <h4 class="mt-3 fw-semibold">Zaproszenia do grupy</h4>
                 <div class="grid-quizes">
                     @foreach (var request in studentRequests)
                     {
@@ -182,19 +191,25 @@
                                 </form>
 
                                 <!-- Decline Request Button -->
-                                <form method="post">
+                                <form method="post" class="mt-auto">
                                     <input type="hidden" asp-for="RequestId" value="@request.Id" />
                                     <button class="btn-icon mt-2" type="submit" asp-page-handler="DeclineRequest">
-                                        <i class="far fa-trash-can icon-sm"></i>
+                                        <i class="fas fa-xmark icon-md text-danger"></i>
                                     </button>
                                 </form>
                             </div>
                         </div>
                     }
                 </div>
+
             }
 
-            <h3 class="mt-3"></h3>
+            <div class="mt-3"></div>
+            @if (joinedGroups.Count() > 0 && studentRequests.Count() > 0)
+            {
+                <h4 class="fw-semibold">Grupy</h4>
+            }        
+
             @if (joinedGroups.Count() > 0)
             {
                 <div class="grid-quizes">
@@ -231,9 +246,14 @@
                     }
                 </div>
             }
-            else
+            else if (studentRequests.Count() == 0)
             {
-                <p>Nie jesteś członkiem żadnej grupy. Utwórz grupę lub poproś o dołączenie, a pojawi się tutaj!</p>
+                <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                    <i class="fas fa-user-group mb-4 icon-giant"></i>
+                    <div class="text-center fw-semibold" style="max-width: 400px;">
+                        Nie jesteś jeszcze członkiem żadnej grupy. <br/> Gdy zostaniesz do jakiejś zaproszony, będziesz mógł do niej dołączyć tutaj!
+                    </div>
+                </div>
             }
         </div>
     </div>

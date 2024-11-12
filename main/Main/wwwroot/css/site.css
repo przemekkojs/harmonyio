@@ -71,6 +71,12 @@ body {
     border-color: #0b5ed7;
 }
 
+.btn-no-hover:hover{
+    background-color: transparent;
+    color: inherit;
+    border-color: inherit;
+}
+
 .overflow-md-auto {
     overflow: auto;
 }
@@ -141,8 +147,21 @@ body {
     width: 30px;
 }
 
+.icon-md {
+    font-size: 28px;
+    text-align: center;
+    justify-content: center;
+    width: 30px;
+}
+
 .icon-lg {
     font-size: 30px;
+    text-align: center;
+    justify-content: center;
+}
+
+.icon-giant {
+    font-size: 100px;
     text-align: center;
     justify-content: center;
 }
@@ -193,7 +212,6 @@ body {
     color: inherit;
     border-color: inherit;
 }
-
 
 /*Grade and solve (for details and summary): */
 details {

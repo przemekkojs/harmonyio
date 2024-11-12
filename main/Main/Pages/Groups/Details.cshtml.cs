@@ -22,6 +22,9 @@ namespace Main.Pages
             _repository = repository;
             _userManager = userManager;
         }
+
+        public string CurrentUserId {get; set;}
+
         public bool IsAdmin { get; set; }
 
         public bool IsMaster { get; set; }
@@ -62,8 +65,14 @@ namespace Main.Pages
                     .Include(g => g.MasterUser)
                     .Include(g => g.Quizzes)
                         .ThenInclude(q => q.Excersises)
+                            .ThenInclude(e => e.ExcersiseSolutions)
                     .Include(g => g.Quizzes)
                         .ThenInclude(q => q.Creator)
+                    .Include(g => g.Quizzes)
+                        .ThenInclude(q => q.Participants)
+                    .Include(g => g.Quizzes)
+                        .ThenInclude(q => q.QuizResults)
+                    .Include(g => g.Quizzes)
                     .Include(g => g.Requests)
                         .ThenInclude(r => r.User)
                 );
@@ -80,6 +89,8 @@ namespace Main.Pages
             IsMaster = GroupMaster.Id == appUser.Id;
 
             IsAdmin = IsMaster || group.Teachers.Contains(appUser);
+
+            CurrentUserId = appUser.Id;
 
             if (!IsAdmin && !group.Students.Contains(appUser))
             {
@@ -169,7 +180,7 @@ namespace Main.Pages
         }
 
         public async Task<IActionResult> OnPostAddUsers()
-        {
+        {            
             var appUser = await _userManager.GetUserAsync(User);
             if (appUser == null)
             {
@@ -209,10 +220,9 @@ namespace Main.Pages
             HashSet<string> wrongEmails = new HashSet<string>();
 
             var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
-            var notFoundMails = emails
-                    .Where(email => !usersByEmail.ContainsKey(email));
-            wrongEmails.AddRange(notFoundMails);
+            var notFoundMails = emails.Except(usersByEmail.Keys.Select(e => e));
 
+            wrongEmails.AddRange(notFoundMails);
 
             // check if users are already added to group
             if (AsAdmins)

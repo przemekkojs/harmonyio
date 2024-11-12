@@ -3,6 +3,9 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
 
 <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
@@ -18,7 +21,7 @@
                 <ul class="dropdown-menu dropdown-menu-end p-1 overflow-hidden" aria-labelledby="profileDropdown">
                     <li class="d-flex flex-row align-items-center p-1">
                         <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 20px; height: 20px;" />
-                        <span class="dropdown-item-text ps-2">@UserManager.GetUserName(User)</span>
+                        <span class="dropdown-item-text ps-2 text-truncate">@(currentUser?.FullName ?? "")</span>
                     </li>
                     <hr class="border m-0">
                     <li>
