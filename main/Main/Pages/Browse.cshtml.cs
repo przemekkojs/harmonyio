@@ -64,7 +64,8 @@ namespace Main.Pages
                 return RedirectToPage("Error");
             }
 
-            if (!quiz.Participants.Any())
+            // quiz isnt started or user isnt participant so forbid browsing it
+            if (quiz.State == QuizState.NotStarted || !quiz.Participants.Any())
             {
                 return Forbid();
             }
@@ -74,6 +75,12 @@ namespace Main.Pages
             var quizResult = quiz.QuizResults.FirstOrDefault();
             if (quizResult == null || quizResult.Grade == null)
             {
+                // quiz is open and quiz result isnt set
+                if (quiz.State == QuizState.Open)
+                {
+                    return RedirectToPage("Solve", new { code = quiz.Code });
+                }
+                // here quiz must be closed so set grade to -
                 GradeString = "-";
             }
             else
