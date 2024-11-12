@@ -419,8 +419,8 @@
             if (response.headers.get('content-type')?.includes('application/json')) {
                 const result = await response.json();
 
-                if (result.notFoundEmails) {
-                    return result.notFoundEmails;
+                if (result.wrongEmails) {
+                    return result.wrongEmails;
                 }
 
                 if (result.success) {

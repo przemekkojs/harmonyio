@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -181,4 +181,43 @@ body {
     }
 }
 
+.sidebar{
+    width: 255px; 
+    min-width: 255px;
+}
 
+.non-interactive {
+    pointer-events: none;      
+    color: inherit;         
+}
+
+.non-interactive:hover, .non-interactive:focus {
+    background-color: inherit; 
+    color: inherit;
+    border-color: inherit;
+}
+
+
+/*Grade and solve (for details and summary): */
+details {
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: .375rem;
+    padding: 0.75rem;
+}
+
+summary {
+    font-weight: 500;
+    cursor: pointer;
+    color: #0d6efd;
+}
+
+summary::marker {
+    font-size: 1.2em;
+    color: #0d6efd;
+}
+
+details span {
+    margin-left: 1rem;
+    color: #212529;
+}

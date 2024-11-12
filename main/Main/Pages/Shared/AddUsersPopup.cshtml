@@ -82,8 +82,11 @@ przypadku niepowodzenia
 
 <script>
 
-    let addUsersPopup = document.getElementById('addUsersPopup');
-    let addUserButton = addUsersPopup.querySelector('#addUserButton');
+    const addUsersPopup = document.getElementById('addUsersPopup');
+    const addUserButton = addUsersPopup.querySelector('#addUserButton');
+    const emailListContainer = document.getElementById("emailListContainer");
+    const emailsNumber = document.getElementById("emailsNumber");
+
     let assignModalButton;
 
     let addingAdmins = false;
@@ -91,7 +94,7 @@ przypadku niepowodzenia
     let wrongEmails = [];
 
     const validationText = addUsersPopup.querySelector('#addValidationText');
-    let emailInput = document.getElementById("addEmailInput");
+    const emailInput = document.getElementById("addEmailInput");
     const emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
 
     emailInput.addEventListener("focusout", addEmail);
@@ -102,19 +105,17 @@ przypadku niepowodzenia
     });
 
     addUsersPopup.addEventListener('show.bs.modal', function (event) {
-        clearEmailsList();
-
         assignModalButton = event.relatedTarget;
         addingAdmins = assignModalButton.getAttribute('data-adding-admins') === "true";
         addUsersPopup.querySelector('#addUsersTitle').innerText = addingAdmins ? "Dodaj adminów grupy" : "Dodaj uczestników grupy";
-        addUsersPopup.querySelector('#newUsersTitle').innerText = addingAdmins ? "Nowi admini" : "Nowi uczestnicy";;
+        addUsersPopup.querySelector('#newUsersTitle').innerText = addingAdmins ? "Nowi admini" : "Nowi uczestnicy";
+
+        clearEmailsList();
     });
 
     function clearEmailsList() {
         assignedEmails = [];
         wrongEmails = [];
-        const emailListContainer = document.getElementById("emailListContainer");
-        const emailsNumber = document.getElementById("emailsNumber");
 
         emailListContainer.innerHTML = "";
         emailsNumber.innerText = "(0)";
@@ -166,8 +167,6 @@ przypadku niepowodzenia
     }
 
     function addEmailToEmailsList(email, isWrong = false) {
-        const emailListContainer = document.getElementById("emailListContainer");
-        const emailsNumber = document.getElementById("emailsNumber");
         emailsNumber.innerText = `(${assignedEmails.length})`;
 
         const emailDiv = document.createElement("div");
@@ -205,8 +204,6 @@ przypadku niepowodzenia
     }
 
     function showWrongEmails() {
-        const emailListContainer = document.getElementById("emailListContainer");
-        const emailsNumber = document.getElementById("emailsNumber");
         emailListContainer.innerHTML = "";
         emailsNumber.innerText = `(${assignedEmails.length})`;
 

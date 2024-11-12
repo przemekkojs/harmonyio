@@ -3,8 +3,10 @@ let sketchFont;
 
 let grandStaff;
 
+const drawAddNoteHint = false;
+
 function resizeCanvasHorizontally() {
-  canvasWidth = grandStaff.width + 5;
+  canvasWidth = grandStaff.width;
   resizeCanvas(canvasWidth, canvasHeight);
 }
 

@@ -13,9 +13,21 @@ namespace Algorithm.New.Algorithm.Mistake
 
         public static NoteMistake CreateEmptyNoteMistake(int barIndex, int verticalIndex, string voice)
         {
+            voice = voice switch
+            {
+                "S" => "sopranie",
+                "A" => "alcie",
+                "T" => "tenorze",
+                _ => "basie"
+            };
+
             return new NoteMistake(barIndex, verticalIndex, voice)
             {
-                Description = $"Brakuje nuty w głosie {voice}."
+                Description = (
+                    [barIndex],
+                    [verticalIndex],
+                    $"Brakuje nuty w {voice}."
+                )
             };
         }
 
@@ -32,9 +44,7 @@ namespace Algorithm.New.Algorithm.Mistake
         public NoteMistake(Note? note, Stack? stack)
         {            
             if (note == null)
-            {
                 Voice = string.Empty;
-            }
             else
             {
                 var voice = GetVoiceFromStack(note, stack);
@@ -67,6 +77,8 @@ namespace Algorithm.New.Algorithm.Mistake
 
                 if (toCheck.Equals(note))
                     return voices[index];
+
+                index++;
             }
 
             return null;
