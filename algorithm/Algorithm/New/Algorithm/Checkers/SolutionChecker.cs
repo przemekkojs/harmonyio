@@ -1,7 +1,5 @@
-﻿using Algorithm.New.Algorithm.Mistake;
-using Algorithm.New.Music;
+﻿using Algorithm.New.Algorithm.Mistake.Solution;
 using Algorithm.New.Utils;
-using System.Diagnostics;
 
 namespace Algorithm.New.Algorithm.Checkers
 {
@@ -16,9 +14,9 @@ namespace Algorithm.New.Algorithm.Checkers
         /// <param name="solution">Rozwiązanie</param>
         /// <param name="settings">Ustawienia sprawdzania</param>
         /// <returns>Lista błędów</returns>
-        public static List<Mistake.Mistake> CheckSolution(Solution solution, Settings settings)
+        public static List<Mistake.Solution.Mistake> CheckSolution(Solution solution, Settings settings)
         {
-            List<Mistake.Mistake> result = [];
+            List<Mistake.Solution.Mistake> result = [];
             var noteMistakes = CheckNoteMistakes(solution);
             var stackMistakes = CheckStackMistakes(solution, settings);
 

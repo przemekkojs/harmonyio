@@ -1,4 +1,4 @@
-﻿namespace Algorithm.New.Algorithm.Mistake
+﻿namespace Algorithm.New.Algorithm.Mistake.Solution
 {
     public abstract class Mistake
     {

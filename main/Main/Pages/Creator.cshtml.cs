@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using Algorithm.New.Algorithm.Checkers;
+using Algorithm.New.Algorithm.Parsers.ProblemParser;
 using Main.Data;
-using Main.Enumerations;
 using Main.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 namespace Main.Pages
 {
@@ -72,9 +72,45 @@ namespace Main.Pages
             return Page();
         }
 
+        // To tak funkcja, któr¹ trzeba lepiej okodowaæ.
+        private bool CheckProblem(string question)
+        {
+            // Tutaj bierzemy rozwi¹zanie z kreatora i parsujemy
+            var parsed = Parser.ParseJsonToProblem(question);
+
+            // Mo¿e wyjœæ NULL, wiêc trzeba sprawdziæ
+            if (parsed != null)
+            {
+                // A to jest lista b³êdów. Na sam pocz¹tek wystarczy informowanie, czy b³êdy sa, potem siê
+                // doda jakieœ wyœwietlanie, jakie to b³êdy
+                var mistakes = ProblemChecker.CheckProblem(parsed);
+
+                // Co jak s¹ b³êdy
+                if (mistakes.Count != 0)
+                {
+                    // Tu siê przyda popup, ¿e b³êdy w zadaniu
+                    // TODO: ¯eby nie prze³adowaæ strony - trzeba siê z AJAXem pobawiæ
+                    return false;
+                }
+                else
+                {
+                    // Jak nie ma b³êdów, to wsm nie ma co nic robiæ.
+                    return true;
+                }
+            }
+            else
+            {
+                // TODO: Tutaj trzeba ogarn¹æ czemu wsm wyszed³ null
+                return true;
+            }
+        }
+
+        // TODO: Ogarn¹æ, ¿eby sprawdzarka dzia³a³a.
+        // Je¿eli ktoœ siê tym zajmuje, to w komentarzach jest tutorial
         public async Task<IActionResult> OnPostSave()
         {
             var currentUser = (await _userManager.GetUserAsync(User))!;
+
             if (currentUser == null)
                 return RedirectToPage("Login");
 
@@ -92,6 +128,12 @@ namespace Main.Pages
 
                 foreach (string question in Questions!)
                 {
+                    // Te 4 linijki trzeba ogarn¹æ, ¿eby lepiej dzia³a³y.
+                    var checkProblemResult = CheckProblem(question);
+
+                    if (!checkProblemResult)
+                        return Page();
+
                     _repository.Add(new Excersise()
                     {
                         Question = question,
@@ -128,6 +170,12 @@ namespace Main.Pages
 
                 foreach (var question in Questions)
                 {
+                    // Te 4 linijki trzeba ogarn¹æ, ¿eby lepiej dzia³a³y.
+                    var checkProblemResult = CheckProblem(question);
+
+                    if (!checkProblemResult)
+                        return Page();
+
                     _repository.Add(new Excersise()
                     {
                         Question = question,

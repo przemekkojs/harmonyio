@@ -184,10 +184,7 @@ namespace Algorithm.New.Music
 
         private void DeductRootAndPosition(List<Component> doubled)
         {
-            bool hasRoot = Root != null;
-            bool hasPosition = Position != null;
-
-            if (hasRoot)
+            if (Root != null)
             {
                 if (Root.Equals(Component.Root) || Root.Equals(Component.Fifth))
                 {
@@ -196,7 +193,7 @@ namespace Algorithm.New.Music
                 }
                 else if (Root.Equals(Component.Third))
                 {
-                    if (hasPosition)
+                    if (Position != null)
                     {
                         if (Position.Equals(Component.Root))
                             doubled.Add(Component.Root);
@@ -364,8 +361,6 @@ namespace Algorithm.New.Music
             }
             else
                 return false;
-
-            return true;
         }
 
         private static string ComponentListToString(List<Component> components) => "[" + string.Join(", ", components.ConvertAll(item => $"{item}")) + "]";

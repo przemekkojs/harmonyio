@@ -1,7 +1,4 @@
-﻿using Algorithm.New.Algorithm;
-using Algorithm.Old.Music;
-
-namespace Algorithm.New.Music
+﻿namespace Algorithm.New.Music
 {
     public enum Mode { Minor, Major }
     public class Tonation
@@ -48,15 +45,14 @@ namespace Algorithm.New.Music
 
         public static Tonation GetTonation(int sharpsCount, int flatsCount)
         {
-            List<Tonation> tonations = new List<Tonation>
-            {
+            List<Tonation> tonations = [
                 CFlatMajor, CMajor, CMinor, CSharpMajor, CSharpMinor,
                 DFlatMajor, DMajor, DMinor, DSharpMinor, EFlatMajor,
                 EFlatMinor, EMajor, EMinor, FMajor, FMinor, FSharpMajor,
                 FSHarpMinor, GFlatMajor, GMajor, GMinor, GSharpMinor,
                 AFlatMajor, AFlatMinor, AMajor, AMinor, ASharpMinor,
                 BFlatMajor, BFlatMinor, BMajor, BMinor
-            };
+            ];
 
             return tonations
                 .FirstOrDefault(t => t.FlatsCount == flatsCount && t.SharpsCount == sharpsCount) ??

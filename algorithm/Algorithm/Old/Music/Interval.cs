@@ -34,7 +34,7 @@ namespace Algorithm.Old.Music
 
         }
 
-        public static List<Note> NotesAbove(Note? note, int semitones)
+        public static List<Note>? NotesAbove(Note? note, int semitones)
         {
             if (note == null)
                 throw new ArgumentException("Note cannot be null");
@@ -45,7 +45,7 @@ namespace Algorithm.Old.Music
             return null;
         }
 
-        public static List<string> NoteNamesAbove(string name, int semitones)
+        public static List<string>? NoteNamesAbove(string name, int semitones)
         {
             return null;
         }

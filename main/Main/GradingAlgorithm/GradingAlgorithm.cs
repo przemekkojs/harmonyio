@@ -1,10 +1,8 @@
 ﻿using Algorithm.New;
 using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
-using Algorithm.New.Algorithm.Mistake;
+using Algorithm.New.Algorithm.Mistake.Solution;
 using Algorithm.New.Music;
-using Algorithm.Old.Music;
-using System.Text;
 
 namespace Main.GradingAlgorithm
 {

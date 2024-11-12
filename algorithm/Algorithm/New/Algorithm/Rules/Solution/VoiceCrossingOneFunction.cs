@@ -1,15 +1,16 @@
 ﻿using Algorithm.New.Utils;
 
-namespace Algorithm.New.Algorithm.Rules
+namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public class VoiceCrossingOneFunction : Rule
     {
         public VoiceCrossingOneFunction() : base(
             name: "Krzyżowanie głosów w ramach jednej funkcji",
             description: "Czy nuty w ramach jednej funkcji nie krzyżują się wysokościami w ramach sąsiednich głosów?",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
-        public override bool IsSatisfied(string additionalParamsJson="", params Music.Stack[] stacks)
+        public override bool IsSatisfied(string additionalParamsJson = "", params Music.Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

@@ -1,4 +1,4 @@
-﻿using Algorithm.New.Algorithm.Rules;
+﻿using Algorithm.New.Algorithm.Rules.Solution;
 
 namespace Algorithm.New.Algorithm
 {

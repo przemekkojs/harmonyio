@@ -1,13 +1,14 @@
 ﻿using Algorithm.New.Music;
 using Algorithm.New.Utils;
 
-namespace Algorithm.New.Algorithm.Rules
+namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public class VoiceCrossing : Rule
     {
         public VoiceCrossing() : base(
             name: "Krzyżowanie głosów",
-            description: "Czy nuty w obu funkcjach nie krzyżują się wysokościami w ramach tego samego głosu?") { }
+            description: "Czy nuty w obu funkcjach nie krzyżują się wysokościami w ramach tego samego głosu?")
+        { }
 
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
