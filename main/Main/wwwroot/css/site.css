@@ -18,6 +18,11 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background: url('/images/bg-pattern.png') repeat, linear-gradient(#2d53b2, #426edb);
+    background-size: 38vw 38vw, cover;
+    background-position: 0 0, center;
+    background-attachment: fixed;
+    padding-top: 93px;
 }
 
 /*Navbar*/
@@ -145,14 +150,6 @@ body {
 .no-style {
     all: unset;
     text-decoration: none;
-}
-
-body {
-    background: url('/images/bg-pattern.png') repeat, linear-gradient(#2d53b2, #426edb);
-    background-size: 38vw 38vw, cover;
-    background-position: 0 0, center;
-    background-attachment: fixed;
-    padding-top: 93px;
 }
 
 /* OTHER */

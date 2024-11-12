@@ -160,7 +160,7 @@ namespace Main.Pages
             }
 
             await _repository.SaveChangesAsync();
-            return RedirectToPage("Index");
+            return RedirectToPage("Assigned");
         }
     }
 }
