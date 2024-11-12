@@ -259,7 +259,13 @@
     </div>
 
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3">
-        <div class="fw-bold fs-4 mb-3">Szkice</div>
+        <div class="mb-3 d-flex flex-row">
+            <div class="fw-bold fs-4 ">Szkice</div>
+            <a asp-page="Creator" class="btn btn-primary ms-auto text-nowrap">
+               <i class="fas fa-plus me-1"></i>
+               Utwórz
+            </a>
+        </div>
         
         @foreach (var quiz in Model.Sketches)
         {

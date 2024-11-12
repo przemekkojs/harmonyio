@@ -1,12 +1,26 @@
 ﻿@page
 @model Main.Pages.GroupDetailsModel
+@using Enumerations
 @{
     var teacherRequests = Model.Group.Requests.Where(q => q.ForTeacher).Select(q => q.User);
     var studentRequests = Model.Group.Requests.Where(q => !q.ForTeacher).Select(q => q.User);
     var teachers = Model.Group.Teachers;
     var students = Model.Group.Students;
-}
 
+    var futureQuizzes = Model.Group.Quizzes.Where(q => q.State == Enumerations.QuizState.NotStarted);
+    
+    var activeQuizzes = Model.IsAdmin ?
+        Model.Group.Quizzes.Where(q => q.State == Enumerations.QuizState.Open) :
+        Model.Group.Quizzes.Where(q => q.State == Enumerations.QuizState.Open && !q.QuizResults.Any(qr => qr.UserId == Model.CurrentUserId));
+
+    var toGradeQuizzes = Model.IsAdmin ?
+        Model.Group.Quizzes.Where(q => q.State != Enumerations.QuizState.NotStarted && q.QuizResults.Count < q.Excersises.First().ExcersiseSolutions.Count) :
+        Model.Group.Quizzes.Where(q => q.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.CurrentUserId) && !q.QuizResults.Any(qr => qr.UserId == Model.CurrentUserId));
+    
+    var gradedQuizzes = Model.IsAdmin ?
+        Model.Group.Quizzes.Where(q => q.State != Enumerations.QuizState.NotStarted && q.QuizResults.Count > 0 && q.QuizResults.Count == q.Excersises.First().ExcersiseSolutions.Count) :
+        Model.Group.Quizzes.Where(q => q.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.CurrentUserId) && q.QuizResults.Any(qr => qr.UserId == Model.CurrentUserId));
+}
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
     <form method="post" asp-page-handler="DeleteUser" id="formForDeleteUser">
@@ -47,17 +61,23 @@
                     <i class="fas fa-user-group icon-sm me-2"></i>
                     <span>Uczestnicy</span>
                 </button>
-                <button id="quizesButton" onclick="switchTab(1)"
+                <button id="groupQuizesButton" onclick="switchTab(1)"
+                    class="btn btn-outline-dark hover-primary d-flex align-items-center p-3 me-3">
+                    <i class="fas fa-music icon-sm me-2"></i>
+                    <span>Quizy grupy</span>
+                </button>
+                <button id="gradeQuizesButton" onclick="switchTab(2)"
                     class="btn btn-outline-dark hover-primary d-flex align-items-center p-3">
                     <i class="fas fa-music icon-sm me-2"></i>
-                    <span>Quizy</span>
+                    <span>@(Model.IsAdmin ? "Quizy do oceny" : "Quizy ocenione")</span>
                 </button>
             </div>
 
             <div class="d-md-none w-100">
                 <select class="form-select" id="sm-tab-select" onchange="switchTab(parseInt(this.value))">
                     <option value="0" selected>Uczestnicy</option>
-                    <option value="1">Quizy</option>
+                    <option value="1">Quizy grupy</option>
+                    <option value="2">@(Model.IsAdmin ? "Quizy do oceny" : "Quizy ocenione")</option>
                 </select>
             </div>
         </div>
@@ -202,7 +222,7 @@
             </div>
         </div>
 
-        <div id="quizesSection" class="h-100 d-flex flex-row overflow-auto px-3 d-none">
+        <div id="groupQuizesSection" class="h-100 d-flex flex-row overflow-auto px-3 d-none">
             <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3"
                 style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
@@ -215,10 +235,9 @@
                     @{
                         var first = true;
                     }
-                    @foreach (var quiz in Model.Group.Quizzes)
+                    @foreach (var quiz in activeQuizzes)
                     {
-                        <div
-                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
+                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
                             <div class="flex-grow-1 d-flex flex-column">
                                 <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
@@ -227,7 +246,7 @@
                                     <span class="fw-bold me-1">Pozostało:</span>
                                     <span id="to-solve-time-@(quiz.Id)">
                                         @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
-                                    PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
@@ -244,9 +263,13 @@
 
                             @if (!Model.IsAdmin)
                             {
+
                                 <div class="d-flex flex-column h-100">
-                                    <a asp-page="/Solve" asp-route-code="@(quiz.Code)"
-                                        class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
+                                    <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">
+                                        @* @(quiz.Excersises.First().ExcersiseSolutions.First().UserId) *@
+
+                                        @(quiz.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.CurrentUserId) ? "Edytuj" : "Rozwiąż")
+                                    </a>
                                 </div>
                             }
                         </div>
@@ -267,7 +290,7 @@
                     @{
                         first = true;
                     }
-                    @foreach (var quiz in Model.Group.Quizzes)
+                    @foreach (var quiz in futureQuizzes)
                     {
                         <div
                             class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first? "mt-2" : "")">
@@ -279,7 +302,7 @@
                                     <span class="fw-bold me-1">Dostępne za:</span>
                                     <span id="future-quiz-time-@(quiz.Id)">
                                         @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
-                                    PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
@@ -293,13 +316,118 @@
                                     <span>@(quiz.Creator.FullName)</span>
                                 </div>
                             </div>
+                        </div>
+                        first = false;
+                    }
+                </div>
+            </div>
+        </div>
 
-                            @* Chyba usunąć - nie można edytować quizu po publikacji *@
+         <div id="gradeQuizesSection" class="h-100 d-flex flex-row overflow-auto px-3 d-none">
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3"
+                style="min-width: 200px">
+                <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
+                    <span class="mx-auto">Do oceny</span>
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
+                    @{
+                        first = true;
+                    }
+                    @foreach (var quiz in toGradeQuizzes)
+                    {
+                        <div
+                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
+                            <div class="flex-grow-1 d-flex flex-column">
+                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
+
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="far fa-clock icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Pozostało:</span> @*Lub Zakończono*@
+                                    <span id="to-grade-time-@(quiz.Id)">
+                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
+                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                    </span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="fas fa-user-group icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Wypełniono:</span>
+                                    @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
+                                </div>
+                                <div class="d-flex flex-row align-items-center">
+                                    <i class="fas fa-user icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Twórca:</span>
+                                    <span>@(quiz.Creator.FullName)</span>
+                                </div>
+                            </div>
+
                             @if (Model.IsAdmin)
                             {
                                 <div class="d-flex flex-column h-100">
-                                    <a asp-page="/Creator" asp-route-id="@(quiz.Id)"
-                                        class="btn btn-primary ms-auto mt-auto">Edytuj</a>
+                                    <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
+                                        class="btn btn-primary ms-auto mt-auto">Oceń</a>
+                                </div>
+                            }
+                        </div>
+                        first = false;
+                    }
+                </div>
+            </div>
+
+            <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column"
+                style="min-width: 200px">
+                <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
+                    <span class="mx-auto">Ocenione</span>
+                </div>
+
+                <hr class="m-0 border border-1" />
+
+                <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
+                    @{
+                        first = true;
+                    }
+                    @foreach (var quiz in gradedQuizzes)
+                    {
+                        <div
+                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first? "mt-2" : "")">
+                            <div class="flex-grow-1 d-flex flex-column">
+                                
+                                @if (Model.IsAdmin) {
+                                    <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
+                                } else {
+                                    <div class="d-flex flex-row">
+                                        <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
+                                        <div class="fw-bold ms-auto fs-5">@(((Grade)(quiz.QuizResults.First(qr => qr.UserId == Model.CurrentUserId).Grade)!).AsString())</div>
+                                    </div>
+                                }
+
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="far fa-clock icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Pozostało:</span> @*Lub Zakończono*@
+                                    <span id="graded-time-@(quiz.Id)">
+                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
+                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                    </span>
+                                </div>
+                                <div class="d-flex flex-row align-items-center mb-2">
+                                    <i class="fas fa-user-group icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Wypełniono:</span>
+                                    @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
+                                </div>
+                                <div class="d-flex flex-row align-items-center">
+                                    <i class="fas fa-user icon-sm me-2"></i>
+                                    <span class="fw-bold me-1">Twórca:</span>
+                                    <span>@(quiz.Creator.FullName)</span>
+                                </div>
+                            </div>
+
+                            @if (Model.IsAdmin)
+                            {
+                                <div class="d-flex flex-column h-100">
+                                    <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
+                                        class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
                                 </div>
                             }
                         </div>
@@ -318,28 +446,47 @@
 <script>
 
     const usersButton = document.getElementById("usersButton");
-    const quizesButton = document.getElementById("quizesButton");
+    const groupQuizesButton = document.getElementById("groupQuizesButton");
+    const gradeQuizesButton = document.getElementById("gradeQuizesButton");
     const usersSection = document.getElementById("usersSection");
-    const quizesSection = document.getElementById("quizesSection");
+    const groupQuizesSection = document.getElementById("groupQuizesSection");
+    const gradeQuizesSection = document.getElementById("gradeQuizesSection");
     const smallTabSelect = document.getElementById("sm-tab-select");
 
     function switchTab(tabIndex) {
         if (tabIndex == 0) {
             usersButton.classList.add("btn-primary");
             usersButton.classList.remove("btn-outline-dark", "hover-primary");
-            quizesButton.classList.add("btn-outline-dark", "hover-primary");
-            quizesButton.classList.remove("btn-primary");
+            groupQuizesButton.classList.add("btn-outline-dark", "hover-primary");
+            groupQuizesButton.classList.remove("btn-primary");
+            gradeQuizesButton.classList.add("btn-outline-dark", "hover-primary");
+            gradeQuizesButton.classList.remove("btn-primary");
 
-            quizesSection.classList.add("d-none")
             usersSection.classList.remove("d-none");
-        } else {
-            quizesButton.classList.add("btn-primary");
-            quizesButton.classList.remove("btn-outline-dark", "hover-primary");
+            groupQuizesSection.classList.add("d-none")
+            gradeQuizesSection.classList.add("d-none")
+        } else if (tabIndex == 1) {
             usersButton.classList.add("btn-outline-dark", "hover-primary");
             usersButton.classList.remove("btn-primary");
+            groupQuizesButton.classList.add("btn-primary");
+            groupQuizesButton.classList.remove("btn-outline-dark", "hover-primary");
+            gradeQuizesButton.classList.add("btn-outline-dark", "hover-primary");
+            gradeQuizesButton.classList.remove("btn-primary");
 
             usersSection.classList.add("d-none")
-            quizesSection.classList.remove("d-none");
+            groupQuizesSection.classList.remove("d-none");
+            gradeQuizesSection.classList.add("d-none")
+        } else {
+            usersButton.classList.add("btn-outline-dark", "hover-primary");
+            usersButton.classList.remove("btn-primary");
+            groupQuizesButton.classList.add("btn-outline-dark", "hover-primary");
+            groupQuizesButton.classList.remove("btn-primary");
+            gradeQuizesButton.classList.add("btn-primary");
+            gradeQuizesButton.classList.remove("btn-outline-dark", "hover-primary");
+
+            usersSection.classList.add("d-none")
+            groupQuizesSection.classList.add("d-none");
+            gradeQuizesSection.classList.remove("d-none")
         }
 
         smallTabSelect.value = tabIndex;

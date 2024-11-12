@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-center" style="min-height: 100%;"> 
     <div class="bg-white rounded shadow p-3 mb-3" style="width: 400px;">
         <h2 class="text-center fw-bold mb-4">Utwórz konto</h2>
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post"> 
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             
             <div class="mb-3">
@@ -39,6 +39,13 @@
 
             <button id="registerSubmit" type="submit" class="w-100 btn btn-primary p-2 mt-3">Zarejestruj się</button>
         </form>
+
+        <div class="d-flex flex-row align-items-center my-2">
+            <hr class="w-50"/>
+            <span class="fw-bold mx-2 small text-secondary">lub</span>
+            <hr class="w-50"/>
+        </div>
+
         <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
             <div>
                 <p>
@@ -46,13 +53,11 @@
                     {
                         if (provider.Name == "Google")
                         {
-                        <div class="col-md-4">
-                            <button type = "submit" class="btn btn-block btn-google" value="@provider.Name" 
-                                        title="Log in using your @provider.DisplayName account" name="provider">
-
-                                <i class="fab fa-google-plus fa-align-left social-icon" style=""></i>Google
+                            <button id="login-submit" type="submit" value="@provider.Name" name="provider"
+                                class="w-100 btn btn-outline-secondary btn-no-hover p-2 mb-3 d-flex align-items-center justify-content-center">
+                                <img src="~/images/google.png" alt="Google" class="me-2" style="width: 20px; height: 20px;">
+                                Kontynuuj z Google
                             </button>
-                        </div>
                         }
                         else if (provider.Name == "Facebook")
                         {
@@ -100,6 +105,11 @@
                 </p>
             </div>
         </form>
+
+        <div class="small text-center">
+            Masz już konto? 
+            <a id="forgot-password" asp-page="./Login">Zaloguj się</a>
+        </div>
     </div>
 </div>
 
