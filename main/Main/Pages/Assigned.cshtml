@@ -157,15 +157,15 @@
                                 <div class="fw-bold fs-5 ms-auto mb-auto">
                                     @(((Grade)(quizResult.Grade!)).AsString())
                                 </div>
+                                <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto">Przeglądaj</a>
                             }
                             else
                             {
                                 <span class="text-truncate mb-auto">Oczekuje na ocenę...</span>
+                                <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-primary ms-auto mb-1"
+                                    id="solveButton@(quiz.Id)">Edytuj</a>
                             }
 
-                            <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-primary ms-auto mb-1"
-                                id="solveButton@(quiz.Id)">Edytuj</a>
-                            <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto">Przeglądaj</a>
                         </div>
                     </div>
                 }
