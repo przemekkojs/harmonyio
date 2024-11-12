@@ -160,6 +160,12 @@ body {
     justify-content: center;
 }
 
+.icon-giant {
+    font-size: 100px;
+    text-align: center;
+    justify-content: center;
+}
+
 .no-style {
     all: unset;
     text-decoration: none;
