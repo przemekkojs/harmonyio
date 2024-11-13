@@ -117,9 +117,11 @@ namespace Main.Pages
             {
                 Grades = Users.Select(u => Quiz.QuizResults.First(qr => qr.UserId == u.Id).Grade).ToList();
 
-                var pmc = Users.Select(u =>
-                    Quiz.QuizResults.First(qr => qr.UserId == u.Id)
-                    .ExcersiseResults.Select(er => (er.Points, er.MaxPoints, er.Comment)).ToList()).ToList();
+                var pmc = Users.Select(u => Quiz.QuizResults
+                        .First(qr => qr.UserId == u.Id).ExcersiseResults
+                            .Select(er => (er.Points, er.MaxPoints, er.Comment))
+                        .ToList())
+                    .ToList();
 
                 Points = pmc
                     .Select(innerList => innerList.Select(t => t.Points).ToList())

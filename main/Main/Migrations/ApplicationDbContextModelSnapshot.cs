@@ -172,6 +172,9 @@ namespace Main.Migrations
                     b.Property<int>("ExcersiseSolutionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MaxPoints")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Points")
                         .HasColumnType("INTEGER");
 
