@@ -12,7 +12,7 @@
             <div class="sidebar d-flex flex-column bg-white rounded shadow me-3 p-3">
                 <div class="mb-auto">
                     <label asp-for="QuizName" class="form-label fw-bold"></label>
-                    <input id="QuizName" name="QuizName" asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
+                    <input id="QuizName" name="QuizName" asp-for="QuizName" class="form-control bg-white border-secondary" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger" id="quiz-name-validation"></span>
                 </div>
 
@@ -81,7 +81,6 @@
 
         const questions = [];
         const tasks = taskContainer.tasks;
-        console.log("Tasks", tasks);
 
         if (tasks.length === 0) {
             questionsValidationError.innerText = "Dodaj przynajmniej jedno zadanie.";
@@ -90,8 +89,6 @@
 
         tasks.forEach(t => {
             const toAppend = t.hiddenInput.value;
-            console.log("Solution", toAppend);
-            console.log("Type", typeof (toAppend));
             questions.push(toAppend);
         });
 
@@ -100,6 +97,13 @@
         event.preventDefault();
 
         const form = document.getElementById('pageForm');
+
+        const maxes = [];
+
+        tasks.forEach(t => {
+            const toAppend = t.maxPointsInput.value;
+            maxes.push(toAppend);
+        });
 
         const quizName = document.getElementById("QuizName").value;
         const verificationToken = form
@@ -120,9 +124,7 @@
         formData.append("QuizName", quizName);
         formData.append("Questions", JSON.stringify(questions));
         formData.append("EditedQuizId", editedQuizId);
-
-        console.log(excersises);
-        console.log([...formData.entries()]);
+        formData.append("Maxes", JSON.stringify(maxes));
 
         try {
             const response = await fetch(form.action, {
@@ -193,23 +195,32 @@
             const metreCount = metreSplitted[0];
             const metreValue = metreSplitted[1];
 
-            const tonationString = `${tonationLetterSelect.value}${accidentalSelect.value}${modeSelect.value}`;
+            const tonationString = `${tonationLetterSelect.value}${modeSelect.value}`;
             const tonationParsed = parseTonationToAccidentalsCount(tonationString);
             const sharpsCount = tonationParsed[0];
             const flatsCount = tonationParsed[1];
+            const minor = tonationParsed[2];
+            const maxPoints = currentTask.maxPointsInput.value;
+
+            if (maxPoints < 1 || maxPoints > 100)
+                return false;
+
+            if (sharpsCount == -1 || flatsCount == -1)
+                return false;
 
             const taskResult = currentTask.getResult();
 
             if (taskResult.includes(null))
                 return false;
 
-
             const toPush = {
                 question: questionText,
                 sharpsCount: Number(sharpsCount),
                 flatsCount: Number(flatsCount),
+                minor: Number(minor),
                 metreValue: Number(metreValue),
                 metreCount: Number(metreCount),
+                maxPoints: maxPoints,
                 task: taskResult
             }
 
@@ -225,6 +236,6 @@
 
 @section Scripts {
     @{
-                        <partial name="_ValidationScriptsPartial" />
+                            <partial name="_ValidationScriptsPartial" />
     }
 }

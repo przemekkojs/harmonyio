@@ -19,15 +19,14 @@ namespace Main.GradingAlgorithm
 
             var checkResult = SolutionChecker
                 .CheckSolution(solution, settings)
-                .Distinct() // TODO: Nwm czy to coś zmienia, trzeba sprawdzić
+                .Distinct()
                 .ToList();
 
             var maxMistakesCount = GetMaxMistakesCount(problem, settings);
             var opinion = GenerateOpinion(checkResult);
             var mistakesCount = checkResult.Sum(x => x.Quantity);
 
-            // TODO: Zadanie powinno mieć określoną maks. liczbę punktów, nie inaczej
-            var maxPoints = 10;
+            var maxPoints = problem.MaxPoints;
             var algorithmPoints = maxMistakesCount - mistakesCount > 0 ? maxMistakesCount - mistakesCount : 0;
             var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
             var points = Convert.ToInt32(pointsPercent / maxPoints);

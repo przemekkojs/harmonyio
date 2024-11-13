@@ -9,14 +9,14 @@ namespace Main.Models
 
 		//Tymczasowo pytanie to po prostu jakiś testowy string
 		public string Question { get; set; } = "";
+		public int MaxPoints { get; set; }
 
 		//FOREIGN KEYS
-
 		public int QuizId { get; set; }
 		[JsonIgnore]
 		public Quiz Quiz { get; set; } = null!;
 
-		public ICollection<ExcersiseSolution> ExcersiseSolutions = new List<ExcersiseSolution>();
+		public ICollection<ExcersiseSolution> ExcersiseSolutions = [];
 	}
 }
 
