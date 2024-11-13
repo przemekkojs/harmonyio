@@ -16,19 +16,38 @@ class TwoNotes {
   toJson() {
     let jsonResult = [];
 
+    let commonAccidentalName = "";
+    // check if notes are on the same line and one of them has accidental and other doesnt
+    if (
+      this.note1 !== null &&
+      this.note2 !== null &&
+      this.note1.line == this.note2.line
+    ) {
+      if (this.note1.hasAccidental() && !this.note2.hasAccidental()) {
+        commonAccidentalName = this.note1.accidental.getChar();
+      } else if (!this.note1.hasAccidental() && this.note2.hasAccidental()) {
+        commonAccidentalName = this.note2.accidental.getChar();
+      }
+    }
+
     let note1Json;
     if (this.note1 !== null) {
       note1Json = this.note1.toJson();
-      note1Json.voice = this.#determineVoice(this.note1);
+      if (commonAccidentalName !== "") {
+        note1Json.accidentalName = commonAccidentalName;
+      }
+      note1Json.voice = this.#determineVoice(this.note1, true);
       jsonResult.push(note1Json);
     }
 
     let note2Json;
     if (this.note2 !== null) {
       note2Json = this.note2.toJson();
-      note2Json.voice = this.#determineVoice(this.note2);
+      if (commonAccidentalName !== "") {
+        note2Json.accidentalName = commonAccidentalName;
+      }
+      note2Json.voice = this.#determineVoice(this.note2, false);
       jsonResult.push(note2Json);
-    } else {
     }
 
     return jsonResult;
@@ -42,7 +61,47 @@ class TwoNotes {
     }
   }
 
-  #determineVoice(note) {
+  #determineVoice(note, determiningNote1) {
+    // both notes are present and they are full note
+    if (
+      this.note1 !== null &&
+      this.note2 !== null &&
+      this.note1.getBaseValue() === 1
+    ) {
+      const curNoteLine = note.line;
+      const otherNoteLine = determiningNote1
+        ? this.note2.line
+        : this.note1.line;
+
+      // full notes are on the same line, note1 will be facing up and note2 will be facing down
+      if (curNoteLine === otherNoteLine) {
+        if (determiningNote1) {
+          if (this.isUpperStaff) {
+            return Note.noteVoices.soprano;
+          } else {
+            return Note.noteVoices.tenore;
+          }
+        } else {
+          if (this.isUpperStaff) {
+            return Note.noteVoices.alto;
+          } else {
+            return Note.noteVoices.bass;
+          }
+        }
+      } else {
+        if (curNoteLine < otherNoteLine && this.isUpperStaff) {
+          return Note.noteVoices.soprano;
+        } else if (curNoteLine > otherNoteLine && this.isUpperStaff) {
+          return Note.noteVoices.alto;
+        } else if (curNoteLine < otherNoteLine && !this.isUpperStaff) {
+          return Note.noteVoices.tenore;
+        } else {
+          return Note.noteVoices.bass;
+        }
+      }
+    }
+
+    // notes arent full note so normal check
     if (note.isFacingUp && this.isUpperStaff) {
       return Note.noteVoices.soprano;
     } else if (!note.isFacingUp && this.isUpperStaff) {
@@ -398,6 +457,23 @@ class TwoNotes {
     this.notesXOffset = 0;
 
     const lineDistBetweenNotes = Math.abs(this.note1.line - this.note2.line);
+    const noteHeadWidth = this.note1.getNoteWidth(false);
+
+    if (this.note1.getBaseValue() == 1) {
+      if (lineDistBetweenNotes == 0.5) {
+        this.notesXOffset += noteHeadWidth / 2;
+        if (this.note1Y < this.note2Y) {
+          this.note1X -= this.notesXOffset;
+          this.note2X += this.notesXOffset;
+        } else {
+          this.note1X += this.notesXOffset;
+          this.note2X -= this.notesXOffset;
+        }
+      }
+
+      return;
+    }
+
     // overlap need to be separated
     if (
       lineDistBetweenNotes === 0.5 ||
@@ -405,7 +481,6 @@ class TwoNotes {
         lineDistBetweenNotes < 3 &&
         !this.isNoteFacingUpAboveNoteFacingDown())
     ) {
-      const noteHeadWidth = this.note1.getNoteWidth(false);
       this.notesXOffset += noteHeadWidth / 2;
 
       if (this.note1Y < this.note2Y) {
@@ -469,20 +544,21 @@ class TwoNotes {
   }
 
   drawAdditionalLinesOnAdding(lineNumber, noteWidth) {
+    console.log(lineNumber);
     const lineX = this.parent.getNotesCenterLineX();
     const lineX0 = lineX - noteWidth;
     const lineX1 = lineX + noteWidth;
 
-    const note1Line = this.note1 ? this.note1.line : 0;
+    const note1Line = this.note1 ? this.note1.line : 2;
 
     strokeWeight(2);
     stroke(0);
-    for (let i = Math.min(note1Line - 1, -1); i >= lineNumber; i--) {
+    for (let i = Math.min(Math.floor(note1Line), -1); i >= lineNumber; i--) {
       const lineY = this.getLineY(i);
       line(lineX0, lineY, lineX1, lineY);
     }
 
-    for (let i = Math.max(note1Line + 1, 5); i <= lineNumber; i++) {
+    for (let i = Math.max(Math.ceil(note1Line), 5); i <= lineNumber; i++) {
       const lineY = this.getLineY(i);
       line(lineX0, lineY, lineX1, lineY);
     }
