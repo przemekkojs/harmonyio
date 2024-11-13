@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Main.Enumerations;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Main.Models
 {

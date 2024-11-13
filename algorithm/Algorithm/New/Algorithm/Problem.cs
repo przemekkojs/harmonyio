@@ -7,15 +7,17 @@ namespace Algorithm.New.Algorithm
         public List<Function> Functions {  get; private set; }
         public Metre Metre { get; private set; }
         public Tonation Tonation { get; private set; }
+        public int MaxPoints { get; private set; }
 
-        public Problem(List<Function> functions, Metre metre, Tonation tonation)
+        public Problem(List<Function> functions, Metre metre, Tonation tonation, int maxPoints)
         {
             Functions = functions;
             Metre = metre;
             Tonation = tonation;
+            MaxPoints = maxPoints;
         }
 
-        public Problem(Metre metre, Tonation tonation) : this([], metre, tonation) { }
+        public Problem(Metre metre, Tonation tonation, int maxPoints) : this([], metre, tonation, maxPoints) { }
 
         public override bool Equals(object? obj)
         {

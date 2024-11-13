@@ -8,7 +8,7 @@ namespace Main.Models
 		public int Id { get; set; }
 
 		public int Points { get; set; }
-		public int MaxPoints { get; set; }
+		public int MaxPoints { get; set; }		
 		public string Comment { get; set; } = "";
 
 		//FOREIGN KEYS

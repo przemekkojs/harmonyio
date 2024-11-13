@@ -142,6 +142,9 @@ namespace Main.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MaxPoints")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Question")
                         .IsRequired()
                         .HasColumnType("TEXT");

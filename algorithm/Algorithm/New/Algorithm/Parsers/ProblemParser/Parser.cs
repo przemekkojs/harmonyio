@@ -18,15 +18,18 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
             var flatsCount = parsedProblem.FlatsCount;
             var sharpsCount = parsedProblem.SharpsCount;
             var functions = parsedProblem.Functions;
+            var maxPoints = parsedProblem.MaxPoints;
+            var minor = parsedProblem.Minor;
 
             List<Function> realFuntions = [];
 
             foreach (var f in functions)
                 realFuntions.Add(new Function(f));
 
+            // TODO: Poprawić tonację (dodać parametr minor itd.)
             var tonation = Tonation.GetTonation(sharpsCount, flatsCount);
             var metre = Metre.GetMetre(metreCount, metreValue);
-            var result = new Problem(realFuntions, metre, tonation);
+            var result = new Problem(realFuntions, metre, tonation, maxPoints);
 
             return result;
         }

@@ -1,4 +1,5 @@
 import { BarContainer } from "./barContainer.js";
+import { parseAccidentalsCountToTonationInfo, parseMetreValuesToMetre  } from "../utils.js";
 
 class Task {
     constructor(taskContainer, taskIndex, maxBars = 16) {     
@@ -10,23 +11,44 @@ class Task {
         this.barContainer = new BarContainer(taskContainer, maxBars);
         this.handleRemove = this.taskContainer.removeTask.bind(this.taskContainer, this.taskIndex);
 
-        this.container = document.createElement('div');
-        this.container.className = "task-content w-100 p-3";        
-
-        this.questionInput = document.createElement('input');
-        this.questionInput.type = "text";
-        this.questionInput.class = "form-control task-input";
-        this.questionInput.placeholder = "Wpisz polecenie";
-
+        // Ukryty input
         this.hiddenInput = document.createElement('input');
         this.hiddenInput.type = "hidden";        
 
-        this.params = document.createElement('div');
-        this.params.className = "params";
+        // Zadanie
+        this.taskNumber = document.createElement('input');
+        this.taskNumber.type = "text";
+        this.taskNumber.readOnly = true;
+        this.taskNumber.className = "form-control task-id";
+                
+        this.maxPointsInput = document.createElement('input');
+        this.maxPointsInput.type = 'number';
+        this.maxPointsInput.className = "form-control bg-white border-secondary points-input no-arrows mt-1";
+        this.maxPointsInput.style = "width: 100px;";
+        this.maxPointsInput.maxLength = "3";
+        this.maxPointsInput.placeholder = "Punkty";
+        this.maxPointsInput.value = 10;
+        this.maxPointsInput.required = true;        
 
-        this.metreLabel = document.createElement('label');
-        this.metreLabel.innerText = "Metrum: ";
+        this.pointsDiv = document.createElement('div');
+        this.pointsDiv.className = "col-auto p-1 h-100 align-items-left";
+        this.pointsDiv.appendChild(this.taskNumber);
+        this.pointsDiv.appendChild(this.maxPointsInput);
+        
+        // Pytanie: 
+        this.questionInput = document.createElement('textarea');
+        this.questionInput.className = "form-control task-input bg-white border-secondary h-100";
+        this.questionInput.placeholder = "Wpisz polecenie (opcjonalne)";
 
+        this.questionFormGroup = document.createElement('div');
+        this.questionFormGroup.className = "form-group h-100";
+        this.questionFormGroup.appendChild(this.questionInput);
+
+        this.questionDiv = document.createElement('div');
+        this.questionDiv.className = "col p-1 h-100";
+        this.questionDiv.appendChild(this.questionFormGroup);        
+
+        // Parametry (metrum i tonacja):
         this.metreSelect = document.createElement('select');
         this.metreSelect.innerHTML = `
             <option value="2/4">2/4</option>
@@ -35,55 +57,101 @@ class Task {
             <option value="3/8">3/8</option>
             <option value="6/8">6/8</option>
         `;
+        this.metreSelect.ariaLabel = "Metrum";
+        this.metreSelect.className = "form-control bg-white border-secondary";
 
         this.tonationLabel = document.createElement('label');
-        this.tonationLabel.innerText = "Tonacja: ";
+        this.tonationLabel.innerText = "Tonacja";
+        this.tonationLabel.className = "fw-bold ms-auto me-2";
 
         this.tonationNameSelect = document.createElement('select');
-        this.tonationNameSelect.className = "smaller-select";
         this.tonationNameSelect.innerHTML = `
             <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="G">G</option>
-            <option value="A">A</option>
-            <option value="H">H</option>`;
+            <option value="Ces">Ces</option>
+            <option value="Cis">Cis</option>
 
-        this.tonationAccidentalSelect = document.createElement('select');
-        this.tonationAccidentalSelect.className = "smaller-select";
-        this.tonationAccidentalSelect.innerHTML = `
-            <option value=" "> </option>
-            <option value="#">#</option>
-            <option value="b">b</option>
-        `;
+            <option value="D">D</option>
+            <option value="Des">Des</option>
+            <option value="Dis">Dis</option>
+
+            <option value="E">E</option>
+            <option value="Es">Es</option>
+
+            <option value="F">F</option>
+            <option value="Fis">Fis</option>
+
+            <option value="G">G</option>
+            <option value="Gis">Gis</option>
+            <option value="Ges">Ges</option>
+
+            <option value="A">A</option>
+            <option value="Ais">Ais</option>
+            <option value="As">As</option>
+
+            <option value="H">H</option>
+            <option value="H">B</option>`;
+        this.tonationNameSelect.className = "form-control bg-white border-secondary";
 
         this.tonationModeSelect = document.createElement('select');
         this.tonationModeSelect.innerHTML = `
             <option value="dur">Dur</option>
             <option value="moll">moll</option>
         `;
+        this.tonationModeSelect.className = "form-control bg-white border-secondary";
 
-        this.params.appendChild(this.metreLabel);
-        this.params.appendChild(this.metreSelect);
-        this.params.appendChild(this.tonationLabel);
-        this.params.appendChild(this.tonationNameSelect);
-        this.params.appendChild(this.tonationAccidentalSelect);
-        this.params.appendChild(this.tonationModeSelect);
+        const nameCol = document.createElement('div');
+        nameCol.className = "col";
+        nameCol.appendChild(this.tonationNameSelect);
 
-        this.taskSubmit = document.createElement('div');
-        this.taskSubmit.className = "task-submit";
+        const modeCol = document.createElement('div');
+        modeCol.className = "col";
+        modeCol.appendChild(this.tonationModeSelect);
 
+        this.paramsInnerDiv = document.createElement('div');
+        this.paramsInnerDiv.className = "row gx-1 mt-1";
+        this.paramsInnerDiv.appendChild(nameCol);
+        this.paramsInnerDiv.appendChild(modeCol);
+
+        this.dropdownsFormGroup = document.createElement('div');
+        this.dropdownsFormGroup.className = "align-items-center h-100";
+        this.dropdownsFormGroup.appendChild(this.metreSelect);
+        // this.dropdownsFormGroup.appendChild(this.tonationLabel);
+        this.dropdownsFormGroup.appendChild(this.paramsInnerDiv);
+
+        this.dropdownsDiv = document.createElement('div');
+        this.dropdownsDiv.className = "col-auto p-1 h-100";
+        this.dropdownsDiv.appendChild(this.dropdownsFormGroup);
+
+        // Główna forma:
+        this.form = document.createElement('div');
+        this.form.className = "row align-items-center";
+        this.form.style = "height: 85px;";
+        this.form.appendChild(this.pointsDiv);
+        this.form.appendChild(this.questionDiv);
+        this.form.appendChild(this.dropdownsDiv);
+
+        // Kontener parametrów
+        this.params = document.createElement('div');
+        this.params.className = "container border-bottom p-1 gx-1 mt-1";       
+        this.params.appendChild(this.form);
+
+        // Usuwanie zadania
         this.deleteButton = document.createElement('input');
         this.deleteButton.type = "button";
         this.deleteButton.className = "btn btn-danger btn-sm";
         this.deleteButton.style = "width: 100px;";
         this.deleteButton.value = "Usuń";
 
+        this.taskSubmit = document.createElement('div');
+        this.taskSubmit.className = "task-submit";
         this.taskSubmit.appendChild(this.deleteButton);
 
+        // Pełny kontener zadania
+        // Kontener zadania: 
+        this.container = document.createElement('div');
+        this.container.className = "task-content w-100 p-3 rounded";
+
         this.container.appendChild(this.hiddenInput);
-        this.container.appendChild(this.questionInput);
         this.container.appendChild(this.params);
         this.container.appendChild(this.barContainer.container);
         this.container.appendChild(this.taskSubmit);        
@@ -92,17 +160,15 @@ class Task {
     }
 
     setId(taskIndex) {
-        //console.log("Task: setId(): taskIndex: ", taskIndex);
         this.deleteButton.removeEventListener('click', this.handleRemove);
 
         this.taskIndex = taskIndex;
 
-        this.metreLabel.for = `metre-select-task-${taskIndex}`;
         this.metreSelect.id = `metre-select-task-${taskIndex}`;
+        this.taskNumber.value = `Zadanie ${taskIndex + 1}`;
 
         this.tonationLabel.for = `tonation-name-select-task-${taskIndex}`;
         this.tonationNameSelect.id = `tonation-name-select-task-${taskIndex}`;
-        this.tonationAccidentalSelect.id = `accidental-task-${taskIndex}`;
         this.tonationModeSelect.id = `mode-task-${taskIndex}`;
 
         this.deleteButton.id = `delete-${taskIndex}`;
@@ -111,6 +177,8 @@ class Task {
         this.questionInput.id = `question-task-${taskIndex}`;
         this.hiddenInput.name = `Questions[${taskIndex}]`;
         this.hiddenInput.id = `question-json-${taskIndex}`;
+
+        this.maxPointsInput.id = `max-points-${taskIndex}`;
 
         this.barContainer.setId(taskIndex);
         this.handleRemove = this.taskContainer.removeTask.bind(this.taskContainer, this.taskIndex);
@@ -127,24 +195,28 @@ class Task {
             });
         });
 
-        console.log(result);
         return result;
     }
 
     // Tutaj wlatuje obiekt zadania
     load(excersiseObject) {
         const sharpsCount = excersiseObject.sharpsCount;
-        const flatsCount = excersiseObject.sharpsCount;
+        const flatsCount = excersiseObject.flatsCount;
+        const minor = excersiseObject.minor;
         const metreValue = excersiseObject.metreValue;
         const metreCount = excersiseObject.metreCount;
         const taskObject = excersiseObject.task;
         const question = excersiseObject.question;
+        const maxPoints = excersiseObject.maxPoints;
 
+        const metreValueResult = parseMetreValuesToMetre([metreValue, metreCount]);
+        const tonationInfo = parseAccidentalsCountToTonationInfo([sharpsCount, flatsCount, minor]);
+
+        this.tonationNameSelect.value = tonationInfo[0];
+        this.tonationModeSelect.value = tonationInfo[1];
+        this.metreSelect.value = metreValueResult;
         this.questionInput.value = question;
-
-        //console.log("TaskContainer: load(): taskObject: ", taskObject); 
-
-        // TODO: Tonacja i metrum
+        this.maxPointsInput.value = maxPoints;
 
         let index = 0;
         let lastBar = 0;
@@ -163,13 +235,7 @@ class Task {
             }                
 
             const bar = this.barContainer.bars[barIndex];
-
-            //console.log("TaskContainer: load(): bar: ", bar);
-
             const functionCount = bar ? bar.functionContainer.functions.length - 1 : 0;
-
-            //console.log(parsedFunction);
-            //console.log(index, '/', functionCount);
 
             if (index >= functionCount) {
                 bar.functionContainer.addFunction();
@@ -177,8 +243,6 @@ class Task {
 
             const functionCountInBar = bar.functionContainer.functions.length;
             const newFunction = bar.functionContainer.functions[functionCountInBar - 1];
-
-            //console.log("TaskContainer: load(): newFunction: ", newFunction);
 
             if (parsedFunction.minor)
                 newFunction.functionCreator.minor.checked = true;
@@ -212,7 +276,6 @@ class Task {
 
 export class TaskContainer {
     constructor(parent, maxTasksCount = 3) {
-        //console.log("TaskContainer");
         this.tasks = [];
         this.maxTasksCount = maxTasksCount;
         this.parent = parent;
@@ -222,22 +285,15 @@ export class TaskContainer {
 
     addTask() {        
         const taskCount = this.tasks.length;
-        //console.log("addTask(): TaskContainer.tasks.length: " + this.tasks.length);
 
         if (taskCount < this.maxTasksCount) {
             const toAdd = new Task(this, taskCount);
             this.tasks.push(toAdd);
             this.parent.appendChild(toAdd.container);
         }
-
-        //console.log("addTask(): TaskContainer.tasks: " + this.tasks);
     }
 
     removeTask(taskIndex) {
-        //console.log("removeTask(): TaskContainer.tasks: " + this.tasks);
-        //console.log("removeTask(): TaskContainer: ");
-        //console.log(this);
-
         const taskCount = this.tasks.length;
 
         if (taskIndex >= taskCount)
@@ -251,32 +307,22 @@ export class TaskContainer {
     }
 
     setId(taskIndex = 0) {
-        //console.log("TaskContainer: setId(): taskIndex: ", taskIndex); 
         const taskCount = this.tasks.length;
-
-        //console.log("TaskContainer: setId(): TaskContainer.tasks: ", this.tasks); 
 
         for (let index = taskIndex; index < taskCount; index++) {
             const toChange = this.tasks[index];
-            //console.log("TaskContainer: setId(): toChange: ", toChange)
 
             if (toChange != null)
                 toChange.setId(index);
-            // else
-                //console.log("TaskContainer: setId() null: index: ", index)
         }
     }
 
     // Ładowanie z całego JSONa
     load(excersises) {
-        //console.log("TaskContainer: load(): excersises: ", excersises);
-
         let index = 0;
 
         excersises.forEach(excersise => {
-            const excersiseObject = JSON.parse(excersise);
-
-            //console.log("TaskContainer: load(): excersiseObject: ", excersiseObject);            
+            const excersiseObject = JSON.parse(excersise);           
             const tasksCount = this.tasks.length - 1;
 
             if (index > tasksCount)

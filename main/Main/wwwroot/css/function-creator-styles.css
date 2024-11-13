@@ -223,23 +223,6 @@
     background-color: #dddddd;
 }
 
-.params select {
-    font-size: 25px;
-    text-align: center;
-    width: 100px;
-    border: none;
-    border-bottom: 1px solid black;
-    background: none;
-
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    text-indent: 1px;
-    text-overflow: '';
-
-    font-family: inherit;
-}
-
 .params .smaller-select {
     width: 25px;
     font-family: inherit;
@@ -247,7 +230,6 @@
 
 .task-submit {
     text-align: right;
-    background-color: #dddddd;
     font-family: inherit;
 }
 
@@ -361,4 +343,27 @@
 
 .hide-border {
     border: none;
+}
+
+
+.no-arrows::-webkit-outer-spin-button,
+.no-arrows::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.no-arrows[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.points-input {
+    max-width: 100px;
+    text-align: left;
+}
+
+.task-id {
+    background-color: #383A3C;
+    max-width: 100px;
+    color: white;
+    font-weight: 500;
 }

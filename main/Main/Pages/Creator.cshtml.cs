@@ -37,7 +37,7 @@ namespace Main.Pages
         public int? EditedQuizId { get; set; } = null;
 
         [BindProperty]
-        public List<int> Maxes { get; set; } = null!;
+        public List<string> Maxes { get; set; } = null!;
 
         [BindProperty]
         public string? Code { get; set; }
@@ -84,44 +84,22 @@ namespace Main.Pages
             return Page();
         }
 
-        // To tak funkcja, któr¹ trzeba lepiej okodowaæ.
         private bool CheckProblem(string question)
         {
-            // Tutaj bierzemy rozwi¹zanie z kreatora i parsujemy
             try
             {
                 var parsed = Parser.ParseJsonToProblem(question);
 
-                // Mo¿e wyjœæ NULL, wiêc trzeba sprawdziæ
                 if (parsed != null)
                 {
                     if (parsed.Functions.Count == 0)
-                    {
                         return false;
-                    }
 
-                    // A to jest lista b³êdów. Na sam pocz¹tek wystarczy informowanie, czy b³êdy sa, potem siê
-                    // doda jakieœ wyœwietlanie, jakie to b³êdy
                     var mistakes = ProblemChecker.CheckProblem(parsed);
-
-                    // Co jak s¹ b³êdy
-                    if (mistakes.Count != 0)
-                    {
-                        // Tu siê przyda popup, ¿e b³êdy w zadaniu
-                        // TODO: ¯eby nie prze³adowaæ strony - trzeba siê z AJAXem pobawiæ
-                        return false;
-                    }
-                    else
-                    {
-                        // Jak nie ma b³êdów, to wsm nie ma co nic robiæ.
-                        return true;
-                    }
+                    return mistakes.Count == 0;
                 }
                 else
-                {
-                    // TODO: Tutaj trzeba ogarn¹æ czemu wsm wyszed³ null
-                    return true;
-                }
+                    return false;
             }
             catch (Exception ex) when (ex is ArgumentNullException || ex is InvalidOperationException)
             {
@@ -143,11 +121,13 @@ namespace Main.Pages
             return true;
         }
 
-        // TODO: Ogarn¹æ, ¿eby sprawdzarka dzia³a³a.
-        // Je¿eli ktoœ siê tym zajmuje, to w komentarzach jest tutorial
         public async Task<IActionResult> OnPostSave()
         {
-            Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0]);
+            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i siê ³aduje jako zerowy element listy,
+            // wiêc te linijki jakby rozpakowuj¹ t¹ litê.
+            // Je¿eli na froncie nie ma b³êdów, to to zawsze siê wykona poprawnie.
+            Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0])!;
+            Maxes = JsonConvert.DeserializeObject<List<string>>(Maxes[0])!;
 
             var currentUser = await _userManager.GetUserAsync(User);
 
@@ -198,12 +178,16 @@ namespace Main.Pages
 
             var quizId = quiz.Id;
 
-            foreach (var question in Questions)
+            for (int index = 0; index < Questions.Count; index++)
             {
+                var question = Questions[index];
+                var points = Convert.ToInt32(Maxes[index]);
+
                 _repository.Add(new Excersise
                 {
                     Question = question,
                     QuizId = quizId,
+                    MaxPoints = points
                 });
             }
 
