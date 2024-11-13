@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using NuGet.Protocol;
 
 namespace Main.Areas.Identity.Pages.Account
 {
@@ -142,21 +143,12 @@ namespace Main.Areas.Identity.Pages.Account
 
                     email = _userManager.NormalizeEmail(email);
 
-                    var user = await _emailStore.FindByEmailAsync(email, CancellationToken.None);
+                    var user = await _userManager.FindByEmailAsync(email);
 
                     if (user != null)
                     {
-                        var resultIdentity = await _userManager.AddLoginAsync(user, info);
-                        
-                        if (resultIdentity.Succeeded)
-                        {
-                            await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
-                            return LocalRedirect(returnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToPage("random 23");
-                        }
+                        await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                        return LocalRedirect(returnUrl);
                     }
 
                     Input = new InputModel
@@ -186,8 +178,10 @@ namespace Main.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
 
-                await _userStore.SetUserNameAsync(user, Input.Email.ToLower(), CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email.ToLower(), CancellationToken.None);
+                var email = _userManager.NormalizeEmail(Input.Email);
+
+                await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -197,25 +191,9 @@ namespace Main.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
+                        // Did not find simpler way to confirm email
+
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                        // var userId = await _userManager.GetUserIdAsync(user);
-
-                        // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        // var callbackUrl = Url.Page(
-                        //     "/Account/ConfirmEmail",
-                        //     pageHandler: null,
-                        //     values: new { area = "Identity", userId = userId, code = code },
-                        //     protocol: Request.Scheme);
-
-                        // await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        //     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                        // // If account confirmation is required, we need to show the link if we don't have a real email sender
-                        // if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                        // {
-                        //     return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
-                        // }
 
                         var resultConfirmEmail = await _userManager.ConfirmEmailAsync(user, code);
                         if (!resultConfirmEmail.Succeeded)
