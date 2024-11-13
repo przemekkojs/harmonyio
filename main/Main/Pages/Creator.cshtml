@@ -6,26 +6,25 @@
     <link rel="stylesheet" href="~/css/creator-style.css" />
 </head>
 
-<form method="post" class="h-100 w-100 d-flex flex-column">
+<form method="post" class="h-100 w-100 d-flex flex-column" id="pageForm" asp-page-handler="save">
     <div class="flex-grow-1 d-flex flex-column mb-3 overflow-auto">
         <div class="flex-grow-1 d-flex flex-row overflow-auto">
             <div class="sidebar d-flex flex-column bg-white rounded shadow me-3 p-3">
                 <div class="mb-auto">
                     <label asp-for="QuizName" class="form-label fw-bold"></label>
-                    <input asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly"
-                        placeholder="Nazwa quizu">
-                    <span asp-validation-for="QuizName" class="text-danger"></span>
+                    <input id="QuizName" name="QuizName" asp-for="QuizName" class="form-control" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
+                    <span asp-validation-for="QuizName" class="text-danger" id="quiz-name-validation"></span>
                 </div>
 
-                <input class="mx-2 p-1 rounded" type="button" value="Test" onclick="confirmExcersises()" />
                 @if (!Model.BrowseOnly)
                 {
-                    <button type="submit" asp-page-handler="Save" class="btn btn-primary btn-std-width mx-auto mt-2"
-                        onclick="confirmExcersises()">Zapisz</button>
+                    <button type="button" asp-page-handler="Save" class="btn btn-primary btn-std-width mx-auto mt-2"
+                        onclick="submitForm(event)">Zapisz</button>
                     @* TODO: DODAĆ ŻEBY BUTTON PUBLIKUJ DZIAŁAŁ (TAK JAK ZAPISZ, ALE OD RAZU OTWIERA POPUP) *@
                     @* <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
                         onclick="confirmExcersises()">Opublikuj</button> *@
                 }
+
                 <a asp-page="Created" class="btn btn-danger btn-std-width mx-auto mt-2">Wyjdź</a>
             </div>
 
@@ -47,7 +46,8 @@
             </div>
         </div>
 
-        <input type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
+        <input name="EditedQuizId" type="hidden" asp-for="EditedQuizId" value="@Model.EditedQuizId" />
+        <input name="Questions" type="hidden" asp-for="Questions" />
     </div>
 </form>
 
@@ -69,6 +69,99 @@
         )
     );
 
+    window.submitForm = async function submitForm(event) {
+        questionsValidationError.innerText = "";
+        const tasksResult = confirmExcersises(event);       
+
+        if (!tasksResult) {
+            // TODO: Ładniejszy popup
+            questionsValidationError.innerText = "Zadanie zawiera błędy.";
+            return;
+        }
+
+        const questions = [];
+        const tasks = taskContainer.tasks;
+        console.log("Tasks", tasks);
+
+        if (tasks.length === 0) {
+            questionsValidationError.innerText = "Dodaj przynajmniej jedno zadanie.";
+            return;
+        }
+
+        tasks.forEach(t => {
+            const toAppend = t.hiddenInput.value;
+            console.log("Solution", toAppend);
+            console.log("Type", typeof (toAppend));
+            questions.push(toAppend);
+        });
+
+        console.log("Questions", questions);
+
+        event.preventDefault();
+
+        const form = document.getElementById('pageForm');
+
+        const quizName = document.getElementById("QuizName").value;
+        const verificationToken = form
+            .querySelector("[name='__RequestVerificationToken']")
+            .value;
+
+        if (quizName == '') {
+            document.getElementById('quiz-name-validation').innerText = "Nazwa quizu jest wymagana";
+            return;
+        }
+
+        const editedQuizId = form
+            .querySelector("[name='EditedQuizId']")
+            .value;        
+
+        const formData = new FormData();
+        formData.append("__RequestVerificationToken", verificationToken);
+        formData.append("QuizName", quizName);
+        formData.append("Questions", JSON.stringify(questions));
+        formData.append("EditedQuizId", editedQuizId);
+
+        console.log(excersises);
+        console.log([...formData.entries()]);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            console.log("Response", response);
+
+            if (response.ok) {
+                const contentType = response.headers.get('Content-Type');
+
+                if (contentType && contentType.includes("application/json")) {
+                    const result = await response.json();
+                    console.log("Result", result);
+
+                    if (result.success) {
+                        window.location.href = result.redirectUrl;
+                    } else {
+                        if (result.redirect) {
+                            window.location.href = result.redirectUrl;
+                        } else {
+                            questionsValidationError.innerText = result.errorMessage;
+                        }
+                    }
+                } else {
+                    // Co jak dostaniemy HTML'a
+                    questionsValidationError.innerText = "Nieznany błąd.";
+                }
+            } else {
+                questionsValidationError.innerText = "Błąd serwera.";
+            }
+        }
+        catch (error) {
+            console.log(error);
+            questionsValidationError.innerText = "Błąd serwera.";
+        }
+    }
+
     function addExisting() {
         taskContainer.load(excersises);
         questionsValidationError.innerText = '';
@@ -76,13 +169,14 @@
 
     window.addExcersise = function () {
         taskContainer.addTask();
-        questionsValidationError.innerText = '';
     }
 
     window.confirmExcersises = function (event) {
         questionsValidationError.innerText = '';
         answer.length = 0;
         const tasks = taskContainer.tasks;
+
+        console.log(tasks.length);
 
         for (let i = 0; i < tasks.length; i++) {
             const currentTask = tasks[i];
@@ -105,33 +199,22 @@
             const flatsCount = tonationParsed[1];
 
             const taskResult = currentTask.getResult();
-            let good = true;
 
-            taskResult.forEach(f => {
-                if (f.symbol === null || f.symbol === '' || f.symbol === " ") {
-                    // TODO: Może jakiś popup?
-                    questionsValidationError.innerText = "W zadaniu nie może być pustych funkcji.";
-                    event.preventDefault();
-                    good = false;
-                }
-            });
-
-            if (good) {
-                console.log(taskResult);
-
-                answer.push({
-                    question: questionText,
-                    sharpsCount: Number(sharpsCount),
-                    flatsCount: Number(flatsCount),
-                    metreValue: Number(metreValue),
-                    metreCount: Number(metreCount),
-                    task: taskResult
-                });
-
-                hiddenInput.value = JSON.stringify(answer[i]);
-            }
-            else
+            if (taskResult.includes(null))
                 return false;
+
+
+            const toPush = {
+                question: questionText,
+                sharpsCount: Number(sharpsCount),
+                flatsCount: Number(flatsCount),
+                metreValue: Number(metreValue),
+                metreCount: Number(metreCount),
+                task: taskResult
+            }
+
+            answer.push(toPush);
+            hiddenInput.value = JSON.stringify(toPush);   
         }
 
         return true;
@@ -142,6 +225,6 @@
 
 @section Scripts {
     @{
-                            <partial name="_ValidationScriptsPartial" />
+                        <partial name="_ValidationScriptsPartial" />
     }
 }

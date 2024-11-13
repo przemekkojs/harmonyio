@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Parsers.ProblemParser;
 using Main.Data;
@@ -8,9 +9,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Main.Pages
 {
+    public class QuizData
+    {
+        public int? EditedQuizId { get; set; }
+        public List<string> Questions { get; set; }
+        public string QuizName { get; set; }
+    }
+
     [Authorize]
     public class CreatorModel : PageModel
     {
@@ -20,12 +29,15 @@ namespace Main.Pages
         [BindProperty]
         [Display(Name = "Nazwa quizu")]
         [Required(ErrorMessage = "Nazwa quizu jest wymagana")]
-        public string QuizName { get; set; } = null!;
+        public string QuizName { get; set; } = null!;        
 
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
         [BindProperty]
         public int? EditedQuizId { get; set; } = null;
+
+        [BindProperty]
+        public List<int> Maxes { get; set; } = null!;
 
         [BindProperty]
         public string? Code { get; set; }
@@ -76,117 +88,128 @@ namespace Main.Pages
         private bool CheckProblem(string question)
         {
             // Tutaj bierzemy rozwi¹zanie z kreatora i parsujemy
-            var parsed = Parser.ParseJsonToProblem(question);
-
-            // Mo¿e wyjœæ NULL, wiêc trzeba sprawdziæ
-            if (parsed != null)
+            try
             {
-                // A to jest lista b³êdów. Na sam pocz¹tek wystarczy informowanie, czy b³êdy sa, potem siê
-                // doda jakieœ wyœwietlanie, jakie to b³êdy
-                var mistakes = ProblemChecker.CheckProblem(parsed);
+                var parsed = Parser.ParseJsonToProblem(question);
 
-                // Co jak s¹ b³êdy
-                if (mistakes.Count != 0)
+                // Mo¿e wyjœæ NULL, wiêc trzeba sprawdziæ
+                if (parsed != null)
                 {
-                    // Tu siê przyda popup, ¿e b³êdy w zadaniu
-                    // TODO: ¯eby nie prze³adowaæ strony - trzeba siê z AJAXem pobawiæ
-                    return false;
+                    if (parsed.Functions.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    // A to jest lista b³êdów. Na sam pocz¹tek wystarczy informowanie, czy b³êdy sa, potem siê
+                    // doda jakieœ wyœwietlanie, jakie to b³êdy
+                    var mistakes = ProblemChecker.CheckProblem(parsed);
+
+                    // Co jak s¹ b³êdy
+                    if (mistakes.Count != 0)
+                    {
+                        // Tu siê przyda popup, ¿e b³êdy w zadaniu
+                        // TODO: ¯eby nie prze³adowaæ strony - trzeba siê z AJAXem pobawiæ
+                        return false;
+                    }
+                    else
+                    {
+                        // Jak nie ma b³êdów, to wsm nie ma co nic robiæ.
+                        return true;
+                    }
                 }
                 else
                 {
-                    // Jak nie ma b³êdów, to wsm nie ma co nic robiæ.
+                    // TODO: Tutaj trzeba ogarn¹æ czemu wsm wyszed³ null
                     return true;
                 }
             }
-            else
+            catch (Exception ex) when (ex is ArgumentNullException || ex is InvalidOperationException)
             {
-                // TODO: Tutaj trzeba ogarn¹æ czemu wsm wyszed³ null
-                return true;
+                return false;
             }
+        }
+
+        private bool ValidateAndAddExercises()
+        {
+            foreach (string question in Questions)
+            {
+                var questionEmpty = string.IsNullOrWhiteSpace(question);
+                var questionInvalid = CheckProblem(question);
+
+                if (questionEmpty || !questionInvalid)
+                    return false;                
+            }
+
+            return true;
         }
 
         // TODO: Ogarn¹æ, ¿eby sprawdzarka dzia³a³a.
         // Je¿eli ktoœ siê tym zajmuje, to w komentarzach jest tutorial
         public async Task<IActionResult> OnPostSave()
         {
-            var currentUser = (await _userManager.GetUserAsync(User))!;
+            Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0]);
+
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };
+            var loginResult = new { success = false, redirect = true, redirectUrl = Url.Page("Login") };
+            var errorResult = new { success = false, redirect = true, redirectUrl = Url.Page("Error") };
+            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera b³êdne zadania." };
 
             if (currentUser == null)
-                return RedirectToPage("Login");
+                return new JsonResult(loginResult);
+
+            Quiz? quiz;
 
             if (EditedQuizId == null)
             {
-                var quiz = new Quiz()
+                quiz = new Quiz
                 {
                     Name = QuizName,
-                    CreatorId = currentUser.Id,
+                    CreatorId = currentUser.Id
                 };
 
                 _repository.Add(quiz);
-
-                await _repository.SaveChangesAsync();
-
-                foreach (string question in Questions!)
-                {
-                    // Te 4 linijki trzeba ogarn¹æ, ¿eby lepiej dzia³a³y.
-                    var checkProblemResult = CheckProblem(question);
-
-                    if (!checkProblemResult)
-                        return Page();
-
-                    _repository.Add(new Excersise()
-                    {
-                        Question = question,
-                        QuizId = quiz.Id,
-                    });
-                }
             }
             else
             {
-                var editedQuiz = await _repository.GetAsync<Quiz>(
+                quiz = await _repository.GetAsync<Quiz>(
                     filter: q => q.Id == EditedQuizId,
                     modifier: q => q.Include(r => r.Excersises)
                 );
 
-                if (editedQuiz == null)
-                    return RedirectToPage("Error");
+                if (quiz == null)
+                    return new JsonResult(errorResult);
 
-                editedQuiz.Name = QuizName;
+                quiz.Name = QuizName;
+                _repository.Update(quiz);
 
-                _repository.Update(editedQuiz);
+                foreach (var exercise in quiz.Excersises)
+                {
+                    _repository.Delete(exercise);
+                }
+            }
 
+            if (!ValidateAndAddExercises())
+                return new JsonResult(invalidQuestionsResult);
+
+            if (EditedQuizId == null)
                 await _repository.SaveChangesAsync();
 
-                foreach (var question in editedQuiz.Excersises)
+            var quizId = quiz.Id;
+
+            foreach (var question in Questions)
+            {
+                _repository.Add(new Excersise
                 {
-                    _repository.Delete(question);
-                }
-
-                if (Questions.Any(q => q == null))
-                {
-                    ModelState.AddModelError(nameof(Questions), "Nie mo¿na dodaæ pustych zadañ.");
-                    return Page();
-                }
-
-                foreach (var question in Questions)
-                {
-                    // Te 4 linijki trzeba ogarn¹æ, ¿eby lepiej dzia³a³y.
-                    var checkProblemResult = CheckProblem(question);
-
-                    if (!checkProblemResult)
-                        return Page();
-
-                    _repository.Add(new Excersise()
-                    {
-                        Question = question,
-                        QuizId = editedQuiz.Id,
-                    });
-                }
+                    Question = question,
+                    QuizId = quizId,
+                });
             }
 
             await _repository.SaveChangesAsync();
 
-            return RedirectToPage("Created");
+            return new JsonResult(successResult);
         }
 
         public async Task<IActionResult> OnPostSubmit()

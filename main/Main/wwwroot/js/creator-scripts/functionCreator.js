@@ -600,7 +600,6 @@ class FunctionCreator {
         const added = this.addedList != null ? this.addedList : [];
 
         if (symbol === "") {
-            alert('Nie można dodać pustej funkcji!'); // TODO: Dać jakieś ładniejsze coś XD
             return null;
         }        
 
