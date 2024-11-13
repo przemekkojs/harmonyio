@@ -548,10 +548,12 @@ function handleNoteInteraction(elementsUnderMouse, note) {
     const twoNotes = elementsUnderMouse.twoNotes;
     if (twoNotes.canAddNote(note)) {
       const snappingPoint = twoNotes.getClosestSnappingPoint(mouseX, mouseY);
-      twoNotes.drawAdditionalLinesOnAdding(
-        snappingPoint.lineNumber,
-        note.getNoteWidth(false)
-      );
+      if (snappingPoint.lineNumber < -0.5 || snappingPoint.lineNumber > 4.5) {
+        twoNotes.drawAdditionalLinesOnAdding(
+          snappingPoint.lineNumber,
+          note.getNoteWidth(false)
+        );
+      }
       note.draw(snappingPoint.x, snappingPoint.y);
 
       if (mouseIsPressed) {

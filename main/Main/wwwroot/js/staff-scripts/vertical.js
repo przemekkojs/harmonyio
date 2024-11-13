@@ -59,10 +59,14 @@ class Vertical {
   }
 
   shouldDrawHintArea(isUpperStaff) {
-    if(isUpperStaff) {
-      return !this.lowerStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index);
+    if (isUpperStaff) {
+      return (
+        !this.lowerStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index)
+      );
     } else {
-      return !this.upperStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index);
+      return (
+        !this.upperStaff.isEmpty() || this.parent.shouldDrawHintArea(this.index)
+      );
     }
   }
 
@@ -200,7 +204,9 @@ class Vertical {
     push();
     fill(255, 153, 153, 50);
     noStroke();
-    rect(this.getX(), this.getY(), this.verticalWidth, this.getHeight());
+    const thirdW = this.verticalWidth / 3;
+    const notesCenterLineX = this.getNotesCenterLineX();
+    rect(notesCenterLineX - thirdW, this.getY(), thirdW * 2, this.getHeight());
     pop();
   }
 }
