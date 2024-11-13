@@ -92,8 +92,7 @@
                             class="form-control points-input border-secondary bg-white" />
 
                         <span class="fw-bold ms-3 me-2">Max</span>
-                        <input type="number" id="max" onchange="onMaxChange(this.value)"
-                            onKeyPress="integerKeyPress(event)"
+                        <input type="number" id="max"  @* onchange="onMaxChange(this.value)" onKeyPress="integerKeyPress(event)" *@
                             class="form-control points-input border-secondary bg-white" />
 
                         <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal"
@@ -118,8 +117,7 @@
                             {
                                 <input id="points-hidden-@exId-@usrId" type="hidden" asp-for="Points[usrId][exId]" value="0" />
                                 <input id="max-hidden-@exId-@usrId" type="hidden" asp-for="Maxes[usrId][exId]" value="0" />
-                                <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]"
-                                    value="" />
+                                <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]" value="" />
                             }
                         }
 
@@ -138,6 +136,7 @@
                 </div>
             </div>
         </div>
+    </div>
 </form>
 
 <div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle"
@@ -189,16 +188,12 @@
     const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
     const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToSolutions[u].Select(es => es.Answer))));
-    const algorithmOpinions = null; //TODO;
-
-    console.log(questions);
-    console.log(userSolutions);
-
+    
     let currentUserIndex = 0;
     let currentQuestionIndex = 0;
 
     function getCurrentSolution() {
-        return userSolutions[currentUserIndex][currentQuestionIndex]
+        return userSolutions[currentUserIndex][currentQuestionIndex];
     }
 </script>
 
@@ -330,19 +325,19 @@
         handleTotalPoints(currentUserIndex);
     }
 
-    function onMaxChange(value) {
-        let numValue = Number(value);
+    // function onMaxChange(value) {
+    //     let numValue = Number(value);
 
-        if (value === "") {
-            numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item2;
-            document.getElementById(`max`).value = numValue;
-        }
+    //     if (value === "") {
+    //         numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item2;
+    //         document.getElementById(`max`).value = numValue;
+    //     }
 
-        userScores[currentUserIndex][currentQuestionIndex].Item2 = numValue;
-        document.getElementById(`max-hidden-${currentQuestionIndex}-${currentUserIndex}`).value = numValue;
+    //     userScores[currentUserIndex][currentQuestionIndex].Item2 = numValue;
+    //     document.getElementById(`max-hidden-${currentQuestionIndex}-${currentUserIndex}`).value = numValue;
 
-        handleTotalPoints(currentUserIndex);
-    }
+    //     handleTotalPoints(currentUserIndex);
+    // }
 
     function onCommentChange(value) {
         userComments[currentUserIndex][currentQuestionIndex] = value;
@@ -355,7 +350,6 @@
         }
     }
 
-
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
@@ -366,11 +360,10 @@
             else
                 document.getElementById('question-area').classList.remove('d-none');
 
-            let score = userScores[currentUserIndex][currentQuestionIndex];
-            let scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
-            let opinion = scoreSuggestions.Item3;
+            const score = userScores[currentUserIndex][currentQuestionIndex];
+            const scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
+            const opinion = scoreSuggestions.Item3;
 
-            console.log(opinion)
             document.getElementById('algorithm-opinions').innerHTML = opinion;
 
             pointsElement.placeholder = scoreSuggestions.Item1;
@@ -391,6 +384,7 @@
 
     const maxVisibleButtons = 9;
     const targetVisibleOneSide = Math.floor(maxVisibleButtons / 2)
+
     function generateButtons(index) {
         let questionButtonsContainer = document.getElementById("excersises-buttons");
         questionButtonsContainer.innerHTML = '';

@@ -124,9 +124,11 @@ namespace Main.Pages
                 Points = pmc
                     .Select(innerList => innerList.Select(t => t.Points).ToList())
                     .ToList();
+
                 Maxes = pmc
                     .Select(innerList => innerList.Select(t => t.MaxPoints).ToList())
                     .ToList();
+
                 Comments = pmc
                     .Select(innerList => innerList.Select(t => t.Comment).ToList())
                     .ToList();
@@ -229,7 +231,6 @@ namespace Main.Pages
                         QuizResultId = quizResults[i].Id,
                         ExcersiseSolutionId = UsersToSolutions[Users[i]][j].Id,
                         Points = Points[i][j],
-                        MaxPoints = Maxes[i][j],
                         Comment = Comments[i][j] ?? "",
                     };
                     _repository.Add(excersiseResult);
