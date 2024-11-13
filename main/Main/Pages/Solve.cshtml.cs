@@ -137,6 +137,7 @@ namespace Main.Pages
             }
 
             bool hasChangedAnswer = false;
+
             var excersises = quiz.Excersises.ToList();
             var userSolutionsMap = quiz.Excersises
                 .SelectMany(e => e.ExcersiseSolutions)
