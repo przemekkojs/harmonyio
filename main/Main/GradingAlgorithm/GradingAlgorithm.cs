@@ -29,7 +29,7 @@ namespace Main.GradingAlgorithm
             var maxPoints = problem.MaxPoints;
             var algorithmPoints = maxMistakesCount - mistakesCount > 0 ? maxMistakesCount - mistakesCount : 0;
             var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
-            var points = Convert.ToInt32(pointsPercent / maxPoints);
+            var points = Convert.ToInt32(pointsPercent * maxPoints / 100);
 
             return (points, maxPoints, opinion);
         }
@@ -59,7 +59,8 @@ namespace Main.GradingAlgorithm
                 .Count();
 
             maxMistakesCount += oneFunctionSettingsCount * functionsCount;
-            maxMistakesCount += twoFunctionSettingsCount * functionsCount - functionsCount; // -functionsCount, ponieważ ostatniej nie uwzględniamy
+            maxMistakesCount += twoFunctionSettingsCount * functionsCount - functionsCount;
+            // -functionsCount, ponieważ ostatniej nie uwzględniamy
 
             return maxMistakesCount;
         }
@@ -80,10 +81,10 @@ namespace Main.GradingAlgorithm
                 if (!tmpStacksMap.ContainsKey(key))
                     tmpStacksMap[key] = new Stack(
                         index: new Algorithm.New.Music.Index()
-                        { // To chyba nie ma znaczenia, bo nie sprawdzamy rytmu po stronie algorytmu, ale no dodać trzeba
+                        {
                             Bar = function.Index.Bar,
                             Position = function.Index.Position,
-                            Duration = function.Index.Duration // To może się nie zgadzać pod względem rytmicznym, ale nie ma to znaczenia.
+                            Duration = function.Index.Duration
                         },
                         notes: [null, null, null, null]
                     );
@@ -125,10 +126,7 @@ namespace Main.GradingAlgorithm
                             .ThenBy(key => key.Item2.Item3)
                 .ToList();
 
-            // TODO: Co jeśli funkcje zaczynają się od np. 2 taktu, a nie 1.
             int lastBar = 0;
-
-            // TODO: Zrobić to potem na HTML-a
             var opinion = "";
 
             foreach (var key in sortedKeys)

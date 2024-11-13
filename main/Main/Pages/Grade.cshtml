@@ -116,7 +116,7 @@
                             @for (int usrId = 0; usrId < Model.Users.Count; usrId++)
                             {
                                 <input id="points-hidden-@exId-@usrId" type="hidden" asp-for="Points[usrId][exId]" value="0" />
-                                <input id="max-hidden-@exId-@usrId" type="hidden" asp-for="Maxes[usrId][exId]" value="0" />
+                                <input id="max-hidden-@exId-@usrId" type="hidden" asp-for="Maxes[exId]" value="0" />
                                 <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]" value="" />
                             }
                         }
@@ -217,7 +217,7 @@
 
     const userScores = @(Model.Points == null ?
         Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToGradings[u]))) :
-        Html.Raw(JsonConvert.SerializeObject(Model.Users.Select((u, index) => Model.Points[index].Zip(Model.Maxes[index], (x, y) => (x, y)).ToList())))
+        Html.Raw(JsonConvert.SerializeObject(Model.Users.Select((u, index) => Model.Points[index].Zip(Model.Maxes, (x, y) => (x, y)).ToList())))
         );
 
     const userComments = @Html.Raw(JsonConvert.SerializeObject(Model.Comments))

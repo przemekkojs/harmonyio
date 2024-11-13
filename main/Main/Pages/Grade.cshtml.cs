@@ -34,7 +34,7 @@ namespace Main.Pages
         [BindProperty]
         public List<List<int>> Points { get; set; } = null!; //user, then excersise
         [BindProperty]
-        public List<List<int>> Maxes { get; set; } = null!;  //user, then excersise
+        public List<int> Maxes { get; set; } = null!;  //user, then excersise
         [BindProperty]
         public List<List<string>> Comments { get; set; } = null!;
 
@@ -100,6 +100,9 @@ namespace Main.Pages
 
             Users = [.. UsersToSolutions.Keys];
             Excersises = [.. Quiz.Excersises];
+            Maxes = Excersises
+                .Select(x => x.MaxPoints)
+                .ToList();
 
             return true;
         }
@@ -127,10 +130,6 @@ namespace Main.Pages
                     .Select(innerList => innerList.Select(t => t.Points).ToList())
                     .ToList();
 
-                Maxes = pmc
-                    .Select(innerList => innerList.Select(t => t.MaxPoints).ToList())
-                    .ToList();
-
                 Comments = pmc
                     .Select(innerList => innerList.Select(t => t.Comment).ToList())
                     .ToList();
@@ -139,7 +138,6 @@ namespace Main.Pages
             {
                 Grades = [];
                 Points = [];
-                Maxes = [];
                 Comments = [];
                 
                 foreach (var user in Users)
@@ -147,20 +145,16 @@ namespace Main.Pages
                     Grades.Add(Grade.One);
 
                     var pointsToAdd = new List<int>();
-                    var maxesToAdd = new List<int>();
                     var commentsToAdd = new List<string>();
 
                     foreach (var ex in SolutionsToGradings.Keys)
                     {
                         var mark = SolutionsToGradings[ex];
-
                         pointsToAdd.Add(mark.Item1);
-                        maxesToAdd.Add(mark.Item2);
                         commentsToAdd.Add("");
                     }
 
                     Points.Add(pointsToAdd);
-                    Maxes.Add(maxesToAdd);
                     Comments.Add(commentsToAdd);
                 }                
             }
@@ -234,6 +228,7 @@ namespace Main.Pages
                         ExcersiseSolutionId = UsersToSolutions[Users[i]][j].Id,
                         Points = Points[i][j],
                         Comment = Comments[i][j] ?? "",
+                        MaxPoints = Excersises[j].MaxPoints
                     };
                     _repository.Add(excersiseResult);
                 }
