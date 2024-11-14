@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241114114330_QuizResultNullable")]
-    partial class QuizResultNullable
+    [Migration("20241114145643_quizResultRequiredFalseForExResult2")]
+    partial class quizResultRequiredFalseForExResult2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,6 +145,9 @@ namespace Main.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MaxPoints")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Question")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -185,7 +188,7 @@ namespace Main.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("QuizResultId")
+                    b.Property<int?>("QuizResultId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -209,9 +212,6 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ExcersiseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ExcersiseResultId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -543,8 +543,7 @@ namespace Main.Migrations
                     b.HasOne("Main.Models.QuizResult", "QuizResult")
                         .WithMany("ExcersiseResults")
                         .HasForeignKey("QuizResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ExcersiseSolution");
 

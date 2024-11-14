@@ -7,20 +7,18 @@ namespace Main.Models
 	{
 		public int Id { get; set; }
 		public int Points { get; set; }
-		public int MaxPoints { get; set; }		
+		public int MaxPoints { get; set; }
 		public string Comment { get; set; } = "";
 		public int AlgorithmPoints { get; set; }
-		public int MaxPoints { get; set; }
-		public string Comment { get; set; } = string.Empty;
 		public string AlgorithmOpinion { get; set; } = string.Empty;
 
-        //FOREIGN KEYS
+		//FOREIGN KEYS
 
-        public int ExcersiseSolutionId { get; set; }
+		public int ExcersiseSolutionId { get; set; }
 		[JsonIgnore]    //looping dependency, json converter goes crazy without it
 		public ExcersiseSolution ExcersiseSolution { get; set; } = null!;
 
-		public int QuizResultId { get; set; }
+		public int? QuizResultId { get; set; }
 		// TODO quiz result should be nullable, when grading with algorithm, create new excersise result
 		// this result may not be linked to quiz result
 		public QuizResult? QuizResult { get; set; } = null;

@@ -96,6 +96,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(er => er.QuizResult)
             .WithMany(qr => qr.ExcersiseResults)
             .HasForeignKey(er => er.QuizResultId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
 
         // Relacja wiele-do-wielu między UserGroup a ApplicationUser (uczestnicy) [oba]
@@ -103,7 +104,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasMany(q => q.TeacherInGroups)
             .WithMany(u => u.Teachers)
             .UsingEntity(j => j.ToTable("GroupLeader"));
-        
+
         modelBuilder.Entity<ApplicationUser>()
             .HasMany(q => q.StudentInGroups)
             .WithMany(u => u.Students)
@@ -124,47 +125,4 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .OnDelete(DeleteBehavior.Cascade);
 
     }
-
-    // public override int SaveChanges()
-    // {
-    //     HandleQuizCodes();
-    //     return base.SaveChanges();
-    // }
-
-    // public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    // {
-    //     HandleQuizCodes();
-    //     return base.SaveChangesAsync(cancellationToken);
-    // }
-
-    // public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
-    // {
-    //     HandleQuizCodes();
-    //     return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-    // }
-
-
-    // private void HandleQuizCodes()
-    // {
-    //     foreach (var entry in ChangeTracker.Entries<Quiz>())
-    //     {
-    //         if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
-    //         {
-    //             var quiz = entry.Entity;
-
-    //             var hasCode = quiz.IsCreated && quiz.OpenDate < DateTime.Now && quiz.CloseDate > DateTime.Now;
-
-    //             if (hasCode && string.IsNullOrEmpty(quiz.Code))
-    //             {
-    //                 quiz.Code = CodeGeneration();
-    //             }
-    //             else if (!hasCode)
-    //             {
-    //                 quiz.Code = null;
-    //             }
-    //         }
-    //         // !IsCreated || OpenDate > DateTime.Now ? QuizState.NotStarted :
-	// 		// CloseDate < DateTime.Now ? QuizState.Closed : QuizState.Open;
-    //     }
-    // }
 }
