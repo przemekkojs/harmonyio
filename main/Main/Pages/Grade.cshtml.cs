@@ -87,7 +87,7 @@ namespace Main.Pages
                 .SelectMany(e => e.ExcersiseSolutions, (e, es) => (e.Question, es))
                 .ToDictionary(
                     tuple => tuple.es,
-                    tuple => _algorithm.Grade(tuple.Question, tuple.es.Answer)
+                    tuple => (tuple.es.ExcersiseResult.Points, tuple.es.ExcersiseResult.MaxPoints, tuple.es.ExcersiseResult.AlgorithmOpinion)
                 );
 
             UsersToGradings = UsersToSolutions

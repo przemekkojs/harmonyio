@@ -1,4 +1,5 @@
 using Main.Data;
+using Main.GradingAlgorithm;
 using Main.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ namespace Main.Pages
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
+        private readonly IGradingAlgorithm _algorithm;
 
         public Quiz Quiz { get; set; } = null!;
 
@@ -21,10 +23,11 @@ namespace Main.Pages
         [BindProperty]
         public List<string> Answers { get; set; } = new();
 
-        public SolveModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
+        public SolveModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager, IGradingAlgorithm algorithm)
         {
             _repository = repository;
             _userManager = userManager;
+            _algorithm = algorithm;
         }
 
         public async Task<IActionResult> OnGetAsync(string code)
@@ -117,10 +120,9 @@ namespace Main.Pages
             }
 
             var quizResult = quiz.QuizResults.FirstOrDefault();
+
             // quiz isnt open or user isnt participant
-            if (
-                quiz.State != Enumerations.QuizState.Open ||
-                !quiz.Participants.Any())
+            if (quiz.State != Enumerations.QuizState.Open || !quiz.Participants.Any())
             {
                 return Forbid();
             }
@@ -180,8 +182,28 @@ namespace Main.Pages
                     Answer = newAnswer,
                     UserId = appUser.Id
                 };
+
                 // TODO add async call to grade this new solution and add excersise result to db 
+                // To tak chyba ma dzia³aæ?
+                var grade = _algorithm.Grade(exercise.Question, newAnswer);
+
+                var excersiseResult = new ExcersiseResult
+                {
+                    Comment = "",
+                    Points = grade.Item1, // Punkty na starcie ustawiamy na punkty algorytmu
+                    AlgorithmPoints = grade.Item1,
+                    MaxPoints = grade.Item2,
+                    AlgorithmOpinion = grade.Item3,
+                    ExcersiseSolutionId = newSolution.Id
+                };
+
+                newSolution.ExcersiseResultId = excersiseResult.Id;
+                
                 _repository.Add(newSolution);
+                await _repository.SaveChangesAsync();
+
+                _repository.Add(excersiseResult);
+                await _repository.SaveChangesAsync();
             }
 
             // answers was changed so set quiz result grade to null, it needs new grade
