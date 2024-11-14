@@ -65,7 +65,7 @@ namespace Main.Pages
                 return RedirectToPage("Browse", new { id = quiz.Id });
             }
 
-            // quiz is closed and users isnt participant
+            // quiz is closed and user isnt participant
             if (quiz.State == Enumerations.QuizState.Closed && !Quiz.Participants.Any())
             {
                 return Forbid();
@@ -182,28 +182,20 @@ namespace Main.Pages
                     Answer = newAnswer,
                     UserId = appUser.Id
                 };
+                _repository.Add(newSolution);
 
-                // TODO add async call to grade this new solution and add excersise result to db 
-                // To tak chyba ma dzia³aæ?
-                var grade = _algorithm.Grade(exercise.Question, newAnswer);
-
+                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer);
                 var excersiseResult = new ExcersiseResult
                 {
                     Comment = "",
-                    Points = grade.Item1, // Punkty na starcie ustawiamy na punkty algorytmu
-                    AlgorithmPoints = grade.Item1,
-                    MaxPoints = grade.Item2,
-                    AlgorithmOpinion = grade.Item3,
-                    ExcersiseSolutionId = newSolution.Id
+                    Points = algorithmGrade.Item1, // Set initial points based on the algorithm's grade
+                    AlgorithmPoints = algorithmGrade.Item1,
+                    MaxPoints = exercise.MaxPoints,
+                    AlgorithmOpinion = algorithmGrade.Item3,
+                    ExcersiseSolution = newSolution, // Associate with the solution
                 };
 
-                newSolution.ExcersiseResultId = excersiseResult.Id;
-                
-                _repository.Add(newSolution);
-                await _repository.SaveChangesAsync();
-
                 _repository.Add(excersiseResult);
-                await _repository.SaveChangesAsync();
             }
 
             // answers was changed so set quiz result grade to null, it needs new grade
@@ -215,9 +207,9 @@ namespace Main.Pages
                     result.Grade = null;
                     _repository.Update(result);
                 }
+                await _repository.SaveChangesAsync();
             }
 
-            await _repository.SaveChangesAsync();
             return RedirectToPage("Assigned");
         }
     }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Main.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -381,8 +381,7 @@ namespace Main.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Answer = table.Column<string>(type: "TEXT", nullable: false),
                     ExcersiseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    ExcersiseResultId = table.Column<int>(type: "INTEGER", nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -410,6 +409,8 @@ namespace Main.Migrations
                     Points = table.Column<int>(type: "INTEGER", nullable: false),
                     MaxPoints = table.Column<int>(type: "INTEGER", nullable: false),
                     Comment = table.Column<string>(type: "TEXT", nullable: false),
+                    AlgorithmPoints = table.Column<int>(type: "INTEGER", nullable: false),
+                    AlgorithmOpinion = table.Column<string>(type: "TEXT", nullable: false),
                     ExcersiseSolutionId = table.Column<int>(type: "INTEGER", nullable: false),
                     QuizResultId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

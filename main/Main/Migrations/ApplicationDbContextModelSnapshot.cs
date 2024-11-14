@@ -185,7 +185,7 @@ namespace Main.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("QuizResultId")
+                    b.Property<int?>("QuizResultId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -209,9 +209,6 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ExcersiseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ExcersiseResultId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -543,8 +540,7 @@ namespace Main.Migrations
                     b.HasOne("Main.Models.QuizResult", "QuizResult")
                         .WithMany("ExcersiseResults")
                         .HasForeignKey("QuizResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ExcersiseSolution");
 

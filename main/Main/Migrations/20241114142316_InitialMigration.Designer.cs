@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241113203419_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241114142316_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,6 +168,13 @@ namespace Main.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AlgorithmOpinion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AlgorithmPoints")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -205,9 +212,6 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ExcersiseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ExcersiseResultId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")

@@ -18,9 +18,8 @@ namespace Main.Models
 		public string UserId { get; set; } = null!;
 		public ApplicationUser User { get; set; } = null!;
 
-		public int ExcersiseResultId { get; set; }
-        [JsonIgnore]    //looping dependency, json converter goes crazy without it
-        public ExcersiseResult? ExcersiseResult { get; set; }
-    }
+		[JsonIgnore]    //looping dependency, json converter goes crazy without it
+		public ExcersiseResult? ExcersiseResult { get; set; }
+	}
 }
 

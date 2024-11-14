@@ -5,7 +5,7 @@
 namespace Main.Migrations
 {
     /// <inheritdoc />
-    public partial class QuizResultNullable : Migration
+    public partial class quizResultRequiredFalseForExResult : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
