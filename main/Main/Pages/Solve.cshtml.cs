@@ -184,7 +184,8 @@ namespace Main.Pages
                 };
                 _repository.Add(newSolution);
 
-                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer);
+                var maxPointsForExcersise = exercise.MaxPoints;
+                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExcersise);
                 var excersiseResult = new ExcersiseResult
                 {
                     Comment = "",
@@ -196,6 +197,7 @@ namespace Main.Pages
                 };
 
                 _repository.Add(excersiseResult);
+                await _repository.SaveChangesAsync(); // Tego chyba brakowa³o...
             }
 
             // answers was changed so set quiz result grade to null, it needs new grade

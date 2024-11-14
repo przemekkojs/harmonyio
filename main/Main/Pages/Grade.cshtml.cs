@@ -83,11 +83,12 @@ namespace Main.Pages
                 .GroupBy(es => es.User)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
+            // To siê wysypuje - ExcersiseResult jest zawsze nullem
             SolutionsToGradings = Quiz.Excersises
                 .SelectMany(e => e.ExcersiseSolutions, (e, es) => (e.Question, es))
                 .ToDictionary(
                     tuple => tuple.es,
-                    tuple => (tuple.es.ExcersiseResult.Points, tuple.es.ExcersiseResult.MaxPoints, tuple.es.ExcersiseResult.AlgorithmOpinion)
+                    tuple => (tuple.es.ExcersiseResult.Points, tuple.es.Excersise.MaxPoints, tuple.es.ExcersiseResult.AlgorithmOpinion)
                 );
 
             UsersToGradings = UsersToSolutions
@@ -134,30 +135,31 @@ namespace Main.Pages
                     .Select(innerList => innerList.Select(t => t.Comment).ToList())
                     .ToList();
             }
-            else
-            {
-                Grades = [];
-                Points = [];
-                Comments = [];
-                
-                foreach (var user in Users)
-                {
-                    Grades.Add(Grade.One);
+            // TODO: To trzeba jakoœ zrobiæ sprytniej
+            //else
+            //{
+            //    Grades = [];
+            //    Points = [];
+            //    Comments = [];
 
-                    var pointsToAdd = new List<int>();
-                    var commentsToAdd = new List<string>();
+            //    foreach (var user in Users)
+            //    {
+            //        Grades.Add(Grade.One);
 
-                    foreach (var ex in SolutionsToGradings.Keys)
-                    {
-                        var mark = SolutionsToGradings[ex];
-                        pointsToAdd.Add(mark.Item1);
-                        commentsToAdd.Add("");
-                    }
+            //        var pointsToAdd = new List<int>();
+            //        var commentsToAdd = new List<string>();
 
-                    Points.Add(pointsToAdd);
-                    Comments.Add(commentsToAdd);
-                }                
-            }
+            //        foreach (var ex in SolutionsToGradings.Keys)
+            //        {
+            //            var mark = SolutionsToGradings[ex];
+            //            pointsToAdd.Add(mark.Item1);
+            //            commentsToAdd.Add("");
+            //        }
+
+            //        Points.Add(pointsToAdd);
+            //        Comments.Add(commentsToAdd);
+            //    }
+            //}
 
             return Page();
         }

@@ -60,6 +60,7 @@
     const excersiseContainer = document.getElementById('excersise-container');
     const taskContainer = new TaskContainer(excersiseContainer);
     const questionsValidationError = document.getElementById('questions-validation-error');
+    const defaultPoints = 10;
 
     const excersises = @Html.Raw(
         Json.Serialize(
@@ -92,16 +93,18 @@
             questions.push(toAppend);
         });
 
-        console.log("Questions", questions);
-
         event.preventDefault();
 
         const form = document.getElementById('pageForm');
-
         const maxes = [];
 
         tasks.forEach(t => {
             const toAppend = t.maxPointsInput.value;
+
+            // Niech wartość defaultowa będzie równa 10 pkt / zadanie
+            if (toAppend === null)
+                toAppend = defaultPoints;
+
             maxes.push(toAppend);
         });
 
@@ -200,9 +203,9 @@
             const sharpsCount = tonationParsed[0];
             const flatsCount = tonationParsed[1];
             const minor = tonationParsed[2];
-            const maxPoints = currentTask.maxPointsInput.value;
+            const maxPoints = Number(currentTask.maxPointsInput.value);
 
-            if (maxPoints < 1 || maxPoints > 100)
+            if (maxPoints > 100 || maxPoints < 1)
                 return false;
 
             if (sharpsCount == -1 || flatsCount == -1)
@@ -220,7 +223,7 @@
                 minor: Number(minor),
                 metreValue: Number(metreValue),
                 metreCount: Number(metreCount),
-                maxPoints: maxPoints,
+                maxPoints: Number(maxPoints),
                 task: taskResult
             }
 

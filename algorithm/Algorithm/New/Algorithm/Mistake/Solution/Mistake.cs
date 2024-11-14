@@ -4,6 +4,7 @@
     {
         public const string UNKNOWN_MISTAKE = "Niesprecyzowany błąd";
 
+        public int MistakeCode { get; set; }
         public (List<int>, List<int>, string) Description { get; protected set; } = ([], [], UNKNOWN_MISTAKE);
         public abstract int Quantity { get; }
 

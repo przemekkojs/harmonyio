@@ -350,6 +350,12 @@
         }
     }
 
+    function generateOpinionByList(opinion) {
+        const parsed = JSON.parse(opinion);
+
+        return "";
+    }
+
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
@@ -364,7 +370,7 @@
             const scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
             const opinion = scoreSuggestions.Item3;
 
-            document.getElementById('algorithm-opinions').innerHTML = opinion;
+            document.getElementById('algorithm-opinions').innerHTML = generateOpinionByList(opinion);
 
             pointsElement.placeholder = scoreSuggestions.Item1;
             maxElement.placeholder = scoreSuggestions.Item2;
