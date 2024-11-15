@@ -23,7 +23,7 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public string CurrentUserId {get; set;}
+        public string CurrentUserId {get; set;} = "";
 
         public bool IsAdmin { get; set; }
 

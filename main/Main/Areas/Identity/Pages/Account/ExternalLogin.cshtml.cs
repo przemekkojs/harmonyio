@@ -141,8 +141,6 @@ namespace Main.Areas.Identity.Pages.Account
                 {
                     var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
-                    email = _userManager.NormalizeEmail(email);
-
                     var user = await _userManager.FindByEmailAsync(email);
 
                     if (user != null)
@@ -177,8 +175,8 @@ namespace Main.Areas.Identity.Pages.Account
 
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-
-                var email = _userManager.NormalizeEmail(Input.Email);
+                
+                var email = Input.Email;
 
                 await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
