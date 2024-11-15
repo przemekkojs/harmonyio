@@ -21,6 +21,7 @@ namespace Main.Models
 		public int? QuizResultId { get; set; }
 		// TODO quiz result should be nullable, when grading with algorithm, create new excersise result
 		// this result may not be linked to quiz result
+		[JsonIgnore]
 		public QuizResult? QuizResult { get; set; } = null;
 	}
 }

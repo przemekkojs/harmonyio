@@ -16,37 +16,134 @@ namespace Main.Pages
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
-        private readonly IGradingAlgorithm _algorithm;
+
+        public Dictionary<ApplicationUser, List<ExcersiseSolution>> UsersToSolutions { get; set; } = [];
+        public Dictionary<ExcersiseSolution, (int, int, string)> SolutionsToGradings { get; set; } = [];
+        public Dictionary<ApplicationUser, List<(int, int, string)>> UsersToGradings { get; set; } = [];
+
 
         public Quiz Quiz { get; set; } = null!;
-        public ApplicationUser AppUser { get; set; } = null!;
-
-        public List<ApplicationUser> Users { get; set; } = null!;
-        public List<Excersise> Excersises { get; set; } = null!;
-        public Dictionary<ApplicationUser, List<ExcersiseSolution>> UsersToSolutions { get; set; } = null!;
-        public Dictionary<ExcersiseSolution, (int, int, string)> SolutionsToGradings { get; set; } = null!;
-        public Dictionary<ApplicationUser, List<(int, int, string)>> UsersToGradings { get; set; } = null!;
+        public List<ApplicationUser> Users { get; set; } = [];
+        public List<List<string>> Solutions { get; set; } = [];
+        public List<Excersise> Excersises { get; set; } = [];
 
         [BindProperty]
         public int QuizId { get; set; }
         [BindProperty]
-        public List<Grade?> Grades { get; set; } = null!;
+        public List<string> UserIds { get; set; } = [];
         [BindProperty]
-        public List<List<int>> Points { get; set; } = null!; //user, then excersise
+        public List<Grade?> Grades { get; set; } = []; // grade of each user
+        public List<List<int>> PointSuggestions { get; set; } = [];
+        public List<List<string>> Opinions { get; set; } = [];
         [BindProperty]
-        public List<int> Maxes { get; set; } = null!;  //user, then excersise
+        public List<List<int>> Points { get; set; } = []; //user, then points for excersise soltion
         [BindProperty]
-        public List<List<string>> Comments { get; set; } = null!;
+        public List<List<string>> Comments { get; set; } = []; //user, then comment for excersise solution
 
         public GradeModel(
             ApplicationRepository repository,
-            UserManager<ApplicationUser> userManager,
-            IGradingAlgorithm algorithm)
+            UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _repository = repository;
-            _algorithm = algorithm;
         }
+
+        public async Task<IActionResult> OnGetAsync(int id)
+        {
+            var appUser = await _userManager.GetUserAsync(User);
+            if (appUser == null)
+            {
+                return Forbid();
+            }
+
+            var quiz = await _repository.GetAsync<Quiz>(
+                q => q.Id == id,
+                query => query
+                    .Include(q => q.Participants)
+                    .Include(q => q.QuizResults)
+                    .Include(q => q.Excersises)
+                        .ThenInclude(e => e.ExcersiseSolutions)
+                            .ThenInclude(es => es.ExcersiseResult)
+                    .Include(q => q.PublishedToGroup)
+                        .ThenInclude(q => q.Teachers.Where(u => u.Id == appUser.Id))
+            );
+
+            if (quiz == null)
+            {
+                return RedirectToPage("Error");
+            }
+
+            // check if user can grade quiz
+            // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
+            if (
+                quiz.CreatorId != appUser.Id &&
+                !quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Count != 0))
+            {
+                return Forbid();
+            }
+
+            Quiz = quiz;
+            Excersises = [.. Quiz.Excersises];
+
+            var allSolutions = quiz.Excersises.SelectMany(e => e.ExcersiseSolutions).ToList();
+            var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
+
+            // fill missing excersises only if quiz is closed
+            if (quiz.State == QuizState.Closed && participantsAnsweredIds.Count != quiz.Participants.Count)
+            {
+                var participantsNotAnsweredIds = quiz.Participants.Select(p => p.Id).Except(participantsAnsweredIds);
+                var newSolutions = await FillMissingExcersiseSolutionsAndResults(participantsNotAnsweredIds);
+                allSolutions.AddRange(newSolutions);
+            }
+
+            // this is where nobody solved the quiz, maybe should be handled differently
+            if (allSolutions.Count == 0)
+            {
+                return RedirectToPage("Error");
+            }
+
+            // just to make sure that soutions are in good order
+            allSolutions = allSolutions.OrderBy(es => es.ExcersiseId).ToList();
+
+            var usersToSolutions = allSolutions
+                .GroupBy(es => es.User)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            var usersToSolutionResults = usersToSolutions
+                .ToDictionary(
+                    userToSolutions => userToSolutions.Key,
+                    userToSolutions => userToSolutions.Value
+                        .Select(es => es.ExcersiseResult)
+                        .ToList()
+                );
+
+            var usersToQuizResult = usersToSolutions.Keys
+                .ToDictionary(
+                    user => user,
+                    user => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == user.Id)
+                );
+
+            Users = [.. usersToSolutions.Keys];
+            Users = Users.OrderBy(u => u.LastName).ThenBy(u => u.FirstName).ToList();
+
+            UserIds = Users.Select(u => u.Id).ToList();
+
+            foreach (var user in Users)
+            {
+                Grades.Add(usersToQuizResult[user]?.Grade ?? null);
+                Solutions.Add(usersToSolutions[user].Select(es => es.Answer).ToList());
+
+                var userSolutionResults = usersToSolutionResults[user];
+                Points.Add(userSolutionResults.Select(er => er?.Points ?? 0).ToList());
+                Comments.Add(userSolutionResults.Select(er => er?.Comment ?? "").ToList());
+                PointSuggestions.Add(userSolutionResults.Select(er => er?.AlgorithmPoints ?? 0).ToList());
+                // przemo tu wlasnie bedziesz tworzyl te elementy html i wkladal zamiast tego co ponizej
+                Opinions.Add(userSolutionResults.Select(er => er?.AlgorithmOpinion ?? "").ToList());
+            }
+
+            return Page();
+        }
+
 
         private async Task<bool> Init(int quizId)
         {
@@ -63,17 +160,16 @@ namespace Main.Pages
             );
 
             if (quiz == null || currentUser == null ||
-                quiz.CreatorId != currentUser.Id 
-                    // ||
-                    // (quiz.State == QuizState.Open 
-                    // && quiz.Excersises.First().ExcersiseSolutions.Count < quiz.Participants.Count
-                    // )
+                quiz.CreatorId != currentUser.Id
+                // ||
+                // (quiz.State == QuizState.Open 
+                // && quiz.Excersises.First().ExcersiseSolutions.Count < quiz.Participants.Count
+                // )
                 )
             {
                 return false;
             }
 
-            AppUser = currentUser;
             Quiz = quiz;
 
             await FillMissingExcersiseSolutions();
@@ -83,7 +179,7 @@ namespace Main.Pages
                 .GroupBy(es => es.User)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
-            // To siê wysypuje - ExcersiseResult jest zawsze nullem
+            // To siï¿½ wysypuje - ExcersiseResult jest zawsze nullem
             SolutionsToGradings = Quiz.Excersises
                 .SelectMany(e => e.ExcersiseSolutions, (e, es) => (e.Question, es))
                 .ToDictionary(
@@ -101,69 +197,8 @@ namespace Main.Pages
 
             Users = [.. UsersToSolutions.Keys];
             Excersises = [.. Quiz.Excersises];
-            Maxes = Excersises
-                .Select(x => x.MaxPoints)
-                .ToList();
-
             return true;
         }
-
-        public async Task<IActionResult> OnGetAsync(int id)
-        {
-            bool success = await Init(id);
-
-            if (!success)
-            {
-                return Forbid();
-            }
-
-            if (Quiz.QuizResults.Count > 0)
-            {
-                Grades = Users.Select(u => Quiz.QuizResults.First(qr => qr.UserId == u.Id).Grade).ToList();
-
-                var pmc = Users.Select(u => Quiz.QuizResults
-                        .First(qr => qr.UserId == u.Id).ExcersiseResults
-                            .Select(er => (er.Points, er.MaxPoints, er.Comment))
-                        .ToList())
-                    .ToList();
-
-                Points = pmc
-                    .Select(innerList => innerList.Select(t => t.Points).ToList())
-                    .ToList();
-
-                Comments = pmc
-                    .Select(innerList => innerList.Select(t => t.Comment).ToList())
-                    .ToList();
-            }
-            // TODO: To trzeba jakoœ zrobiæ sprytniej
-            //else
-            //{
-            //    Grades = [];
-            //    Points = [];
-            //    Comments = [];
-
-            //    foreach (var user in Users)
-            //    {
-            //        Grades.Add(Grade.One);
-
-            //        var pointsToAdd = new List<int>();
-            //        var commentsToAdd = new List<string>();
-
-            //        foreach (var ex in SolutionsToGradings.Keys)
-            //        {
-            //            var mark = SolutionsToGradings[ex];
-            //            pointsToAdd.Add(mark.Item1);
-            //            commentsToAdd.Add("");
-            //        }
-
-            //        Points.Add(pointsToAdd);
-            //        Comments.Add(commentsToAdd);
-            //    }
-            //}
-
-            return Page();
-        }
-
         public async Task<IActionResult> OnPost()
         {
             bool success = await Init(QuizId);
@@ -235,7 +270,7 @@ namespace Main.Pages
                     _repository.Add(excersiseResult);
                 }
             }
-            
+
             await _repository.SaveChangesAsync();
 
             return RedirectToPage("Created");
@@ -264,6 +299,39 @@ namespace Main.Pages
 
             if (changedAnything)
                 await _repository.SaveChangesAsync();
+        }
+
+        private async Task<List<ExcersiseSolution>> FillMissingExcersiseSolutionsAndResults(IEnumerable<string> participantsNotAnsweredIds)
+        {
+            List<ExcersiseSolution> newSolutions = [];
+            foreach (var excersise in Quiz.Excersises)
+            {
+                foreach (var participantId in participantsNotAnsweredIds)
+                {
+                    var solution = new ExcersiseSolution()
+                    {
+                        ExcersiseId = excersise.Id,
+                        Answer = "",
+                        UserId = participantId,
+                    };
+                    _repository.Add(solution);
+
+                    var excersiseResult = new ExcersiseResult
+                    {
+                        Comment = "",
+                        Points = 0,
+                        AlgorithmPoints = 0,
+                        MaxPoints = excersise.MaxPoints,
+                        AlgorithmOpinion = "",
+                        ExcersiseSolution = solution,
+                    };
+                    _repository.Add(excersiseResult);
+                    newSolutions.Add(solution);
+                }
+            }
+
+            await _repository.SaveChangesAsync();
+            return newSolutions;
         }
     }
 }

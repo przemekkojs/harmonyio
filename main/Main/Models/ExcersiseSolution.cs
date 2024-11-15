@@ -13,9 +13,11 @@ namespace Main.Models
 		//FOREIGN KEYS
 
 		public int ExcersiseId { get; set; }
+		[JsonIgnore]
 		public Excersise Excersise { get; set; } = null!;
 
 		public string UserId { get; set; } = null!;
+		[JsonIgnore]
 		public ApplicationUser User { get; set; } = null!;
 
 		[JsonIgnore]    //looping dependency, json converter goes crazy without it
