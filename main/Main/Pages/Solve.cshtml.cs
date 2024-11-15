@@ -138,8 +138,6 @@ namespace Main.Pages
                 return RedirectToPage("Error");
             }
 
-            bool hasChangedAnswer = false;
-
             var excersises = quiz.Excersises.ToList();
             var userSolutionsMap = quiz.Excersises
                 .SelectMany(e => e.ExcersiseSolutions)
@@ -150,14 +148,6 @@ namespace Main.Pages
                 var exercise = excersises[i];
                 var newAnswer = Answers[i] ?? "";
 
-                // case when for example there is two excersises, user just does first and saves
-                // then answer returned from second excersise is empty, as if there was no solution to it
-                // if there was previous solution, it will stay the same
-                if (newAnswer == "")
-                {
-                    continue;
-                }
-
                 // check if there is solution to excersise
                 if (userSolutionsMap.TryGetValue(exercise.Id, out var existingSolution))
                 {
@@ -166,16 +156,12 @@ namespace Main.Pages
                     {
                         continue;
                     }
-                    hasChangedAnswer = true;
                     // if solution answer is different, delete current solution (this also deletes result)
                     _repository.Delete(existingSolution);
                 }
-                else
-                {
-                    hasChangedAnswer = true;
-                }
 
                 // add new solution if there was no solution or current answer is different
+                // here also new solution is added when newAnswer == "", TODO FOR ALGORITM - check if anser == "" and can just return 0 points or something
                 var newSolution = new ExcersiseSolution
                 {
                     ExcersiseId = exercise.Id,
@@ -197,21 +183,9 @@ namespace Main.Pages
                 };
 
                 _repository.Add(excersiseResult);
-                await _repository.SaveChangesAsync(); // Tego chyba brakowa³o...
             }
 
-            // answers was changed so set quiz result grade to null, it needs new grade
-            // setting to null instead of deleting will keep exising excersise results
-            if (hasChangedAnswer)
-            {
-                foreach (var result in quiz.QuizResults)
-                {
-                    result.Grade = null;
-                    _repository.Update(result);
-                }
-                await _repository.SaveChangesAsync();
-            }
-
+            await _repository.SaveChangesAsync();
             return RedirectToPage("Assigned");
         }
     }
