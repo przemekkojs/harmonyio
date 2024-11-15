@@ -171,18 +171,33 @@ namespace Main.Pages
                 _repository.Add(newSolution);
 
                 var maxPointsForExcersise = exercise.MaxPoints;
-                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExcersise);
-                var excersiseResult = new ExcersiseResult
+                if (newAnswer == "")
                 {
-                    Comment = "",
-                    Points = algorithmGrade.Item1, // Set initial points based on the algorithm's grade
-                    AlgorithmPoints = algorithmGrade.Item1,
-                    MaxPoints = exercise.MaxPoints,
-                    AlgorithmOpinion = algorithmGrade.Item3,
-                    ExcersiseSolution = newSolution, // Associate with the solution
-                };
-
-                _repository.Add(excersiseResult);
+                    var excersiseResult = new ExcersiseResult
+                    {
+                        Comment = "",
+                        Points = 0, // Set initial points based on the algorithm's grade
+                        AlgorithmPoints = 0,
+                        MaxPoints = maxPointsForExcersise,
+                        AlgorithmOpinion = "",
+                        ExcersiseSolution = newSolution, // Associate with the solution
+                    };
+                    _repository.Add(excersiseResult);
+                }
+                else
+                {
+                    var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExcersise);
+                    var excersiseResult = new ExcersiseResult
+                    {
+                        Comment = "",
+                        Points = algorithmGrade.Item1, // Set initial points based on the algorithm's grade
+                        AlgorithmPoints = algorithmGrade.Item1,
+                        MaxPoints = exercise.MaxPoints,
+                        AlgorithmOpinion = algorithmGrade.Item3,
+                        ExcersiseSolution = newSolution, // Associate with the solution
+                    };
+                    _repository.Add(excersiseResult);
+                }
             }
 
             await _repository.SaveChangesAsync();
