@@ -9,8 +9,8 @@
 
 <div class="h-100 w-100 d-flex pb-3 overflow-auto">
     @* hidden form *@
-    <form method="post">
-        <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
+    <form method="post" id="gradeForm">
+        <input type="hidden" asp-for="QuizId" value="@Model.QuizId" />
 
         @for (int i = 0; i < Model.Users.Count; i++)
         {
@@ -36,7 +36,7 @@
 
     <div class="sidebar d-flex flex-column bg-white shadow rounded pb-3 me-3">
         <div class="fw-bold fs-4 overflow-hidden p-3 flex-shrink-0" style="text-overflow: ellipsis;">
-            @Model.Quiz.Name
+            @Model.QuizName
         </div>
 
         <hr class="m-0" />
@@ -60,7 +60,8 @@
 
         <hr class="m-0 mb-3" />
 
-        <button type="submit" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz oceny</button>
+        <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz
+            oceny</button>
         <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
     </div>
 
@@ -108,7 +109,10 @@
                     onKeyPress="integerKeyPress(event)" class="form-control points-input border-secondary bg-white" />
 
                 <span class="fw-bold ms-3 me-2">Max</span>
-                <input type="number" id="max" class="form-control points-input border-secondary bg-white" />
+                <div id="max"
+                    class="border border-secondary text-secondary rounded px-2 py-1 align-items-center d-flex h-100">
+                    @*SET VIA JS*@
+                </div>
 
                 <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
                     Komentarz
@@ -348,9 +352,8 @@
             document.getElementById('algorithm-opinions').innerHTML = generateOpinionByList(opinion);
 
             pointsElement.placeholder = pointsSuggestion;
-            maxElement.placeholder = maxPoints;
             pointsElement.value = points;
-            maxElement.value = maxPoints;
+            maxElement.innerText = maxPoints;
 
             if (loadToGrandStaff) {
                 grandStaff.loadFromJson(questions[currentQuestionIndex], userSolutions[currentUserIndex][currentQuestionIndex])
@@ -410,5 +413,9 @@
     }
 
     loadUser(currentUserIndex, false);
+
+    function submitFormClicked() {
+        document.getElementById("gradeForm").submit();
+    }
 
 </script>

@@ -99,7 +99,8 @@
             <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
                 <i class="fas fa-calendar-days mb-4 icon-giant"></i>
                 <div class="text-center fw-semibold" style="max-width: 400px;">
-                    Nie masz aktualnie żadnych zaplanowanych, ani trwających quizów. Po dołączeniu będziesz mógł je rozwiązać tutaj!
+                    Nie masz aktualnie żadnych zaplanowanych, ani trwających quizów. Po dołączeniu będziesz mógł je
+                    rozwiązać tutaj!
                 </div>
             </div>
         }
@@ -124,7 +125,7 @@
                                     <i class="far fa-calendar icon-sm me-2"></i>
                                     <span class="text-truncate">
                                         <span class="fw-bold">Oceniono:</span>
-                                        @quizResult.GradeDate
+                                        @quizResult.GradeDate.ToString("dd.MM.yyyy HH:mm")
                                     </span>
                                 </div>
                             }

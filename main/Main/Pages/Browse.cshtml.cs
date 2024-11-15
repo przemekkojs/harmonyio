@@ -29,13 +29,6 @@ namespace Main.Pages
         public List<string> Answers = [];
         public List<ExerciseResultData> ExerciseResults = new List<ExerciseResultData>();
 
-        public class ExcersiseResultData
-        {
-            public int Points { get; set; }
-            public int MaxPoints { get; set; } = 10; // Default to 10 if no data
-            public string Comment { get; set; } = string.Empty;
-        }
-
         public BrowseModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;

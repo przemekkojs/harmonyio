@@ -190,7 +190,7 @@ namespace Main.Pages
                     var excersiseResult = new ExcersiseResult
                     {
                         Comment = "",
-                        Points = algorithmGrade.Item1, // Set initial points based on the algorithm's grade
+                        Points = 0, // Set initial points to 0, cannot be algorithm points because then when student browses the solution which wasnt graded he can see algorithms points
                         AlgorithmPoints = algorithmGrade.Item1,
                         MaxPoints = exercise.MaxPoints,
                         AlgorithmOpinion = algorithmGrade.Item3,
