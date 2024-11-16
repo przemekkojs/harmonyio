@@ -159,55 +159,23 @@ namespace Main.Pages
 
                 _repository.Add(newSolution);
 
-                ExcersiseResult excersiseResult;
                 var maxPointsForExcersise = exercise.MaxPoints;                
                 var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExcersise);
+                var mistakes = algorithmGrade.Item3;
+                var mistakeResults = GenerateMistakeResults(mistakes);
 
-                if (newAnswer == string.Empty)
+                var excersiseResult = new ExcersiseResult
                 {
-                    excersiseResult = new ExcersiseResult
-                    {
-                        Comment = string.Empty,
-                        Points = 0, // Set initial points based on the algorithm's grade
-                        AlgorithmPoints = 0,
-                        MaxPoints = maxPointsForExcersise,
-                        ExcersiseSolution = newSolution, // Associate with the solution
-                    };                    
-                }
-                else
-                {                    
-                    excersiseResult = new ExcersiseResult
-                    {
-                        Comment = string.Empty,
-                        Points = 0, // Set initial points to 0, cannot be algorithm points because then when student browses the solution which wasnt graded he can see algorithms points
-                        AlgorithmPoints = algorithmGrade.Item1,
-                        MaxPoints = maxPointsForExcersise,
-                        ExcersiseSolution = newSolution, // Associate with the solution
-                    };              
-                }
+                    Comment = string.Empty,
+                    Points = 0, // Set initial points based on the algorithm's grade
+                    AlgorithmPoints = algorithmGrade.Item1,
+                    MaxPoints = maxPointsForExcersise,
+                    ExcersiseSolution = newSolution, // Associate with the solution
+                    MistakeResults = mistakeResults
+                };
 
                 _repository.Add(excersiseResult);
                 await _repository.SaveChangesAsync();
-
-                _repository.Context.Entry(excersiseResult)
-                    .Collection(er => er.MistakeResults)
-                    .Load();
-
-                // Dodawanie b³êdów do bazy
-                var mistakes = algorithmGrade.Item3;
-                var mistakeResults = GenerateMistakeResults(mistakes);
-                var existingMistakeResults = excersiseResult.MistakeResults;
-
-                if (existingMistakeResults != null)
-                    _repository.Context.RemoveRange(existingMistakeResults);
-
-                await _repository.SaveChangesAsync();
-
-                foreach (var mistakeResult in mistakeResults)
-                {
-                    mistakeResult.ExcersiseResultId = excersiseResult.Id;
-                    _repository.Add(mistakeResult);
-                }
             }
 
             await _repository.SaveChangesAsync();
@@ -251,9 +219,7 @@ namespace Main.Pages
                         mistakeResult.Functions = [function1, function2];
                     }
                     else
-                    {
                         mistakeResult.Functions = [function1, function2];
-                    }
                 }
 
                 foreach (var o in tmp[key])

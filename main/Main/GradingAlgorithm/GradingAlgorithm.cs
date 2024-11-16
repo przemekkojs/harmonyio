@@ -11,9 +11,19 @@ namespace Main.GradingAlgorithm
     public class GradingAlgorithm : IGradingAlgorithm
     {
         public (int, int, Dictionary<(int, (int, int, int)), List<int>>) Grade(string question, string answer, int maxPoints)
-        {            
-            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser.ParseJsonToSolutionParseResult(answer);
-            var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser.ParseJsonToProblem(question);
+        {
+            var questionEmpty = question == string.Empty;
+            var answerEmpty = answer == string.Empty;
+
+            if (questionEmpty || answerEmpty)
+                return (0, maxPoints, []);
+
+            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                .ParseJsonToSolutionParseResult(answer);
+
+            var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser
+                .ParseJsonToProblem(question);
+
             var solution = new Solution(problem, solutionParseResult.Stacks);
             var settings = Constants.Settings;
 
@@ -38,9 +48,7 @@ namespace Main.GradingAlgorithm
         private static float DivAsPercentage(int numerator, int denominator)
         {
             if (denominator == 0)
-            {
-                throw new DivideByZeroException("Denominator cannot be zero.");
-            }
+                throw new DivideByZeroException("Nie można dzielić przez 0.");
 
             float result = (float)numerator / denominator * 100;
             return result;
