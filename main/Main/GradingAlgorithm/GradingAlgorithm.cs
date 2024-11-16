@@ -3,12 +3,14 @@ using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Mistake.Solution;
 using Algorithm.New.Music;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 namespace Main.GradingAlgorithm
 {
     public class GradingAlgorithm : IGradingAlgorithm
     {
-        public (int, int, string) Grade(string question, string answer)
+        public (int, int, Dictionary<(int, (int, int, int)), List<int>>) Grade(string question, string answer, int maxPoints)
         {            
             var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser.ParseJsonToSolutionParseResult(answer);
             var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser.ParseJsonToProblem(question);
@@ -23,10 +25,9 @@ namespace Main.GradingAlgorithm
                 .ToList();
 
             var maxMistakesCount = GetMaxMistakesCount(problem, settings);
-            var opinion = GenerateOpinion(checkResult);
+            var opinion = GenerateOpinion2(checkResult);
             var mistakesCount = checkResult.Sum(x => x.Quantity);
 
-            var maxPoints = problem.MaxPoints;
             var algorithmPoints = maxMistakesCount - mistakesCount > 0 ? maxMistakesCount - mistakesCount : 0;
             var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
             var points = Convert.ToInt32(pointsPercent * maxPoints / 100);
@@ -59,8 +60,7 @@ namespace Main.GradingAlgorithm
                 .Count();
 
             maxMistakesCount += oneFunctionSettingsCount * functionsCount;
-            maxMistakesCount += twoFunctionSettingsCount * functionsCount - functionsCount;
-            // -functionsCount, ponieważ ostatniej nie uwzględniamy
+            maxMistakesCount += twoFunctionSettingsCount * functionsCount - functionsCount; // -functionsCount, ponieważ ostatniej nie uwzględniamy
 
             return maxMistakesCount;
         }
@@ -93,6 +93,41 @@ namespace Main.GradingAlgorithm
             List<Stack> tmpStacks = [.. tmpStacksMap.Values];
             solution.Stacks.Clear();
             solution.Stacks.AddRange(tmpStacks);
+        }
+
+        private static Dictionary<(int, (int, int, int)), List<int>> GenerateOpinion2(List<Mistake> mistakes)
+        {
+            // Takty, funkcje w taktach, ID błędu
+            var tmp = new Dictionary<(int, (int, int, int)), List<int>>();
+
+            foreach (var mistake in mistakes)
+            {
+                var barIndexes = mistake.Description.Item1;
+                var functionIndexes = mistake.Description.Item2;
+                var description = mistake.MistakeCode;
+
+                var bar1 = barIndexes.Count > 0 ? barIndexes[0] : -1;
+                var bar2 = barIndexes.Count > 1 ? barIndexes[1] : bar1;
+
+                var function1 = functionIndexes.Count > 0 ? functionIndexes[0] : -1;
+                var function2 = functionIndexes.Count > 1 ? functionIndexes[1] : function1;
+
+                var key = (bar1, (function1, function2, bar2));
+
+                if (!tmp.ContainsKey(key))
+                    tmp[key] = [];
+
+                tmp[key].Add(description);
+            }
+
+            return tmp;
+        }
+
+        private static string CodeToMistake(int code)
+        {
+            string result = "Nieokreślony błąd.";
+
+            return result;
         }
 
         private static string GenerateOpinion(List<Mistake> mistakes)

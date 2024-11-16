@@ -10,7 +10,6 @@ namespace Main.Models
 		public int MaxPoints { get; set; }
 		public string Comment { get; set; } = "";
 		public int AlgorithmPoints { get; set; }
-		public string AlgorithmOpinion { get; set; } = string.Empty;
 
 		//FOREIGN KEYS
 
@@ -21,7 +20,9 @@ namespace Main.Models
 		public int? QuizResultId { get; set; }
 		// TODO quiz result should be nullable, when grading with algorithm, create new excersise result
 		// this result may not be linked to quiz result
+		[JsonIgnore]
 		public QuizResult? QuizResult { get; set; } = null;
+
+		public ICollection<MistakeResult> MistakeResults { get; set; } = new List<MistakeResult>();
 	}
 }
-

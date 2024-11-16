@@ -7,137 +7,138 @@
     <link rel="stylesheet" href="~/css/grade-style.css" />
 </head>
 
-<form method="post" class="h-100 w-100 d-flex flex-column overflow-auto">
-    <div class="flex-grow-1 d-flex mb-3 overflow-auto">
-        <div class="sidebar d-flex flex-column bg-white shadow rounded pb-3 me-3">
-            <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
-            <div class="fw-bold fs-4 overflow-hidden p-3 flex-shrink-0" style="text-overflow: ellipsis;">
-                @Model.Quiz.Name
+<div class="h-100 w-100 d-flex pb-3 overflow-auto">
+    @* hidden form *@
+    <form method="post" id="gradeForm">
+        <input type="hidden" asp-for="QuizId" value="@Model.QuizId" />
+
+        @for (int i = 0; i < Model.Users.Count; i++)
+        {
+            <input id="grade-hidden-@i" type="hidden" asp-for="Grades[i]" />
+        }
+
+        @for (int userIndex = 0; userIndex < Model.Users.Count; userIndex++)
+        {
+            @for (int exerciseIndex = 0; exerciseIndex < Model.Excersises.Count; exerciseIndex++)
+            {
+                <input id="points-hidden-@exerciseIndex-@userIndex" type="hidden" asp-for="Points[userIndex][exerciseIndex]"
+                    value="@Model.Points[userIndex][exerciseIndex]" />
+                <input id="comment-hidden-@exerciseIndex-@userIndex" type="hidden" asp-for="Comments[userIndex][exerciseIndex]"
+                    value="@Model.Comments[userIndex][exerciseIndex]" />
+            }
+        }
+
+        @for (int i = 0; i < Model.Users.Count; i++)
+        {
+            <input type="hidden" asp-for="UserIds[i]" value="@Model.UserIds[i]" />
+        }
+    </form>
+
+    <div class="sidebar d-flex flex-column bg-white shadow rounded pb-3 me-3">
+        <div class="fw-bold fs-4 overflow-hidden p-3 flex-shrink-0" style="text-overflow: ellipsis;">
+            @Model.QuizName
+        </div>
+
+        <hr class="m-0" />
+
+        <div class="overflow-auto flex-grow-1 p-3">
+            @for (int i = 0; i < Model.Users.Count; i++)
+            {
+                <div onclick="selectUser(@i)"
+                    class="student-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
+                    <div
+                        class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                        @Model.Users[i].FullName
+                    </div>
+                    <div id="user-grade-@i"
+                        class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
+                        -
+                    </div>
+                </div>
+            }
+        </div>
+
+        <hr class="m-0 mb-3" />
+
+        <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz
+            oceny</button>
+        <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
+    </div>
+
+    <div class="flex-grow-1 d-flex flex-column overflow-auto ">
+        <div class="bg-white rounded shadow mb-3 d-flex flex-column justify-content-between">
+            <div class="d-flex align-items-center h-100 p-3">
+                <div id="current-user-text" class="fw-bold fs-4">
+                    @*SET VIA JS*@
+                </div>
+
+                <span class="fw-bold ms-auto me-2">Wynik</span>
+                <div id="points-text"
+                    class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap h-100 align-items-center d-flex">
+                    @*SET VIA JS*@
+                </div>
+                <div id="percentage-text"
+                    class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4 h-100 align-items-center d-flex">
+                    @*SET VIA JS*@
+                </div>
+                <span class="fw-bold me-2">Ocena</span>
+                <select id="grade-select" onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
+                    class="grade-select bg-transparent form-select border border-secondary text-secondary"
+                    aria-label="Wybierz ocenę">
+                    <option selected disabled>-</option>
+                    @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
+                    {
+                        <option value="@grade">@grade.AsString()</option>
+                    }
+                </select>
             </div>
 
             <hr class="m-0" />
 
-            <div class="overflow-auto flex-grow-1 p-3">
-                @for (int i = 0; i < Model.Users.Count; i++)
-                {
-                    <div onclick="selectUser(@i)"
-                        class="student-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
-                        <div
-                            class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
-                            @Model.Users[i].FullName
-                        </div>
-                        <div id="user-grade-@i"
-                            class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
-                            -
-                        </div>
-                    </div>
-                }
+            <div class="d-flex flex-row align-items-center p-3">
+                <div id="excersises-buttons" class="d-flex flex-row align-items-center">
+                </div>
+                <div id="div-last-ex">
+                    <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
+                    <button id="btn-last-ex" type="button" onclick="lastQuestion()"
+                        class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
+                </div>
+
+                <span class="fw-bold ms-auto me-2">Punkty</span>
+                <input type="number" id="points" onchange="onPointsChange(this.value)"
+                    onKeyPress="integerKeyPress(event)" class="form-control points-input border-secondary bg-white" />
+
+                <span class="fw-bold ms-3 me-2">Max</span>
+                <div id="max"
+                    class="border border-secondary text-secondary rounded px-2 py-1 align-items-center d-flex h-100">
+                    @*SET VIA JS*@
+                </div>
+
+                <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
+                    Komentarz
+                </a>
             </div>
-
-            <hr class="m-0 mb-3" />
-
-            <button type="submit" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz oceny</button>
-            <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
         </div>
 
-        <div class="flex-grow-1 d-flex flex-column overflow-auto ">
-            <div class="d-flex flex-column overflow-auto">
-                <div class="bg-white rounded shadow mb-3 d-flex flex-column justify-content-between">
-                    <div class="d-flex align-items-center h-100 p-3">
-                        <div id="current-user-text" class="fw-bold fs-4">
-                            @*SET VIA JS*@
-                        </div>
+        <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto" id="staff-section-div">
+            <div class="flex-grow-1" id="question-area">
+                <p class="m-0 fw-semibold" id="question">
+                    @* FILLED VIA JS *@
+                </p>
+            </div>
 
-                        <span class="fw-bold ms-auto me-2">Wynik</span>
-                        <div id="points-text"
-                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap h-100 align-items-center d-flex">
-                            @*SET VIA JS*@
-                        </div>
-                        <div id="percentage-text"
-                            class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4 h-100 align-items-center d-flex">
-                            @*SET VIA JS*@
-                        </div>
-                        <span class="fw-bold me-2">Ocena</span>
-                        <select id="grade-select"
-                            onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
-                            class="grade-select bg-transparent form-select border border-secondary text-secondary"
-                            aria-label="Wybierz ocenę">
-                            <option selected disabled>-</option>
-                            @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
-                            {
-                                <option value="@grade">@grade.AsString()</option>
-                            }
-                        </select>
+            <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white rounded mt-3">
+                <div id="p5_loading">Ładowanie rozwiązania</div>
+                @*SET VIA JS*@
+            </div>
 
-                        @for (int i = 0; i < Model.Users.Count; i++)
-                        {
-                            <input id="grade-hidden-@i" type="hidden" asp-for="Grades[i]" />
-                        }
-                    </div>
+            @* TODO: Stylowanie trochę porządniej XD *@
+            <div id="algorithm-opinions" style="width: 100%; height: 100%; margin-bottom: -1rem;">
 
-                    <hr class="m-0" />
-
-                    <div class="d-flex flex-row align-items-center p-3">
-                        <div id="excersises-buttons" class="d-flex flex-row align-items-center">
-                        </div>
-                        <div id="div-last-ex">
-                            <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
-                            <button id="btn-last-ex" type="button" onclick="lastQuestion()"
-                                class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
-                        </div>
-
-                        <span class="fw-bold ms-auto me-2">Punkty</span>
-                        <input type="number" id="points" onchange="onPointsChange(this.value)"
-                            onKeyPress="integerKeyPress(event)"
-                            class="form-control points-input border-secondary bg-white" />
-
-                        <span class="fw-bold ms-3 me-2">Max</span>
-                        <input type="number" id="max"  @* onchange="onMaxChange(this.value)" onKeyPress="integerKeyPress(event)" *@
-                            class="form-control points-input border-secondary bg-white" />
-
-                        <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal"
-                            data-bs-target="#commentPopup">
-                            Komentarz
-                        </a>
-                    </div>
-                </div>
-
-                <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto">
-                    <div class="flex-grow-1" id="question-area">
-                        <p class="m-0 fw-semibold" id="question">
-                            @* FILLED VIA JS *@
-                        </p>
-                    </div>
-
-                    <div class="mt-3 d-flex flex-row">
-
-                        @for (int exId = 0; exId < Model.Excersises.Count; exId++)
-                        {
-                            @for (int usrId = 0; usrId < Model.Users.Count; usrId++)
-                            {
-                                <input id="points-hidden-@exId-@usrId" type="hidden" asp-for="Points[usrId][exId]" value="0" />
-                                <input id="max-hidden-@exId-@usrId" type="hidden" asp-for="Maxes[exId]" value="0" />
-                                <input id="comment-hidden-@exId-@usrId" type="hidden" asp-for="Comments[usrId][exId]" value="" />
-                            }
-                        }
-
-                        <div id="music-staff-div"
-                            class="flex-grow-1 h-100 d-flex justify-content-center align-items-center">
-                            <div id="p5_loading">Ładowanie pięciolinii</div>
-                            @* MUSIC STAFF DIV SET VIA JS *@
-
-                        </div>
-
-                    </div>
-                    @* TODO: Stylowanie trochę porządniej XD *@
-                    <div id="algorithm-opinions" style="width: 100%; height: 100%; margin-bottom: -1rem;">
-
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-</form>
+</div>
 
 <div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle"
     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -161,7 +162,11 @@
 
 
 <script>
-    const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
+    const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")';
+    const staffSectionDiv = document.getElementById("staff-section-div");
+    const staffSectionWidth = staffSectionDiv.offsetWidth - 60;
+    let canvasWidth = staffSectionWidth;
+    let canvasHeight = 800;
 
     const symbolPaths = {
         curlyBrace: '@Url.Content("~/images/staff-symbols/curly-brace.png")',
@@ -182,13 +187,12 @@
         thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
     };
 
-    let canvasWidth = 978;
-    let canvasHeight = 800;
+
 
     const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
     const questions = questionsRaw.map(q => JSON.parse(q));
-    const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToSolutions[u].Select(es => es.Answer))));
-    
+    const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Solutions));
+
     let currentUserIndex = 0;
     let currentQuestionIndex = 0;
 
@@ -213,18 +217,16 @@
 
 <script>
     const usernames = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => u.FullName)));
-    const userScoreSuggestions = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToGradings[u])));
 
-    const userScores = @(Model.Points == null ?
-        Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => Model.UsersToGradings[u]))) :
-        Html.Raw(JsonConvert.SerializeObject(Model.Users.Select((u, index) => Model.Points[index].Zip(Model.Maxes, (x, y) => (x, y)).ToList())))
-        );
+    const userGrades = @Html.Raw(JsonConvert.SerializeObject(Model.Grades.Select(g => new[] { g?.ToString() ?? "-", g?.AsString() ?? "-" })));
 
-    const userComments = @Html.Raw(JsonConvert.SerializeObject(Model.Comments))
-            ?? Array.from({ length: usernames.length }, () => Array(@Model.Excersises.Count).fill(""));
+    const userPoints = @Html.Raw(JsonConvert.SerializeObject(Model.Points));
+    const userPointsSuggestions = @Html.Raw(JsonConvert.SerializeObject(Model.PointSuggestions));
+    const userComments = @Html.Raw(JsonConvert.SerializeObject(Model.Comments));
+    const userOpinions = @Html.Raw(JsonConvert.SerializeObject(Model.Opinions));
 
-    const userGrades = @Html.Raw(JsonConvert.SerializeObject(Model.Grades?.Select(g => new[] { g?.ToString() ?? "-", g?.AsString() ?? "-" }) ?? null))
-            ?? Array.from({ length: usernames.length }, () => ["-", "-"]);
+    const excersiseMaxes = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.MaxPoints)));
+    const maxesSum = @Model.Excersises.Select(e => e.MaxPoints).Sum();
 
     const studentRows = Array.from(document.querySelectorAll('div.student-row'));
     const currentUserText = document.getElementById("current-user-text");
@@ -238,13 +240,6 @@
     const maxElement = document.getElementById("max");
     const commentElement = document.getElementById("comment");
 
-    for (let i = 0; i < @Model.Excersises.Count; i++) {
-        for (let j = 0; j < @Model.Users.Count; j++) {
-            document.getElementById(`points-hidden-${i}-${j}`).value = userScores[j][i].Item1;
-            document.getElementById(`max-hidden-${i}-${j}`).value = userScores[j][i].Item2;
-            document.getElementById(`comment-hidden-${i}-${j}`).value = userComments[j][i];
-        }
-    }
     for (let i = 0; i < @Model.Users.Count; i++) {
         if (userGrades[i][0] != "-") {
             document.getElementById(`user-grade-${i}`).innerText = userGrades[i][1];
@@ -263,9 +258,9 @@
     }
 
     function handleTotalPoints(index) {
-        let [totalPoints, totalMax] = getUserTotalPointsAndMax(index);
-        pointsText.innerText = totalPoints + " / " + totalMax;
-        percentageText.innerText = Math.round((totalPoints / totalMax) * 100) + "%";
+        const totalPoints = getUserTotalPoints(index);
+        pointsText.innerText = totalPoints + " / " + maxesSum;
+        percentageText.innerText = Math.round((totalPoints / maxesSum) * 100) + "%";
     }
 
     function handleStudentsList(index) {
@@ -286,17 +281,13 @@
         loadUser(currentUserIndex);
     }
 
-    function getUserTotalPointsAndMax(userIndex) {
+    function getUserTotalPoints(userIndex) {
         let totalPoints = 0;
-        let totalMax = 0;
-
-        let scores = userScores[userIndex];
-        scores.forEach((score) => {
-            totalPoints += score.Item1;
-            totalMax += score.Item2;
+        const points = userPoints[userIndex];
+        points.forEach(num => {
+            totalPoints += num;
         });
-
-        return [totalPoints, totalMax];
+        return totalPoints;
     }
 
     function onGradeChange(value, strValue) {
@@ -308,10 +299,10 @@
 
     function onPointsChange(value) {
         let numValue = Number(value);
-        let maxValue = Number(userScores[currentUserIndex][currentQuestionIndex].Item2);
+        const maxValue = excersiseMaxes[currentQuestionIndex];
 
         if (value === "") {
-            numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item1;
+            numValue = userPointsSuggestions[currentUserIndex][currentQuestionIndex];
             document.getElementById(`points`).value = numValue;
         }
         if (numValue > maxValue) {
@@ -319,25 +310,11 @@
             document.getElementById(`points`).value = numValue;
         }
 
-        userScores[currentUserIndex][currentQuestionIndex].Item1 = numValue;
+        userPoints[currentUserIndex][currentQuestionIndex] = numValue;
         document.getElementById(`points-hidden-${currentQuestionIndex}-${currentUserIndex}`).value = numValue;
 
         handleTotalPoints(currentUserIndex);
     }
-
-    // function onMaxChange(value) {
-    //     let numValue = Number(value);
-
-    //     if (value === "") {
-    //         numValue = userScoreSuggestions[currentUserIndex][currentQuestionIndex].Item2;
-    //         document.getElementById(`max`).value = numValue;
-    //     }
-
-    //     userScores[currentUserIndex][currentQuestionIndex].Item2 = numValue;
-    //     document.getElementById(`max-hidden-${currentQuestionIndex}-${currentUserIndex}`).value = numValue;
-
-    //     handleTotalPoints(currentUserIndex);
-    // }
 
     function onCommentChange(value) {
         userComments[currentUserIndex][currentQuestionIndex] = value;
@@ -360,23 +337,32 @@
             else
                 document.getElementById('question-area').classList.remove('d-none');
 
-            const score = userScores[currentUserIndex][currentQuestionIndex];
-            const scoreSuggestions = userScoreSuggestions[currentUserIndex][currentQuestionIndex];
-            const opinion = scoreSuggestions.Item3;
+            const points = userPoints[currentUserIndex][currentQuestionIndex];
+            const maxPoints = excersiseMaxes[currentQuestionIndex];
+            const pointsSuggestion = userPointsSuggestions[currentUserIndex][currentQuestionIndex];
+            const comment = userComments[currentUserIndex][currentQuestionIndex];            
+            const opinion = userOpinions[currentUserIndex][currentQuestionIndex] === "" ?
+                "Brak błędów" : userOpinions[currentUserIndex][currentQuestionIndex];
 
-            document.getElementById('algorithm-opinions').innerHTML = opinion;
+            console.log("Opinion", opinion);
+            console.log("User opinions", userOpinions);
 
-            pointsElement.placeholder = scoreSuggestions.Item1;
-            maxElement.placeholder = scoreSuggestions.Item2;
-            pointsElement.value = score.Item1;
-            maxElement.value = score.Item2;
-            //solutionElement.innerText = userSolutions[currentUserIndex][currentQuestionIndex];
+            document.getElementById('algorithm-opinions').innerHTML = `
+                <details>
+                    <summary>Opinia algorytmu</summary>
+                    ${opinion}
+                </details>
+            `;
+
+            pointsElement.placeholder = pointsSuggestion;
+            pointsElement.value = points;
+            maxElement.innerText = maxPoints;
 
             if (loadToGrandStaff) {
                 grandStaff.loadFromJson(questions[currentQuestionIndex], userSolutions[currentUserIndex][currentQuestionIndex])
             }
 
-            commentElement.value = userComments[currentUserIndex][currentQuestionIndex];
+            commentElement.value = comment;
 
             generateButtons(currentQuestionIndex);
         }
@@ -430,5 +416,9 @@
     }
 
     loadUser(currentUserIndex, false);
+
+    function submitFormClicked() {
+        document.getElementById("gradeForm").submit();
+    }
 
 </script>

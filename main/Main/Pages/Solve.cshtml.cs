@@ -54,25 +54,21 @@ namespace Main.Pages
             }
 
             var quizResult = quiz.QuizResults.FirstOrDefault();
+            var quizResultExists = quizResult != null && quizResult.Grade != null;
+            var quizClosed = quiz.State == Enumerations.QuizState.Closed;
+            var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
+            var quizHasUsers = quiz.Participants != null && quiz.Participants.Count != 0;
+
             // quiz result exists or quiz is closed and user is participant
-            if (
-                (quizResult != null && quizResult.Grade != null) ||
-                (
-                    quiz.State == Enumerations.QuizState.Closed &&
-                    Quiz.Participants.Any())
-                )
-            {
+            if ((quizResultExists) || (quizClosed && quizHasUsers))
                 return RedirectToPage("Browse", new { id = quiz.Id });
-            }
 
             // quiz is closed and user isnt participant
-            if (quiz.State == Enumerations.QuizState.Closed && !Quiz.Participants.Any())
-            {
+            if (quizClosed && !quizHasUsers)
                 return Forbid();
-            }
 
             // TODO redirect to some quiz is not started page, adding this to solve page wil add one big if so i think new page is better
-            if (quiz.State != Enumerations.QuizState.Open)
+            if (quizNotOpen)
             {
                 // also here can check if quiz.State == notStarted (published already) and add user as participant
                 // this way the quiz will be in Assigned planned section
@@ -81,9 +77,9 @@ namespace Main.Pages
 
             Quiz = quiz;
 
-            if (!Quiz.Participants.Any())
+            if (!quizHasUsers)
             {
-                Quiz.Participants.Add(appUser);
+                quiz.Participants.Add(appUser);
                 _repository.Update(Quiz);
                 await _repository.SaveChangesAsync();
             }
@@ -98,10 +94,9 @@ namespace Main.Pages
         public async Task<IActionResult> OnPost()
         {
             var appUser = await _userManager.GetUserAsync(User);
+
             if (appUser == null)
-            {
                 return Forbid();
-            }
 
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == QuizId,
@@ -111,34 +106,26 @@ namespace Main.Pages
                     .Include(q => q.Excersises)
                     .ThenInclude(e => e.ExcersiseSolutions
                         .Where(es => es.UserId == appUser.Id))
-                    .Include(q => q.Participants.Where(p => p.Id == appUser.Id))
-            );
+                    .Include(q => q.Participants.Where(p => p.Id == appUser.Id)));
 
             if (quiz == null)
-            {
                 return RedirectToPage("Error");
-            }
 
             var quizResult = quiz.QuizResults.FirstOrDefault();
 
             // quiz isnt open or user isnt participant
-            if (quiz.State != Enumerations.QuizState.Open || !quiz.Participants.Any())
-            {
+            var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
+            var quizHasParticipants = quiz.Participants.Count != 0;
+
+            if (quizNotOpen || !quizHasParticipants)
                 return Forbid();
-            }
 
             // quiz is graded so show the result
             if (quizResult != null && quizResult.Grade != null)
-            {
                 RedirectToPage("Browse", new { id = quiz.Id });
-            }
 
             if (Answers.Count != quiz.Excersises.Count)
-            {
                 return RedirectToPage("Error");
-            }
-
-            bool hasChangedAnswer = false;
 
             var excersises = quiz.Excersises.ToList();
             var userSolutionsMap = quiz.Excersises
@@ -150,67 +137,134 @@ namespace Main.Pages
                 var exercise = excersises[i];
                 var newAnswer = Answers[i] ?? "";
 
-                // case when for example there is two excersises, user just does first and saves
-                // then answer returned from second excersise is empty, as if there was no solution to it
-                // if there was previous solution, it will stay the same
-                if (newAnswer == "")
-                {
-                    continue;
-                }
-
                 // check if there is solution to excersise
                 if (userSolutionsMap.TryGetValue(exercise.Id, out var existingSolution))
                 {
                     // if solution answer is the same, dont do anything
                     if (existingSolution.Answer == newAnswer)
-                    {
                         continue;
-                    }
-                    hasChangedAnswer = true;
+
                     // if solution answer is different, delete current solution (this also deletes result)
                     _repository.Delete(existingSolution);
                 }
-                else
-                {
-                    hasChangedAnswer = true;
-                }
 
                 // add new solution if there was no solution or current answer is different
+                // here also new solution is added when newAnswer == "", TODO FOR ALGORITM - check if anser == "" and can just return 0 points or something
                 var newSolution = new ExcersiseSolution
                 {
                     ExcersiseId = exercise.Id,
                     Answer = newAnswer,
                     UserId = appUser.Id
                 };
+
                 _repository.Add(newSolution);
 
-                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer);
-                var excersiseResult = new ExcersiseResult
+                ExcersiseResult excersiseResult;
+                var maxPointsForExcersise = exercise.MaxPoints;                
+                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExcersise);
+
+                if (newAnswer == string.Empty)
                 {
-                    Comment = "",
-                    Points = algorithmGrade.Item1, // Set initial points based on the algorithm's grade
-                    AlgorithmPoints = algorithmGrade.Item1,
-                    MaxPoints = exercise.MaxPoints,
-                    AlgorithmOpinion = algorithmGrade.Item3,
-                    ExcersiseSolution = newSolution, // Associate with the solution
-                };
+                    excersiseResult = new ExcersiseResult
+                    {
+                        Comment = string.Empty,
+                        Points = 0, // Set initial points based on the algorithm's grade
+                        AlgorithmPoints = 0,
+                        MaxPoints = maxPointsForExcersise,
+                        ExcersiseSolution = newSolution, // Associate with the solution
+                    };                    
+                }
+                else
+                {                    
+                    excersiseResult = new ExcersiseResult
+                    {
+                        Comment = string.Empty,
+                        Points = 0, // Set initial points to 0, cannot be algorithm points because then when student browses the solution which wasnt graded he can see algorithms points
+                        AlgorithmPoints = algorithmGrade.Item1,
+                        MaxPoints = maxPointsForExcersise,
+                        ExcersiseSolution = newSolution, // Associate with the solution
+                    };              
+                }
 
                 _repository.Add(excersiseResult);
-            }
-
-            // answers was changed so set quiz result grade to null, it needs new grade
-            // setting to null instead of deleting will keep exising excersise results
-            if (hasChangedAnswer)
-            {
-                foreach (var result in quiz.QuizResults)
-                {
-                    result.Grade = null;
-                    _repository.Update(result);
-                }
                 await _repository.SaveChangesAsync();
+
+                _repository.Context.Entry(excersiseResult)
+                    .Collection(er => er.MistakeResults)
+                    .Load();
+
+                // Dodawanie b³êdów do bazy
+                var mistakes = algorithmGrade.Item3;
+                var mistakeResults = GenerateMistakeResults(mistakes);
+                var existingMistakeResults = excersiseResult.MistakeResults;
+
+                if (existingMistakeResults != null)
+                    _repository.Context.RemoveRange(existingMistakeResults);
+
+                await _repository.SaveChangesAsync();
+
+                foreach (var mistakeResult in mistakeResults)
+                {
+                    mistakeResult.ExcersiseResultId = excersiseResult.Id;
+                    _repository.Add(mistakeResult);
+                }
             }
 
+            await _repository.SaveChangesAsync();
             return RedirectToPage("Assigned");
+        }
+
+        private static List<MistakeResult> GenerateMistakeResults(Dictionary<(int, (int, int, int)), List<int>> tmp)
+        {
+            var sortedKeys = tmp.Keys
+                .OrderBy(key => key.Item1)
+                    .ThenBy(key => key.Item2.Item1)
+                        .ThenBy(key => key.Item2.Item2)
+                            .ThenBy(key => key.Item2.Item3)
+                .ToList();
+
+            int lastBar = 0;
+            List<MistakeResult> result = [];
+
+            foreach (var key in sortedKeys)
+            {
+                MistakeResult mistakeResult = new();
+
+                var bar = key.Item1;
+                var function1 = key.Item2.Item1;
+                var function2 = key.Item2.Item2;
+                var bar2 = key.Item2.Item3;
+
+                if (bar != lastBar)
+                {
+                    lastBar = bar;
+                    mistakeResult.Bars = [bar];
+                }
+
+                if (function1 == function2)
+                    mistakeResult.Functions = [function1];
+                else
+                {
+                    if (bar2 != bar)
+                    {
+                        mistakeResult.Bars = [bar2];
+                        mistakeResult.Functions = [function1, function2];
+                    }
+                    else
+                    {
+                        mistakeResult.Functions = [function1, function2];
+                    }
+                }
+
+                foreach (var o in tmp[key])
+                {
+                    mistakeResult.MistakeCodes.Add(o);
+                }
+
+                result.Add(mistakeResult);
+            }
+
+            return result;
         }
     }
 }

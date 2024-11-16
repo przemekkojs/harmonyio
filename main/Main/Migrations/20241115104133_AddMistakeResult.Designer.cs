@@ -3,6 +3,7 @@ using System;
 using Main.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115104133_AddMistakeResult")]
+    partial class AddMistakeResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -270,7 +273,7 @@ namespace Main.Migrations
 
                     b.HasIndex("ExcersiseResultId");
 
-                    b.ToTable("MistakeResults");
+                    b.ToTable("MistakeResult");
                 });
 
             modelBuilder.Entity("Main.Models.Quiz", b =>
@@ -611,13 +614,11 @@ namespace Main.Migrations
 
             modelBuilder.Entity("Main.Models.MistakeResult", b =>
                 {
-                    b.HasOne("Main.Models.ExcersiseResult", "ExcersiseResult")
+                    b.HasOne("Main.Models.ExcersiseResult", null)
                         .WithMany("MistakeResults")
                         .HasForeignKey("ExcersiseResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ExcersiseResult");
                 });
 
             modelBuilder.Entity("Main.Models.Quiz", b =>
