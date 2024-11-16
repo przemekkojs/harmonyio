@@ -23,7 +23,6 @@ namespace Main.Models
 		[JsonIgnore]
 		public QuizResult? QuizResult { get; set; } = null;
 
-		public ICollection<MistakeResult> MistakeResults { get; set; } = [];
+		public ICollection<MistakeResult> MistakeResults { get; set; } = new List<MistakeResult>();
 	}
 }
-

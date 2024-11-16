@@ -5,9 +5,10 @@ using Microsoft.EntityFrameworkCore;
 namespace Main.Data;
 
 public class ApplicationRepository : IRepository
-{
-    private readonly ApplicationDbContext context;
+{    
     public ApplicationDbContext Context => context;
+
+    private readonly ApplicationDbContext context;
 
     public ApplicationRepository(ApplicationDbContext context)
     {
@@ -55,11 +56,11 @@ public class ApplicationRepository : IRepository
         context.Users.RemoveRange(context.Users);
         context.UsersGroups.RemoveRange(context.UsersGroups);
         context.GroupRequests.RemoveRange(context.GroupRequests);
+        context.MistakeResults.RemoveRange(context.MistakeResults);
     }
 
     public async Task SaveChangesAsync()
     {
         await context.SaveChangesAsync();
-    }
-    
+    }    
 }

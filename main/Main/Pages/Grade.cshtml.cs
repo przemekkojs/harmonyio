@@ -262,6 +262,16 @@ namespace Main.Pages
 
                 // przemo tu wlasnie bedziesz tworzyl te elementy html i wkladal zamiast tego co ponizej
                 // ok
+                foreach (var result in userSolutionResults)
+                {
+                    if (result == null)
+                        continue;
+
+                    _repository.Context.Entry(result)
+                        .Collection(er => er.MistakeResults)
+                        .Load();
+                }
+
                 Opinions.Add(userSolutionResults
                     .Select(er => MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak b³êdów.")
                     .ToList());

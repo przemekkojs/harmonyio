@@ -17,7 +17,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<QuizResult> QuizResults { get; set; }
     public DbSet<UsersGroup> UsersGroups { get; set; }
     public DbSet<GroupRequest> GroupRequests { get; set; }
-
+    public DbSet<MistakeResult> MistakeResults { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -117,12 +117,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(gr => gr.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Relacja jeden-do-wielu między GroupRequest a GroupReqest
+        // Relacja jeden-do-wielu między GroupRequest a GroupRequest
         modelBuilder.Entity<GroupRequest>()
             .HasOne(gr => gr.Group)
             .WithMany(u => u.Requests)
             .HasForeignKey(gr => gr.GroupId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Relacja jeden-do-wielu między ExcersiseResult a MistakeResult
+        modelBuilder.Entity<ExcersiseResult>()
+            .HasMany(er => er.MistakeResults)
+            .WithOne(mr => mr.ExcersiseResult)
+            .HasForeignKey(mr => mr.ExcersiseResultId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

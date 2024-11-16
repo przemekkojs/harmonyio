@@ -56,7 +56,8 @@ namespace Main.Pages
             var quizResult = quiz.QuizResults.FirstOrDefault();
             var quizResultExists = quizResult != null && quizResult.Grade != null;
             var quizClosed = quiz.State == Enumerations.QuizState.Closed;
-            var quizHasUsers = Quiz.Participants != null && Quiz.Participants.Count != 0;
+            var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
+            var quizHasUsers = quiz.Participants != null && quiz.Participants.Count != 0;
 
             // quiz result exists or quiz is closed and user is participant
             if ((quizResultExists) || (quizClosed && quizHasUsers))
@@ -67,7 +68,7 @@ namespace Main.Pages
                 return Forbid();
 
             // TODO redirect to some quiz is not started page, adding this to solve page wil add one big if so i think new page is better
-            if (quiz.State != Enumerations.QuizState.Open)
+            if (quizNotOpen)
             {
                 // also here can check if quiz.State == notStarted (published already) and add user as participant
                 // this way the quiz will be in Assigned planned section
@@ -78,7 +79,7 @@ namespace Main.Pages
 
             if (!quizHasUsers)
             {
-                Quiz.Participants.Add(appUser);
+                quiz.Participants.Add(appUser);
                 _repository.Update(Quiz);
                 await _repository.SaveChangesAsync();
             }
@@ -188,15 +189,23 @@ namespace Main.Pages
                 _repository.Add(excersiseResult);
                 await _repository.SaveChangesAsync();
 
+                _repository.Context.Entry(excersiseResult)
+                    .Collection(er => er.MistakeResults)
+                    .Load();
+
                 // Dodawanie b³êdów do bazy
                 var mistakes = algorithmGrade.Item3;
                 var mistakeResults = GenerateMistakeResults(mistakes);
+                var existingMistakeResults = excersiseResult.MistakeResults;
+
+                if (existingMistakeResults != null)
+                    _repository.Context.RemoveRange(existingMistakeResults);
+
+                await _repository.SaveChangesAsync();
 
                 foreach (var mistakeResult in mistakeResults)
                 {
                     mistakeResult.ExcersiseResultId = excersiseResult.Id;
-                    excersiseResult.MistakeResults.Add(mistakeResult);
-
                     _repository.Add(mistakeResult);
                 }
             }
@@ -221,10 +230,10 @@ namespace Main.Pages
             {
                 MistakeResult mistakeResult = new();
 
-                var bar = key.Item1 + 1;
-                var function1 = key.Item2.Item1 + 1;
-                var function2 = key.Item2.Item2 + 1;
-                var bar2 = key.Item2.Item3 + 1;
+                var bar = key.Item1;
+                var function1 = key.Item2.Item1;
+                var function2 = key.Item2.Item2;
+                var bar2 = key.Item2.Item3;
 
                 if (bar != lastBar)
                 {

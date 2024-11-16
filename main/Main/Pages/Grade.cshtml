@@ -327,12 +327,6 @@
         }
     }
 
-    function generateOpinionByList(opinion) {
-        const parsed = JSON.parse(opinion);
-
-        return "";
-    }
-
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
@@ -346,10 +340,19 @@
             const points = userPoints[currentUserIndex][currentQuestionIndex];
             const maxPoints = excersiseMaxes[currentQuestionIndex];
             const pointsSuggestion = userPointsSuggestions[currentUserIndex][currentQuestionIndex];
-            const comment = userComments[currentUserIndex][currentQuestionIndex]
-            const opinion = userOpinions[currentUserIndex][currentQuestionIndex];
+            const comment = userComments[currentUserIndex][currentQuestionIndex];            
+            const opinion = userOpinions[currentUserIndex][currentQuestionIndex] === "" ?
+                "Brak błędów" : userOpinions[currentUserIndex][currentQuestionIndex];
 
-            document.getElementById('algorithm-opinions').innerHTML = generateOpinionByList(opinion);
+            console.log("Opinion", opinion);
+            console.log("User opinions", userOpinions);
+
+            document.getElementById('algorithm-opinions').innerHTML = `
+                <details>
+                    <summary>Opinia algorytmu</summary>
+                    ${opinion}
+                </details>
+            `;
 
             pointsElement.placeholder = pointsSuggestion;
             pointsElement.value = points;
