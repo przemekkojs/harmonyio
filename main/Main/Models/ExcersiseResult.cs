@@ -10,7 +10,6 @@ namespace Main.Models
 		public int MaxPoints { get; set; }
 		public string Comment { get; set; } = "";
 		public int AlgorithmPoints { get; set; }
-		public string AlgorithmOpinion { get; set; } = string.Empty;
 
 		//FOREIGN KEYS
 
@@ -23,6 +22,8 @@ namespace Main.Models
 		// this result may not be linked to quiz result
 		[JsonIgnore]
 		public QuizResult? QuizResult { get; set; } = null;
+
+		public ICollection<MistakeResult> MistakeResults { get; set; } = [];
 	}
 }
 
