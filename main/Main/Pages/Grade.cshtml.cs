@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Main.Enumerations;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
+using NuGet.Packaging;
 
 namespace Main.Pages
 {
@@ -94,6 +95,7 @@ namespace Main.Pages
                 var participantsNotAnsweredIds = quiz.Participants.Select(p => p.Id).Except(participantsAnsweredIds);
                 var newSolutions = await FillMissingExcersiseSolutionsAndResults(participantsNotAnsweredIds, quiz.Excersises);
                 allSolutions.AddRange(newSolutions);
+                participantsAnsweredIds.AddRange(newSolutions.Select(es => es.UserId));
             }
 
             // this is where nobody solved the quiz, maybe should be handled differently
@@ -105,11 +107,11 @@ namespace Main.Pages
             // just to make sure that soutions are in good order
             allSolutions = allSolutions.OrderBy(es => es.ExcersiseId).ToList();
 
-            var usersToSolutions = allSolutions
-                .GroupBy(es => es.User)
+            var userIdToSolutions = allSolutions
+                .GroupBy(es => es.UserId)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
-            var usersToSolutionResults = usersToSolutions
+            var userIdToSolutionResults = userIdToSolutions
                 .ToDictionary(
                     userToSolutions => userToSolutions.Key,
                     userToSolutions => userToSolutions.Value
@@ -117,23 +119,22 @@ namespace Main.Pages
                         .ToList()
                 );
 
-            var usersToQuizResult = usersToSolutions.Keys
+            var userIdToQuizResult = userIdToSolutions.Keys
                 .ToDictionary(
-                    user => user,
-                    user => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == user.Id)
+                    userId => userId,
+                    userId => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == userId)
                 );
 
-            Users = [.. usersToSolutions.Keys];
+            Users = quiz.Participants.Where(p => participantsAnsweredIds.Contains(p.Id)).ToList();
             Users = Users.OrderBy(u => u.LastName).ThenBy(u => u.FirstName).ToList();
-
             UserIds = Users.Select(u => u.Id).ToList();
 
-            foreach (var user in Users)
+            foreach (var userId in UserIds)
             {
-                Grades.Add(usersToQuizResult[user]?.Grade ?? null);
-                Solutions.Add(usersToSolutions[user].Select(es => es.Answer).ToList());
+                Grades.Add(userIdToQuizResult[userId]?.Grade ?? null);
+                Solutions.Add(userIdToSolutions[userId].Select(es => es.Answer).ToList());
 
-                var userSolutionResults = usersToSolutionResults[user];
+                var userSolutionResults = userIdToSolutionResults[userId];
                 Points.Add(userSolutionResults.Select(er => er?.Points ?? 0).ToList());
                 Comments.Add(userSolutionResults.Select(er => er?.Comment ?? "").ToList());
                 PointSuggestions.Add(userSolutionResults.Select(er => er?.AlgorithmPoints ?? 0).ToList());
@@ -180,22 +181,22 @@ namespace Main.Pages
             var allSolutions = quiz.Excersises.SelectMany(e => e.ExcersiseSolutions).ToList().OrderBy(es => es.ExcersiseId).ToList();
             var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
 
-            var usersToSolutions = allSolutions
-                .GroupBy(es => es.User)
+            var userIdToSolutions = allSolutions
+                .GroupBy(es => es.UserId)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
-            var userIdToSolutionResults = usersToSolutions
+            var userIdToSolutionResults = userIdToSolutions
                 .ToDictionary(
-                    userToSolutions => userToSolutions.Key.Id,
+                    userToSolutions => userToSolutions.Key,
                     userToSolutions => userToSolutions.Value
                         .Select(es => es.ExcersiseResult)
                         .ToList()
                 );
 
-            var userIdToQuizResult = usersToSolutions.Keys
+            var userIdToQuizResult = userIdToSolutions.Keys
                 .ToDictionary(
-                    user => user.Id,
-                    user => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == user.Id)
+                    userId => userId,
+                    userId => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == userId)
                 );
 
             var gradingTime = DateTime.Now;
@@ -210,8 +211,6 @@ namespace Main.Pages
                 }
 
                 var curGrade = Grades[i];
-                // user wasnt graded so just continue
-
                 var curQuizResult = userIdToQuizResult[curUserId];
                 if (curQuizResult == null)
                 {
