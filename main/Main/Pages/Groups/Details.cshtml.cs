@@ -23,15 +23,24 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        public string CurrentUserId {get; set;}
+        public string CurrentUserId { get; set; } = "";
 
         public bool IsAdmin { get; set; }
 
         public bool IsMaster { get; set; }
 
+        public bool IsParticipant { get; set; }
+
         public UsersGroup Group { get; set; } = null!;
 
-        public ApplicationUser GroupMaster { get; set; } = null!;
+        public IEnumerable<Quiz> ActiveQuizzes { get; set; } = [];
+        public IEnumerable<Quiz> FutureQuizzes { get; set; } = [];
+        public IEnumerable<Quiz> ToGradeQuizzes { get; set; } = [];
+        public IEnumerable<Quiz> GradedQuizzes { get; set; } = [];
+
+        public HashSet<int> UserSolvedQuizIds { get; set; } = [];
+        public HashSet<int> UserGradedQuizIds { get; set; } = [];
+
 
         [BindProperty]
         public string UserId { get; set; } = "";
@@ -66,6 +75,7 @@ namespace Main.Pages
                     .Include(g => g.Quizzes)
                         .ThenInclude(q => q.Excersises)
                             .ThenInclude(e => e.ExcersiseSolutions)
+                                .ThenInclude(es => es.ExcersiseResult)
                     .Include(g => g.Quizzes)
                         .ThenInclude(q => q.Creator)
                     .Include(g => g.Quizzes)
@@ -81,14 +91,13 @@ namespace Main.Pages
             {
                 return RedirectToPage("/Error");
             }
-
-            Group = group;
-
-            GroupMaster = group.MasterUser;
-
-            IsMaster = GroupMaster.Id == appUser.Id;
+            IsMaster = group.MasterId == appUser.Id;
 
             IsAdmin = IsMaster || group.Teachers.Contains(appUser);
+
+            IsParticipant = group.Students.Contains(appUser);
+
+            Group = group;
 
             CurrentUserId = appUser.Id;
 
@@ -96,6 +105,44 @@ namespace Main.Pages
             {
                 return Forbid();
             }
+
+            var quizzes = group.Quizzes.Reverse();
+            var openOrClosedQuizzes = quizzes.Where(q => q.State != Enumerations.QuizState.NotStarted);
+
+            UserSolvedQuizIds = openOrClosedQuizzes.Where(q => q.Excersises.Any(e => e.ExcersiseSolutions.Any(es => es.UserId == CurrentUserId))).Select(q => q.Id).ToHashSet();
+            UserGradedQuizIds = openOrClosedQuizzes.Where(q => q.QuizResults.Any(qr => qr.UserId == CurrentUserId && qr.Grade != null)).Select(q => q.Id).ToHashSet();
+
+            ActiveQuizzes = IsAdmin ?
+                openOrClosedQuizzes.Where(q => q.State == Enumerations.QuizState.Open) :
+                openOrClosedQuizzes.Where(
+                    q => q.State == Enumerations.QuizState.Open &&
+                    !UserSolvedQuizIds.Contains(q.Id));
+
+
+            FutureQuizzes = quizzes.Where(q => q.State == Enumerations.QuizState.NotStarted);
+
+            ToGradeQuizzes = IsAdmin ?
+                openOrClosedQuizzes.Where(
+                    q => q.Excersises.Any(e => e.ExcersiseSolutions.Any(es => es.ExcersiseResult?.QuizResultId == null)) ||
+                        q.QuizResults.Any(qr => qr.Grade == null) ||
+                        (q.State == Enumerations.QuizState.Closed && q.QuizResults.Where(qr => qr.Grade != null).Count() != q.Participants.Count)
+                    ) :
+                openOrClosedQuizzes.Where(
+                    q => (UserSolvedQuizIds.Contains(q.Id) && !UserGradedQuizIds.Contains(q.Id)) ||
+                    (q.State == Enumerations.QuizState.Closed && !UserGradedQuizIds.Contains(q.Id)));
+
+            GradedQuizzes = IsAdmin ?
+                openOrClosedQuizzes.Where(
+                    q => (
+                            q.QuizResults.Count > 0 &&
+                            q.Excersises.All(e => e.ExcersiseSolutions.All(es => es.ExcersiseResult != null && es.ExcersiseResult.QuizResultId != null)) &&
+                            q.QuizResults.All(qr => qr.Grade != null)
+                        ) ||
+                        (
+                            q.State == Enumerations.QuizState.Closed &&
+                            q.QuizResults.Where(qr => qr.Grade != null).Count() == q.Participants.Count
+                        )) :
+                openOrClosedQuizzes.Where(q => UserGradedQuizIds.Contains(q.Id));
 
             return Page();
         }
@@ -180,7 +227,7 @@ namespace Main.Pages
         }
 
         public async Task<IActionResult> OnPostAddUsers()
-        {            
+        {
             var appUser = await _userManager.GetUserAsync(User);
             if (appUser == null)
             {

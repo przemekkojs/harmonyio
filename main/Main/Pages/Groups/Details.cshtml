@@ -4,22 +4,6 @@
 @{
     var teacherRequests = Model.Group.Requests.Where(q => q.ForTeacher).Select(q => q.User);
     var studentRequests = Model.Group.Requests.Where(q => !q.ForTeacher).Select(q => q.User);
-    var teachers = Model.Group.Teachers;
-    var students = Model.Group.Students;
-
-    var futureQuizzes = Model.Group.Quizzes.Where(q => q.State == Enumerations.QuizState.NotStarted);
-    
-    var activeQuizzes = Model.IsAdmin ?
-        Model.Group.Quizzes.Where(q => q.State == Enumerations.QuizState.Open) :
-        Model.Group.Quizzes.Where(q => q.State == Enumerations.QuizState.Open && !q.QuizResults.Any(qr => qr.UserId == Model.CurrentUserId));
-
-    var toGradeQuizzes = Model.IsAdmin ?
-        Model.Group.Quizzes.Where(q => q.State != Enumerations.QuizState.NotStarted && q.QuizResults.Count < q.Excersises.First().ExcersiseSolutions.Count) :
-        Model.Group.Quizzes.Where(q => q.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.CurrentUserId) && !q.QuizResults.Any(qr => qr.UserId == Model.CurrentUserId));
-    
-    var gradedQuizzes = Model.IsAdmin ?
-        Model.Group.Quizzes.Where(q => q.State != Enumerations.QuizState.NotStarted && q.QuizResults.Count > 0 && q.QuizResults.Count == q.Excersises.First().ExcersiseSolutions.Count) :
-        Model.Group.Quizzes.Where(q => q.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.CurrentUserId) && q.QuizResults.Any(qr => qr.UserId == Model.CurrentUserId));
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
@@ -94,14 +78,14 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto" id="student-list-count">(@(students.Count()))</span>
+                        <span class="me-auto" id="student-list-count">(@(Model.Group.Students.Count))</span>
                     </div>
 
                     <div class="d-flex flex-column">
                         @{
                             int studentIndex = 0;
                         }
-                        @foreach (var student in students)
+                        @foreach (var student in Model.Group.Students)
                         {
                             <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
                                 id="students-list-element-@(studentIndex)">
@@ -161,19 +145,19 @@
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
                     <div class="d-flex flex-row fw-bold mb-2">
                         <span class="me-1">Aktywni</span>
-                        <span class="me-auto" id="teacher-list-count">(@(teachers.Count() + 1))</span>
+                        <span class="me-auto" id="teacher-list-count">(@(Model.Group.Teachers.Count + 1))</span>
                     </div>
 
                     <div class="d-flex flex-column">
                         <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
                             <i class="fas fa-crown icon-sm me-1"></i>
 
-                            <span class="text-truncate me-2">@(Model.GroupMaster.FullName)</span>
+                            <span class="text-truncate me-2">@(Model.Group.MasterUser.FullName)</span>
                         </div>
                         @{
                             int teacherIndex = 0;
                         }
-                        @foreach (var teacher in teachers)
+                        @foreach (var teacher in Model.Group.Teachers)
                         {
                             <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
                                 id="teachers-list-element-@(teacherIndex)">
@@ -235,24 +219,24 @@
                     @{
                         var first = true;
                     }
-                    @foreach (var quiz in activeQuizzes)
+                    @foreach (var quiz in Model.ActiveQuizzes)
                     {
-                        <div class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
+                        <div
+                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
                             <div class="flex-grow-1 d-flex flex-column">
                                 <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Pozostało:</span>
-                                    <span id="to-solve-time-@(quiz.Id)">
-                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
-                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">Zamknięcie:</span>
+                                        @quiz.CloseDate
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="fas fa-music icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Zadania:</span>
-                                    <span>@(quiz.Excersises.Count())</span>
+                                    <span>@(quiz.Excersises.Count)</span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center">
                                     <i class="fas fa-user icon-sm me-2"></i>
@@ -261,14 +245,12 @@
                                 </div>
                             </div>
 
-                            @if (!Model.IsAdmin)
+                            @if (Model.IsParticipant && !Model.UserGradedQuizIds.Contains(quiz.Id))
                             {
-
                                 <div class="d-flex flex-column h-100">
                                     <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">
-                                        @* @(quiz.Excersises.First().ExcersiseSolutions.First().UserId) *@
-
-                                        @(quiz.Excersises.First().ExcersiseSolutions.Any(es => es.UserId == Model.CurrentUserId) ? "Edytuj" : "Rozwiąż")
+                                        @(Model.UserSolvedQuizIds.Contains(quiz.Id)
+                                            ? "Edytuj" : "Rozwiąż")
                                     </a>
                                 </div>
                             }
@@ -290,7 +272,7 @@
                     @{
                         first = true;
                     }
-                    @foreach (var quiz in futureQuizzes)
+                    @foreach (var quiz in Model.FutureQuizzes)
                     {
                         <div
                             class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first? "mt-2" : "")">
@@ -299,10 +281,9 @@
 
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Dostępne za:</span>
-                                    <span id="future-quiz-time-@(quiz.Id)">
-                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
-                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">Otwarcie:</span>
+                                        @quiz.OpenDate
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center mb-2">
@@ -323,7 +304,7 @@
             </div>
         </div>
 
-         <div id="gradeQuizesSection" class="h-100 d-flex flex-row overflow-auto px-3 d-none">
+        <div id="gradeQuizesSection" class="h-100 d-flex flex-row overflow-auto px-3 d-none">
             <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3"
                 style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
@@ -336,7 +317,7 @@
                     @{
                         first = true;
                     }
-                    @foreach (var quiz in toGradeQuizzes)
+                    @foreach (var quiz in Model.ToGradeQuizzes)
                     {
                         <div
                             class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "mt-2" : "")">
@@ -345,17 +326,20 @@
 
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Pozostało:</span> @*Lub Zakończono*@
-                                    <span id="to-grade-time-@(quiz.Id)">
-                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
-                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">@(quiz.State == QuizState.Open ? "Zamknięcie:" :
+                                        "Zamknięto:")</span>
+                                        @quiz.CloseDate
                                     </span>
                                 </div>
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="fas fa-user-group icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Wypełniono:</span>
-                                    @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
-                                </div>
+                                @if (Model.IsAdmin)
+                                {
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="fas fa-user-group icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Wypełniono:</span>
+                                        @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
+                                    </div>
+                                }
                                 <div class="d-flex flex-row align-items-center">
                                     <i class="fas fa-user icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Twórca:</span>
@@ -369,6 +353,24 @@
                                     <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
                                         class="btn btn-primary ms-auto mt-auto">Oceń</a>
                                 </div>
+                            }
+                            else
+                            { // dont change structure of this if, it must be like this
+                                @if (quiz.State == QuizState.Open)
+                                {
+                                    <div class="d-flex flex-column h-100">
+                                        <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">
+                                            Edytuj
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="d-flex flex-column h-100">
+                                        <a asp-page="/Browse" asp-route-id="@(quiz.Id)"
+                                            class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
+                                    </div>
+                                }
                             }
                         </div>
                         first = false;
@@ -388,34 +390,29 @@
                     @{
                         first = true;
                     }
-                    @foreach (var quiz in gradedQuizzes)
+                    @foreach (var quiz in Model.GradedQuizzes)
                     {
                         <div
                             class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first? "mt-2" : "")">
                             <div class="flex-grow-1 d-flex flex-column">
-                                
-                                @if (Model.IsAdmin) {
-                                    <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
-                                } else {
-                                    <div class="d-flex flex-row">
-                                        <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
-                                        <div class="fw-bold ms-auto fs-5">@(((Grade)(quiz.QuizResults.First(qr => qr.UserId == Model.CurrentUserId).Grade)!).AsString())</div>
-                                    </div>
-                                }
+                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Pozostało:</span> @*Lub Zakończono*@
-                                    <span id="graded-time-@(quiz.Id)">
-                                        @*TODO: WYPEŁNIJ TO ZA POMOCĄ JS, TAK ŻEBY AKTUALIZOWAŁO SIĘ CO SEKUNDĘ. KOD MOŻNA
-                                        PRZEKOPIOWAĆ Z EKRANU CREATED*@
+                                    <span class="text-truncate">
+                                        <span class="fw-bold">@(quiz.State == QuizState.Open ? "Zamknięcie:" :
+                                        "Zamknięto:")</span>
+                                        @quiz.CloseDate
                                     </span>
                                 </div>
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="fas fa-user-group icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Wypełniono:</span>
-                                    @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
-                                </div>
+                                @if (Model.IsAdmin)
+                                {
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="fas fa-user-group icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Wypełniono:</span>
+                                        @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
+                                    </div>
+                                }
                                 <div class="d-flex flex-row align-items-center">
                                     <i class="fas fa-user icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Twórca:</span>
@@ -428,6 +425,16 @@
                                 <div class="d-flex flex-column h-100">
                                     <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
                                         class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex flex-column h-100">
+                                    <div class="fw-bold ms-auto fs-5">Ocena: @(((Grade)(quiz.QuizResults.First(qr => qr.UserId
+                                ==
+                                Model.CurrentUserId).Grade)!).AsString())</div>
+                                    <a asp-page="/Browse" asp-route-id="@(quiz.Id)"
+                                        class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
                                 </div>
                             }
                         </div>
