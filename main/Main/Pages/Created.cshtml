@@ -29,10 +29,10 @@
         class="w-100 w-md-50 flex-grow-1 overflow-md-auto flex-column d-flex bg-white rounded shadow px-3 pt-3 me-3 mb-3">
 
         @if (
-        Model.ReadyToGrade.Count != 0 ||
-        Model.Opened.Count != 0 ||
-        Model.NotOpened.Count != 0 ||
-        Model.Closed.Count != 0
+            Model.ReadyToGrade.Count != 0 ||
+            Model.Opened.Count != 0 ||
+            Model.NotOpened.Count != 0 ||
+            Model.Closed.Count != 0
         )
         {
             @if (Model.ReadyToGrade.Count > 0)
@@ -71,10 +71,11 @@
                         <div class="d-flex flex-column h-100 ms-2">
                             @if(quiz.State == QuizState.Open) {
                                 var callbackUrl = Url.Page(
-                                                    "/Solve",
+                                                    "/Join",
                                                     pageHandler: null,
                                                     values: new { code = quiz.Code },
                                                     protocol: Request.Scheme);
+
                                 <div class="d-flex flex-row">
                                     <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
                                         data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
@@ -103,7 +104,7 @@
                 @foreach (var quiz in Model.Opened)
                 {
                     var callbackUrl = Url.Page(
-                                        "/Solve",
+                                        "/Join",
                                         pageHandler: null,
                                         values: new { code = quiz.Code },
                                         protocol: Request.Scheme);
@@ -165,10 +166,10 @@
                 @foreach (var quiz in Model.NotOpened)
                 {
                     var callbackUrl = Url.Page(
-                    "/Solve",
-                    pageHandler: null,
-                    values: new { code = quiz.Code },
-                    protocol: Request.Scheme);
+                        "/Join",
+                        pageHandler: null,
+                        values: new { code = quiz.Code },
+                        protocol: Request.Scheme);
 
                     <div class="border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
                         <div class="flex-grow-1 d-flex flex-column flex-column flex-basis-0 overflow-hidden">
