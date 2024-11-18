@@ -1,0 +1,96 @@
+@page
+@model Main.Pages.JoinModel
+@{
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center mx-auto p-4" style="min-height: 100%;">
+    <div class="bg-white shadow rounded d-flex flex-column py-3" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center fw-bold px-3">Dołączono do quizu!</h2>
+
+        <i class="fas fa-user-graduate my-4 w-100 text-center" style="font-size: 100px;"></i>
+
+        <p class="px-3">Udało ci się pomyślnie dołączyć do quizu <span class="fw-bold">"@Model.Quiz.Name"</span>! Został on dodany do twoich przypisanych quizów.</p>
+
+        <div class="d-flex flex-column gap-2 my-3 px-3 mx-auto" style="max-width: 100%;">
+            <div class="d-flex flex-row w-100">
+                <i class="fas fa-user icon-sm me-2"></i>
+                <span class="text-truncate w-100">
+                    <span class="fw-bold">Twórca:</span>
+                    @Model.Quiz.Creator.FullName
+                </span>
+            </div>
+            <div class="d-flex flex-row w-100">
+                <i class="fas fa-music icon-sm me-2"></i>
+                <span class="text-truncate w-100">
+                    <span class="fw-bold">Zadania:</span>
+                    @Model.Quiz.Excersises.Count
+                </span>
+            </div>
+            <div class="d-flex flex-row w-100">
+                <i class="far fa-clock icon-sm me-2"></i>
+                <span class="text-truncate w-100">
+                    <span id="opens-in" class="fw-bold">Otwarcie za:</span>
+                    <span id="closes-in" class="fw-bold">Zamknięcie za:</span>
+                    <span id="timer">12d 17h 13m 11s</span>
+                </span>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="d-flex flex-row justify-content-center align-items-center px-3 modal-footer gap-2">
+            <a asp-page="Assigned" class="btn btn-secondary btn-std-width">Powrót</a>
+            <a asp-page="Solve" asp-route-code="@Model.Quiz.Code" class="btn btn-primary btn-std-width @(Model.Quiz.State == Enumerations.QuizState.Open ? "" : "d-none")">Rozwiąż</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("layout-main-container").classList.remove("overflow-auto");
+</script>
+
+<script>
+    const isOpen = @((Model.Quiz.State == Enumerations.QuizState.Open).ToString().ToLower());
+
+    const timer = document.getElementById('timer');
+
+    if (isOpen){
+        document.getElementById('opens-in').classList.add('d-none');
+        document.getElementById('closes-in').classList.remove('d-none');
+    } else {
+        document.getElementById('opens-in').classList.remove('d-none');
+        document.getElementById('closes-in').classList.add('d-none');
+    }
+
+    const endDate = new Date("@(Model.Quiz.State == Enumerations.QuizState.Open ? Model.Quiz.CloseDate.ToString("o") : Model.Quiz.OpenDate.ToString("o"))");
+    function updateTimer() {
+        const now = new Date();
+        const timeRemaining = endDate - now;
+
+        if (timeRemaining <= 0) {
+            document.getElementById("countdown").innerText = "0m 0s";
+            return;
+        }
+
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        let displayText = "";
+
+        if (days > 0) {
+            displayText = `${days}d ${hours}h`;
+        } else if (hours > 0) {
+            displayText = `${hours}h ${minutes}m`;
+        } else {
+            displayText = `${minutes}m ${seconds}s`;
+        }
+
+        timer.innerText = displayText;
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+
+</script>
