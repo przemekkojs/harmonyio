@@ -1,0 +1,109 @@
+@page
+@model Main.Pages.IndexModel
+@{
+}
+
+<style>
+    body {
+        background: url('/images/bg-pattern-dark.png') repeat, white;
+        background-size: 38vw 38vw, cover;
+        background-position: 0 0, center;
+        background-attachment: fixed;    
+    }
+
+    .carousel-control-next,
+    .carousel-control-prev  {
+        filter: invert(100%);
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 10%;
+    }
+
+    .carousel-inner .carousel-item > div {
+        padding: 0 10%;
+    }
+
+    .img-blob {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; /* Zapewnia dopasowanie obrazu do kontenera */
+        object-position: center; /* Centruje obraz w kontenerze */
+    }
+</style>
+
+<div class="h-100 w-100 pb-4">
+    <div id="mainCarousel" class="carousel slide py-3 d-flex align-items-center" data-bs-ride="carousel" style="min-height: 100%">
+        <div class="carousel-inner d-flex align-items-center">
+            <!-- Slide 1: Primary Background -->
+            <div class="carousel-item active">
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center h-100 gap-5">
+                    <div class="w-100 w-md-50 d-flex flex-column">
+                        <div class="display-3 text-primary fw-bold font-title">Harmony.io</div>
+                        <div class="h2 text-primary fw-semibold">Twórz i rozwiązuj quizy harmoniczne</div>
+                        <p class="fs-5 mb-5 mt-4">Za pomocą naszego naszego specjalnego edytora funkcjI harmonicznych możesz z łatwością tworzyć zadania funkcyjne. Inni będą je następnie rozwiązywać poprzez układanie nutek na pięciolinii. Tak, to na prawdę tak proste!</p>
+                        <div class="d-flex flex-row flex-wrap gap-3">
+                            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-std-width fs-5">Zarejestruj się</a>
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-std-width fs-5">Zaloguj się</a>
+                        </div>
+                    </div>
+                    <div class="w-100 w-md-50 h-100 d-flex justify-content-center align-items-center">
+                        <img src="images/people-blob2.png" alt="Blob Image" class="img-blob">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Secondary Background -->
+            <div class="carousel-item">
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center h-100 gap-5">
+                    <div class="w-100 w-md-50 d-flex flex-column">
+                        <div class="display-3 text-other1 fw-bold font-title">Harmony.io</div>
+                        <div class="h2 text-other1 fw-semibold">Udostępniaj w prosty sposób</div>
+                        <p class="fs-5 mb-5 mt-4">Utworzone quizy udostępniać możesz za pomocą linku, kodu, czy bezpośrednio wysyłając zaproszenie przez email. Możesz również tworzyć specjalne grupy uczniów, dzięki którym możesz w prosty sposób przypisać quiz całej klasie!</p>
+                        <div class="d-flex flex-row flex-wrap gap-3">
+                            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-other1 btn-std-width fs-5">Zarejestruj się</a>
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-other1 btn-std-width fs-5">Zaloguj się</a>
+                        </div>
+                    </div>
+                    <div class="w-100 w-md-50 h-100 d-flex justify-content-center align-items-center">
+                        <img src="images/people-blob1.png" alt="Blob Image" class="img-blob">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Dark Background -->
+            <div class="carousel-item">
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center h-100 gap-5">
+                    <div class="w-100 w-md-50 d-flex flex-column">
+                        <div class="display-3 text-other2 fw-bold font-title">Harmony.io</div>
+                        <div class="h2 text-other2 fw-semibold">Oceniaj z pomocą naszego algorytmu</div>
+                        <p class="fs-5 mb-5 mt-4">Żmudne ocenianie nieczytelnych rozwiązań na papierze to już przeżytek! Nasz algorytm sam sprawdzi i oceni przesłane rozwiązania, wypisując wszystkie błędy. Z czymś się nie zgadzasz? Nie martw się! Zawsze możesz nadpisać punktację i dodać własny komentarz.</p>
+                        <div class="d-flex flex-row flex-wrap gap-3">
+                            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-other2 btn-std-width fs-5">Zarejestruj się</a>
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-other2 btn-std-width fs-5">Zaloguj się</a>
+                        </div>
+                    </div>
+                    <div class="w-100 w-md-50 h-100 d-flex justify-content-center align-items-center">
+                        <img src="images/people-blob3.png" alt="Blob Image" class="img-blob">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev d-none d-md-block" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next d-none d-md-block" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<script>
+    document.getElementById("layout-main-container").classList.remove("container");
+</script>
+

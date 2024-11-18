@@ -1,9 +1,16 @@
 @page
+@using Main.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 @model Main.Pages.IndexModel
 @{
 }
 
 <style>
+    body {
+        padding-top: 68px;
+    }
+
     .tile {
         width: 300px;
         max-width: 70vw;
@@ -19,37 +26,42 @@
     }
 </style>
 
-<div class="d-flex flex-column justify-content-center align-items-center p-4" style="min-height: 100%;">
-    <div class="text-center text-white font-title display-1 mb-4">
-        Harmony.io
-    </div>
-    <div class="container-fluid">
-        <div class="d-flex flex-wrap justify-content-center" style="gap: 30px;">
-            @*Created*@
-            <a asp-page="Assigned"
-                class="tile shadow bg-white flex-item d-flex align-items-center justify-content-center flex-column p-4">
-                <h3 class="mb-2 text-dark fw-bold">Przypisane<br />Quizy</h3>
-            </a>
+@if (SignInManager.IsSignedIn(User)) 
+{
+    <div class="d-flex flex-column justify-content-center align-items-center p-4" style="min-height: 100%;">
+        <div class="text-center text-white font-title display-1 mb-4">
+            Harmony.io
+        </div>
+        <div class="container-fluid">
+            <div class="d-flex flex-wrap justify-content-center" style="gap: 30px;">
+                @*Created*@
+                <a asp-page="Assigned"
+                    class="tile shadow bg-white flex-item d-flex align-items-center justify-content-center flex-column p-4">
+                    <h3 class="mb-2 text-dark fw-bold">Przypisane<br />Quizy</h3>
+                </a>
 
-            @*Join*@
-            <form method='get' action="/join"
-                class="tile shadow bg-white flex-item d-flex align-items-center justify-content-center flex-column p-4">
-                <h3 class="mb-3 text-dark fw-bold">Dołącz</h3>
-                <input id="code" class="form-control text-center fw-bold mb-1" name="code" type="text"
-                    placeholder="Kod quizu" required />
-                <button type="submit" class="btn btn-secondary fw-bold w-100 m-2">Wprowadź</button>
-            </form>
+                @*Join*@
+                <form method='get' action="/join"
+                    class="tile shadow bg-white flex-item d-flex align-items-center justify-content-center flex-column p-4">
+                    <h3 class="mb-3 text-dark fw-bold">Dołącz</h3>
+                    <input id="code" class="form-control text-center fw-bold mb-1" name="code" type="text"
+                        placeholder="Kod quizu" required />
+                    <button type="submit" class="btn btn-secondary fw-bold w-100 m-2">Wprowadź</button>
+                </form>
 
-            @*Assigned*@
-            <a asp-page="Created"
-                class="tile shadow bg-white flex-item d-flex align-items-center justify-content-center flex-column p-4">
-                <h3 class="mb-2 text-dark fw-bold">Utworzone<br />Quizy</h3>
-            </a>
+                @*Assigned*@
+                <a asp-page="Created"
+                    class="tile shadow bg-white flex-item d-flex align-items-center justify-content-center flex-column p-4">
+                    <h3 class="mb-2 text-dark fw-bold">Utworzone<br />Quizy</h3>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.getElementById("main-navbar").classList.remove("mb-3");
-    document.getElementById("layout-main-container").classList.remove("container");
-</script>
+    <script>
+        document.getElementById("layout-main-container").classList.remove("container");
+    </script>
+} else 
+{
+    <partial name="_IndexUnsignedPartial" /> 
+}
