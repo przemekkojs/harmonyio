@@ -119,6 +119,9 @@ przypadku niepowodzenia
 
         emailListContainer.innerHTML = "";
         emailsNumber.innerText = "(0)";
+        validationText.classList.add('d-none');
+        emailInput.classList.remove("input-error");
+        emailInput.value = "";
     }
 
     addUserButton.addEventListener('click', async function (event) {
