@@ -1,4 +1,5 @@
-﻿using Algorithm.New.Utils;
+﻿using Algorithm.New.Music;
+using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
@@ -21,12 +22,19 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
             var stack = stacks[0];
 
-            bool sopranoAlto = Interval.IsLower(stack.Soprano, stack.Alto);
-            bool altoTenore = Interval.IsLower(stack.Alto, stack.Tenore);
-            bool tenoreBass = Interval.IsLower(stack.Tenore, stack.Bass);
-            bool bassNotNull = stack.Bass != null;
+            bool sopranoAlto = NoteCheckResult(stack.Soprano, stack.Alto);
+            bool altoTenore = NoteCheckResult(stack.Alto, stack.Tenore);
+            bool tenoreBass = NoteCheckResult(stack.Tenore, stack.Bass);            
 
-            return sopranoAlto && altoTenore && tenoreBass && bassNotNull;
+            return sopranoAlto && altoTenore && tenoreBass;
+        }
+
+        private static bool NoteCheckResult(Note? note1, Note? note2)
+        {
+            if (note1 != null && note2 != null)
+                return Interval.IsLower(note2, note1);
+            else
+                return true;
         }
     }
 }

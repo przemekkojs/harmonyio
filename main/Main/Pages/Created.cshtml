@@ -36,7 +36,7 @@
         {
             @if (Model.ReadyToGrade.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Do Oceny</div>
+                <div class="fw-bold fs-4 mb-3">Do Oceny (@Model.ReadyToGrade.Count)</div>
 
                 @foreach (var quiz in Model.ReadyToGrade)
                 {
@@ -98,7 +98,7 @@
 
             @if (Model.Opened.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Otwarte</div>
+                <div class="fw-bold fs-4 mb-3">Otwarte (@Model.Opened.Count)</div>
 
                 @foreach (var quiz in Model.Opened)
                 {
@@ -160,7 +160,7 @@
 
             @if (Model.NotOpened.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zaplanowane</div> 
+                <div class="fw-bold fs-4 mb-3">Zaplanowane (@Model.NotOpened.Count)</div>
 
                 @foreach (var quiz in Model.NotOpened)
                 {
@@ -213,7 +213,7 @@
 
             @if (Model.Closed.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zamknięte</div>
+                <div class="fw-bold fs-4 mb-3">Zamknięte (@Model.Closed.Count)</div>
 
                 @foreach (var quiz in Model.Closed)
                 {
@@ -263,15 +263,21 @@
 
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3">
         <div class="mb-3 d-flex flex-row">
-            <div class="fw-bold fs-4 ">Szkice</div>
+            <div class="fw-bold fs-4 ">Szkice (@Model.Sketches.Count)</div>
             <a asp-page="Creator" class="btn btn-primary ms-auto text-nowrap">
                <i class="fas fa-plus me-1"></i>
                Utwórz
             </a>
         </div>
+
+        <div>
+            <span id="quizValidation"></span>
+        </div>
         
         @foreach (var quiz in Model.Sketches)
         {
+            
+
             <div class="quiz border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
                 <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                     <div class="fw-bold fs-5 text-truncate">@quiz.Name</div>
@@ -300,8 +306,13 @@
                         </a>
                     </div>
 
-                    <a href="#" class="btn btn-primary mt-auto" data-bs-toggle="modal" data-bs-target="#publishPopup"
-                        data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-callback-name="publish">
+                    <a href="#"
+                        class="btn btn-primary mt-auto"
+                        data-bs-toggle="modal"
+                        data-bs-target="#publishPopup"
+                        data-quiz-id="@quiz.Id"
+                        data-quiz-name="@quiz.Name"
+                        data-callback-name="publish">
                         Opublikuj
                     </a>
                 </div>
@@ -328,14 +339,15 @@
         document.getElementById("deleteFormForQuiz").submit();
     }
 
-    function publish(quizId, openDateTime, closeDateTime) {
+    window.publish = async function (quizId, openDateTime, closeDateTime) {
         //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
 
+        const form = document.getElementById("publishFormForQuiz");
         document.getElementById("publishFormQuizId").value = quizId;
         document.getElementById("publishFormOpenDateForQuiz").value = openDateTime;
         document.getElementById("publishFormCloseDateForQuiz").value = closeDateTime;
-        document.getElementById("publishFormForQuiz").submit();
-
+        form.submit();
+        
         //TODO: Po opublikowaniu powinien od razu włączyć się assign popup
         // (można go włączyć przyciskiem Udostępnij, ale dobrze jakby włączał się też automatycznie)
     }
@@ -421,5 +433,4 @@
         });
 
     }
-
 </script>

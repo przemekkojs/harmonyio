@@ -108,7 +108,7 @@ namespace Main.Pages
                 var questionEmpty = string.IsNullOrWhiteSpace(question);                
 
                 if (questionEmpty)
-                    return false;                
+                    return false;
             }
 
             return true;

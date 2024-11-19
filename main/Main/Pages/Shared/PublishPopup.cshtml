@@ -138,6 +138,7 @@ argumenty - quizId, openDate i closeDate
         const closeDateTimeString = `${closeDate}T${closeHour}:00:00.000Z`;
 
         const callbackName = publishModalButton.getAttribute('data-callback-name');
+
         if (typeof window[callbackName] === 'function') {
             const quizId = publishModalButton.getAttribute('data-quiz-id');
             window[callbackName](quizId, openDateTimeString, closeDateTimeString);

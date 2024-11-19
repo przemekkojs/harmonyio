@@ -60,15 +60,25 @@ export class BarContainer {
             this.bars.push(newBar);
 
             this.container.insertBefore(newBar.functionContainer.container, this.addBarButton);
-        }        
+        }      
+
+        // If more bars than one were added, show delete button.
+        const bar = this.bars[0];
+        const deleteButton = bar.functionContainer.deleteButton;
+
+        if (this.bars.length == 1)
+            deleteButton.className = "button-medium custom-button empty-button";
+        else
+            deleteButton.className = "button-medium custom-button trash-button";     
     }
 
     removeBar(barIndex) {
         const barsLength = this.bars.length;
 
         // Disable deleting only one bar
-        if (barsLength < 2)
+        if (barsLength == 1) {
             return;
+        }            
 
         if (barIndex >= barsLength)
             return;
@@ -78,6 +88,12 @@ export class BarContainer {
         this.bars.splice(barIndex, 1);
         this.setId(this.taskIndex, barIndex);        
         this.container.removeChild(currentBar.functionContainer.container);
+
+        if (this.bars.length == 1) {
+            const bar = this.bars[0];
+            const deleteButton = bar.functionContainer.deleteButton;
+            deleteButton.className = "button-medium custom-button empty-button";
+        }
     }
 
     setId(taskIndex, startBarIndex=0) {

@@ -11,8 +11,27 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
 
         public StackMistake(List<int> barIndexes, List<int> verticalIndexes, Rule rule)
         {
-            BarIndexes = barIndexes;
-            VerticalIndexes = verticalIndexes;
+            List<int> tmpBars = [];
+            List<int> tmpFunctions = [];
+
+            foreach(var barIndex in barIndexes)
+            {
+                if (barIndex < 0)
+                    tmpBars.Add(0);
+                else
+                    tmpBars.Add(barIndex);
+            }
+
+            foreach (var verticalIndex in verticalIndexes)
+            {
+                if (verticalIndex < 0)
+                    tmpFunctions.Add(0);
+                else
+                    tmpFunctions.Add(verticalIndex);
+            }
+
+            BarIndexes = tmpBars;
+            VerticalIndexes = tmpFunctions;
             MistakeCode = rule.Id;
 
             GenerateDescription();

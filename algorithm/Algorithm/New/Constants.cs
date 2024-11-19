@@ -46,7 +46,8 @@ namespace Algorithm.New
         // TODO: Klasa
         public static readonly List<Algorithm.Rules.Problem.Rule> ProblemSettings =
         [
-            new SubdominantAfterDominant()
+            new SubdominantAfterDominant(),
+            new EmptyFunction()
         ];
 
         // public static readonly VoiceDistance VoiceDistance = new();
