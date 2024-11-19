@@ -173,6 +173,8 @@ przypadku niepowodzenia
         assignedEmails = [];
         emailListContainer.innerHTML = "";
         emailsNumber.innerHTML = "(0)";
+        emailInput.value = "";
+        emailInput.classList.remove("input-error");
     }
 
     assignSaveButton.addEventListener('click', async function (event) {
