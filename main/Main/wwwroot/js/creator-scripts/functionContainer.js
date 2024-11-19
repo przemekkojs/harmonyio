@@ -2,8 +2,6 @@
 
 export class FunctionContainer {
     constructor(bar, maxFunctionsCount) {
-        //console.log("FunctionContainer");
-
         this.maxFunctionsCount = maxFunctionsCount;
         this.bar = bar;
         this.taskIndex = bar.taskIndex;
@@ -46,11 +44,10 @@ export class FunctionContainer {
         this.container.appendChild(this.barInfoPlaceholder);
         this.container.appendChild(this.addFunctionButton);
 
-        // this.addFunction();
+        //this.addFunction();
     }
 
     addFunction() {
-        //console.log("FunctionContainer.addFunction()");
         const functionCount = this.functions.length;
 
         if (functionCount < this.maxFunctionsCount) {
@@ -68,21 +65,17 @@ export class FunctionContainer {
             return;
         
         const currentFunction = this.functions[functionIndex];
-        //console.log("FunctionContainer: removeFunction(): functionIndex", functionIndex);
-        //console.log("FunctionContainer: removeFunction(): currentFunction", currentFunction);
 
         this.functions.splice(functionIndex, 1);
         this.setId(this.taskIndex, this.barIndex, functionIndex);
-
-        //console.log("FunctionContainer: removeFunction(): container", this.container);
-        //console.log("FunctionContainer: removeFunction(): currentFunction.functionCreator.container", currentFunction.functionCreator.container);
         this.container.removeChild(currentFunction.functionCreator.container);
     }
 
-    setId(taskIndex, barIndex, startFunctionIndex=0) {
-        this.addFunctionButton.removeEventListener('click', this.handleAddFunction);
+    setId(taskIndex, barIndex, startFunctionIndex = 0) {     
+        console.log("Set bar index", this.barIndex, "to", barIndex);
         this.taskIndex = taskIndex;
         this.barIndex = barIndex;
+        this.addFunctionButton.removeEventListener('click', this.handleAddFunction);
 
         const functionCount = this.functions.length;
 
@@ -92,7 +85,12 @@ export class FunctionContainer {
         }
 
         this.addFunctionButton.id = `add-function-${this.taskIndex}-${this.barIndex}`;
+        
         this.container.id = `bar-${this.taskIndex}-${this.barIndex}`;
+
+        console.log("Before innerText:", this.barNumber.innerText);
+        this.barNumber.innerText = `${barIndex + 1}`; // TODO: Sprawdzić czemu to nie działa...
+        console.log("After innerText:", this.barNumber.innerText);
 
         this.handleAddFunction = this.addFunction.bind(this);
         this.addFunctionButton.addEventListener('click', this.handleAddFunction);

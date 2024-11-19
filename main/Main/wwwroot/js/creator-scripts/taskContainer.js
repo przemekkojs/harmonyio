@@ -229,10 +229,10 @@ class Task {
 
             let barCount = this.barContainer.bars.length;
 
-            while (barIndex >= barCount) {
-                barCount++;
+            while (barIndex >= barCount) {                
                 this.barContainer.addBar();
-            }                
+                barCount++;
+            }
 
             const bar = this.barContainer.bars[barIndex];
             const functionCount = bar ? bar.functionContainer.functions.length - 1 : 0;

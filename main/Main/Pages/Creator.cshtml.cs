@@ -53,9 +53,7 @@ namespace Main.Pages
         public async Task<IActionResult> OnGetAsync(int? id, bool? triggerSubmit)
         {
             if (id == null)
-            {
                 return Page();
-            }
 
             var appUser = await _userManager.GetUserAsync(User);
 
@@ -65,21 +63,17 @@ namespace Main.Pages
             );
 
             if (quiz == null || appUser == null || appUser.Id != quiz.CreatorId)
-            {
                 return Forbid();
-            }
 
             BrowseOnly = quiz.IsCreated;
-
             EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
             Code = quiz.Code;
+
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
 
             if (triggerSubmit ?? false)
-            {
                 return await OnPostSubmit();
-            }
 
             return Page();
         }
