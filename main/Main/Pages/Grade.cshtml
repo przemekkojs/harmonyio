@@ -97,20 +97,31 @@
 
             <div class="d-flex flex-row align-items-center p-3">
                 <div id="excersises-buttons" class="d-flex flex-row align-items-center">
+                    @*SET VIA JS*@
                 </div>
+
                 <div id="div-last-ex">
                     <img src="~/images/three_dots.png" alt="Three dots" class="ms-2 three-dots-img">
                     <button id="btn-last-ex" type="button" onclick="lastQuestion()"
                         class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
-                </div>
+                </div>                
 
+                @* Punkty nauczyciela *@
                 <span class="fw-bold ms-auto me-2">Punkty</span>
                 <input type="number" id="points" onchange="onPointsChange(this.value)"
                     onKeyPress="integerKeyPress(event)" class="form-control points-input border-secondary bg-white" />
 
+                @* Max punktów za zadanie *@
                 <span class="fw-bold ms-3 me-2">Max</span>
                 <div id="max"
                     class="border border-secondary text-secondary rounded px-2 py-1 align-items-center d-flex h-100">
+                    @*SET VIA JS*@
+                </div>
+
+                @* Punkty sugerowane przez algorytm *@
+                <span class="fw-bold ms-3 me-2">Sugestia</span>
+                <div type="number" id="suggestion"
+                     class="border border-secondary text-secondary rounded px-2 py-1 align-items-center d-flex h-100" readonly>
                     @*SET VIA JS*@
                 </div>
 
@@ -132,9 +143,8 @@
                 @*SET VIA JS*@
             </div>
 
-            @* TODO: Stylowanie trochę porządniej XD *@
             <div id="algorithm-opinions" style="width: 100%; height: 100%; margin-bottom: -1rem;">
-
+                @*SET VIA JS*@
             </div>
         </div>
     </div>
@@ -187,8 +197,6 @@
         thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
     };
 
-
-
     const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
     const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Solutions));
@@ -234,9 +242,9 @@
     const percentageText = document.getElementById("percentage-text");
     const gradeSelect = document.getElementById("grade-select");
     const questionElement = document.getElementById("question");
-    const excersiseNumberElement = document.getElementById("excersiseNumber");
-    const suggestionElement = document.getElementById("suggestion");
+    const excersiseNumberElement = document.getElementById("excersiseNumber");    
     const pointsElement = document.getElementById("points");
+    const suggestionElement = document.getElementById("suggestion");
     const maxElement = document.getElementById("max");
     const commentElement = document.getElementById("comment");
 
@@ -294,7 +302,7 @@
         userGrades[currentUserIndex] = [value, strValue];
         document.getElementById(`user-grade-${currentUserIndex}`).innerText = strValue;
         document.getElementById(`grade-hidden-${currentUserIndex}`).value = value;
-    @* document.getElementById("grades-validation-text").innerText = ''; *@
+    @*  document.getElementById("grades-validation-text").innerText = ''; *@
         }
 
     function onPointsChange(value) {
@@ -344,9 +352,6 @@
             const opinion = userOpinions[currentUserIndex][currentQuestionIndex] === "" ?
                 "Brak błędów" : userOpinions[currentUserIndex][currentQuestionIndex];
 
-            console.log("Opinion", opinion);
-            console.log("User opinions", userOpinions);
-
             document.getElementById('algorithm-opinions').innerHTML = `
                 <details>
                     <summary>Opinia algorytmu</summary>
@@ -354,6 +359,7 @@
                 </details>
             `;
 
+            suggestionElement.innerText = pointsSuggestion;
             pointsElement.placeholder = pointsSuggestion;
             pointsElement.value = points;
             maxElement.innerText = maxPoints;

@@ -11,21 +11,31 @@ namespace Main.GradingAlgorithm
     public class GradingAlgorithm : IGradingAlgorithm
     {
         public (int, int, Dictionary<(int, (int, int, int)), List<int>>) Grade(string question, string answer, int maxPoints)
-        {            
-            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser.ParseJsonToSolutionParseResult(answer);
-            var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser.ParseJsonToProblem(question);
+        {
+            var questionEmpty = question == string.Empty;
+            var answerEmpty = answer == string.Empty;
+
+            if (questionEmpty || answerEmpty)
+                return (0, maxPoints, []);
+
+            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                .ParseJsonToSolutionParseResult(answer);
+
+            var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser
+                .ParseJsonToProblem(question);
+
             var solution = new Solution(problem, solutionParseResult.Stacks);
             var settings = Constants.Settings;
 
             PopulateEmptyStacks(problem, solution);
 
             var checkResult = SolutionChecker
-                .CheckSolution(solution, settings)
-                .Distinct()
-                .ToList();
+                .CheckSolution(solution, settings);
+                //.Distinct()
+                //.ToList();
 
             var maxMistakesCount = GetMaxMistakesCount(problem, settings);
-            var opinion = GenerateOpinion2(checkResult);
+            var opinion = GenerateOpinion(checkResult);
             var mistakesCount = checkResult.Sum(x => x.Quantity);
 
             var algorithmPoints = maxMistakesCount - mistakesCount > 0 ? maxMistakesCount - mistakesCount : 0;
@@ -38,9 +48,7 @@ namespace Main.GradingAlgorithm
         private static float DivAsPercentage(int numerator, int denominator)
         {
             if (denominator == 0)
-            {
-                throw new DivideByZeroException("Denominator cannot be zero.");
-            }
+                throw new DivideByZeroException("Nie można dzielić przez 0.");
 
             float result = (float)numerator / denominator * 100;
             return result;
@@ -95,7 +103,7 @@ namespace Main.GradingAlgorithm
             solution.Stacks.AddRange(tmpStacks);
         }
 
-        private static Dictionary<(int, (int, int, int)), List<int>> GenerateOpinion2(List<Mistake> mistakes)
+        private static Dictionary<(int, (int, int, int)), List<int>> GenerateOpinion(List<Mistake> mistakes)
         {
             // Takty, funkcje w taktach, ID błędu
             var tmp = new Dictionary<(int, (int, int, int)), List<int>>();
@@ -121,92 +129,6 @@ namespace Main.GradingAlgorithm
             }
 
             return tmp;
-        }
-
-        private static string CodeToMistake(int code)
-        {
-            string result = "Nieokreślony błąd.";
-
-            return result;
-        }
-
-        private static string GenerateOpinion(List<Mistake> mistakes)
-        {
-            var tmp = new Dictionary<(int, (int, int, int)), List<string>>();
-
-            foreach (var mistake in mistakes)
-            {
-                var barIndexes = mistake.Description.Item1;
-                var functionIndexes = mistake.Description.Item2;
-                var description = mistake.Description.Item3;
-
-                var bar1 = barIndexes.Count > 0 ? barIndexes[0] : -1;
-                var bar2 = barIndexes.Count > 1 ? barIndexes[1] : bar1;
-
-                var function1 = functionIndexes.Count > 0 ? functionIndexes[0] : -1;
-                var function2 = functionIndexes.Count > 1 ? functionIndexes[1] : function1;
-
-                var key = (bar1, (function1, function2, bar2));
-
-                if (!tmp.ContainsKey(key))
-                    tmp[key] = [];
-
-                tmp[key].Add(description);
-            }
-
-            var sortedKeys = tmp.Keys
-                .OrderBy(key => key.Item1)
-                    .ThenBy(key => key.Item2.Item1)
-                        .ThenBy(key => key.Item2.Item2)
-                            .ThenBy(key => key.Item2.Item3)
-                .ToList();
-
-            int lastBar = 0;
-            var opinion = "";
-
-            foreach (var key in sortedKeys)
-            {
-                var bar = key.Item1 + 1;
-
-                var function1 = key.Item2.Item1 + 1;
-                var function2 = key.Item2.Item2 + 1;
-                var bar2 = key.Item2.Item3 + 1;
-
-                if (bar != lastBar)
-                {
-                    if (lastBar != 0)
-                        opinion += $"</details>";
-
-                    lastBar = bar;
-
-                    opinion += $"<details><summary>Takt {bar}</summary>";
-                }                
-
-                if (function1 == function2)
-                {
-                    opinion += $"<details><summary>Funkcja na miarę {function1}</summary>";
-                }
-                else
-                {
-                    if (bar2 != bar)
-                    {
-                        opinion += $"<details><summary>Funkcje na miary {function1}, {function2} w takcie {bar2})</summary>";
-                    }
-                    else
-                    {
-                        opinion += $"<details><summary>Funkcje na miary {function1}, {function2}</summary>";
-                    }
-                }
-
-                foreach (var o in tmp[key])
-                {
-                    opinion += $"<span>{o}</span><br>";
-                }
-
-                opinion += "</details>";
-            }
-
-            return opinion;
         }
     }
 }

@@ -9,11 +9,12 @@ namespace Algorithm.New.Algorithm.Checkers
     public static class SolutionChecker
     {
         /// <summary>
-        /// Metoda główna
+        /// Metoda sprawdzająca. Sprawdza błędy nutowe i funkcyjne.
         /// </summary>
-        /// <param name="solution">Rozwiązanie</param>
-        /// <param name="settings">Ustawienia sprawdzania</param>
-        /// <returns>Lista błędów</returns>
+        /// <param name="solution">Rozwiązanie użytkownika.</param>
+        /// <param name="settings">Ustawienia sprawdzania - czyli wszystkie aktywne zasady</param>
+        /// <returns>Lista błędów nutowych (NoteMistake) i funkcyjnych (StackMistake). Wszystko w jednej liście
+        /// typu Mistake.</returns>
         public static List<Mistake.Solution.Mistake> CheckSolution(Solution solution, Settings settings)
         {
             List<Mistake.Solution.Mistake> result = [];
@@ -46,24 +47,15 @@ namespace Algorithm.New.Algorithm.Checkers
                 int noteIndex = 0;
 
                 foreach (var note in stackNotes)
-                {
-                    if (note == null)
-                    {
-                        var voice = noteIndex switch { 0 => "S", 1 => "A", 2 => "T", _ => "B" };
-                        var toAppend = NoteMistake.CreateEmptyNoteMistake(stack.Index.Bar, stack.Index.Position, voice);
-                        result.Add(toAppend);
-                    }
-                    else
-                    {
-                        var noteName = note?.Name;
-                        noteName ??= string.Empty;
+                {                    
+                    var noteName = note?.Name;
+                    noteName ??= string.Empty;
 
-                        if (!uniqueNotes.Contains(noteName))
-                        {
-                            var toAppend = new NoteMistake(note, stack);
-                            result.Add(toAppend);
-                        }
-                    }
+                    if (!uniqueNotes.Contains(noteName))
+                    {
+                        var toAppend = new NoteMistake(note, stack);
+                        result.Add(toAppend);
+                    }                    
 
                     noteIndex++;
                 }

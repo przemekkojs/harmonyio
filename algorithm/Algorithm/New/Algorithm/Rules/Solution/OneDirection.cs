@@ -6,6 +6,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     public class OneDirection : Rule
     {
         public OneDirection() : base(
+            id: 101,
             name: "Ruch jednokierunkowy",
             description: "Czy w ramach dwóch funkcji, wszystkie głosy wykonały ruch w jednym kierunku?")
         { }

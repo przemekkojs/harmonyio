@@ -4,12 +4,14 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public abstract class Rule
     {
+        public int Id { get; protected set; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }
         public bool OneFunction { get; protected set; }
 
-        protected Rule(string name, string description, bool oneFunction = false)
-        {
+        protected Rule(int id, string name, string description, bool oneFunction = false)
+        {            
+            Id = id;
             Name = name;
             Description = description;
             OneFunction = oneFunction;

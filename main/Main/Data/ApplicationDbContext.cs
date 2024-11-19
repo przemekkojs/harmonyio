@@ -129,6 +129,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasMany(er => er.MistakeResults)
             .WithOne(mr => mr.ExcersiseResult)
             .HasForeignKey(mr => mr.ExcersiseResultId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

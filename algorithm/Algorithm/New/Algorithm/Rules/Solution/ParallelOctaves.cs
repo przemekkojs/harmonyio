@@ -6,6 +6,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     public class ParallelOctaves : Rule
     {
         public ParallelOctaves() : base(
+            id: 103,
             name: "Oktawy równoległe",
             description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale oktawy?")
         { }
