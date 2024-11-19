@@ -8,8 +8,6 @@ using Main.Enumerations;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
 using Algorithm.New.Algorithm.Mistake.Solution;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Algorithm.New;
 
 namespace Main.Pages
 {
@@ -92,18 +90,25 @@ namespace Main.Pages
             {
                 var bar = key.Item1 + 1;
 
+                if (bar <= 0)
+                    bar = 1;
+
                 var function1 = key.Item2.Item1 + 1;
                 var function2 = key.Item2.Item2 + 1;
                 var bar2 = key.Item2.Item3 + 1;
 
+                if (bar2 <= 0)
+                    bar2 = 1;
+
                 if (bar != lastBar)
                 {
-                    if (lastBar != 0)
+                    if (lastBar > 0)
                         result += $"</details>";
 
-                    lastBar = bar;
                     result += $"<details><summary>Takt {bar}</summary>";
                 }
+
+                lastBar = bar;
 
                 if (function1 == function2)
                     result += $"<details><summary>Funkcja na miarê {function1}</summary>";

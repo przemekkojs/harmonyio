@@ -269,9 +269,15 @@
                Utwórz
             </a>
         </div>
+
+        <div>
+            <span id="quizValidation"></span>
+        </div>
         
         @foreach (var quiz in Model.Sketches)
         {
+            
+
             <div class="quiz border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
                 <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                     <div class="fw-bold fs-5 text-truncate">@quiz.Name</div>
@@ -300,8 +306,13 @@
                         </a>
                     </div>
 
-                    <a href="#" class="btn btn-primary mt-auto" data-bs-toggle="modal" data-bs-target="#publishPopup"
-                        data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name" data-callback-name="publish">
+                    <a href="#"
+                        class="btn btn-primary mt-auto"
+                        data-bs-toggle="modal"
+                        data-bs-target="#publishPopup"
+                        data-quiz-id="@quiz.Id"
+                        data-quiz-name="@quiz.Name"
+                        data-callback-name="publish">
                         Opublikuj
                     </a>
                 </div>
@@ -328,14 +339,15 @@
         document.getElementById("deleteFormForQuiz").submit();
     }
 
-    function publish(quizId, openDateTime, closeDateTime) {
+    window.publish = async function (quizId, openDateTime, closeDateTime) {
         //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
 
+        const form = document.getElementById("publishFormForQuiz");
         document.getElementById("publishFormQuizId").value = quizId;
         document.getElementById("publishFormOpenDateForQuiz").value = openDateTime;
         document.getElementById("publishFormCloseDateForQuiz").value = closeDateTime;
-        document.getElementById("publishFormForQuiz").submit();
-
+        form.submit();
+        
         //TODO: Po opublikowaniu powinien od razu włączyć się assign popup
         // (można go włączyć przyciskiem Udostępnij, ale dobrze jakby włączał się też automatycznie)
     }
@@ -421,5 +433,4 @@
         });
 
     }
-
 </script>

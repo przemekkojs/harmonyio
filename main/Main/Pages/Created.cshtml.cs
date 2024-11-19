@@ -1,19 +1,12 @@
-using System.Collections;
-using System.Collections.Frozen;
-using System.Security.Claims;
-using System.Text.Json;
 using Main.Data;
 using Main.Enumerations;
 using Main.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Mono.TextTemplating;
 using NuGet.Packaging;
-using NuGet.Protocol;
 
 namespace Main.Pages;
 
@@ -37,7 +30,6 @@ public class CreatedModel : PageModel
 
     [BindProperty]
     public string? GroupsIds { get; set; } = "";
-
 
     public List<Quiz> Sketches { get; set; } = [];
     public List<Quiz> ReadyToGrade { get; set; } = [];
@@ -247,9 +239,12 @@ public class CreatedModel : PageModel
         if (quizToPublish == null || quizToPublish.IsCreated || noClosedDate || noOpenDate)
             return RedirectToPage("Error");
 
+        // Jak quiz nie jest valid
+        var errorResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera b³êdne zadania." };
+
         // TODO: Jakiœ popup, ¿e nie mo¿na
         if (!quizToPublish.IsValid)
-            return Page();
+            return new JsonResult(errorResult);
 
         quizToPublish.CloseDate = (DateTime)CloseDate!;
         quizToPublish.OpenDate = (DateTime)OpenDate!;
@@ -265,16 +260,14 @@ public class CreatedModel : PageModel
     public async Task<IActionResult> OnPostDelete()
     {
         var appUser = await _userManager.GetUserAsync(User);
+
         if (appUser == null)
-        {
             return Forbid();
-        }
 
         var deletedQuiz = await _repository.GetAsync<Quiz>(q => q.Id == QuizId && q.CreatorId == appUser.Id);
+
         if (deletedQuiz == null)
-        {
             return RedirectToPage("Error");
-        }
 
         _repository.Delete(deletedQuiz);
         await _repository.SaveChangesAsync();
