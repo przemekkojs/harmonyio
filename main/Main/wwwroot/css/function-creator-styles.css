@@ -319,6 +319,14 @@
     background-image: url('../images/creator-images/thrash-can-red.png');
 }
 
+.empty-button {
+    background-image: url('../images/creator-images/thrash-can-gray.png');
+}
+
+.empty-button:hover {
+    cursor: not-allowed;
+}
+
 .round-arrow-button {
     background-image: url('../images/creator-images/round-arrow.png');
 }
