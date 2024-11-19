@@ -6,37 +6,16 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
     public class NoteMistake : Mistake
     {
         public int BarIndex { get; set; }
-        public int VerticalIndex { get; set; }
-        public string Voice { get; set; }
+        public int VerticalIndex { get; set; }        
 
-        public override int Quantity => 1;
-
-        public static NoteMistake CreateEmptyNoteMistake(int barIndex, int verticalIndex, string voice)
-        {
-            voice = voice switch
-            {
-                "S" => "sopranie",
-                "A" => "alcie",
-                "T" => "tenorze",
-                _ => "basie"
-            };
-
-            return new NoteMistake(barIndex, verticalIndex, voice)
-            {
-                Description = (
-                    [barIndex],
-                    [verticalIndex],
-                    $"Brakuje nuty w {voice}."
-                )
-            };
-        }
+        public override int Quantity => 1;        
 
         [JsonConstructor]
-        public NoteMistake(int barIndex, int verticalIndex, string voice)
+        public NoteMistake(int barIndex, int verticalIndex, int code)
         {
             BarIndex = barIndex;
             VerticalIndex = verticalIndex;
-            Voice = voice;
+            MistakeCode = code;
 
             GenerateDescription();
         }
@@ -44,47 +23,33 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
         public NoteMistake(Note? note, Stack? stack)
         {
             if (note == null)
-                Voice = string.Empty;
+                MistakeCode = -1;
             else
-            {
-                var voice = GetVoiceFromStack(note, stack);
-
-                if (voice != null)
-                    Voice = voice;
-                else
-                    Voice = string.Empty;
-            }
+                MistakeCode = GetVoiceIndexFromStack(note, stack);
 
             BarIndex = stack != null ? stack.Index.Bar : 0;
             VerticalIndex = stack != null ? stack.Index.Position : 0;
+
             GenerateDescription();
         }
 
-        public static string? GetVoiceFromStack(Note note, Stack? stack)
+        public static int GetVoiceIndexFromStack(Note note, Stack? stack)
         {
             int index = 0;
-            List<string> voices = ["S", "A", "T", "B"];
 
             while (index < stack?.Notes.Count)
             {
                 var toCheck = stack.Notes[index];
 
-                if (toCheck == null)
-                {
-                    index++;
-                    continue;
-                }
-
-                if (toCheck.Equals(note))
-                    return voices[index];
+                if (note.Equals(toCheck))
+                    return index;
 
                 index++;
             }
 
-            return null;
+            return -1;
         }
 
-        public override void GenerateDescription() =>
-            Description = GenerateNoteMistakeDescription(Voice, BarIndex, VerticalIndex);
+        public override void GenerateDescription() => Description = ([BarIndex], [VerticalIndex], MistakeCode);
     }
 }

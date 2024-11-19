@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Main.Enumerations;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
+using Algorithm.New.Algorithm.Mistake.Solution;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Algorithm.New;
 
 namespace Main.Pages
 {
@@ -69,10 +72,9 @@ namespace Main.Pages
                     tmp[key] = [];
 
                 foreach (var mistakeCode in mistakeCodes)
-                {
-                    // TODO: Jakieœ parsowanie kodu na b³¹d
-                    var description = "B£¥D";
-                    tmp[key].Add(description);
+                {                    
+                    var description = Mistake.MistakeCodeToDescription(mistakeCode);
+                    tmp[key].Add(description);                    
                 }
             }
 
@@ -100,24 +102,16 @@ namespace Main.Pages
                         result += $"</details>";
 
                     lastBar = bar;
-
                     result += $"<details><summary>Takt {bar}</summary>";
                 }
 
                 if (function1 == function2)
-                {
                     result += $"<details><summary>Funkcja na miarê {function1}</summary>";
-                }
                 else
                 {
-                    if (bar2 != bar)
-                    {
-                        result += $"<details><summary>Funkcje na miary {function1}, {function2} w takcie {bar2})</summary>";
-                    }
-                    else
-                    {
-                        result += $"<details><summary>Funkcje na miary {function1}, {function2}</summary>";
-                    }
+                    result += (bar == bar2 ?
+                        $"<details><summary>Funkcje na miary {function1}, {function2}</summary>" :
+                        $"<details><summary>Funkcje na miary {function1}, {function2} w takcie {bar2})</summary>");                    
                 }
 
                 foreach (var o in tmp[key])

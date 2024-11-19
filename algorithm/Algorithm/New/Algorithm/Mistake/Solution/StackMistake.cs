@@ -8,20 +8,19 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
     {
         public List<int> BarIndexes { get; private set; }
         public List<int> VerticalIndexes { get; private set; }
-        public string RuleName { get; private set; }
 
-        [JsonConstructor]
-        public StackMistake(List<int> barIndexes, List<int> verticalIndexes, string ruleName)
+        public StackMistake(List<int> barIndexes, List<int> verticalIndexes, Rule rule)
         {
             BarIndexes = barIndexes;
             VerticalIndexes = verticalIndexes;
-            RuleName = ruleName;
+            MistakeCode = rule.Id;
+
             GenerateDescription();
         }
 
         public StackMistake(List<Stack> stacks, Rule? rule)
         {
-            RuleName = rule != null ? rule.Name : "Nieokreślona zasada";
+            MistakeCode = rule != null ? rule.Id : 0;
 
             BarIndexes = [];
             VerticalIndexes = [];
@@ -48,7 +47,6 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
 
         public override int Quantity => VerticalIndexes.Count;
 
-        public override void GenerateDescription() =>
-            Description = GenerateStackMistakeDescription(BarIndexes, VerticalIndexes, RuleName);
+        public override void GenerateDescription() => Description = (BarIndexes, VerticalIndexes, MistakeCode);
     }
 }

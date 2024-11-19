@@ -352,9 +352,6 @@
             const opinion = userOpinions[currentUserIndex][currentQuestionIndex] === "" ?
                 "Brak błędów" : userOpinions[currentUserIndex][currentQuestionIndex];
 
-            console.log("Opinion", opinion);
-            console.log("User opinions", userOpinions);
-
             document.getElementById('algorithm-opinions').innerHTML = `
                 <details>
                     <summary>Opinia algorytmu</summary>

@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     public class VoiceCrossingOneFunction : Rule
     {
         public VoiceCrossingOneFunction() : base(
+            id: 105,
             name: "Krzyżowanie głosów w ramach jednej funkcji",
             description: "Czy nuty w ramach jednej funkcji nie krzyżują się wysokościami w ramach sąsiednich głosów?",
             oneFunction: true)

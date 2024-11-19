@@ -6,6 +6,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     public class ParallelFifths : Rule
     {
         public ParallelFifths() : base(
+            id: 102,
             name: "Kwinty równoległe",
             description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale kwinty?")
         { }

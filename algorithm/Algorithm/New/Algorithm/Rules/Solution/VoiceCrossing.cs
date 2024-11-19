@@ -6,6 +6,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     public class VoiceCrossing : Rule
     {
         public VoiceCrossing() : base(
+            id: 104,
             name: "Krzyżowanie głosów",
             description: "Czy nuty w obu funkcjach nie krzyżują się wysokościami w ramach tego samego głosu?")
         { }
