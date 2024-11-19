@@ -3,12 +3,13 @@
     cursor: pointer;
     color: var(--bs-gray-600);
     border-style: dashed;
-    height: 168px;
+}
+
+.quiz {
     min-height: 168px;
-    background-color: transparent;
 }
 
 .icon-img {
-    width: 25px;
+    width: 25px; 
     height: 25px;
 }

@@ -152,8 +152,9 @@
 .function-creator {
     text-align: center;  
     margin: 2px;
-    background-color: #fefefe;
-    border-radius: 25px;
+    border-style: solid;
+    border-color: #efefef;
+    border-radius: 10px;
     padding: 5px;
     padding-top: 20px;
 }
@@ -197,8 +198,9 @@
 }
 
 .components-place {
-    padding: 10px;
-    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex; 
     align-items: center;
     overflow: auto;
 }
@@ -207,9 +209,10 @@
     display: flex;
     align-items: center;
     padding: 10px;
-    margin: 10px;
-    background-color: #efefef;
-    border-radius: 25px;
+    margin-right: 10px;
+    border-style: solid;
+    border-color: #efefef;
+    border-radius: 10px;
 }
 
 .added-component {
@@ -305,6 +308,7 @@
 .button-large {
     width: 50px;
     height: 50px;
+    min-width: 50px;
 }
 
 .tick-button {
@@ -321,6 +325,15 @@
 
 .plus-button {
     background-image: url('../images/creator-images/plus.png');
+}
+
+.trash-icon-white {
+    background-image: url('../images/creator-images/thrash-can-white.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;  
 }
 
 @keyframes shake {
