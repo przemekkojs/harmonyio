@@ -22,7 +22,7 @@ body {
     background-size: 38vw 38vw, cover;
     background-position: 0 0, center;
     background-attachment: fixed;
-    padding-top: 93px;
+    padding-top: 86px;
 }
 
 /*Navbar*/
@@ -32,7 +32,13 @@ body {
 }
 
 .nav-link {
-    text-decoration: none
+    text-decoration: none;
+    gap: 20px;
+}
+@media (max-width: 768px) { 
+    .nav-link {
+        gap: 3px;
+    }
 }
 
 .nav-logo{
