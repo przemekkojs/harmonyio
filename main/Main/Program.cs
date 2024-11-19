@@ -67,6 +67,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
 app.MapRazorPages();
 
 app.Run();
