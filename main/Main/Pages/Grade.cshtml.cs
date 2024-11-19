@@ -41,6 +41,8 @@ namespace Main.Pages
         public List<List<int>> Points { get; set; } = []; //user, then points for excersise solution
         [BindProperty]
         public List<List<string>> Comments { get; set; } = []; //user, then comment for excersise solution
+        [BindProperty]
+        public bool ShareAlgorithmOpinion { get; set; }
 
         public GradeModel(
             ApplicationRepository repository,
@@ -106,7 +108,7 @@ namespace Main.Pages
                 }
 
                 if (function1 == function2)
-                    result += $"<details><summary>Funkcja na miarê {function1}</summary>";
+                    result += $"<details><summary>Funkcja na miarï¿½ {function1}</summary>";
                 else
                 {
                     result += (bar == bar2 ?
@@ -125,7 +127,7 @@ namespace Main.Pages
             return result;
         }
 
-        // Tutaj inicjalizowane s¹ b³êdy
+        // Tutaj inicjalizowane sï¿½ bï¿½ï¿½dy
         private void InitializeMistakes(Quiz quiz)
         {            
             SolutionsToMistakes = [];
@@ -179,7 +181,7 @@ namespace Main.Pages
             QuizId = quiz.Id;
             QuizName = quiz.Name;
             Excersises = [.. quiz.Excersises];
-            InitializeMistakes(quiz); // Tutaj inicjowane s¹ b³êdy
+            InitializeMistakes(quiz); // Tutaj inicjowane sï¿½ bï¿½ï¿½dy
 
             var allSolutions = quiz.Excersises.SelectMany(e => e.ExcersiseSolutions).ToList();
             var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
@@ -267,7 +269,7 @@ namespace Main.Pages
                 }
 
                 Opinions.Add(userSolutionResults
-                    .Select(er => MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak b³êdów.")
+                    .Select(er => MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak bï¿½ï¿½dï¿½w.")
                     .ToList());
             }
 
@@ -300,7 +302,7 @@ namespace Main.Pages
 
             // check if user can grade quiz
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
-            // TODO: Tu nie powinno byæ || zamiast && ?
+            // TODO: Tu nie powinno byï¿½ || zamiast && ?
             var userIsNotCreator = quiz.CreatorId != appUser.Id;
             var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Count != 0);
 
@@ -314,7 +316,7 @@ namespace Main.Pages
 
             var participantsAnsweredIds = allSolutions
                 .Select(es => es.UserId)
-                .ToHashSet(); // Kurde, poszala³eœ XD
+                .ToHashSet(); // Kurde, poszalaï¿½eï¿½ XD
 
             var userIdToSolutions = allSolutions
                 .GroupBy(es => es.UserId)
