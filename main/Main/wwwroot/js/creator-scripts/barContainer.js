@@ -92,9 +92,6 @@ export class BarContainer {
         for (let index = startBarIndex; index < barsLength; index++) {
             const toChange = this.bars[index];            
             toChange.setId(taskIndex, index);
-
-            console.log(toChange.functionContainer.barNumber);
-            toChange.functionContainer.barNumber.innerText = `${index}`;
         }
 
         this.handleAddBar = this.addBar.bind(this);

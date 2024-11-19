@@ -30,7 +30,13 @@ export class FunctionContainer {
         this.deleteButton.title = `Usuń takt ${this.barIndex + 1}`;
         this.deleteButton.id = `delete-bar-${this.taskIndex}-${this.barIndex}`;
 
-        this.barInfo = `<svg heigth="135" width="10"><line x1="5" y1="0" x2="5" y2="140" style="stroke:black;stroke-width:1px;"/></svg>`
+        this.barInfo = `
+            <svg heigth="135" width="10">
+                <line x1="5" y1="0" x2="5" y2="140" style="stroke:black;stroke-width:1px;"/>
+            </svg>`;
+
+        this.barInfoDiv = document.createElement('div');
+        this.barInfoDiv.innerHTML = this.barInfo;
 
         this.barInfoPlaceholder = document.createElement('div');
         this.barInfoPlaceholder.style.display = 'flex';
@@ -38,13 +44,11 @@ export class FunctionContainer {
         this.barInfoPlaceholder.style.alignItems = 'center';
 
         this.barInfoPlaceholder.appendChild(this.barNumber);
-        this.barInfoPlaceholder.innerHTML += this.barInfo;
+        this.barInfoPlaceholder.appendChild(this.barInfoDiv);
         this.barInfoPlaceholder.appendChild(this.deleteButton);
 
         this.container.appendChild(this.barInfoPlaceholder);
         this.container.appendChild(this.addFunctionButton);
-
-        //this.addFunction();
     }
 
     addFunction() {
