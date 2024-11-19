@@ -30,7 +30,7 @@ export class FunctionContainer {
         this.deleteButton.title = `Usuń takt ${this.barIndex + 1}`;
         this.deleteButton.id = `delete-bar-${this.taskIndex}-${this.barIndex}`;
 
-        this.barInfo = `<svg heigth="120" width="10"><line x1="5" y1="0" x2="5" y2="110" style="stroke:black;stroke-width:1px;"/></svg>`
+        this.barInfo = `<svg heigth="135" width="10"><line x1="5" y1="0" x2="5" y2="140" style="stroke:black;stroke-width:1px;"/></svg>`
 
         this.barInfoPlaceholder = document.createElement('div');
         this.barInfoPlaceholder.style.display = 'flex';
