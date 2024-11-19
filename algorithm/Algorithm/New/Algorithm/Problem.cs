@@ -13,6 +13,11 @@ namespace Algorithm.New.Algorithm
             Functions = functions;
             Metre = metre;
             Tonation = tonation;
+
+            foreach (var function in Functions)
+            {
+                function.Tonation = tonation;
+            }
         }
 
         public Problem(Metre metre, Tonation tonation, int maxPoints) : this([], metre, tonation) { }

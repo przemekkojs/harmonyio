@@ -6,7 +6,7 @@
         public int Octave { get; set; }
         public string Accidental { get; private set; }
 
-        private static readonly List<string> PossibleAccidentals = ["#", "b", "x", "bb", "bq"];
+        private static readonly List<string> PossibleAccidentals = ["#", "b", "x", "bb", "bq", ""];
 
         public Note (string name, int octave)
         {
@@ -16,9 +16,22 @@
             DeductAccidental();
         }
 
+        public void SetNewName(string newName)
+        {
+            Name = newName;
+            DeductAccidental();
+        }
+
         public Note (string name, int octave, string accidental)
         {
-            Name = name;
+            if (!PossibleAccidentals.Contains(accidental))
+                throw new ArgumentException("Invalid accidental");
+
+            if (!accidental.Equals("bq"))
+                Name = name + accidental;
+            else
+                Name = name;
+
             Octave = octave;
             Accidental = accidental;
         }
@@ -27,7 +40,7 @@
         {
             var accidentalString = Name[1..];
 
-            if (PossibleAccidentals.Contains(accidentalString))
+            if (!PossibleAccidentals.Contains(accidentalString))
                 throw new ArgumentException("Invalid note parameters");
 
             Accidental = accidentalString;
