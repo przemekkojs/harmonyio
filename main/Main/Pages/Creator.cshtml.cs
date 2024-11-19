@@ -107,15 +107,27 @@ namespace Main.Pages
             }
         }
 
-        private bool ValidateAndAddExercises()
+        private bool ValidateEmptyExercises()
         {
             foreach (string question in Questions)
             {
-                var questionEmpty = string.IsNullOrWhiteSpace(question);
-                var questionInvalid = CheckProblem(question);
+                var questionEmpty = string.IsNullOrWhiteSpace(question);                
 
-                if (questionEmpty || !questionInvalid)
+                if (questionEmpty)
                     return false;                
+            }
+
+            return true;
+        }
+
+        private bool ValidateExcersises()
+        {
+            foreach (string question in Questions)
+            {
+                var valid = CheckProblem(question);
+
+                if (!valid)
+                    return false;
             }
 
             return true;
@@ -170,8 +182,13 @@ namespace Main.Pages
                 }
             }
 
-            if (!ValidateAndAddExercises())
+            if (!ValidateEmptyExercises())
                 return new JsonResult(invalidQuestionsResult);
+
+            quiz.IsValid = true;
+
+            if (!ValidateExcersises())
+                quiz.IsValid = false;
 
             if (EditedQuizId == null)
                 await _repository.SaveChangesAsync();
