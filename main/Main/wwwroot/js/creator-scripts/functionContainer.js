@@ -21,6 +21,7 @@ export class FunctionContainer {
 
         this.barNumber = document.createElement('span');
         this.barNumber.style = "margin-bottom: 5px; font-style: italic;";
+        this.barNumber.className = "text-nowrap";
         this.barNumber.innerText = `${this.barIndex + 1}`;
 
         this.container = document.createElement('div');

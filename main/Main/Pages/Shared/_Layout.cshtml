@@ -36,8 +36,8 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white border-bottom shadow-sm fixed-top" id="main-navbar">
-            <div class="container">
+        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-white shadow-sm fixed-top p-0" id="main-navbar" style="height: 77px;">
+            <div class="container h-100">
                 <a class="navbar-brand p-0" asp-area="" asp-page="/Index">
                     <img src="~/images/logo.svg" alt="Logo" class="nav-logo mt-1" style="width: 50px; height: 50px;" />
                 </a>
@@ -45,35 +45,39 @@
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between h-100"> 
                     @if (currentNavState != NavState.HiddenTabs){
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Index">
+                        <ul class="navbar-nav flex-grow-1 h-100">
+                            <li class="nav-item h-100">
+                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Index">
+                                    <hr class="m-0 border-primary border-3 invisible"/>
                                     <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : "")">Strona główna</span>
-                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Home ? "visible" : "invisible")" />
+                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Home ? "visible" : "invisible")" />
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Assigned">
+                            <li class="nav-item h-100 d-flex">
+                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Assigned">
+                                    <hr class="m-0 border-primary border-3 invisible"/>
                                     <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : "")">Przypisane</span>
-                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
+                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Created">
+                            <li class="nav-item h-100 d-flex">
+                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Created">
+                                    <hr class="m-0 border-primary border-3 invisible"/>
                                     <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : "")">Utworzone</span>
-                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Created ? "visible" : "invisible")" />
+                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Created ? "visible" : "invisible")" />
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark pb-0" asp-area="" asp-page="/Groups/Index">
+                            <li class="nav-item h-100 d-flex">
+                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Groups/Index">
+                                    <hr class="m-0 border-primary border-3 invisible"/>
                                     <span class="text-nowrap @(currentNavState == NavState.Groups ? "text-primary" : "")">Grupy</span>
-                                    <hr class="mb-0 mt-1 border-primary nav-underline @(currentNavState == NavState.Groups ? "visible" : "invisible")" />
+                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Groups ? "visible" : "invisible")" />
                                 </a>
                             </li>
                         </ul>
-                    } else {
+                    } else { 
                         <div></div>
                     }
 
