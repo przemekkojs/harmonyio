@@ -236,23 +236,26 @@ public class CreatedModel : PageModel
     public async Task<IActionResult> OnPostPublish()
     {
         var appUser = await _userManager.GetUserAsync(User);
+
         if (appUser == null)
-        {
             return Forbid();
-        }
 
-        var quizToPublic = await _repository.GetAsync<Quiz>(q => q.Id == QuizId && q.CreatorId == appUser.Id);
+        var quizToPublish = await _repository.GetAsync<Quiz>(q => q.Id == QuizId && q.CreatorId == appUser.Id);
+        var noClosedDate = CloseDate == null;
+        var noOpenDate = OpenDate == null;
 
-        if (quizToPublic == null || quizToPublic.IsCreated || CloseDate == null || OpenDate == null)
-        {
+        if (quizToPublish == null || quizToPublish.IsCreated || noClosedDate || noOpenDate)
             return RedirectToPage("Error");
-        }
 
-        quizToPublic.CloseDate = (DateTime)CloseDate;
-        quizToPublic.OpenDate = (DateTime)OpenDate;
-        quizToPublic.IsCreated = true;
+        // TODO: Jakiœ popup, ¿e nie mo¿na
+        if (!quizToPublish.IsValid)
+            return Page();
 
-        _repository.Update(quizToPublic);
+        quizToPublish.CloseDate = (DateTime)CloseDate!;
+        quizToPublish.OpenDate = (DateTime)OpenDate!;
+        quizToPublish.IsCreated = true;
+
+        _repository.Update(quizToPublish);
         await _repository.SaveChangesAsync();
 
         return RedirectToPage();

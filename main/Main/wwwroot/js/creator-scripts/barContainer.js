@@ -30,7 +30,6 @@ class Bar {
 
 export class BarContainer {
     constructor(taskContainer, maxBars) {
-        //console.log("BarContainer");
         this.bars = [];
         this.taskIndex = taskContainer.taskIndex;
         this.taskContainer = taskContainer;
@@ -67,13 +66,17 @@ export class BarContainer {
     removeBar(barIndex) {
         const barsLength = this.bars.length;
 
+        // Disable deleting only one bar
+        if (barsLength < 2)
+            return;
+
         if (barIndex >= barsLength)
             return;
 
         const currentBar = this.bars[barIndex];
 
         this.bars.splice(barIndex, 1);
-        this.setId(this.taskIndex, barIndex);
+        this.setId(this.taskIndex, barIndex);        
         this.container.removeChild(currentBar.functionContainer.container);
     }
 
@@ -87,7 +90,7 @@ export class BarContainer {
         this.addBarButton.id = `add-bar-${this.taskIndex}`;
 
         for (let index = startBarIndex; index < barsLength; index++) {
-            const toChange = this.bars[index];
+            const toChange = this.bars[index];            
             toChange.setId(taskIndex, index);
         }
 
