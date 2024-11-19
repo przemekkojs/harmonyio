@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Algorithm.New.Music
 {
-    public enum Symbol { T, Sii, Tiii, Diii, S, D, Tvi, Svi, Dvii, Svii }
+    public enum Symbol { T, Sii, Tiii, Diii, S, D, Tvi, Svi, Dvii, Svii, None }
     public enum InsertionType { Forward, Backward, None }
     
     public class ParsedFunction
@@ -104,7 +104,7 @@ namespace Algorithm.New.Music
                 "Svi" => Symbol.Svi,
                 "Dvii" => Symbol.Dvii,
                 "Svii" => Symbol.Svii,
-                _ => throw new ArgumentException("Invalid symbol.")
+                _ => Symbol.None
             };
 
             IsMain = new List<string>() { "T", "S", "D" }.Contains(parsedFunction.Symbol);

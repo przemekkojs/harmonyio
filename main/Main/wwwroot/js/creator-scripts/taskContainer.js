@@ -271,7 +271,7 @@ class Task {
 }
 
 export class TaskContainer {
-    constructor(parent, maxTasksCount = 3) {
+    constructor(parent, maxTasksCount = 100) {
         this.tasks = [];
         this.maxTasksCount = maxTasksCount;
         this.parent = parent;
