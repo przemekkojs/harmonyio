@@ -36,7 +36,7 @@
         {
             @if (Model.ReadyToGrade.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Do Oceny</div>
+                <div class="fw-bold fs-4 mb-3">Do Oceny (@Model.ReadyToGrade.Count)</div>
 
                 @foreach (var quiz in Model.ReadyToGrade)
                 {
@@ -98,7 +98,7 @@
 
             @if (Model.Opened.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Otwarte</div>
+                <div class="fw-bold fs-4 mb-3">Otwarte (@Model.Opened.Count)</div>
 
                 @foreach (var quiz in Model.Opened)
                 {
@@ -160,7 +160,7 @@
 
             @if (Model.NotOpened.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zaplanowane</div> 
+                <div class="fw-bold fs-4 mb-3">Zaplanowane (@Model.NotOpened.Count)</div>
 
                 @foreach (var quiz in Model.NotOpened)
                 {
@@ -213,7 +213,7 @@
 
             @if (Model.Closed.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zamknięte</div>
+                <div class="fw-bold fs-4 mb-3">Zamknięte (@Model.Closed.Count)</div>
 
                 @foreach (var quiz in Model.Closed)
                 {
@@ -263,7 +263,7 @@
 
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3">
         <div class="mb-3 d-flex flex-row">
-            <div class="fw-bold fs-4 ">Szkice</div>
+            <div class="fw-bold fs-4 ">Szkice (@Model.Sketches.Count)</div>
             <a asp-page="Creator" class="btn btn-primary ms-auto text-nowrap">
                <i class="fas fa-plus me-1"></i>
                Utwórz
