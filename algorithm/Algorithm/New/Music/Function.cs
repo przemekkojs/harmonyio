@@ -83,7 +83,8 @@ namespace Algorithm.New.Music
                 { Component.Ninth, tonationNotes[Offset(1)] }
             };
         }
-        
+
+        /// <summary>WAŻNE! Ustawić Tonation osobno przy wykorzystaniu tego konstruktora</summary>
         public Function(ParsedFunction parsedFunction)
         {
             Index = new Index()
@@ -140,7 +141,6 @@ namespace Algorithm.New.Music
 
             PossibleComponents = [];
 
-            // TODO - these should be also set somehow
             InsertionType = InsertionType.None;
             IsInsertion = false;
             Tonation = Tonation.CMajor;

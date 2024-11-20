@@ -20,11 +20,6 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
             var functions = parsedProblem.Functions;
             var minor = parsedProblem.Minor != 1;
 
-            List<Function> realFuntions = [];
-
-            foreach (var f in functions)
-                realFuntions.Add(new Function(f));
-
             // TODO: Poprawić tonację (dodać parametr minor itd.)
             var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
 
@@ -34,8 +29,20 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
                 throw new ArgumentException("Invalid tonation");
             
             var metre = Metre.GetMetre(metreCount, metreValue);
-            var result = new Problem(realFuntions, metre, tonation);
 
+            List<Function> realFuntions = [];
+
+            foreach (var f in functions)
+            {
+                var toAdd = new Function(f)
+                {
+                    Tonation = tonation
+                };
+
+                realFuntions.Add(toAdd);
+            }
+
+            var result = new Problem(realFuntions, metre, tonation);
             return result;
         }
 
