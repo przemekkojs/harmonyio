@@ -13,7 +13,7 @@
         {
             @if (Model.NotSolvedOpen.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Do rozwiązania</div>
+                <div class="fw-bold fs-4 mb-3">Do rozwiązania (@Model.NotSolvedOpen.Count)</div>
                 @foreach (var quiz in Model.NotSolvedOpen)
                 {
                     <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
@@ -55,7 +55,7 @@
 
             @if (Model.NotSolvedPlanned.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zaplanowane</div>
+                <div class="fw-bold fs-4 mb-3">Zaplanowane (@Model.NotSolvedPlanned.Count)</div>
                 @foreach (var quiz in Model.NotSolvedPlanned)
                 {
                     <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3" id="plannedElement@(quiz.Id)">
@@ -111,7 +111,7 @@
         {
             @if (Model.SolvedOpen.Count != 0)
             {
-                <div class="fw-bold fs-4 mb-3">Rozwiązane otwarte</div>
+                <div class="fw-bold fs-4 mb-3">Rozwiązane otwarte (@Model.SolvedOpen.Count)</div>
                 @foreach (var quiz in Model.SolvedOpen)
                 {
                     Model.GradedQuizes.TryGetValue(quiz.Id, out var quizResult);
@@ -181,7 +181,7 @@
 
             @if (Model.Closed.Count != 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zamknięte</div>
+                <div class="fw-bold fs-4 mb-3">Zamknięte (@Model.Closed.Count)</div>
                 @foreach (var quiz in Model.Closed)
                 {
                     Model.GradedQuizes.TryGetValue(quiz.Id, out var quizResult);

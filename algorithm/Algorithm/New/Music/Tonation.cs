@@ -46,7 +46,7 @@
                 throw new ArgumentException("Invalid accidentals count.");
         }
 
-        public static Tonation GetTonation(int sharpsCount, int flatsCount)
+        public static IEnumerable<Tonation> GetTonation(int sharpsCount, int flatsCount)
         {
             List<Tonation> tonations = [
                 CFlatMajor, CMajor, CMinor, CSharpMajor, CSharpMinor,
@@ -58,7 +58,7 @@
             ];
 
             return tonations
-                .FirstOrDefault(t => t.FlatsCount == flatsCount && t.SharpsCount == sharpsCount) ??
+                .Where(t => t.FlatsCount == flatsCount && t.SharpsCount == sharpsCount) ??
                 throw new ArgumentException("Invalid number of accidentals.");
         }
 

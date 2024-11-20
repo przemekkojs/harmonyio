@@ -18,7 +18,7 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
             var flatsCount = parsedProblem.FlatsCount;
             var sharpsCount = parsedProblem.SharpsCount;
             var functions = parsedProblem.Functions;
-            var minor = parsedProblem.Minor;
+            var minor = parsedProblem.Minor != 1;
 
             List<Function> realFuntions = [];
 
@@ -26,7 +26,13 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
                 realFuntions.Add(new Function(f));
 
             // TODO: Poprawić tonację (dodać parametr minor itd.)
-            var tonation = Tonation.GetTonation(sharpsCount, flatsCount);
+            var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
+
+            var tonation = (minor ?
+                tonationList.FirstOrDefault(x => x.Mode == Mode.Minor) : 
+                tonationList.FirstOrDefault(x => x.Mode == Mode.Major)) ?? 
+                throw new ArgumentException("Invalid tonation");
+            
             var metre = Metre.GetMetre(metreCount, metreValue);
             var result = new Problem(realFuntions, metre, tonation);
 

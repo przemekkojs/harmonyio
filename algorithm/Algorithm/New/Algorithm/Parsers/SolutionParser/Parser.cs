@@ -1,7 +1,6 @@
 ﻿using Algorithm.New.Algorithm.Parsers.NoteParser;
 using Algorithm.New.Music;
 using Newtonsoft.Json;
-using System.Security.Cryptography;
 
 namespace Algorithm.New.Algorithm.Parsers.SolutionParser
 {
@@ -11,8 +10,18 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
         {
             JsonSolution? parsedTask = JsonConvert.DeserializeObject<JsonSolution>(solutionJsonString) ?? throw new ArgumentException("Invalid JSON string.");
 
+            var minor = parsedTask.Minor != 1;
+            var sharpsCount = parsedTask.SharpsCount;
+            var flatsCount = parsedTask.FlatsCount;
+
             var notes = parsedTask.Notes;
-            var tonation = Tonation.GetTonation(parsedTask.SharpsCount, parsedTask.FlatsCount);
+            var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
+
+            var tonation = (minor ?
+                tonationList.FirstOrDefault(x => x.Mode == Mode.Minor) :
+                tonationList.FirstOrDefault(x => x.Mode == Mode.Major)) ??
+                throw new ArgumentException("Invalid tonation");
+
             var metre = Metre.GetMetre(parsedTask.MetreCount, parsedTask.MetreValue);
 
             // (Bar index, vertical index) : Notes

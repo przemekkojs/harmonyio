@@ -304,15 +304,17 @@
                         </a>
                     </div>
 
-                    <a id="publish-quiz-@quiz.Id"
-                        class="btn btn-primary mt-auto"                        
-                        onclick="validateQuiz(@(quiz.Id), '@(quiz.Name)', '@(quiz.IsValid)')">
-                        Opublikuj
-                    </a>
+                    <div class="mt-auto">
+                        <span id="errors-quiz-@quiz.Id" class="text-danger me-2"></span>
 
-                    <span id="errors-quiz-@quiz.Id" class="text-danger"></span>
-                </div>  
-            </div>            
+                        <a id="publish-quiz-@quiz.Id"
+                            class="btn btn-primary"                        
+                            onclick="validateQuiz(@(quiz.Id), '@(quiz.Name)', '@(quiz.IsValid)')">
+                            Opublikuj
+                        </a>
+                    </div>
+                </div>
+            </div>
         }
 
         <a asp-page="Creator" class="no-style mb-3">

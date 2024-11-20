@@ -148,8 +148,6 @@ namespace Main.Pages
                     _repository.Delete(existingSolution);
                 }
 
-                // add new solution if there was no solution or current answer is different
-                // here also new solution is added when newAnswer == "", TODO FOR ALGORITM - check if anser == "" and can just return 0 points or something
                 var newSolution = new ExcersiseSolution
                 {
                     ExcersiseId = exercise.Id,
@@ -167,10 +165,10 @@ namespace Main.Pages
                 var excersiseResult = new ExcersiseResult
                 {
                     Comment = string.Empty,
-                    Points = 0, // Set initial points based on the algorithm's grade
+                    Points = 0,
                     AlgorithmPoints = algorithmGrade.Item1,
                     MaxPoints = maxPointsForExcersise,
-                    ExcersiseSolution = newSolution, // Associate with the solution
+                    ExcersiseSolution = newSolution,
                     MistakeResults = mistakeResults
                 };
 
