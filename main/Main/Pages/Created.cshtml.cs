@@ -239,13 +239,6 @@ public class CreatedModel : PageModel
         if (quizToPublish == null || quizToPublish.IsCreated || noClosedDate || noOpenDate)
             return RedirectToPage("Error");
 
-        // Jak quiz nie jest valid
-        var errorResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera b³êdne zadania." };
-
-        // TODO: Jakiœ popup, ¿e nie mo¿na
-        if (!quizToPublish.IsValid)
-            return new JsonResult(errorResult);
-
         quizToPublish.CloseDate = (DateTime)CloseDate!;
         quizToPublish.OpenDate = (DateTime)OpenDate!;
         quizToPublish.IsCreated = true;

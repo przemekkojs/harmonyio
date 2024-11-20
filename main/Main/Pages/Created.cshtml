@@ -276,8 +276,6 @@
         
         @foreach (var quiz in Model.Sketches)
         {
-            
-
             <div class="quiz border rounded shadow-sm mb-3 p-0 d-flex flex-row flex-shrink-0 p-3">
                 <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                     <div class="fw-bold fs-5 text-truncate">@quiz.Name</div>
@@ -306,17 +304,15 @@
                         </a>
                     </div>
 
-                    <a href="#"
-                        class="btn btn-primary mt-auto"
-                        data-bs-toggle="modal"
-                        data-bs-target="#publishPopup"
-                        data-quiz-id="@quiz.Id"
-                        data-quiz-name="@quiz.Name"
-                        data-callback-name="publish">
+                    <a id="publish-quiz-@quiz.Id"
+                        class="btn btn-primary mt-auto"                        
+                        onclick="validateQuiz(@(quiz.Id), '@(quiz.Name)', '@(quiz.IsValid)')">
                         Opublikuj
                     </a>
-                </div>
-            </div>
+
+                    <span id="errors-quiz-@quiz.Id" class="text-danger"></span>
+                </div>  
+            </div>            
         }
 
         <a asp-page="Creator" class="no-style mb-3">
@@ -333,13 +329,40 @@
 <partial name="~/Pages/Shared/PublishPopup.cshtml" />
 <partial name="~/Pages/Shared/AssignPopup.cshtml" />
 
-<script>
+<script>    
+    function onErrorTextChange(errorsQuiz) {
+        setTimeout(() => {
+            errorsQuiz.innerText = '';
+        }, 3000);
+    }
+
+    // Tu jest logika informowania o błędach w quizie
+    window.validateQuiz = function(quizId, quizName, isValid) {
+        var errorsQuiz = document.getElementById(`errors-quiz-${quizId}`);
+        errorsQuiz.innerText = "";
+
+        // Tu wrzucamy ewentualny popup, dla uproszczenia zrobiłem zwykły textbox
+        if (isValid === "False") {
+            errorsQuiz.innerText = "Quiz zawiera błędy";
+            onErrorTextChange(errorsQuiz);
+            return;
+        }           
+
+        var quiz = document.getElementById(`publish-quiz-${quizId}`);    
+        quiz.setAttribute('data-bs-toggle', 'modal');
+        quiz.setAttribute('data-bs-target', '#publishPopup');
+        quiz.setAttribute('data-quiz-id', quizId);
+        quiz.setAttribute('data-quiz-name', quizName);
+        quiz.setAttribute('data-callback-name', 'publish');
+        quiz.click();
+    }
+
     function deleteQuiz(quizId) {
         document.getElementById("deleteFormQuizId").value = quizId;
         document.getElementById("deleteFormForQuiz").submit();
     }
 
-    window.publish = async function (quizId, openDateTime, closeDateTime) {
+    window.publish = function (quizId, openDateTime, closeDateTime) {
         //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
 
         const form = document.getElementById("publishFormForQuiz");
