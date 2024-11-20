@@ -92,10 +92,7 @@ export class FunctionContainer {
         this.addFunctionButton.id = `add-function-${this.taskIndex}-${this.barIndex}`;
         
         this.container.id = `bar-${this.taskIndex}-${this.barIndex}`;
-
-        console.log("Before innerText:", this.barNumber.innerText);
-        this.barNumber.innerText = `${barIndex + 1}`; // TODO: Sprawdzić czemu to nie działa...
-        console.log("After innerText:", this.barNumber.innerText);
+        this.barNumber.innerText = `${barIndex + 1}`;
 
         this.handleAddFunction = this.addFunction.bind(this);
         this.addFunctionButton.addEventListener('click', this.handleAddFunction);
