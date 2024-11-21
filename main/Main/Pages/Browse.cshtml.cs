@@ -63,7 +63,7 @@ namespace Main.Pages
             if (quizNotStarted || !userIsParticipant)
                 return Forbid();
 
-            Quiz = quiz;
+
             var quizResult = quiz.QuizResults.FirstOrDefault();
 
             if (quizResult == null || quizResult.Grade == null)
@@ -78,9 +78,10 @@ namespace Main.Pages
             else
                 GradeString = ((Grade)quizResult.Grade).AsString();
 
+            Quiz = quiz;
             Questions = quiz.Exercises.Select(e => e.Question).ToList();
             Answers = quiz.Exercises
-                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.Answer ?? string.Empty)
+                .Select(e => e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.Answer ?? string.Empty)
                 .ToList();
 
             // Tutaj robimy b��dy
@@ -106,17 +107,24 @@ namespace Main.Pages
 
             // TODO when added max points to excersise, assign this max points
             ExerciseResults = quiz.Exercises
-                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.ExerciseResult)
-                .Select(result => result == null ?
-                    new ExerciseResultData { Points = 0 } :
-                    new ExerciseResultData
-
-                    {
-                        Points = result.Points,
-                        MaxPoints = result.MaxPoints,
-                        Comment = result.Comment
-                    })
-                .ToList();
+            .Select(e => new
+            {
+                e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.ExerciseResult,
+                e.MaxPoints
+            })
+            .Select(x => x.ExerciseResult == null
+                ? new ExerciseResultData
+                {
+                    Points = 0,
+                    MaxPoints = x.MaxPoints
+                }
+                : new ExerciseResultData
+                {
+                    Points = x.ExerciseResult.Points,
+                    MaxPoints = x.MaxPoints,
+                    Comment = x.ExerciseResult.Comment
+                })
+            .ToList();
             return Page();
         }
     }

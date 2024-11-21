@@ -124,7 +124,7 @@ public class JoinModelTests
             context.Users.AddRange(users);
 
             var creatorUser = users[0];
-            var participantUser = users[1]; // Simulating the existing participant
+            var curUser = users[1];
 
             var quiz = new Quiz
             {
@@ -141,7 +141,7 @@ public class JoinModelTests
             await context.SaveChangesAsync();
 
             _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
-                .ReturnsAsync(participantUser);
+                .ReturnsAsync(curUser);
 
             var repository = new ApplicationRepository(context);
             var pageModel = new JoinModel(repository, _userManagerMock.Object);
@@ -172,7 +172,7 @@ public class JoinModelTests
             context.Users.AddRange(users);
 
             var creatorUser = users[0];
-            var participantUser = users[1]; // Simulating the existing participant
+            var curUser = users[1];
 
             var quiz = new Quiz
             {
@@ -189,7 +189,7 @@ public class JoinModelTests
             await context.SaveChangesAsync();
 
             _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
-                .ReturnsAsync(participantUser);
+                .ReturnsAsync(curUser);
 
             var repository = new ApplicationRepository(context);
             var pageModel = new JoinModel(repository, _userManagerMock.Object);
@@ -207,7 +207,7 @@ public class JoinModelTests
                                              .FirstOrDefaultAsync(q => q.Id == 1);
             Assert.NotNull(updatedQuiz);
             Assert.Single(updatedQuiz.Participants); // Ensure participant is added
-            Assert.Contains(updatedQuiz.Participants, u => u.Id == participantUser.Id);
+            Assert.Contains(updatedQuiz.Participants, u => u.Id == curUser.Id);
         }
     }
 }
