@@ -44,8 +44,8 @@ public class AssignedModel : PageModel
             u => u
                 .Include(u => u.QuizResults)
                 .Include(u => u.ParticipatedQuizes)
-                    .ThenInclude(q => q.Excersises)
-                        .ThenInclude(e => e.ExcersiseSolutions.Where(es => es.UserId == appUser.Id))
+                    .ThenInclude(q => q.Exercises)
+                        .ThenInclude(e => e.ExerciseSolutions.Where(es => es.UserId == appUser.Id))
                 .Include(u => u.ParticipatedQuizes)
                     .ThenInclude(q => q.Creator)
         );
@@ -62,7 +62,7 @@ public class AssignedModel : PageModel
 
         foreach (var quiz in user.ParticipatedQuizes.Reverse())
         {
-            bool isSolved = quiz.Excersises.Any(e => e.ExcersiseSolutions.Any());
+            bool isSolved = quiz.Exercises.Any(e => e.ExerciseSolutions.Any());
 
             if (isSolved)
             {

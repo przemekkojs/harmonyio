@@ -10,7 +10,7 @@
 <div class="h-100 w-100 d-flex flex-row pb-3">
     <form id="solve-form" method="post">
         <input type="hidden" asp-for="QuizId" value="@Model.Quiz.Id" />
-        @for (int i = 0; i < Model.Quiz.Excersises.Count; i++)
+        @for (int i = 0; i < Model.Quiz.Exercises.Count; i++)
         {
             <input type="hidden" asp-for="@Model.Answers[@i]" value="@Model.Answers[@i]" />
         }
@@ -27,7 +27,7 @@
 
         <hr class="mb-0" />
 
-        <div id="excersises-buttons" class="w-100 py-3 mb-auto px-3 overflow-auto"
+        <div id="exercises-buttons" class="w-100 py-3 mb-auto px-3 overflow-auto"
             style="display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px;">
             @* FILLED VIA JS *@
         </div>
@@ -41,7 +41,7 @@
     </div>
 
     <div class="flex-grow-1 w-100 d-flex flex-column bg-white rounded shadow p-3 overflow-auto" id="staff-section-div">
-        <p id="excersise-question" class="fw-semibold align-items-start mb-3">
+        <p id="exercise-question" class="fw-semibold align-items-start mb-3">
             @*SET VIA JS*@
         </p>
 
@@ -78,8 +78,8 @@
         thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
         forbiddenSymbol: '@Url.Content("~/images/staff-symbols/forbidden.png")'
     };
-    const excersises = @Json.Serialize(Model.Quiz.Excersises);
-    const questions = excersises.map(e => JSON.parse(e.question));
+    const exercises = @Json.Serialize(Model.Quiz.Exercises);
+    const questions = exercises.map(e => JSON.parse(e.question));
 </script>
 
 <script src="~/lib/p5/p5.min.js"></script>
@@ -102,9 +102,9 @@
 
     function loadQuestion(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
-            document.getElementById("excersise-question").innerText = questions[index].question;
+            document.getElementById("exercise-question").innerText = questions[index].question;
             
-            document.getElementById("excersise-question").style.display = questions[index].question == '' ? 'none' : 'inline-block';
+            document.getElementById("exercise-question").style.display = questions[index].question == '' ? 'none' : 'inline-block';
 
             if (loadToGrandStaff) {
                 grandStaff.loadFromJson(questions[index], document.querySelector(`input[name="Answers[${index}]"]`).value);
@@ -121,7 +121,7 @@
     }
 
     function generateButtons(index) {
-        const questionButtonsContainer = document.getElementById("excersises-buttons");
+        const questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
 
         for (let i = 0; i < questions.length; i++) {

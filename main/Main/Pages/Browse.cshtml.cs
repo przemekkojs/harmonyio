@@ -45,9 +45,9 @@ namespace Main.Pages
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == id,
                 query => query
-                    .Include(q => q.Excersises)
-                        .ThenInclude(e => e.ExcersiseSolutions.Where(es => es.UserId == appUser.Id))
-                            .ThenInclude(es => es.ExcersiseResult)
+                    .Include(q => q.Exercises)
+                        .ThenInclude(e => e.ExerciseSolutions.Where(es => es.UserId == appUser.Id))
+                            .ThenInclude(es => es.ExerciseResult)
                     .Include(q => q.QuizResults.Where(qr => qr.UserId == appUser.Id))
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id))
             );
@@ -81,14 +81,14 @@ namespace Main.Pages
                 GradeString = ((Grade)quizResult.Grade).AsString();
             }
 
-            Questions = quiz.Excersises.Select(e => e.Question).ToList();
-            Answers = quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? "")
+            Questions = quiz.Exercises.Select(e => e.Question).ToList();
+            Answers = quiz.Exercises
+                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.Answer ?? "")
                 .ToList();
 
-            // TODO when added max points to excersise, assign this max points
-            ExerciseResults = quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.ExcersiseResult)
+            // TODO when added max points to exercise, assign this max points
+            ExerciseResults = quiz.Exercises
+                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.ExerciseResult)
                 .Select(result => result == null
                     ? new ExerciseResultData { Points = 0 }
                     : new ExerciseResultData

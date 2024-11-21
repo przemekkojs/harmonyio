@@ -236,7 +236,7 @@
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="fas fa-music icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Zadania:</span>
-                                    <span>@(quiz.Excersises.Count)</span>
+                                    <span>@(quiz.Exercises.Count)</span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center">
                                     <i class="fas fa-user icon-sm me-2"></i>
@@ -289,7 +289,7 @@
                                 <div class="d-flex flex-row align-items-center mb-2">
                                     <i class="fas fa-music icon-sm me-2"></i>
                                     <span class="fw-bold me-1">Zadania:</span>
-                                    <span>@(quiz.Excersises.Count())</span>
+                                    <span>@(quiz.Exercises.Count())</span>
                                 </div>
                                 <div class="d-flex flex-row align-items-center">
                                     <i class="fas fa-user icon-sm me-2"></i>
@@ -337,7 +337,7 @@
                                     <div class="d-flex flex-row align-items-center mb-2">
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="fw-bold me-1">Wypełniono:</span>
-                                        @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
+                                        @quiz.Exercises.First().ExerciseSolutions.Count / @quiz.Participants.Count
                                     </div>
                                 }
                                 <div class="d-flex flex-row align-items-center">
@@ -410,7 +410,7 @@
                                     <div class="d-flex flex-row align-items-center mb-2">
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="fw-bold me-1">Wypełniono:</span>
-                                        @quiz.Excersises.First().ExcersiseSolutions.Count / @quiz.Participants.Count
+                                        @quiz.Exercises.First().ExerciseSolutions.Count / @quiz.Participants.Count
                                     </div>
                                 }
                                 <div class="d-flex flex-row align-items-center">

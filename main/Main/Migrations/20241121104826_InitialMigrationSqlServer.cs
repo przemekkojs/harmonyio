@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Main.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialMigrationSqlServer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,8 +178,7 @@ namespace Main.Migrations
                         name: "FK_Quizes_AspNetUsers_CreatorId",
                         column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -202,7 +201,7 @@ namespace Main.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Excersises",
+                name: "Exercises",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -213,9 +212,9 @@ namespace Main.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Excersises", x => x.Id);
+                    table.PrimaryKey("PK_Exercises", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Excersises_Quizes_QuizId",
+                        name: "FK_Exercises_Quizes_QuizId",
                         column: x => x.QuizId,
                         principalTable: "Quizes",
                         principalColumn: "Id",
@@ -226,24 +225,22 @@ namespace Main.Migrations
                 name: "QuizParticipants",
                 columns: table => new
                 {
-                    ParticipantsId = table.Column<string>(type: "TEXT", nullable: false),
-                    ParticipatedQuizesId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ParticipantId = table.Column<string>(type: "TEXT", nullable: false),
+                    QuizId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuizParticipants", x => new { x.ParticipantsId, x.ParticipatedQuizesId });
+                    table.PrimaryKey("PK_QuizParticipants", x => new { x.ParticipantId, x.QuizId });
                     table.ForeignKey(
-                        name: "FK_QuizParticipants_AspNetUsers_ParticipantsId",
-                        column: x => x.ParticipantsId,
+                        name: "FK_QuizParticipants_AspNetUsers_ParticipantId",
+                        column: x => x.ParticipantId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_QuizParticipants_Quizes_ParticipatedQuizesId",
-                        column: x => x.ParticipatedQuizesId,
+                        name: "FK_QuizParticipants_Quizes_QuizId",
+                        column: x => x.QuizId,
                         principalTable: "Quizes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -264,35 +261,32 @@ namespace Main.Migrations
                         name: "FK_QuizResults_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_QuizResults_Quizes_QuizId",
                         column: x => x.QuizId,
                         principalTable: "Quizes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "GroupLeader",
                 columns: table => new
                 {
-                    TeacherInGroupsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TeachersId = table.Column<string>(type: "TEXT", nullable: false)
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroupLeader", x => new { x.TeacherInGroupsId, x.TeachersId });
+                    table.PrimaryKey("PK_GroupLeader", x => new { x.GroupId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_GroupLeader_AspNetUsers_TeachersId",
-                        column: x => x.TeachersId,
+                        name: "FK_GroupLeader_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_GroupLeader_UsersGroups_TeacherInGroupsId",
-                        column: x => x.TeacherInGroupsId,
+                        name: "FK_GroupLeader_UsersGroups_GroupId",
+                        column: x => x.GroupId,
                         principalTable: "UsersGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -329,21 +323,20 @@ namespace Main.Migrations
                 name: "PublishedToQuizzes",
                 columns: table => new
                 {
-                    PublishedToGroupId = table.Column<int>(type: "INTEGER", nullable: false),
-                    QuizzesId = table.Column<int>(type: "INTEGER", nullable: false)
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: false),
+                    QuizId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PublishedToQuizzes", x => new { x.PublishedToGroupId, x.QuizzesId });
+                    table.PrimaryKey("PK_PublishedToQuizzes", x => new { x.GroupId, x.QuizId });
                     table.ForeignKey(
-                        name: "FK_PublishedToQuizzes_Quizes_QuizzesId",
-                        column: x => x.QuizzesId,
+                        name: "FK_PublishedToQuizzes_Quizes_QuizId",
+                        column: x => x.QuizId,
                         principalTable: "Quizes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_PublishedToQuizzes_UsersGroups_PublishedToGroupId",
-                        column: x => x.PublishedToGroupId,
+                        name: "FK_PublishedToQuizzes_UsersGroups_GroupId",
+                        column: x => x.GroupId,
                         principalTable: "UsersGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -353,55 +346,53 @@ namespace Main.Migrations
                 name: "UserGroup",
                 columns: table => new
                 {
-                    StudentInGroupsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    StudentsId = table.Column<string>(type: "TEXT", nullable: false)
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserGroup", x => new { x.StudentInGroupsId, x.StudentsId });
+                    table.PrimaryKey("PK_UserGroup", x => new { x.GroupId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_UserGroup_AspNetUsers_StudentsId",
-                        column: x => x.StudentsId,
+                        name: "FK_UserGroup_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_UserGroup_UsersGroups_StudentInGroupsId",
-                        column: x => x.StudentInGroupsId,
+                        name: "FK_UserGroup_UsersGroups_GroupId",
+                        column: x => x.GroupId,
                         principalTable: "UsersGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExcersiseSolutions",
+                name: "ExerciseSolutions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Answer = table.Column<string>(type: "TEXT", nullable: false),
-                    ExcersiseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ExerciseId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExcersiseSolutions", x => x.Id);
+                    table.PrimaryKey("PK_ExerciseSolutions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExcersiseSolutions_AspNetUsers_UserId",
+                        name: "FK_ExerciseSolutions_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ExcersiseSolutions_Excersises_ExcersiseId",
-                        column: x => x.ExcersiseId,
-                        principalTable: "Excersises",
+                        name: "FK_ExerciseSolutions_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExcersiseResults",
+                name: "ExerciseResults",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -410,23 +401,44 @@ namespace Main.Migrations
                     MaxPoints = table.Column<int>(type: "INTEGER", nullable: false),
                     Comment = table.Column<string>(type: "TEXT", nullable: false),
                     AlgorithmPoints = table.Column<int>(type: "INTEGER", nullable: false),
-                    AlgorithmOpinion = table.Column<string>(type: "TEXT", nullable: false),
-                    ExcersiseSolutionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    QuizResultId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ExerciseSolutionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    QuizResultId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExcersiseResults", x => x.Id);
+                    table.PrimaryKey("PK_ExerciseResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExcersiseResults_ExcersiseSolutions_ExcersiseSolutionId",
-                        column: x => x.ExcersiseSolutionId,
-                        principalTable: "ExcersiseSolutions",
+                        name: "FK_ExerciseResults_ExerciseSolutions_ExerciseSolutionId",
+                        column: x => x.ExerciseSolutionId,
+                        principalTable: "ExerciseSolutions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExcersiseResults_QuizResults_QuizResultId",
+                        name: "FK_ExerciseResults_QuizResults_QuizResultId",
                         column: x => x.QuizResultId,
                         principalTable: "QuizResults",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MistakeResults",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Bars = table.Column<string>(type: "TEXT", nullable: false),
+                    Functions = table.Column<string>(type: "TEXT", nullable: false),
+                    MistakeCodes = table.Column<string>(type: "TEXT", nullable: false),
+                    ExerciseResultId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MistakeResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MistakeResults_ExerciseResults_ExerciseResultId",
+                        column: x => x.ExerciseResultId,
+                        principalTable: "ExerciseResults",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -469,35 +481,35 @@ namespace Main.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExcersiseResults_ExcersiseSolutionId",
-                table: "ExcersiseResults",
-                column: "ExcersiseSolutionId",
+                name: "IX_ExerciseResults_ExerciseSolutionId",
+                table: "ExerciseResults",
+                column: "ExerciseSolutionId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExcersiseResults_QuizResultId",
-                table: "ExcersiseResults",
+                name: "IX_ExerciseResults_QuizResultId",
+                table: "ExerciseResults",
                 column: "QuizResultId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Excersises_QuizId",
-                table: "Excersises",
+                name: "IX_Exercises_QuizId",
+                table: "Exercises",
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExcersiseSolutions_ExcersiseId",
-                table: "ExcersiseSolutions",
-                column: "ExcersiseId");
+                name: "IX_ExerciseSolutions_ExerciseId",
+                table: "ExerciseSolutions",
+                column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExcersiseSolutions_UserId",
-                table: "ExcersiseSolutions",
+                name: "IX_ExerciseSolutions_UserId",
+                table: "ExerciseSolutions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupLeader_TeachersId",
+                name: "IX_GroupLeader_UserId",
                 table: "GroupLeader",
-                column: "TeachersId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupRequests_GroupId",
@@ -510,9 +522,14 @@ namespace Main.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PublishedToQuizzes_QuizzesId",
+                name: "IX_MistakeResults_ExerciseResultId",
+                table: "MistakeResults",
+                column: "ExerciseResultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PublishedToQuizzes_QuizId",
                 table: "PublishedToQuizzes",
-                column: "QuizzesId");
+                column: "QuizId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Quizes_CreatorId",
@@ -520,9 +537,9 @@ namespace Main.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizParticipants_ParticipatedQuizesId",
+                name: "IX_QuizParticipants_QuizId",
                 table: "QuizParticipants",
-                column: "ParticipatedQuizesId");
+                column: "QuizId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuizResults_QuizId",
@@ -535,9 +552,9 @@ namespace Main.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserGroup_StudentsId",
+                name: "IX_UserGroup_UserId",
                 table: "UserGroup",
-                column: "StudentsId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsersGroups_MasterId",
@@ -564,13 +581,13 @@ namespace Main.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ExcersiseResults");
-
-            migrationBuilder.DropTable(
                 name: "GroupLeader");
 
             migrationBuilder.DropTable(
                 name: "GroupRequests");
+
+            migrationBuilder.DropTable(
+                name: "MistakeResults");
 
             migrationBuilder.DropTable(
                 name: "PublishedToQuizzes");
@@ -585,16 +602,19 @@ namespace Main.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "ExcersiseSolutions");
-
-            migrationBuilder.DropTable(
-                name: "QuizResults");
+                name: "ExerciseResults");
 
             migrationBuilder.DropTable(
                 name: "UsersGroups");
 
             migrationBuilder.DropTable(
-                name: "Excersises");
+                name: "ExerciseSolutions");
+
+            migrationBuilder.DropTable(
+                name: "QuizResults");
+
+            migrationBuilder.DropTable(
+                name: "Exercises");
 
             migrationBuilder.DropTable(
                 name: "Quizes");

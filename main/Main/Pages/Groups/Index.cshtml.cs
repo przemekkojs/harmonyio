@@ -62,6 +62,7 @@ namespace Main.Pages
                     .Include(u => u.Requests)
                         .ThenInclude(r => r.Group)
                         .ThenInclude(g => g.MasterUser)
+                    .AsSplitQuery()
             );
 
             if (appUser == null)

@@ -73,9 +73,9 @@ namespace Main.Pages
                     .Include(g => g.Students)
                     .Include(g => g.MasterUser)
                     .Include(g => g.Quizzes)
-                        .ThenInclude(q => q.Excersises)
-                            .ThenInclude(e => e.ExcersiseSolutions)
-                                .ThenInclude(es => es.ExcersiseResult)
+                        .ThenInclude(q => q.Exercises)
+                            .ThenInclude(e => e.ExerciseSolutions)
+                                .ThenInclude(es => es.ExerciseResult)
                     .Include(g => g.Quizzes)
                         .ThenInclude(q => q.Creator)
                     .Include(g => g.Quizzes)
@@ -85,6 +85,7 @@ namespace Main.Pages
                     .Include(g => g.Quizzes)
                     .Include(g => g.Requests)
                         .ThenInclude(r => r.User)
+                    .AsSplitQuery()
                 );
 
             if (group == null)
@@ -109,7 +110,7 @@ namespace Main.Pages
             var quizzes = group.Quizzes.Reverse();
             var openOrClosedQuizzes = quizzes.Where(q => q.State != Enumerations.QuizState.NotStarted);
 
-            UserSolvedQuizIds = openOrClosedQuizzes.Where(q => q.Excersises.Any(e => e.ExcersiseSolutions.Any(es => es.UserId == CurrentUserId))).Select(q => q.Id).ToHashSet();
+            UserSolvedQuizIds = openOrClosedQuizzes.Where(q => q.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.UserId == CurrentUserId))).Select(q => q.Id).ToHashSet();
             UserGradedQuizIds = openOrClosedQuizzes.Where(q => q.QuizResults.Any(qr => qr.UserId == CurrentUserId && qr.Grade != null)).Select(q => q.Id).ToHashSet();
 
             ActiveQuizzes = IsAdmin ?
@@ -123,7 +124,7 @@ namespace Main.Pages
 
             ToGradeQuizzes = IsAdmin ?
                 openOrClosedQuizzes.Where(
-                    q => q.Excersises.Any(e => e.ExcersiseSolutions.Any(es => es.ExcersiseResult?.QuizResultId == null)) ||
+                    q => q.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.ExerciseResult?.QuizResultId == null)) ||
                         q.QuizResults.Any(qr => qr.Grade == null) ||
                         (q.State == Enumerations.QuizState.Closed && q.QuizResults.Where(qr => qr.Grade != null).Count() != q.Participants.Count)
                     ) :
@@ -135,7 +136,7 @@ namespace Main.Pages
                 openOrClosedQuizzes.Where(
                     q => (
                             q.QuizResults.Count > 0 &&
-                            q.Excersises.All(e => e.ExcersiseSolutions.All(es => es.ExcersiseResult != null && es.ExcersiseResult.QuizResultId != null)) &&
+                            q.Exercises.All(e => e.ExerciseSolutions.All(es => es.ExerciseResult != null && es.ExerciseResult.QuizResultId != null)) &&
                             q.QuizResults.All(qr => qr.Grade != null)
                         ) ||
                         (

@@ -34,7 +34,7 @@ public class JoinModel : PageModel
             q => q.Code == code,
             query => query
                 .Include(q => q.Creator)
-                .Include(q => q.Excersises)
+                .Include(q => q.Exercises)
                 .Include(q => q.Participants)
         );
 

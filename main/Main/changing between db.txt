@@ -1,0 +1,17 @@
+
+Program.cs
+{
+    in builder.Services.AddDbContext:
+    UseSqlServer <-> UseSqlite
+}
+
+appsettings.json
+{
+    SqlServer:
+    "DefaultConnection": "Server=LAPTOP-FAJOP32S;Database=HarmonyIO;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;"
+    Sqlite:
+    "DefaultConnection": "DataSource=app.db;Cache=Shared"
+}
+
+remember to:
+dotnet ef database update

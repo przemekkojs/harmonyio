@@ -18,7 +18,7 @@ public class ApplicationUser : IdentityUser
     public ICollection<Quiz> CreatedQuizes = new List<Quiz>();
     public ICollection<Quiz> ParticipatedQuizes = new List<Quiz>();
 
-    public ICollection<ExcersiseSolution> ExcersiseSolutions = new List<ExcersiseSolution>();
+    public ICollection<ExerciseSolution> ExerciseSolutions = new List<ExerciseSolution>();
     public ICollection<QuizResult> QuizResults = new List<QuizResult>();
 
 
