@@ -64,8 +64,7 @@ namespace Main.Pages
                 return Forbid();
 
 
-            var quizResult = quiz.QuizResults.FirstOrDefault();
-
+            var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
             if (quizResult == null || quizResult.Grade == null)
             {
                 // quiz is open and quiz result isnt set

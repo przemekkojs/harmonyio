@@ -60,7 +60,7 @@ public class ApplicationRepository : IRepository
         context.MistakeResults.RemoveRange(context.MistakeResults);
     }
 
-    public async Task SaveChangesAsync()
+    public virtual async Task SaveChangesAsync()
     {
         await context.SaveChangesAsync();
     }

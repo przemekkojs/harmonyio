@@ -75,6 +75,7 @@ public class BrowseModelTests
 
             var creatorUser = users[0];
             var curUser = users[1];
+            var otherUser = users[2];
 
             var quiz = new Quiz
             {
@@ -84,7 +85,8 @@ public class BrowseModelTests
                 CreatorId = creatorUser.Id,
                 IsCreated = true,
                 OpenDate = DateTime.Now.AddHours(-1),
-                CloseDate = DateTime.Now.AddHours(1)
+                CloseDate = DateTime.Now.AddHours(1),
+                Participants = new List<ApplicationUser> { otherUser }
             };
 
             context.Quizes.Add(quiz);
@@ -117,6 +119,7 @@ public class BrowseModelTests
 
             var creatorUser = users[0];
             var curUser = users[1];
+            var otherUser = users[2];
 
             var quiz = new Quiz
             {
@@ -126,7 +129,8 @@ public class BrowseModelTests
                 CreatorId = creatorUser.Id,
                 IsCreated = true,
                 OpenDate = DateTime.Now.AddHours(1),
-                CloseDate = DateTime.Now.AddHours(2)
+                CloseDate = DateTime.Now.AddHours(2),
+                Participants = new List<ApplicationUser> { curUser, otherUser }
             };
 
             context.Quizes.Add(quiz);
@@ -159,6 +163,7 @@ public class BrowseModelTests
 
             var creatorUser = users[0];
             var curUser = users[1];
+            var otherUser = users[2];
 
             var quiz = new Quiz
             {
@@ -169,7 +174,7 @@ public class BrowseModelTests
                 IsCreated = true,
                 OpenDate = DateTime.Now.AddHours(-1),
                 CloseDate = DateTime.Now.AddHours(1),
-                Participants = new List<ApplicationUser> { curUser }
+                Participants = new List<ApplicationUser> { curUser, otherUser }
             };
             context.Quizes.Add(quiz);
 
