@@ -599,16 +599,14 @@ class FunctionCreator {
         const alterations = this.alterationsList != null ? this.alterationsList : [];
         const added = this.addedList != null ? this.addedList : [];
 
-        if (symbol === "") {
-            return null;
-        }        
-
+        // To jest zapisywane
         let functionResult = new ParsedFunction(
             this.barIndex, this.functionIndex,
             minor, symbol, position, root, removed,
             alterations, added
         );
 
+        console.log("Success");
         return functionResult;
     }
 

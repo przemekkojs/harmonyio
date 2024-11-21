@@ -8,6 +8,9 @@
         public string Name { get; private set; }
         public Mode Mode { get; private set; }
 
+        public static readonly List<string> SharpsNotes = ["F", "C", "G", "D", "A", "E", "B"];
+        public static readonly List<string> FlatsNotes = ["B", "E", "A", "D", "G", "C", "F"];
+
         // TODO: Json Constructor
 
         public override bool Equals(object? obj)

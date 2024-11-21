@@ -31,7 +31,7 @@ class Task {
         this.maxPointsInput.required = true;        
 
         this.pointsDiv = document.createElement('div');
-        this.pointsDiv.className = "col-auto p-1 h-100 align-items-left";
+        this.pointsDiv.className = "col-auto h-100 p-0 align-items-left";
         this.pointsDiv.appendChild(this.taskNumber);
         this.pointsDiv.appendChild(this.maxPointsInput);
         
@@ -45,7 +45,7 @@ class Task {
         this.questionFormGroup.appendChild(this.questionInput);
 
         this.questionDiv = document.createElement('div');
-        this.questionDiv.className = "col p-1 h-100";
+        this.questionDiv.className = "col h-100 px-2 pb-1";
         this.questionDiv.appendChild(this.questionFormGroup);        
 
         // Parametry (metrum i tonacja):
@@ -108,7 +108,7 @@ class Task {
         modeCol.appendChild(this.tonationModeSelect);
 
         this.paramsInnerDiv = document.createElement('div');
-        this.paramsInnerDiv.className = "row gx-1 mt-1";
+        this.paramsInnerDiv.className = "row mt-1 gx-1";
         this.paramsInnerDiv.appendChild(nameCol);
         this.paramsInnerDiv.appendChild(modeCol);
 
@@ -119,42 +119,38 @@ class Task {
         this.dropdownsFormGroup.appendChild(this.paramsInnerDiv);
 
         this.dropdownsDiv = document.createElement('div');
-        this.dropdownsDiv.className = "col-auto p-1 h-100";
+        this.dropdownsDiv.className = "col-auto p-0 h-100";
         this.dropdownsDiv.appendChild(this.dropdownsFormGroup);
+
+        this.deleteButtonContent = document.createElement('div');
+        this.deleteButtonContent.className = "trash-icon-white mx-auto w-100 h-100";
+
+        this.deleteButton = document.createElement('button');
+        this.deleteButton.className = "col-auto ms-2 mb-1 btn btn-danger p-4";
+        this.deleteButton.style = "width: 81px;";
+        this.deleteButton.appendChild(this.deleteButtonContent);
 
         // Główna forma:
         this.form = document.createElement('div');
-        this.form.className = "row align-items-center";
+        this.form.className = "d-flex flex-row";
         this.form.style = "height: 85px;";
         this.form.appendChild(this.pointsDiv);
         this.form.appendChild(this.questionDiv);
         this.form.appendChild(this.dropdownsDiv);
+        this.form.appendChild(this.deleteButton);
 
         // Kontener parametrów
         this.params = document.createElement('div');
-        this.params.className = "container border-bottom p-1 gx-1 mt-1";       
         this.params.appendChild(this.form);
-
-        // Usuwanie zadania
-        this.deleteButton = document.createElement('input');
-        this.deleteButton.type = "button";
-        this.deleteButton.className = "btn btn-danger btn-sm";
-        this.deleteButton.style = "width: 100px;";
-        this.deleteButton.value = "Usuń";
-
-        this.taskSubmit = document.createElement('div');
-        this.taskSubmit.className = "task-submit";
-        this.taskSubmit.appendChild(this.deleteButton);
 
         // Pełny kontener zadania
         // Kontener zadania: 
         this.container = document.createElement('div');
-        this.container.className = "task-content w-100 p-3 rounded";
+        this.container.className = "task-content w-100 rounded mb-4";
 
         this.container.appendChild(this.hiddenInput);
         this.container.appendChild(this.params);
         this.container.appendChild(this.barContainer.container);
-        this.container.appendChild(this.taskSubmit);        
 
         this.setId(this.taskIndex);
     }
@@ -229,10 +225,10 @@ class Task {
 
             let barCount = this.barContainer.bars.length;
 
-            while (barIndex >= barCount) {
-                barCount++;
+            while (barIndex >= barCount) {                
                 this.barContainer.addBar();
-            }                
+                barCount++;
+            }
 
             const bar = this.barContainer.bars[barIndex];
             const functionCount = bar ? bar.functionContainer.functions.length - 1 : 0;
@@ -275,7 +271,7 @@ class Task {
 }
 
 export class TaskContainer {
-    constructor(parent, maxTasksCount = 3) {
+    constructor(parent, maxTasksCount = 100) {
         this.tasks = [];
         this.maxTasksCount = maxTasksCount;
         this.parent = parent;

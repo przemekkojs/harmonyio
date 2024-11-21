@@ -4,6 +4,7 @@ using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Mistake.Solution;
 using Algorithm.New.Music;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Newtonsoft.Json;
 
 namespace Main.GradingAlgorithm
@@ -31,8 +32,6 @@ namespace Main.GradingAlgorithm
 
             var checkResult = SolutionChecker
                 .CheckSolution(solution, settings);
-                //.Distinct()
-                //.ToList();
 
             var maxMistakesCount = GetMaxMistakesCount(problem, settings);
             var opinion = GenerateOpinion(checkResult);
@@ -41,6 +40,26 @@ namespace Main.GradingAlgorithm
             var algorithmPoints = maxMistakesCount - mistakesCount > 0 ? maxMistakesCount - mistakesCount : 0;
             var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
             var points = Convert.ToInt32(pointsPercent * maxPoints / 100);
+
+            var emptyCount = 0;
+            var stacksCount = solutionParseResult.Stacks.Count;
+
+            foreach (var stack in solutionParseResult.Stacks)
+            {
+                var innerCount = 0;
+
+                foreach (var note in stack.Notes)
+                {
+                    if (note == null)
+                        innerCount++;
+                }
+
+                if (innerCount == 4)
+                    emptyCount++;
+            }
+
+            if (emptyCount == stacksCount)
+                return (0, maxPoints, opinion);
 
             return (points, maxPoints, opinion);
         }

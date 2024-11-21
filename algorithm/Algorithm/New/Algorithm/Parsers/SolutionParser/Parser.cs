@@ -1,6 +1,7 @@
 ﻿using Algorithm.New.Algorithm.Parsers.NoteParser;
 using Algorithm.New.Music;
 using Newtonsoft.Json;
+using System.Security.Cryptography;
 
 namespace Algorithm.New.Algorithm.Parsers.SolutionParser
 {
@@ -11,11 +12,27 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
             JsonSolution? parsedTask = JsonConvert.DeserializeObject<JsonSolution>(solutionJsonString) ?? throw new ArgumentException("Invalid JSON string.");
 
             var notes = parsedTask.Notes;
+            var tonation = Tonation.GetTonation(parsedTask.SharpsCount, parsedTask.FlatsCount);
+            var metre = Metre.GetMetre(parsedTask.MetreCount, parsedTask.MetreValue);
 
             // (Bar index, vertical index) : Notes
             Dictionary<(int, int), List<JsonNote>> noteVerticals = new();
             List<Stack> stacks = [];
 
+            var accidentalNotes = tonation.SharpsCount > 0 ?
+                Tonation.SharpsNotes[0..tonation.SharpsCount] :
+                Tonation.FlatsNotes[0..tonation.FlatsCount];
+
+            var accidental = tonation.SharpsCount > 0 ?
+                "#" : 
+                tonation.FlatsCount > 0 ? 
+                    "b" :
+                    "";
+
+            if (accidentalNotes == null)
+                accidentalNotes = [];
+
+            // TODO: Korekta wszystkich nut
             // Wzięcie wszystkich nut
             foreach (var note in notes)
             {
@@ -34,15 +51,27 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
             {
                 var noteList = noteVerticals[key] ?? [];
 
-                var soprano = GetNoteByVoice(Constants.SOPRANO, noteList);
-                var alto = GetNoteByVoice(Constants.ALTO, noteList);
-                var tenore = GetNoteByVoice(Constants.TENORE, noteList);
-                var bass = GetNoteByVoice(Constants.BASS, noteList);
+                var sopranoJsonNote = GetNoteByVoice(Constants.SOPRANO, noteList);
+                var altoJsonNote = GetNoteByVoice(Constants.ALTO, noteList);
+                var tenoreJsonNote = GetNoteByVoice(Constants.TENORE, noteList);
+                var bassJsonNote = GetNoteByVoice(Constants.BASS, noteList);
 
-                var parsedSoprano = NoteParser.Parser.ParseJsonNoteToNote(soprano);
-                var parserAlto = NoteParser.Parser.ParseJsonNoteToNote(alto);
-                var parsedTenore = NoteParser.Parser.ParseJsonNoteToNote(tenore);
-                var parsedBass = NoteParser.Parser.ParseJsonNoteToNote(bass);
+                var parsedSoprano = NoteParser.Parser.ParseJsonNoteToNote(sopranoJsonNote);
+                var parserAlto = NoteParser.Parser.ParseJsonNoteToNote(altoJsonNote);
+                var parsedTenore = NoteParser.Parser.ParseJsonNoteToNote(tenoreJsonNote);
+                var parsedBass = NoteParser.Parser.ParseJsonNoteToNote(bassJsonNote);
+
+                var soprano = parsedSoprano?.Note;
+                var alto = parserAlto?.Note;
+                var tenore = parsedTenore?.Note;
+                var bass = parsedBass?.Note;
+
+                List<Note?> tmpList = [soprano, alto, tenore, bass];
+
+                foreach (var note in tmpList)
+                {
+                    SetNoteAccidental(note, accidental, accidentalNotes);
+                }
 
                 var toAdd = new Stack(
                     new Music.Index()
@@ -52,26 +81,16 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                         Duration = noteList[0].Value
                     },
 
-                    parsedSoprano?.Note,
-                    parserAlto?.Note,
-                    parsedTenore?.Note,
-                    parsedBass?.Note
+                    soprano,
+                    alto,
+                    tenore,
+                    bass
                 );
 
                 stacks.Add(toAdd);
-            }
+            }            
 
-            var tonation = Tonation.GetTonation(parsedTask.SharpsCount, parsedTask.FlatsCount);
-            
-            try
-            {
-                var metre = Metre.GetMetre(parsedTask.MetreCount, parsedTask.MetreValue);
-                return new SolutionParseResult(tonation, metre, stacks);
-            }
-            catch (ArgumentException)
-            {
-                return new SolutionParseResult(null, null, stacks);
-            }
+            return new SolutionParseResult(tonation, metre, stacks);
         }
 
         // TODO: Make a one-liner using FirstOrDefault<>()
@@ -90,6 +109,15 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
             }
 
             return null;
+        }
+
+        private static void SetNoteAccidental(Note? note, string accidental, List<string> accidentalNotes)
+        {
+            if (note != null)
+            {
+                if (accidentalNotes.Contains(note.Name))
+                    note.SetNewName(note.Name + accidental);
+            }
         }
 
         public static string ParseSolutionToJson(Solution solution)

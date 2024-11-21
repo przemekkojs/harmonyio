@@ -13,6 +13,9 @@
 /main/Main/bin
 /main/Main/obj
 
+/main/Main.Tests/bin
+/main/Main.Tests/obj
+
 **/jsconfig.json
 
 /mockups

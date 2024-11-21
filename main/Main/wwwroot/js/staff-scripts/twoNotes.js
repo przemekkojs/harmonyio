@@ -646,7 +646,7 @@ class TwoNotes {
       this.parent.shouldDrawHintArea(this.isUpperStaff)
     ) {
       push();
-      fill(0, 255, 0, 15);
+      fill(81, 125, 213, 20);
       noStroke();
       const thirdW = this.getWidth() / 3;
       rect(

@@ -32,12 +32,11 @@
         {
             <input type="hidden" asp-for="UserIds[i]" value="@Model.UserIds[i]" />
         }
-    </form>
 
     <div class="sidebar d-flex flex-column bg-white shadow rounded pb-3 me-3">
         <div class="fw-bold fs-4 overflow-hidden p-3 flex-shrink-0" style="text-overflow: ellipsis;">
             @Model.QuizName
-        </div>
+        </div>            
 
         <hr class="m-0" />
 
@@ -60,8 +59,12 @@
 
         <hr class="m-0 mb-3" />
 
-        <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz
-            oceny</button>
+        <div class="d-flex flex-row px-3 mb-3">
+            <input asp-for="ShareAlgorithmOpinion" type="checkbox" class="form-check-input me-2" checked>
+            <span class="text-secondary">Udostępnij uwagi algorytmu</span>
+        </div>
+
+        <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz oceny</button>
         <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
     </div>
 
@@ -74,11 +77,11 @@
 
                 <span class="fw-bold ms-auto me-2">Wynik</span>
                 <div id="points-text"
-                    class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap h-100 align-items-center d-flex">
+                    class="bg-light border border-secondary text-secondary rounded fw-bold px-2 py-1 me-2 text-nowrap h-100 align-items-center d-flex">
                     @*SET VIA JS*@
                 </div>
                 <div id="percentage-text"
-                    class="border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4 h-100 align-items-center d-flex">
+                    class="bg-light border border-secondary text-secondary rounded fw-bold px-2 py-1 me-4 h-100 align-items-center d-flex">
                     @*SET VIA JS*@
                 </div>
                 <span class="fw-bold me-2">Ocena</span>
@@ -106,24 +109,25 @@
                         class="btn btn-outline-secondary btn-tiny-width p-1 ms-2"></button>
                 </div>                
 
+                @* Punkty sugerowane przez algorytm *@
+                <span class="fw-bold ms-auto me-2">Sugestia</span>
+                <div type="number" id="suggestion" style="width: 50px;"
+                     class="bg-light text-center fw-bold border border-secondary text-secondary rounded px-2 py-1 align-items-center justify-content-center d-flex h-100" readonly>
+                    @*SET VIA JS*@
+                </div>
+
                 @* Punkty nauczyciela *@
-                <span class="fw-bold ms-auto me-2">Punkty</span>
-                <input type="number" id="points" onchange="onPointsChange(this.value)"
+                <span class="fw-bold ms-3 me-2">Punkty</span>
+                <input type="number" id="points" style="width: 50px; onchange="onPointsChange(this.value)"
                     onKeyPress="integerKeyPress(event)" class="form-control points-input border-secondary bg-white" />
 
                 @* Max punktów za zadanie *@
                 <span class="fw-bold ms-3 me-2">Max</span>
-                <div id="max"
-                    class="border border-secondary text-secondary rounded px-2 py-1 align-items-center d-flex h-100">
+                <div id="max" style="width: 50px;"
+                    class="bg-light fw-bold border border-secondary text-secondary rounded px-2 py-1 align-items-center justify-content-center d-flex d-flex h-100">
                     @*SET VIA JS*@
                 </div>
 
-                @* Punkty sugerowane przez algorytm *@
-                <span class="fw-bold ms-3 me-2">Sugestia</span>
-                <div type="number" id="suggestion"
-                     class="border border-secondary text-secondary rounded px-2 py-1 align-items-center d-flex h-100" readonly>
-                    @*SET VIA JS*@
-                </div>
 
                 <a href="#" class="ms-3 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#commentPopup">
                     Komentarz
@@ -148,6 +152,9 @@
             </div>
         </div>
     </div>
+
+    
+    </form>
 </div>
 
 <div class="modal fade" id="commentPopup" tabindex="-1" role="dialog" aria-labelledby="deletePopupCenterTitle"

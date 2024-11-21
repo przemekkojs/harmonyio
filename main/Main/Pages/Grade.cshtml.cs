@@ -8,8 +8,6 @@ using Main.Enumerations;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
 using Algorithm.New.Algorithm.Mistake.Solution;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Algorithm.New;
 
 namespace Main.Pages
 {
@@ -41,6 +39,8 @@ namespace Main.Pages
         public List<List<int>> Points { get; set; } = []; //user, then points for exercise solution
         [BindProperty]
         public List<List<string>> Comments { get; set; } = []; //user, then comment for exercise solution
+        [BindProperty]
+        public bool ShareAlgorithmOpinion { get; set; }
 
         public GradeModel(
             ApplicationRepository repository,
@@ -92,18 +92,25 @@ namespace Main.Pages
             {
                 var bar = key.Item1 + 1;
 
+                if (bar <= 0)
+                    bar = 1;
+
                 var function1 = key.Item2.Item1 + 1;
                 var function2 = key.Item2.Item2 + 1;
                 var bar2 = key.Item2.Item3 + 1;
 
+                if (bar2 <= 0)
+                    bar2 = 1;
+
                 if (bar != lastBar)
                 {
-                    if (lastBar != 0)
+                    if (lastBar > 0)
                         result += $"</details>";
 
-                    lastBar = bar;
                     result += $"<details><summary>Takt {bar}</summary>";
                 }
+
+                lastBar = bar;
 
                 if (function1 == function2)
                     result += $"<details><summary>Funkcja na miar� {function1}</summary>";
@@ -178,7 +185,9 @@ namespace Main.Pages
 
             QuizId = quiz.Id;
             QuizName = quiz.Name;
+            
             Exercises = [.. quiz.Exercises];
+
             InitializeMistakes(quiz); // Tutaj inicjowane s� b��dy
 
             var allSolutions = quiz.Exercises.SelectMany(e => e.ExerciseSolutions).ToList();
