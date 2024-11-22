@@ -228,33 +228,33 @@ public class BrowseModelTests
                 OpenDate = DateTime.Now.AddHours(-1),
                 CloseDate = DateTime.Now.AddHours(1),
                 Participants = new List<ApplicationUser> { curUser, otherUser },
-                Excersises = new List<Excersise>
+                Exercises = new List<Exercise>
                 {
-                    new Excersise
+                    new Exercise
                     {
                         Question = "q1",
                         MaxPoints = 12,
-                        ExcersiseSolutions = new List<ExcersiseSolution>
+                        ExerciseSolutions = new List<ExerciseSolution>
                         {
                             // no solution for this question for cur user to check empty behavior
-                            new ExcersiseSolution
+                            new ExerciseSolution
                             {
                                 UserId = otherUser.Id,
                                 Answer = "other user a1",
                             }
                         }
                     },
-                    new Excersise
+                    new Exercise
                     {
                         Question = "q2",
                         MaxPoints = 13,
-                        ExcersiseSolutions = new List<ExcersiseSolution>
+                        ExerciseSolutions = new List<ExerciseSolution>
                         {
-                            new ExcersiseSolution
+                            new ExerciseSolution
                             {
                                 UserId = curUser.Id,
                                 Answer = "cur user a2",
-                                ExcersiseResult = new ExcersiseResult
+                                ExerciseResult = new ExerciseResult
                                 {
                                     Points = 10,
                                     MaxPoints = 13,
@@ -262,11 +262,11 @@ public class BrowseModelTests
                                     AlgorithmPoints = 11
                                 }
                             },
-                            new ExcersiseSolution
+                            new ExerciseSolution
                             {
                                 UserId = otherUser.Id,
                                 Answer = "other user a2",
-                                ExcersiseResult = new ExcersiseResult
+                                ExerciseResult = new ExerciseResult
                                 {
                                     Points = 11,
                                     MaxPoints = 13,
