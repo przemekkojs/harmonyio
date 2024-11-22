@@ -78,13 +78,13 @@ namespace Main.Pages
             else
                 GradeString = ((Grade)quizResult.Grade).AsString();
 
-            Questions = quiz.Excersises.Select(e => e.Question).ToList();
-            Answers = quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? string.Empty)
+            Questions = quiz.Exercises.Select(e => e.Question).ToList();
+            Answers = quiz.Exercises
+                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.Answer ?? string.Empty)
                 .ToList();
 
             // Tutaj robimy b��dy
-            var excersiseResult = quizResult?.ExcersiseResults
+            var excersiseResult = quizResult?.ExerciseResults
                 .FirstOrDefault();
 
             if (excersiseResult != null)
@@ -105,8 +105,8 @@ namespace Main.Pages
                 Opinion = string.Empty;
 
             // TODO when added max points to excersise, assign this max points
-            ExerciseResults = quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.ExcersiseResult)
+            ExerciseResults = quiz.Exercises
+                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.ExerciseResult)
                 .Select(result => result == null ?
                     new ExerciseResultData { Points = 0 } :
                     new ExerciseResultData

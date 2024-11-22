@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Main.Enumerations;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
+using Algorithm.New.Algorithm.Mistake.Solution;
 
 namespace Main.Pages
 {
@@ -162,7 +163,7 @@ namespace Main.Pages
 
             QuizId = quiz.Id;
             QuizName = quiz.Name;
-            Excersises = [.. quiz.Excersises];
+            Exercises = [.. quiz.Exercises];
 
             var allSolutions = quiz.Exercises.SelectMany(e => e.ExerciseSolutions).ToList();
             var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
