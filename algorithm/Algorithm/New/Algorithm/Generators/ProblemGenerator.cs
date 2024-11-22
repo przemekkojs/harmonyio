@@ -15,7 +15,7 @@ namespace Algorithm.New.Algorithm.Generators
         private const int PRIORITY_LOW = 35;
         private const int PRIORITY_LOWEST = 20;
 
-        private static readonly Random _random = new Random();
+        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
 
         private static readonly Dictionary<Symbol, List<(int, Symbol)>> NextSymbols = new()
         {
@@ -260,7 +260,7 @@ namespace Algorithm.New.Algorithm.Generators
 
             var minor = MinorWeights[bestSymbol] == MINOR_DEPENDANT ?
                 tonation.Mode == Mode.Minor :
-                _random.Next() >= MinorWeights[bestSymbol];            
+                _random.Next() <= MinorWeights[bestSymbol];            
 
             return new Function(
                 index: new Music.Index()
