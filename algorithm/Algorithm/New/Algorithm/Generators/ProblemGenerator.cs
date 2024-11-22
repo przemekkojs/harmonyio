@@ -47,7 +47,10 @@ namespace Algorithm.New.Algorithm.Generators
             },
             { Symbol.Diii, new Dictionary<int, Symbol>()
                 {
-
+                    { PRIORITY_HIGHEST, Symbol.Tvi },
+                    { PRIORITY_HIGH, Symbol.T },
+                    { PRIORITY_HIGH, Symbol.D },
+                    { PRIORITY_STANDARD, Symbol.Dvii }
                 }
             },
             { Symbol.S, new Dictionary<int, Symbol>()
@@ -55,7 +58,7 @@ namespace Algorithm.New.Algorithm.Generators
                     { PRIORITY_HIGHEST, Symbol.D },
                     { PRIORITY_HIGHEST, Symbol.Dvii },
                     { PRIORITY_HIGH, Symbol.T },
-                    { PRIORITY_STANDARD, Symbol.T }
+                    { PRIORITY_STANDARD, Symbol.Tvi }
                 }
             },
             { Symbol.D, new Dictionary<int, Symbol>()
@@ -66,22 +69,30 @@ namespace Algorithm.New.Algorithm.Generators
             },
             { Symbol.Tvi, new Dictionary<int, Symbol>()
                 {
-
+                    { PRIORITY_HIGHEST, Symbol.Sii },
+                    { PRIORITY_HIGH, Symbol.S }
                 }
             },
             { Symbol.Svi, new Dictionary<int, Symbol>()
                 {
-
+                    { PRIORITY_HIGHEST, Symbol.Diii },
+                    { PRIORITY_HIGH, Symbol.S },
+                    { PRIORITY_STANDARD, Symbol.T },
+                    { PRIORITY_STANDARD, Symbol.D }
                 }
             },
             { Symbol.Dvii, new Dictionary<int, Symbol>()
                 {
-
+                    { PRIORITY_HIGHEST, Symbol.T },
+                    { PRIORITY_HIGH, Symbol.Tiii },
+                    { PRIORITY_STANDARD, Symbol.Tvi }
                 }
             },
             { Symbol.Svii, new Dictionary<int, Symbol>()
                 {
-
+                    { PRIORITY_HIGHEST, Symbol.D },
+                    { PRIORITY_HIGHEST, Symbol.Diii },
+                    { PRIORITY_HIGH, Symbol.Tiii }
                 }
             }
         };
