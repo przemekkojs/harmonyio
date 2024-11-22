@@ -226,7 +226,6 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ExerciseResultId")
-
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Functions")

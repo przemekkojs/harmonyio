@@ -168,6 +168,7 @@ namespace Main.Migrations
                     OpenDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CloseDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsCreated = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsValid = table.Column<bool>(type: "INTEGER", nullable: false),
                     Code = table.Column<string>(type: "TEXT", nullable: true),
                     CreatorId = table.Column<string>(type: "TEXT", nullable: false)
                 },

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241121104826_InitialMigrationSqlServer")]
+    [Migration("20241122144126_InitialMigrationSqlServer")]
     partial class InitialMigrationSqlServer
     {
         /// <inheritdoc />
@@ -263,6 +263,9 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsCreated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsValid")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
