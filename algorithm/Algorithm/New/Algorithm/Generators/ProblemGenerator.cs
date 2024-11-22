@@ -4,6 +4,8 @@ namespace Algorithm.New.Algorithm.Generators
 {
     public static class ProblemGenerator
     {
+        public const int MIN_BARS = 2;
+
         private const int MAX_WEIGHT = 100;
         private const int MINOR_DEPENDANT = -1;
 
@@ -13,86 +15,85 @@ namespace Algorithm.New.Algorithm.Generators
         private const int PRIORITY_LOW = 35;
         private const int PRIORITY_LOWEST = 20;
 
-        private static readonly Random _random = new();
+        private static readonly Random _random = new Random();
 
-        // TODO: Implementacja
-        private static readonly Dictionary<Symbol, Dictionary<int, Symbol>> NextSymbols = new()
+        private static readonly Dictionary<Symbol, List<(int, Symbol)>> NextSymbols = new()
         {
-            { Symbol.T, new Dictionary<int, Symbol>()
+            { Symbol.T, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.S },
-                    { PRIORITY_HIGHEST, Symbol.Sii },
-                    { PRIORITY_HIGHEST, Symbol.Svi },
-                    { PRIORITY_STANDARD, Symbol.D },
-                    { PRIORITY_STANDARD, Symbol.Dvii },
-                    { PRIORITY_LOW, Symbol.Diii }
+                    ( PRIORITY_HIGHEST, Symbol.S ),
+                    ( PRIORITY_HIGHEST, Symbol.Sii ),
+                    ( PRIORITY_HIGHEST, Symbol.Svi ),
+                    ( PRIORITY_STANDARD, Symbol.D ),
+                    ( PRIORITY_STANDARD, Symbol.Dvii ),
+                    ( PRIORITY_LOW, Symbol.Diii )
                 }
             },
-            { Symbol.Sii, new Dictionary<int, Symbol>()
-                {                    
-                    { PRIORITY_HIGHEST, Symbol.D },                                
-                    { PRIORITY_HIGH, Symbol.T },
-                    { PRIORITY_STANDARD, Symbol.Dvii },
-                    { PRIORITY_LOW, Symbol.Tvi },
-                    { PRIORITY_LOWEST, Symbol.Diii },
-                    { PRIORITY_LOWEST, Symbol.Tiii }
+            { Symbol.Sii, new List<(int, Symbol)>()
+                {
+                    ( PRIORITY_HIGHEST, Symbol.D ),
+                    ( PRIORITY_HIGH, Symbol.T ),
+                    ( PRIORITY_STANDARD, Symbol.Dvii ),
+                    ( PRIORITY_LOW, Symbol.Tvi ),
+                    ( PRIORITY_LOWEST, Symbol.Diii ),
+                    ( PRIORITY_LOWEST, Symbol.Tiii )
                 }
             },
-            { Symbol.Tiii, new Dictionary<int, Symbol>()
+            { Symbol.Tiii, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.D },
-                    { PRIORITY_HIGHEST, Symbol.Dvii },
-                    { PRIORITY_HIGH, Symbol.Svi }
+                    ( PRIORITY_HIGHEST, Symbol.D ),
+                    ( PRIORITY_HIGHEST, Symbol.Dvii ),
+                    ( PRIORITY_HIGH, Symbol.Svi )
                 }
             },
-            { Symbol.Diii, new Dictionary<int, Symbol>()
+            { Symbol.Diii, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.Tvi },
-                    { PRIORITY_HIGH, Symbol.T },
-                    { PRIORITY_HIGH, Symbol.D },
-                    { PRIORITY_STANDARD, Symbol.Dvii }
+                    ( PRIORITY_HIGHEST, Symbol.Tvi ),
+                    ( PRIORITY_HIGH, Symbol.T ),
+                    ( PRIORITY_HIGH, Symbol.D ),
+                    ( PRIORITY_STANDARD, Symbol.Dvii )
                 }
             },
-            { Symbol.S, new Dictionary<int, Symbol>()
+            { Symbol.S, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.D },
-                    { PRIORITY_HIGHEST, Symbol.Dvii },
-                    { PRIORITY_HIGH, Symbol.T },
-                    { PRIORITY_STANDARD, Symbol.Tvi }
+                    ( PRIORITY_HIGHEST, Symbol.D ),
+                    ( PRIORITY_HIGHEST, Symbol.Dvii ),
+                    ( PRIORITY_HIGH, Symbol.T ),
+                    ( PRIORITY_STANDARD, Symbol.Tvi )
                 }
             },
-            { Symbol.D, new Dictionary<int, Symbol>()
+            { Symbol.D, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.T },
-                    { PRIORITY_HIGH, Symbol.Tvi }
+                    ( PRIORITY_HIGHEST, Symbol.T ),
+                    ( PRIORITY_HIGH, Symbol.Tvi )
                 }
             },
-            { Symbol.Tvi, new Dictionary<int, Symbol>()
+            { Symbol.Tvi, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.Sii },
-                    { PRIORITY_HIGH, Symbol.S }
+                    ( PRIORITY_HIGHEST, Symbol.Sii ),
+                    ( PRIORITY_HIGH, Symbol.S )
                 }
             },
-            { Symbol.Svi, new Dictionary<int, Symbol>()
+            { Symbol.Svi, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.Diii },
-                    { PRIORITY_HIGH, Symbol.S },
-                    { PRIORITY_STANDARD, Symbol.T },
-                    { PRIORITY_STANDARD, Symbol.D }
+                    ( PRIORITY_HIGHEST, Symbol.Diii ),
+                    ( PRIORITY_HIGH, Symbol.S ),
+                    ( PRIORITY_STANDARD, Symbol.T ),
+                    ( PRIORITY_STANDARD, Symbol.D )
                 }
             },
-            { Symbol.Dvii, new Dictionary<int, Symbol>()
+            { Symbol.Dvii, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.T },
-                    { PRIORITY_HIGH, Symbol.Tiii },
-                    { PRIORITY_STANDARD, Symbol.Tvi }
+                    ( PRIORITY_HIGHEST, Symbol.T ),
+                    ( PRIORITY_HIGH, Symbol.Tiii ),
+                    ( PRIORITY_STANDARD, Symbol.Tvi )
                 }
             },
-            { Symbol.Svii, new Dictionary<int, Symbol>()
+            { Symbol.Svii, new List<(int, Symbol)>()
                 {
-                    { PRIORITY_HIGHEST, Symbol.D },
-                    { PRIORITY_HIGHEST, Symbol.Diii },
-                    { PRIORITY_HIGH, Symbol.Tiii }
+                    ( PRIORITY_HIGHEST, Symbol.D ),
+                    ( PRIORITY_HIGHEST, Symbol.Diii ),
+                    ( PRIORITY_HIGH, Symbol.Tiii )
                 }
             }
         };
@@ -131,27 +132,92 @@ namespace Algorithm.New.Algorithm.Generators
         // ponieważ JSONy zawierają proste informacje, a nie obiekty.
         public static List<Function> Generate(int bars, Metre metre, Tonation tonation)
         {
+            // Przy okazji check na ujemne wartości
+            if (bars < MIN_BARS)
+                bars = MIN_BARS;
+
             List<Function> result = [];
             Function? current = null;
 
-            var maxFunctionsInBar = metre.Count;
+            var maxFunctionsInBar = metre.Count + 1;
 
             for (int barIndex = 0; barIndex < bars; barIndex++)
             {
-                var functionsInBar = _random.Next(1, maxFunctionsInBar);
+                int functionsInBar = barIndex == bars - 1 ?
+                    1 : // Ostatni takt powinien zawierać zawsze 1 funkcję
+                    _random.Next(1, maxFunctionsInBar);
 
                 for (int functionIndex = 0; functionIndex < functionsInBar; functionIndex++)
                 {
-                    current = Next(current, metre, tonation);
+                    current = Next(current, metre, tonation, barIndex, functionIndex);
+                    result.Add(current);
                 }
             }
+
+            var lastFunction = result.Last();
+            AddMissing(lastFunction, metre, tonation, result);
 
             return result;
         }
 
+        private static void AddMissing(Function lastFunction, Metre metre, Tonation tonation, List<Function> result)
+        {
+            // Logika dodawania dobrego zakończenia zadania
+            if (lastFunction.Symbol != Symbol.T)
+            {
+                var lastBar = lastFunction.Index.Bar;
+
+                // Jeżeli nie ma dominanty, to trzeba z tym coś zrobić
+                if (!lastFunction.Symbol.ToString()[0].Equals("D"))
+                {
+                    var dominant = new Function(
+                        new Music.Index()
+                        {
+                            Bar = lastBar,
+                            Position = 0,
+                            Duration = 1
+                        },
+                        Symbol.D,
+                        false,
+                        tonation
+                    );
+
+                    var tonic = new Function(
+                        new Music.Index()
+                        {
+                            Bar = lastBar,
+                            Position = 0,
+                            Duration = metre.Value
+                        },
+                        Symbol.T,
+                        false,
+                        tonation
+                    );
+
+                    result.AddRange([dominant, tonic]);
+                }
+                else // Jeżeli mamy jakąś dominantę, to wszystko git - tylko tonikę dodać
+                {
+                    var tonic = new Function(
+                        new Music.Index()
+                        {
+                            Bar = lastBar,
+                            Position = metre.Value,
+                            Duration = metre.Value
+                        },
+                        Symbol.T,
+                        false,
+                        tonation
+                    );
+
+                    result.Add(tonic);
+                }
+            }
+        }
+
         // Ta funkcja dodatkowo reaguje, jeżeli powstaje próba 
         // UŻYWAĆ TYLKO W PĘTLI GENERUJĄCEJ KOLEJNE
-        private static Function Next(Function? prev, Metre metre, Tonation tonation)
+        private static Function Next(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
             Function result;
 
@@ -170,7 +236,7 @@ namespace Algorithm.New.Algorithm.Generators
                 );                
             }
             else
-                result = GetBestFittingFunction(prev, metre, tonation);
+                result = GetBestFittingFunction(prev, metre, tonation, barIndex, functionIndex);
 
             // TODO: Dodać tworzenie symboli dodanych w razie potrzeby
             // Na potrzeby bazowe można to pominąć - będą generowane zadania funkcyjne na poziomie I semestru
@@ -182,18 +248,11 @@ namespace Algorithm.New.Algorithm.Generators
         // Ta funkcja, z wykorzystaniem najlepiej dopasowanego symbolu, dorabia resztę informacji,
         // by kolejna funkcja dobrze działała.
         // NIE UŻYWAĆ SAMEJ
-        private static Function GetBestFittingFunction(Function prev, Metre metre, Tonation tonation)
+        private static Function GetBestFittingFunction(Function prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
-            var prevIndex = prev.Index;
-            var newBar = prevIndex.Bar;
-            var newPosition = prevIndex.Position + metre.Value;
+            var newBar = barIndex;
+            var newPosition = functionIndex;
             var newDuration = metre.Value;
-
-            if (newPosition >= metre.Value * metre.Count)
-            {
-                newPosition = 0;
-                newBar++;
-            }
 
             var prevSymbol = prev.Symbol;
             var possibleSymbols = NextSymbols[prevSymbol];
@@ -218,24 +277,24 @@ namespace Algorithm.New.Algorithm.Generators
 
         // Ta funkcja zwraca najlepiej pasujący symbol dla kolejnej funkcji.
         // NIE UŻYWAĆ SAMEJ
-        private static Symbol GetBestFittingSymbol(Dictionary<int, Symbol> possibleSymbols)
+        private static Symbol GetBestFittingSymbol(List<(int, Symbol)> possibleSymbols)
         {
-            var keys = possibleSymbols.Keys;
-            var minWeight = keys
-                .Min(x => x);
+            var ordered = possibleSymbols
+                .OrderByDescending(x => x.Item1);
+
+            var minWeight = ordered
+                .Min(x => x.Item1);
 
             var weight = _random.Next(
                 minValue: minWeight,
                 maxValue: MAX_WEIGHT
             );
 
-            // Zawsze będzie min. jeden element, bo weight jest losowana od najmniejszej wagi w zbiorze.
-            var matchingKey = possibleSymbols.Keys
-                .Where(x => weight >= x)
-                .OrderBy(x => x)
-                .First();
+            var matching = ordered
+                .First(x => x.Item1 <= weight);
 
-            var symbol = possibleSymbols[matchingKey];
+            var symbol = matching.Item2;
+
             return symbol;
         }
     }
