@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Main.Models
 {
-	public class ExcersiseSolution
+	public class ExerciseSolution
 	{
 		public int Id { get; set; }
 
@@ -12,16 +12,16 @@ namespace Main.Models
 
 		//FOREIGN KEYS
 
-		public int ExcersiseId { get; set; }
+		public int ExerciseId { get; set; }
 		[JsonIgnore]
-		public Excersise Excersise { get; set; } = null!;
+		public Exercise Exercise { get; set; } = null!;
 
 		public string UserId { get; set; } = null!;
 		[JsonIgnore]
 		public ApplicationUser User { get; set; } = null!;
 
 		[JsonIgnore]    //looping dependency, json converter goes crazy without it
-		public ExcersiseResult? ExcersiseResult { get; set; }
+		public ExerciseResult? ExerciseResult { get; set; }
 	}
 }
 

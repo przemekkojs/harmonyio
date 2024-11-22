@@ -19,7 +19,7 @@
 
         @for (int userIndex = 0; userIndex < Model.Users.Count; userIndex++)
         {
-            @for (int exerciseIndex = 0; exerciseIndex < Model.Excersises.Count; exerciseIndex++)
+            @for (int exerciseIndex = 0; exerciseIndex < Model.Exercises.Count; exerciseIndex++)
             {
                 <input id="points-hidden-@exerciseIndex-@userIndex" type="hidden" asp-for="Points[userIndex][exerciseIndex]"
                     value="@Model.Points[userIndex][exerciseIndex]" />
@@ -99,7 +99,7 @@
             <hr class="m-0" />
 
             <div class="d-flex flex-row align-items-center p-3">
-                <div id="excersises-buttons" class="d-flex flex-row align-items-center">
+                <div id="exercises-buttons" class="d-flex flex-row align-items-center">
                     @*SET VIA JS*@
                 </div>
 
@@ -204,7 +204,7 @@
         thrashCanCrossed: '@Url.Content("~/images/staff-symbols/thrash-can-crossed.png")',
     };
 
-    const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.Question)));
+    const questionsRaw = @Html.Raw(JsonConvert.SerializeObject(Model.Exercises.Select(e => e.Question)));
     const questions = questionsRaw.map(q => JSON.parse(q));
     const userSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.Solutions));
 
@@ -240,8 +240,8 @@
     const userComments = @Html.Raw(JsonConvert.SerializeObject(Model.Comments));
     const userOpinions = @Html.Raw(JsonConvert.SerializeObject(Model.Opinions));
 
-    const excersiseMaxes = @Html.Raw(JsonConvert.SerializeObject(Model.Excersises.Select(e => e.MaxPoints)));
-    const maxesSum = @Model.Excersises.Select(e => e.MaxPoints).Sum();
+    const exerciseMaxes = @Html.Raw(JsonConvert.SerializeObject(Model.Exercises.Select(e => e.MaxPoints)));
+    const maxesSum = @Model.Exercises.Select(e => e.MaxPoints).Sum();
 
     const studentRows = Array.from(document.querySelectorAll('div.student-row'));
     const currentUserText = document.getElementById("current-user-text");
@@ -249,7 +249,7 @@
     const percentageText = document.getElementById("percentage-text");
     const gradeSelect = document.getElementById("grade-select");
     const questionElement = document.getElementById("question");
-    const excersiseNumberElement = document.getElementById("excersiseNumber");    
+    const exerciseNumberElement = document.getElementById("exerciseNumber");    
     const pointsElement = document.getElementById("points");
     const suggestionElement = document.getElementById("suggestion");
     const maxElement = document.getElementById("max");
@@ -314,7 +314,7 @@
 
     function onPointsChange(value) {
         let numValue = Number(value);
-        const maxValue = excersiseMaxes[currentQuestionIndex];
+        const maxValue = exerciseMaxes[currentQuestionIndex];
 
         if (value === "") {
             numValue = userPointsSuggestions[currentUserIndex][currentQuestionIndex];
@@ -353,7 +353,7 @@
                 document.getElementById('question-area').classList.remove('d-none');
 
             const points = userPoints[currentUserIndex][currentQuestionIndex];
-            const maxPoints = excersiseMaxes[currentQuestionIndex];
+            const maxPoints = exerciseMaxes[currentQuestionIndex];
             const pointsSuggestion = userPointsSuggestions[currentUserIndex][currentQuestionIndex];
             const comment = userComments[currentUserIndex][currentQuestionIndex];            
             const opinion = userOpinions[currentUserIndex][currentQuestionIndex] === "" ?
@@ -385,7 +385,7 @@
     const targetVisibleOneSide = Math.floor(maxVisibleButtons / 2)
 
     function generateButtons(index) {
-        let questionButtonsContainer = document.getElementById("excersises-buttons");
+        let questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
 
         let start = Math.max(index - targetVisibleOneSide, 0);

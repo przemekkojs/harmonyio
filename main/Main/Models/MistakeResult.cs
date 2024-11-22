@@ -9,7 +9,7 @@
         public List<int> MistakeCodes { get; set; } = [];
 
         // FOREIGN KEYS
-        public int? ExcersiseResultId { get; set; }
-        public ExcersiseResult? ExcersiseResult { get; set; }
+        public int? ExerciseResultId { get; set; }
+        public ExerciseResult? ExerciseResult { get; set; }
     }
 }

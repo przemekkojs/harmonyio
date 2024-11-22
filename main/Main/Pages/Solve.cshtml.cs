@@ -42,8 +42,8 @@ namespace Main.Pages
                 q => q.Code == code,
                 query => query
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id))
-                    .Include(q => q.Excersises)
-                        .ThenInclude(q => q.ExcersiseSolutions
+                    .Include(q => q.Exercises)
+                        .ThenInclude(q => q.ExerciseSolutions
                             .Where(es => es.UserId == appUser.Id))
                     .Include(q => q.QuizResults.Where(qr => qr.UserId == appUser.Id))
             );
@@ -84,8 +84,8 @@ namespace Main.Pages
                 await _repository.SaveChangesAsync();
             }
 
-            Answers = Quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? "")
+            Answers = Quiz.Exercises
+                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.Answer ?? "")
                 .ToList();
 
             return Page();
@@ -103,8 +103,8 @@ namespace Main.Pages
                 query => query
                     .Include(q => q.QuizResults
                         .Where(qr => qr.UserId == appUser.Id))
-                    .Include(q => q.Excersises)
-                    .ThenInclude(e => e.ExcersiseSolutions
+                    .Include(q => q.Exercises)
+                    .ThenInclude(e => e.ExerciseSolutions
                         .Where(es => es.UserId == appUser.Id))
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id)));
 
@@ -124,20 +124,20 @@ namespace Main.Pages
             if (quizResult != null && quizResult.Grade != null)
                 RedirectToPage("Browse", new { id = quiz.Id });
 
-            if (Answers.Count != quiz.Excersises.Count)
+            if (Answers.Count != quiz.Exercises.Count)
                 return RedirectToPage("Error");
 
-            var excersises = quiz.Excersises.ToList();
-            var userSolutionsMap = quiz.Excersises
-                .SelectMany(e => e.ExcersiseSolutions)
-                .ToDictionary(es => es.ExcersiseId);
+            var exercises = quiz.Exercises.ToList();
+            var userSolutionsMap = quiz.Exercises
+                .SelectMany(e => e.ExerciseSolutions)
+                .ToDictionary(es => es.ExerciseId);
 
-            for (int i = 0; i < quiz.Excersises.Count; i++)
+            for (int i = 0; i < quiz.Exercises.Count; i++)
             {
-                var exercise = excersises[i];
+                var exercise = exercises[i];
                 var newAnswer = Answers[i] ?? "";
 
-                // check if there is solution to excersise
+                // check if there is solution to exercise
                 if (userSolutionsMap.TryGetValue(exercise.Id, out var existingSolution))
                 {
                     // if solution answer is the same, dont do anything
@@ -150,31 +150,31 @@ namespace Main.Pages
 
                 // add new solution if there was no solution or current answer is different
                 // here also new solution is added when newAnswer == "", TODO FOR ALGORITM - check if anser == "" and can just return 0 points or something
-                var newSolution = new ExcersiseSolution
+                var newSolution = new ExerciseSolution
                 {
-                    ExcersiseId = exercise.Id,
+                    ExerciseId = exercise.Id,
                     Answer = newAnswer,
                     UserId = appUser.Id
                 };
 
                 _repository.Add(newSolution);
 
-                var maxPointsForExcersise = exercise.MaxPoints;                
-                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExcersise);
+                var maxPointsForExercise = exercise.MaxPoints;                
+                var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExercise);
                 var mistakes = algorithmGrade.Item3;
                 var mistakeResults = GenerateMistakeResults(mistakes);
 
-                var excersiseResult = new ExcersiseResult
+                var exerciseResult = new ExerciseResult
                 {
                     Comment = string.Empty,
                     Points = 0, // Set initial points based on the algorithm's grade
                     AlgorithmPoints = algorithmGrade.Item1,
-                    MaxPoints = maxPointsForExcersise,
-                    ExcersiseSolution = newSolution, // Associate with the solution
+                    MaxPoints = maxPointsForExercise,
+                    ExerciseSolution = newSolution, // Associate with the solution
                     MistakeResults = mistakeResults
                 };
 
-                _repository.Add(excersiseResult);
+                _repository.Add(exerciseResult);
                 await _repository.SaveChangesAsync();
             }
 

@@ -49,9 +49,9 @@ public class ApplicationRepository : IRepository
 
     public void Clear()
     {
-        context.ExcersiseResults.RemoveRange(context.ExcersiseResults);
-        context.ExcersiseSolutions.RemoveRange(context.ExcersiseSolutions);
-        context.Excersises.RemoveRange(context.Excersises);
+        context.ExerciseResults.RemoveRange(context.ExerciseResults);
+        context.ExerciseSolutions.RemoveRange(context.ExerciseSolutions);
+        context.Exercises.RemoveRange(context.Exercises);
         context.QuizResults.RemoveRange(context.QuizResults);
         context.Quizes.RemoveRange(context.Quizes);
         context.Users.RemoveRange(context.Users);

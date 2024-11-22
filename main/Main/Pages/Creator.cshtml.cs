@@ -59,7 +59,7 @@ namespace Main.Pages
 
             var quiz = await _repository.GetAsync<Quiz>(
                 filter: q => q.Id == id,
-                modifier: q => q.Include(r => r.Excersises)
+                modifier: q => q.Include(r => r.Exercises)
             );
 
             if (quiz == null || appUser == null || appUser.Id != quiz.CreatorId)
@@ -69,8 +69,8 @@ namespace Main.Pages
             EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
             Code = quiz.Code;
+            Questions = quiz.Exercises.Select(e => e.Question).ToList();
 
-            Questions = quiz.Excersises.Select(e => e.Question).ToList();
 
             if (triggerSubmit ?? false)
                 return await OnPostSubmit();
@@ -129,9 +129,9 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnPostSave()
         {
-            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i siê ³aduje jako zerowy element listy,
-            // wiêc te linijki jakby rozpakowuj¹ t¹ litê.
-            // Je¿eli na froncie nie ma b³êdów, to to zawsze siê wykona poprawnie.
+            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i siï¿½ ï¿½aduje jako zerowy element listy,
+            // wiï¿½c te linijki jakby rozpakowujï¿½ tï¿½ litï¿½.
+            // Jeï¿½eli na froncie nie ma bï¿½ï¿½dï¿½w, to to zawsze siï¿½ wykona poprawnie.
             Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0])!;
             Maxes = JsonConvert.DeserializeObject<List<string>>(Maxes[0])!;
 
@@ -140,7 +140,7 @@ namespace Main.Pages
             var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };
             var loginResult = new { success = false, redirect = true, redirectUrl = Url.Page("Login") };
             var errorResult = new { success = false, redirect = true, redirectUrl = Url.Page("Error") };
-            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera b³êdne zadania." };
+            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera bï¿½ï¿½dne zadania." };
 
             if (currentUser == null)
                 return new JsonResult(loginResult);
@@ -161,7 +161,7 @@ namespace Main.Pages
             {
                 quiz = await _repository.GetAsync<Quiz>(
                     filter: q => q.Id == EditedQuizId,
-                    modifier: q => q.Include(r => r.Excersises)
+                    modifier: q => q.Include(r => r.Exercises)
                 );
 
                 if (quiz == null)
@@ -170,7 +170,7 @@ namespace Main.Pages
                 quiz.Name = QuizName;
                 _repository.Update(quiz);
 
-                foreach (var exercise in quiz.Excersises)
+                foreach (var exercise in quiz.Exercises)
                 {
                     _repository.Delete(exercise);
                 }
@@ -194,7 +194,7 @@ namespace Main.Pages
                 var question = Questions[index];
                 var points = Convert.ToInt32(Maxes[index]);
 
-                _repository.Add(new Excersise
+                _repository.Add(new Exercise
                 {
                     Question = question,
                     QuizId = quizId,
@@ -215,7 +215,7 @@ namespace Main.Pages
             }
             else if (Questions.Any(q => q == "" || q == null))
             {
-                ModelState.AddModelError(nameof(Questions), "Nie mo¿na dodaæ pustych zadañ.");
+                ModelState.AddModelError(nameof(Questions), "Nie moï¿½na dodaï¿½ pustych zadaï¿½.");
             }
 
             if (!ModelState.IsValid)
@@ -245,7 +245,7 @@ namespace Main.Pages
 
                 foreach (string question in Questions!)
                 {
-                    _repository.Add(new Excersise()
+                    _repository.Add(new Exercise()
                     {
                         Question = question,
                         QuizId = quiz.Id,
@@ -256,7 +256,7 @@ namespace Main.Pages
             {
                 var editedQuiz = await _repository.GetAsync<Quiz>(
                     filter: q => q.Id == EditedQuizId,
-                    modifier: q => q.Include(r => r.Excersises)
+                    modifier: q => q.Include(r => r.Exercises)
                 );
 
                 if (editedQuiz == null)
@@ -269,14 +269,14 @@ namespace Main.Pages
 
                 await _repository.SaveChangesAsync();
 
-                foreach (var question in editedQuiz.Excersises)
+                foreach (var question in editedQuiz.Exercises)
                 {
                     _repository.Delete(question);
                 }
 
                 foreach (var question in Questions)
                 {
-                    _repository.Add(new Excersise()
+                    _repository.Add(new Exercise()
                     {
                         Question = question,
                         QuizId = editedQuiz.Id,

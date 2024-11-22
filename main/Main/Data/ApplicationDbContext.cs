@@ -10,9 +10,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 
-    public DbSet<Excersise> Excersises { get; set; }
-    public DbSet<ExcersiseResult> ExcersiseResults { get; set; }
-    public DbSet<ExcersiseSolution> ExcersiseSolutions { get; set; }
+    public DbSet<Exercise> Exercises { get; set; }
+    public DbSet<ExerciseResult> ExerciseResults { get; set; }
+    public DbSet<ExerciseSolution> ExerciseSolutions { get; set; }
     public DbSet<Quiz> Quizes { get; set; }
     public DbSet<QuizResult> QuizResults { get; set; }
     public DbSet<UsersGroup> UsersGroups { get; set; }
@@ -28,19 +28,27 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(q => q.Creator)
             .WithMany(u => u.CreatedQuizes)
             .HasForeignKey(q => q.CreatorId)
-            .OnDelete(DeleteBehavior.Cascade); // Usuń quizy przy usunięciu użytkownika
+            .OnDelete(DeleteBehavior.NoAction); // Usuń quizy przy usunięciu użytkownika
 
         // Relacja wiele-do-wielu między Quiz a ApplicationUser (uczestnicy)
         modelBuilder.Entity<Quiz>()
             .HasMany(q => q.Participants)
             .WithMany(u => u.ParticipatedQuizes)
-            .UsingEntity(j => j.ToTable("QuizParticipants"));
+            .UsingEntity<Dictionary<string, object>>(
+                "QuizParticipants",
+                j => j.HasOne<ApplicationUser>().WithMany().HasForeignKey("ParticipantId").OnDelete(DeleteBehavior.NoAction),
+                j => j.HasOne<Quiz>().WithMany().HasForeignKey("QuizId").OnDelete(DeleteBehavior.NoAction)
+            );
 
         // Relacja wiele-do-wielu między Quiz a Group (grupy przypisane do quizu)
         modelBuilder.Entity<Quiz>()
             .HasMany(q => q.PublishedToGroup)
             .WithMany(u => u.Quizzes)
-            .UsingEntity(j => j.ToTable("PublishedToQuizzes"));
+            .UsingEntity<Dictionary<string, object>>(
+                "PublishedToQuizzes",
+                j => j.HasOne<UsersGroup>().WithMany().HasForeignKey("GroupId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<Quiz>().WithMany().HasForeignKey("QuizId").OnDelete(DeleteBehavior.NoAction)
+            );
 
         // Relacja jeden-do-wielu między UsersGroup a ApplicationUser (założyciel)
         modelBuilder.Entity<UsersGroup>()
@@ -49,32 +57,32 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(g => g.MasterId)
             .OnDelete(DeleteBehavior.NoAction); // Nie usuwaj grupy przy usunięciu założyciela 
 
-        // Relacja jeden-do-wielu między Quiz a Excersise
-        modelBuilder.Entity<Excersise>()
+        // Relacja jeden-do-wielu między Quiz a Exercise
+        modelBuilder.Entity<Exercise>()
             .HasOne(e => e.Quiz)
-            .WithMany(q => q.Excersises)
+            .WithMany(q => q.Exercises)
             .HasForeignKey(e => e.QuizId)
             .OnDelete(DeleteBehavior.Cascade); // Usuń ćwiczenia przy usunięciu quizu
 
-        // Relacja jeden-do-wielu między ExcersiseSolution a Excersise
-        modelBuilder.Entity<ExcersiseSolution>()
-            .HasOne(es => es.Excersise)
-            .WithMany(e => e.ExcersiseSolutions)
-            .HasForeignKey(es => es.ExcersiseId)
-            .OnDelete(DeleteBehavior.Cascade); // Usuń rozwiązania przy usunięciu ćwiczenia
+        // Relacja jeden-do-wielu między ExerciseSolution a Exercise
+        modelBuilder.Entity<ExerciseSolution>()
+            .HasOne(es => es.Exercise)
+            .WithMany(e => e.ExerciseSolutions)
+            .HasForeignKey(es => es.ExerciseId)
+            .OnDelete(DeleteBehavior.Restrict); // Usuń rozwiązania przy usunięciu ćwiczenia
 
-        // Relacja jeden-do-wielu między ExcersiseSolution a ApplicationUser
-        modelBuilder.Entity<ExcersiseSolution>()
+        // Relacja jeden-do-wielu między ExerciseSolution a ApplicationUser
+        modelBuilder.Entity<ExerciseSolution>()
             .HasOne(es => es.User)
-            .WithMany(u => u.ExcersiseSolutions)
+            .WithMany(u => u.ExerciseSolutions)
             .HasForeignKey(es => es.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Usuń rozwiązania przy usunięciu użytkownika
+            .OnDelete(DeleteBehavior.NoAction); // Usuń rozwiązania przy usunięciu użytkownika
 
-        // Relacja jeden-do-jednego między ExcersiseSolution a ExcersiseResult
-        modelBuilder.Entity<ExcersiseSolution>()
-            .HasOne(es => es.ExcersiseResult)
-            .WithOne(er => er.ExcersiseSolution)
-            .HasForeignKey<ExcersiseResult>(er => er.ExcersiseSolutionId)
+        // Relacja jeden-do-jednego między ExerciseSolution a ExerciseResult
+        modelBuilder.Entity<ExerciseSolution>()
+            .HasOne(es => es.ExerciseResult)
+            .WithOne(er => er.ExerciseSolution)
+            .HasForeignKey<ExerciseResult>(er => er.ExerciseSolutionId)
             .OnDelete(DeleteBehavior.Cascade); // Usuń wynik przy usunięciu rozwiązania
 
         // Relacja jeden-do-wielu między QuizResult a Quiz
@@ -82,19 +90,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(qr => qr.Quiz)
             .WithMany(q => q.QuizResults)
             .HasForeignKey(qr => qr.QuizId)
-            .OnDelete(DeleteBehavior.Cascade); // Usuń wyniki przy usunięciu quizu
+            .OnDelete(DeleteBehavior.NoAction); // Usuń wyniki przy usunięciu quizu
 
         // Relacja jeden-do-wielu między QuizResult a ApplicationUser
         modelBuilder.Entity<QuizResult>()
             .HasOne(qr => qr.User)
             .WithMany(u => u.QuizResults)
             .HasForeignKey(qr => qr.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Usuń wyniki przy usunięciu użytkownika
+            .OnDelete(DeleteBehavior.NoAction); // Usuń wyniki przy usunięciu użytkownika
 
-        // Relacja jeden-do-wielu między QuizResult a ExcersiseResult
-        modelBuilder.Entity<ExcersiseResult>()
+        // Relacja jeden-do-wielu między QuizResult a ExerciseResult
+        modelBuilder.Entity<ExerciseResult>()
             .HasOne(er => er.QuizResult)
-            .WithMany(qr => qr.ExcersiseResults)
+            .WithMany(qr => qr.ExerciseResults)
             .HasForeignKey(er => er.QuizResultId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
@@ -103,12 +111,20 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<ApplicationUser>()
             .HasMany(q => q.TeacherInGroups)
             .WithMany(u => u.Teachers)
-            .UsingEntity(j => j.ToTable("GroupLeader"));
+            .UsingEntity<Dictionary<string, object>>(
+                "GroupLeader",
+                j => j.HasOne<UsersGroup>().WithMany().HasForeignKey("GroupId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.NoAction)
+            );
 
         modelBuilder.Entity<ApplicationUser>()
             .HasMany(q => q.StudentInGroups)
             .WithMany(u => u.Students)
-            .UsingEntity(j => j.ToTable("UserGroup"));
+            .UsingEntity<Dictionary<string, object>>(
+                "UserGroup",
+                j => j.HasOne<UsersGroup>().WithMany().HasForeignKey("GroupId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<ApplicationUser>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.NoAction)
+            );
 
         // Relacja jeden-do-wielu między GroupRequest a ApplicationUser
         modelBuilder.Entity<GroupRequest>()
@@ -124,12 +140,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(gr => gr.GroupId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Relacja jeden-do-wielu między ExcersiseResult a MistakeResult
-        modelBuilder.Entity<ExcersiseResult>()
-            .HasMany(er => er.MistakeResults)
-            .WithOne(mr => mr.ExcersiseResult)
-            .HasForeignKey(mr => mr.ExcersiseResultId)
-            .IsRequired(false)
+        // Relacja jeden-do-wielu między ExerciseResult a MistakeResult
+        modelBuilder.Entity<MistakeResult>()
+            .HasOne(mr => mr.ExerciseResult)
+            .WithMany(er => er.MistakeResults)
+            .HasForeignKey(mr => mr.ExerciseResultId)
+                .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
