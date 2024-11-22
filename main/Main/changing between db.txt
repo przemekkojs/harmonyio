@@ -9,6 +9,9 @@ appsettings.json
 {
     SqlServer:
     "DefaultConnection": "Server=LAPTOP-FAJOP32S;Database=HarmonyIO;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;"
+                                        ^
+                                tu daj nazwę sql serwera
+                                (sql server managment studio)
     Sqlite:
     "DefaultConnection": "DataSource=app.db;Cache=Shared"
 }
