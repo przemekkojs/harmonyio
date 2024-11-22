@@ -22,7 +22,7 @@
                         onclick="submitForm(event)">Zapisz</button>
                     @* TODO: DODAĆ ŻEBY BUTTON PUBLIKUJ DZIAŁAŁ (TAK JAK ZAPISZ, ALE OD RAZU OTWIERA POPUP) *@
                     @* <button type="submit" asp-page-handler="Submit" class="btn btn-primary btn-std-width ms-3"
-                        onclick="confirmExcersises()">Opublikuj</button> *@
+                        onclick="confirmExercises()">Opublikuj</button> *@
                 }
 
                 <a asp-page="Created" class="btn btn-danger btn-std-width mx-auto mt-2">Wyjdź</a>
@@ -31,14 +31,14 @@
             <div class="flex-grow-1 bg-white rounded shadow p-3 d-flex flex-column overflow-auto">
                 <span asp-validation-for="Questions" id="questions-validation-error" class="text-danger mb-1"></span>
 
-                <div id="excersise-container" class="d-flex flex-column">
-                    @* EXCERSISES ARE FILLED WITH JAVA SCRIPT *@
+                <div id="exercise-container" class="d-flex flex-column">
+                    @* EXERCISES ARE FILLED WITH JAVA SCRIPT *@
                 </div>
 
                 @if (!Model.BrowseOnly)
                 {
                     <div class="task task-add rounded d-flex justify-content-center align-items-center"
-                        onclick="addExcersise()">
+                        onclick="addExercise()">
                         <span class="plus">+</span>
                         <span>Dodaj zadanie</span>
                     </div>
@@ -57,12 +57,12 @@
 
     const answer = [];
 
-    const excersiseContainer = document.getElementById('excersise-container');
-    const taskContainer = new TaskContainer(excersiseContainer);
+    const exerciseContainer = document.getElementById('exercise-container');
+    const taskContainer = new TaskContainer(exerciseContainer);
     const questionsValidationError = document.getElementById('questions-validation-error');
     const defaultPoints = 10;
 
-    const excersises = @Html.Raw(
+    const exercises = @Html.Raw(
         Json.Serialize(
         Model.Questions?
             .Select(q => q ?? "")
@@ -72,7 +72,7 @@
 
     window.submitForm = async function submitForm(event) {
         questionsValidationError.innerText = "";
-        const tasksResult = confirmExcersises(event);       
+        const tasksResult = confirmExercises(event);       
 
         if (!tasksResult) {
             // TODO: Ładniejszy popup
@@ -168,15 +168,15 @@
     }
 
     function addExisting() {
-        taskContainer.load(excersises);
+        taskContainer.load(exercises);
         questionsValidationError.innerText = '';
     }
 
-    window.addExcersise = function () {
+    window.addExercise = function () {
         taskContainer.addTask();
     }
 
-    window.confirmExcersises = function (event) {
+    window.confirmExercises = function (event) {
         questionsValidationError.innerText = '';
         answer.length = 0;
         const tasks = taskContainer.tasks;

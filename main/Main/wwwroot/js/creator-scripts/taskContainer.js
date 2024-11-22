@@ -195,15 +195,15 @@ class Task {
     }
 
     // Tutaj wlatuje obiekt zadania
-    load(excersiseObject) {
-        const sharpsCount = excersiseObject.sharpsCount;
-        const flatsCount = excersiseObject.flatsCount;
-        const minor = excersiseObject.minor;
-        const metreValue = excersiseObject.metreValue;
-        const metreCount = excersiseObject.metreCount;
-        const taskObject = excersiseObject.task;
-        const question = excersiseObject.question;
-        const maxPoints = excersiseObject.maxPoints;
+    load(exerciseObject) {
+        const sharpsCount = exerciseObject.sharpsCount;
+        const flatsCount = exerciseObject.flatsCount;
+        const minor = exerciseObject.minor;
+        const metreValue = exerciseObject.metreValue;
+        const metreCount = exerciseObject.metreCount;
+        const taskObject = exerciseObject.task;
+        const question = exerciseObject.question;
+        const maxPoints = exerciseObject.maxPoints;
 
         const metreValueResult = parseMetreValuesToMetre([metreValue, metreCount]);
         const tonationInfo = parseAccidentalsCountToTonationInfo([sharpsCount, flatsCount, minor]);
@@ -314,11 +314,11 @@ export class TaskContainer {
     }
 
     // Ładowanie z całego JSONa
-    load(excersises) {
+    load(exercises) {
         let index = 0;
 
-        excersises.forEach(excersise => {
-            const excersiseObject = JSON.parse(excersise);           
+        exercises.forEach(exercise => {
+            const exerciseObject = JSON.parse(exercise);           
             const tasksCount = this.tasks.length - 1;
 
             if (index > tasksCount)
@@ -326,7 +326,7 @@ export class TaskContainer {
 
             const task = this.tasks[index];
 
-            task.load(excersiseObject);
+            task.load(exerciseObject);
 
             index++;
         });

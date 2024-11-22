@@ -16,16 +16,16 @@ namespace Main.Pages
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
 
-        public Dictionary<ApplicationUser, List<ExcersiseSolution>> UsersToSolutions { get; set; } = [];
-        public Dictionary<ExcersiseSolution, (int, int, string)> SolutionsToGradings { get; set; } = [];
+        public Dictionary<ApplicationUser, List<ExerciseSolution>> UsersToSolutions { get; set; } = [];
+        public Dictionary<ExerciseSolution, (int, int, string)> SolutionsToGradings { get; set; } = [];
         public Dictionary<ApplicationUser, List<(int, int, string)>> UsersToGradings { get; set; } = [];
 
         public string QuizName { get; set; } = "";
         public List<ApplicationUser> Users { get; set; } = [];
         public List<List<string>> Solutions { get; set; } = [];
-        public List<Excersise> Excersises { get; set; } = [];
+        public List<Exercise> Exercises { get; set; } = [];
         public List<List<int>> PointSuggestions { get; set; } = [];
-        public List<List<string>> Opinions { get; set; } = [];        
+        public List<List<string>> Opinions { get; set; } = [];
 
         [BindProperty]
         public int QuizId { get; set; }
@@ -34,9 +34,9 @@ namespace Main.Pages
         [BindProperty]
         public List<Grade?> Grades { get; set; } = []; // grade of each user
         [BindProperty]
-        public List<List<int>> Points { get; set; } = []; //user, then points for excersise solution
+        public List<List<int>> Points { get; set; } = []; //user, then points for exercise solution
         [BindProperty]
-        public List<List<string>> Comments { get; set; } = []; //user, then comment for excersise solution
+        public List<List<string>> Comments { get; set; } = []; //user, then comment for exercise solution
         [BindProperty]
         public bool ShareAlgorithmOpinion { get; set; }
 
@@ -47,6 +47,88 @@ namespace Main.Pages
             _userManager = userManager;
             _repository = repository;
         }       
+
+        private static string MistakesToHTML(ICollection<MistakeResult> mistakes)
+        {
+            var tmp = new Dictionary<(int, (int, int, int)), List<string>>();
+
+            foreach (var item in mistakes)
+            {
+                var barIndexes = item.Bars;
+                var functionIndexes = item.Functions;
+                var mistakeCodes = item.MistakeCodes;
+
+                var bar1 = barIndexes.Count > 0 ? barIndexes[0] : -1;
+                var bar2 = barIndexes.Count > 1 ? barIndexes[1] : bar1;
+
+                var function1 = functionIndexes.Count > 0 ? functionIndexes[0] : -1;
+                var function2 = functionIndexes.Count > 1 ? functionIndexes[1] : function1;
+
+                var key = (bar1, (function1, function2, bar2));
+
+                if (!tmp.ContainsKey(key))
+                    tmp[key] = [];
+
+                foreach (var mistakeCode in mistakeCodes)
+                {                    
+                    var description = Mistake.MistakeCodeToDescription(mistakeCode);
+                    tmp[key].Add(description);                    
+                }
+            }
+
+            var sortedKeys = tmp.Keys
+                .OrderBy(key => key.Item1)
+                    .ThenBy(key => key.Item2.Item1)
+                        .ThenBy(key => key.Item2.Item2)
+                            .ThenBy(key => key.Item2.Item3)
+                .ToList();
+
+            int lastBar = 0;
+            var result = "";
+
+            foreach (var key in sortedKeys)
+            {
+                var bar = key.Item1 + 1;
+
+                if (bar <= 0)
+                    bar = 1;
+
+                var function1 = key.Item2.Item1 + 1;
+                var function2 = key.Item2.Item2 + 1;
+                var bar2 = key.Item2.Item3 + 1;
+
+                if (bar2 <= 0)
+                    bar2 = 1;
+
+                if (bar != lastBar)
+                {
+                    if (lastBar > 0)
+                        result += $"</details>";
+
+                    result += $"<details><summary>Takt {bar}</summary>";
+                }
+
+                lastBar = bar;
+
+                if (function1 == function2)
+                    result += $"<details><summary>Funkcja na miar� {function1}</summary>";
+                else
+                {
+                    result += (bar == bar2 ?
+                        $"<details><summary>Funkcje na miary {function1}, {function2}</summary>" :
+                        $"<details><summary>Funkcje na miary {function1}, {function2} w takcie {bar2})</summary>");                    
+                }
+
+                foreach (var o in tmp[key])
+                {
+                    result += $"<span>{o}</span><br>";
+                }
+
+                result += "</details>";
+            }
+
+            return result;
+        }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -60,9 +142,9 @@ namespace Main.Pages
                 query => query
                     .Include(q => q.Participants)
                     .Include(q => q.QuizResults)
-                    .Include(q => q.Excersises)
-                        .ThenInclude(e => e.ExcersiseSolutions)
-                            .ThenInclude(es => es.ExcersiseResult)
+                    .Include(q => q.Exercises)
+                        .ThenInclude(e => e.ExerciseSolutions)
+                            .ThenInclude(es => es.ExerciseResult)
                     .Include(q => q.PublishedToGroup)
                         .ThenInclude(q => q.Teachers.Where(u => u.Id == appUser.Id))
             );
@@ -82,14 +164,14 @@ namespace Main.Pages
             QuizName = quiz.Name;
             Excersises = [.. quiz.Excersises];
 
-            var allSolutions = quiz.Excersises.SelectMany(e => e.ExcersiseSolutions).ToList();
+            var allSolutions = quiz.Exercises.SelectMany(e => e.ExerciseSolutions).ToList();
             var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
 
-            // fill missing excersises only if quiz is closed
+            // fill missing exercises only if quiz is closed
             if (quiz.State == QuizState.Closed && participantsAnsweredIds.Count != quiz.Participants.Count)
             {
                 var participantsNotAnsweredIds = quiz.Participants.Select(p => p.Id).Except(participantsAnsweredIds);
-                var newSolutions = await FillMissingExcersiseSolutionsAndResults(participantsNotAnsweredIds, quiz.Excersises);
+                var newSolutions = await FillMissingExerciseSolutionsAndResults(participantsNotAnsweredIds, quiz.Exercises);
                 allSolutions.AddRange(newSolutions);
                 participantsAnsweredIds.AddRange(newSolutions.Select(es => es.UserId));
             }
@@ -100,7 +182,7 @@ namespace Main.Pages
                 return RedirectToPage("Error");
 
             // just to make sure that soutions are in good order
-            allSolutions = [.. allSolutions.OrderBy(es => es.ExcersiseId)];
+            allSolutions = [.. allSolutions.OrderBy(es => es.ExerciseId)];
 
             var userIdToSolutions = allSolutions
                 .GroupBy(es => es.UserId)
@@ -110,7 +192,7 @@ namespace Main.Pages
                 .ToDictionary(
                     userToSolutions => userToSolutions.Key,
                     userToSolutions => userToSolutions.Value
-                        .Select(es => es.ExcersiseResult)
+                        .Select(es => es.ExerciseResult)
                         .ToList()
                 );
 
@@ -184,9 +266,9 @@ namespace Main.Pages
                 q => q.Id == QuizId,
                 query => query
                     .Include(q => q.QuizResults)
-                    .Include(q => q.Excersises)
-                        .ThenInclude(e => e.ExcersiseSolutions)
-                            .ThenInclude(es => es.ExcersiseResult)
+                    .Include(q => q.Exercises)
+                        .ThenInclude(e => e.ExerciseSolutions)
+                            .ThenInclude(es => es.ExerciseResult)
                     .Include(q => q.PublishedToGroup)
                         .ThenInclude(q => q.Teachers.Where(u => u.Id == appUser.Id))
             );
@@ -203,9 +285,9 @@ namespace Main.Pages
             if (userIsNotCreator && !userIsMaster)
                 return Forbid();
 
-            var allSolutions = quiz.Excersises
-                .SelectMany(e => e.ExcersiseSolutions)
-                .OrderBy(es => es.ExcersiseId)
+            var allSolutions = quiz.Exercises
+                .SelectMany(e => e.ExerciseSolutions)
+                .OrderBy(es => es.ExerciseId)
                 .ToList();
 
             var participantsAnsweredIds = allSolutions
@@ -220,7 +302,7 @@ namespace Main.Pages
                 .ToDictionary(
                     userToSolutions => userToSolutions.Key,
                     userToSolutions => userToSolutions.Value
-                        .Select(es => es.ExcersiseResult)
+                        .Select(es => es.ExerciseResult)
                         .ToList()
                 );
 
@@ -282,32 +364,32 @@ namespace Main.Pages
             return RedirectToPage("Created");
         }
 
-        private async Task<List<ExcersiseSolution>> FillMissingExcersiseSolutionsAndResults(IEnumerable<string> participantsNotAnsweredIds, IEnumerable<Excersise> excersises)
+        private async Task<List<ExerciseSolution>> FillMissingExerciseSolutionsAndResults(IEnumerable<string> participantsNotAnsweredIds, IEnumerable<Exercise> exercises)
         {
-            List<ExcersiseSolution> newSolutions = [];
-            foreach (var excersise in excersises)
+            List<ExerciseSolution> newSolutions = [];
+            foreach (var exercise in exercises)
             {
                 foreach (var participantId in participantsNotAnsweredIds)
                 {
-                    var solution = new ExcersiseSolution()
+                    var solution = new ExerciseSolution()
                     {
-                        ExcersiseId = excersise.Id,
+                        ExerciseId = exercise.Id,
                         Answer = "",
                         UserId = participantId,
                     };
 
                     _repository.Add(solution);
 
-                    var excersiseResult = new ExcersiseResult
+                    var exerciseResult = new ExerciseResult
                     {
                         Comment = "",
                         Points = 0,
                         AlgorithmPoints = 0,
-                        MaxPoints = excersise.MaxPoints,
-                        ExcersiseSolution = solution,
+                        MaxPoints = exercise.MaxPoints,
+                        ExerciseSolution = solution,
                     };
 
-                    _repository.Add(excersiseResult);
+                    _repository.Add(exerciseResult);
                     newSolutions.Add(solution);
                 }
             }

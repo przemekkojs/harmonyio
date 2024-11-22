@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Main.Models
 {
-	public class ExcersiseResult
+	public class ExerciseResult
 	{
 		public int Id { get; set; }
 		public int Points { get; set; }
@@ -13,12 +13,12 @@ namespace Main.Models
 
 		//FOREIGN KEYS
 
-		public int ExcersiseSolutionId { get; set; }
+		public int ExerciseSolutionId { get; set; }
 		[JsonIgnore]    //looping dependency, json converter goes crazy without it
-		public ExcersiseSolution ExcersiseSolution { get; set; } = null!;
+		public ExerciseSolution ExerciseSolution { get; set; } = null!;
 
 		public int? QuizResultId { get; set; }
-		// TODO quiz result should be nullable, when grading with algorithm, create new excersise result
+		// TODO quiz result should be nullable, when grading with algorithm, create new exercise result
 		// this result may not be linked to quiz result
 		[JsonIgnore]
 		public QuizResult? QuizResult { get; set; } = null;

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Main.Models
 {
-	public class Excersise
+	public class Exercise
 	{
 		public int Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace Main.Models
 		[JsonIgnore]
 		public Quiz Quiz { get; set; } = null!;
 
-		public ICollection<ExcersiseSolution> ExcersiseSolutions = [];
+		public ICollection<ExerciseSolution> ExerciseSolutions = [];
 	}
 }
 

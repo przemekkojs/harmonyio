@@ -18,8 +18,10 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end p-1 overflow-hidden" aria-labelledby="profileDropdown">
                     <li class="d-flex flex-row align-items-center p-1">
-                        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle border" style="width: 20px; height: 20px;" />
-                        <span class="dropdown-item-text ps-2 text-truncate">@(currentUser?.FullName ?? "")</span>
+                        <a asp-area="Identity" asp-page="/Account/Manage" class="nav-link d-flex flex-row align-items-center text-decoration-none text-dark">
+                            <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle border" style="width: 20px; height: 20px;" />
+                            <span class="dropdown-item-text ps-2 text-truncate">@(currentUser?.FullName ?? "")</span>
+                        </a>   
                     </li>
                     <hr class="border m-0">
                     <li>

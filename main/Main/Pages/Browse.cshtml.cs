@@ -46,9 +46,9 @@ namespace Main.Pages
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == id,
                 query => query
-                    .Include(q => q.Excersises)
-                        .ThenInclude(e => e.ExcersiseSolutions.Where(es => es.UserId == appUser.Id))
-                            .ThenInclude(es => es.ExcersiseResult)
+                    .Include(q => q.Exercises)
+                        .ThenInclude(e => e.ExerciseSolutions.Where(es => es.UserId == appUser.Id))
+                            .ThenInclude(es => es.ExerciseResult)
                     .Include(q => q.QuizResults.Where(qr => qr.UserId == appUser.Id))
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id))
             );
@@ -57,7 +57,7 @@ namespace Main.Pages
                 return RedirectToPage("Error");
 
             var quizNotStarted = quiz.State == QuizState.NotStarted;
-            var userIsParticipant = quiz.Participants.Count != 0; // TODO: To chyba nie oznacza, ¿e user nie jest participant...
+            var userIsParticipant = quiz.Participants.Count != 0; // TODO: To chyba nie oznacza, ï¿½e user nie jest participant...
 
             // quiz isnt started or user isnt participant so forbid browsing it
             if (quizNotStarted || !userIsParticipant)
@@ -83,7 +83,7 @@ namespace Main.Pages
                 .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? string.Empty)
                 .ToList();
 
-            // Tutaj robimy b³êdy
+            // Tutaj robimy bï¿½ï¿½dy
             var excersiseResult = quizResult?.ExcersiseResults
                 .FirstOrDefault();
 
@@ -110,6 +110,7 @@ namespace Main.Pages
                 .Select(result => result == null ?
                     new ExerciseResultData { Points = 0 } :
                     new ExerciseResultData
+
                     {
                         Points = result.Points,
                         MaxPoints = result.MaxPoints,

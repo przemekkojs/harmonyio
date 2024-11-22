@@ -63,9 +63,9 @@ public class CreatedModel : PageModel
                 .Include(u => u.CreatedQuizes)
                     .ThenInclude(q => q.PublishedToGroup)
                 .Include(u => u.CreatedQuizes)
-                    .ThenInclude(q => q.Excersises)
-                        .ThenInclude(e => e.ExcersiseSolutions)
-                            .ThenInclude(es => es.ExcersiseResult)
+                    .ThenInclude(q => q.Exercises)
+                        .ThenInclude(e => e.ExerciseSolutions)
+                            .ThenInclude(es => es.ExerciseResult)
                 .Include(u => u.CreatedQuizes)
                 .Include(u => u.TeacherInGroups)
                 .Include(u => u.MasterInGroups)
@@ -83,7 +83,7 @@ public class CreatedModel : PageModel
 
         ReadyToGrade = published
             .Where(q =>
-                q.Excersises.Any(e => e.ExcersiseSolutions.Any(es => es.ExcersiseResult?.QuizResultId == null)) ||
+                q.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.ExerciseResult?.QuizResultId == null)) ||
                 q.QuizResults.Any(qr => qr.Grade == null)
             ).ToList();
         Opened = published.Where(q => q.State == QuizState.Open).ToList();
@@ -93,8 +93,8 @@ public class CreatedModel : PageModel
         QuizesToUsersCompleted = published.ToDictionary(
             q => q,
             q => (
-                q.Excersises
-                    .SelectMany(e => e.ExcersiseSolutions)
+                q.Exercises
+                    .SelectMany(e => e.ExerciseSolutions)
                     .Select(s => s.UserId)
                     .Distinct()
                     .Count(),
