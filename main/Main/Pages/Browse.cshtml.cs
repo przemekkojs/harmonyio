@@ -57,7 +57,7 @@ namespace Main.Pages
                 return RedirectToPage("Error");
 
             var quizNotStarted = quiz.State == QuizState.NotStarted;
-            var userIsParticipant = quiz.Participants.Count != 0; // TODO: To chyba nie oznacza, �e user nie jest participant...
+            var userIsParticipant = quiz.Participants.Any(p => p.Id == appUser.Id);
 
             // quiz isnt started or user isnt participant so forbid browsing it
             if (quizNotStarted || !userIsParticipant)
