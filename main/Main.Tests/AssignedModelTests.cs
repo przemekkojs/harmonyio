@@ -108,11 +108,11 @@ public class AssignedModelTests
                 OpenDate = DateTime.Now.AddHours(-1),
                 CloseDate = DateTime.Now.AddHours(1),
                 IsCreated = true,
-                Excersises = new List<Excersise>
+                Exercises = new List<Exercise>
                 {
-                    new Excersise
+                    new Exercise
                     {
-                        ExcersiseSolutions = participants.Select(u => new ExcersiseSolution { UserId = u.Id }).ToList()
+                        ExerciseSolutions = participants.Select(u => new ExerciseSolution { UserId = u.Id }).ToList()
                     }
                 },
                 Participants = participants
@@ -127,11 +127,11 @@ public class AssignedModelTests
                 OpenDate = DateTime.Now.AddHours(-2),
                 CloseDate = DateTime.Now.AddHours(-1),
                 IsCreated = true,
-                Excersises = new List<Excersise>
+                Exercises = new List<Exercise>
                 {
-                    new Excersise
+                    new Exercise
                     {
-                        ExcersiseSolutions = participants.Select(u => new ExcersiseSolution { UserId = u.Id }).ToList()
+                        ExerciseSolutions = participants.Select(u => new ExerciseSolution { UserId = u.Id }).ToList()
                     }
                 },
                 Participants = participants
@@ -146,7 +146,7 @@ public class AssignedModelTests
                 OpenDate = DateTime.Now.AddHours(-1),
                 CloseDate = DateTime.Now.AddHours(1),
                 IsCreated = true,
-                Excersises = new List<Excersise>(),
+                Exercises = new List<Exercise>(),
                 Participants = participants
             },
 
@@ -159,7 +159,7 @@ public class AssignedModelTests
                 OpenDate = DateTime.Now.AddHours(1),
                 CloseDate = DateTime.Now.AddHours(2),
                 IsCreated = true,
-                Excersises = new List<Excersise>(),
+                Exercises = new List<Exercise>(),
                 Participants = participants
             },
 
@@ -172,7 +172,7 @@ public class AssignedModelTests
                 OpenDate = DateTime.Now.AddHours(-3),
                 CloseDate = DateTime.Now.AddHours(-2),
                 IsCreated = true,
-                Excersises = new List<Excersise>(),
+                Exercises = new List<Exercise>(),
                 Participants = participants
             }
         };
