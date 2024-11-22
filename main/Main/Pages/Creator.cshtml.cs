@@ -1,7 +1,9 @@
+using System.CodeDom.Compiler;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Parsers.ProblemParser;
+using Algorithm.New.Music;
 using Main.Data;
 using Main.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -78,7 +80,7 @@ namespace Main.Pages
             return Page();
         }
 
-        private bool CheckProblem(string question)
+        private static bool CheckProblem(string question)
         {
             try
             {
@@ -125,6 +127,14 @@ namespace Main.Pages
             }
 
             return true;
+        }
+
+        public JsonResult OnPostGenerateTask(int bars, int metreValue, int metreCount, int sharpsCount, int flatsCount, int minor)
+        {
+            var generatedFunctions = Algorithm.New.Algorithm.Generators.ProblemGenerator
+                .Generate(bars, metreValue, metreCount, sharpsCount, flatsCount, minor);
+
+            return new JsonResult(generatedFunctions);
         }
 
         public async Task<IActionResult> OnPostSave()

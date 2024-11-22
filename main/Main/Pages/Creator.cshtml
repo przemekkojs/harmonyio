@@ -167,6 +167,42 @@
         }
     }
 
+    function generate(taskIndex) {
+        const task = taskContainer.tasks[taskIndex];
+        const questionText = currentTask.questionInput.value;
+
+        const tonationLetterSelect = currentTask.tonationNameSelect;
+        const accidentalSelect = currentTask.tonationAccidentalSelect;
+        const modeSelect = currentTask.tonationModeSelect;
+        const metreSelect = currentTask.metreSelect;
+
+        const metreSplitted = metreSelect.value.split('/');
+        const metreCount = metreSplitted[0];
+        const metreValue = metreSplitted[1];
+
+        const tonationString = `${tonationLetterSelect.value}${modeSelect.value}`;
+        const tonationParsed = parseTonationToAccidentalsCount(tonationString);
+        const sharpsCount = tonationParsed[0];
+        const flatsCount = tonationParsed[1];
+        const minor = tonationParsed[2];
+        const maxPoints = Number(currentTask.maxPointsInput.value);
+
+        const taskResult = null; // HERE GENERATOR SHOULD BE CALLED SOMEHOW
+
+        const exercise = {
+            question: questionText,
+            sharpsCount: Number(sharpsCount),
+            flatsCount: Number(flatsCount),
+            minor: Number(minor),
+            metreValue: Number(metreValue),
+            metreCount: Number(metreCount),
+            maxPoints: Number(maxPoints),
+            task: taskResult
+        };
+
+        task.load(exercise);
+    }
+
     function addExisting() {
         taskContainer.load(exercises);
         questionsValidationError.innerText = '';
@@ -185,9 +221,7 @@
 
         for (let i = 0; i < tasks.length; i++) {
             const currentTask = tasks[i];
-
             const questionText = currentTask.questionInput.value;
-            const hiddenInput = currentTask.hiddenInput;
 
             const tonationLetterSelect = currentTask.tonationNameSelect;
             const accidentalSelect = currentTask.tonationAccidentalSelect;
@@ -229,6 +263,8 @@
             }
 
             answer.push(toPush);
+
+            const hiddenInput = currentTask.hiddenInput;
             hiddenInput.value = JSON.stringify(toPush);   
         }
 
