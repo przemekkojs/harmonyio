@@ -38,20 +38,27 @@ public class JoinModel : PageModel
                 .Include(q => q.Participants)
         );
 
-        if (quiz == null || quiz.State == Enumerations.QuizState.Closed)
+        if (quiz == null)
         {
             return RedirectToPage("Error");
         }
 
         Quiz = quiz;
 
-        if (!quiz.Participants.Any(p => p.Id == appUser.Id))
+        if (quiz.State != Enumerations.QuizState.Closed)
         {
-            quiz.Participants.Add(appUser);
-            _repository.Update(Quiz);
-            await _repository.SaveChangesAsync();
-        }
+            return Page();
+        } 
+        else 
+        {
+            if (!quiz.Participants.Any(p => p.Id == appUser.Id))
+            {
+                quiz.Participants.Add(appUser);
+                _repository.Update(Quiz);
+                await _repository.SaveChangesAsync();
+            }
 
-        return Page();
+            return Page();
+        }
     }
 }

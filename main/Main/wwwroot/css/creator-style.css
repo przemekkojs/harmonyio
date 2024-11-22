@@ -6,7 +6,8 @@
 
 .task-add {
     cursor: pointer;
-    border-style: dashed;
+    border-style: dashed; 
+    color: var(--bs-gray-600);
 }
 
 .task-creator {

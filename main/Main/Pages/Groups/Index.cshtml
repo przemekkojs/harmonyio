@@ -13,7 +13,7 @@
     <div class="d-none d-md-flex h-100 bg-white shadow rounded d-flex flex-column p-3 me-3"
         style="width: 250px; min-width: 250px;">
         <button id="ownedGroupsButton" onclick="switchTab(0)"
-            class="btn btn-outline-dark hover-primary d-flex align-items-center justify-content-start p-3 mb-2">
+            class="btn btn-outline-secondary hover-primary d-flex align-items-center justify-content-start p-3 mb-2">
             <i class="fas fa-user icon-sm me-2"></i>
             <span>Posiadane grupy</span>
         </button>
@@ -279,8 +279,8 @@
     function switchTab(tabIndex) {
         if (tabIndex == 0) {
             ownedGroupsButton.classList.add("btn-primary");
-            ownedGroupsButton.classList.remove("btn-outline-dark", "hover-primary");
-            joinedGroupsButton.classList.add("btn-outline-dark", "hover-primary");
+            ownedGroupsButton.classList.remove("btn-outline-secondary", "hover-primary");
+            joinedGroupsButton.classList.add("btn-outline-secondary", "hover-primary");
             joinedGroupsButton.classList.remove("btn-primary");
 
             joinedGroupsList.classList.add("d-none")
@@ -289,8 +289,8 @@
             ownedGroupsShown = true;
         } else {
             joinedGroupsButton.classList.add("btn-primary");
-            joinedGroupsButton.classList.remove("btn-outline-dark", "hover-primary");
-            ownedGroupsButton.classList.add("btn-outline-dark", "hover-primary");
+            joinedGroupsButton.classList.remove("btn-outline-secondary", "hover-primary");
+            ownedGroupsButton.classList.add("btn-outline-secondary", "hover-primary");
             ownedGroupsButton.classList.remove("btn-primary");
 
             ownedGroupsList.classList.add("d-none")

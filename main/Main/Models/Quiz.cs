@@ -12,6 +12,7 @@ namespace Main.Models
 		public DateTime CloseDate { get; set; } = default;
 
 		public bool IsCreated { get; set; } = false;
+		public bool IsValid { get; set; } = true;
 		
 		public string? Code {get; set;} = CodeGeneration();
 

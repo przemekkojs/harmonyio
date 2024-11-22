@@ -38,9 +38,9 @@ namespace Algorithm.New.Algorithm.Rules.Solution
         private static bool NoteCheckResult(Note? note1, Note? note2)
         {
             if (note1 != null && note2 != null)
-                return Interval.IsLower(note1, note2);
+                return Interval.IsLower(note2, note1);
             else
-                return false;
+                return true;
         }
     }
 }

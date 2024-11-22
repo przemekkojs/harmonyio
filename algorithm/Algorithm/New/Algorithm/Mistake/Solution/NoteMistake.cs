@@ -13,6 +13,12 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
         [JsonConstructor]
         public NoteMistake(int barIndex, int verticalIndex, int code)
         {
+            if (barIndex < 0)
+                barIndex = 0;
+
+            if (verticalIndex < 0)
+                verticalIndex = 0;
+
             BarIndex = barIndex;
             VerticalIndex = verticalIndex;
             MistakeCode = code;

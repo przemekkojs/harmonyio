@@ -49,7 +49,7 @@ namespace Algorithm.New.Music
                 Meter3_8, Meter6_8
             ];
 
-            return meters.FirstOrDefault(x => x.Value == value && x.Count == count) ?? throw new ArgumentException("Invalid metre parameters.");
+            return meters.FirstOrDefault(x => x.Value == value && x.Count == count) ?? Metre.Meter2_4;
         }
     }
 }

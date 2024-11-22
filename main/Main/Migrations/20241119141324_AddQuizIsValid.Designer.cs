@@ -3,6 +3,7 @@ using System;
 using Main.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,26 +11,58 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119141324_AddQuizIsValid")]
+    partial class AddQuizIsValid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
-            modelBuilder.Entity("GroupLeader", b =>
+            modelBuilder.Entity("ApplicationUserQuiz", b =>
                 {
-                    b.Property<int>("GroupId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
+                    b.Property<string>("ParticipantsId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("GroupId", "UserId");
+                    b.Property<int>("ParticipatedQuizesId")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("ParticipantsId", "ParticipatedQuizesId");
 
-                    b.ToTable("GroupLeader");
+                    b.HasIndex("ParticipatedQuizesId");
+
+                    b.ToTable("QuizParticipants", (string)null);
+                });
+
+            modelBuilder.Entity("ApplicationUserUsersGroup", b =>
+                {
+                    b.Property<int>("TeacherInGroupsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TeachersId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("TeacherInGroupsId", "TeachersId");
+
+                    b.HasIndex("TeachersId");
+
+                    b.ToTable("GroupLeader", (string)null);
+                });
+
+            modelBuilder.Entity("ApplicationUserUsersGroup1", b =>
+                {
+                    b.Property<int>("StudentInGroupsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StudentsId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("StudentInGroupsId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("UserGroup", (string)null);
                 });
 
             modelBuilder.Entity("Main.Models.ApplicationUser", b =>
@@ -106,7 +139,7 @@ namespace Main.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Main.Models.Exercise", b =>
+            modelBuilder.Entity("Main.Models.Excersise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,10 +159,10 @@ namespace Main.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Excersises");
                 });
 
-            modelBuilder.Entity("Main.Models.ExerciseResult", b =>
+            modelBuilder.Entity("Main.Models.ExcersiseResult", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -142,7 +175,7 @@ namespace Main.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ExerciseSolutionId")
+                    b.Property<int>("ExcersiseSolutionId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MaxPoints")
@@ -156,15 +189,15 @@ namespace Main.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseSolutionId")
+                    b.HasIndex("ExcersiseSolutionId")
                         .IsUnique();
 
                     b.HasIndex("QuizResultId");
 
-                    b.ToTable("ExerciseResults");
+                    b.ToTable("ExcersiseResults");
                 });
 
-            modelBuilder.Entity("Main.Models.ExerciseSolution", b =>
+            modelBuilder.Entity("Main.Models.ExcersiseSolution", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -174,7 +207,7 @@ namespace Main.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ExerciseId")
+                    b.Property<int>("ExcersiseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")
@@ -183,11 +216,11 @@ namespace Main.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasIndex("ExcersiseId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ExerciseSolutions");
+                    b.ToTable("ExcersiseSolutions");
                 });
 
             modelBuilder.Entity("Main.Models.GroupRequest", b =>
@@ -225,8 +258,7 @@ namespace Main.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ExerciseResultId")
-
+                    b.Property<int?>("ExcersiseResultId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Functions")
@@ -239,7 +271,7 @@ namespace Main.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseResultId");
+                    b.HasIndex("ExcersiseResultId");
 
                     b.ToTable("MistakeResults");
                 });
@@ -456,70 +488,70 @@ namespace Main.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PublishedToQuizzes", b =>
+            modelBuilder.Entity("QuizUsersGroup", b =>
                 {
-                    b.Property<int>("GroupId")
+                    b.Property<int>("PublishedToGroupId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("QuizId")
+                    b.Property<int>("QuizzesId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("GroupId", "QuizId");
+                    b.HasKey("PublishedToGroupId", "QuizzesId");
 
-                    b.HasIndex("QuizId");
+                    b.HasIndex("QuizzesId");
 
-                    b.ToTable("PublishedToQuizzes");
+                    b.ToTable("PublishedToQuizzes", (string)null);
                 });
 
-            modelBuilder.Entity("QuizParticipants", b =>
+            modelBuilder.Entity("ApplicationUserQuiz", b =>
                 {
-                    b.Property<string>("ParticipantId")
-                        .HasColumnType("TEXT");
+                    b.HasOne("Main.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("QuizId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ParticipantId", "QuizId");
-
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("QuizParticipants");
+                    b.HasOne("Main.Models.Quiz", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipatedQuizesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("UserGroup", b =>
-                {
-                    b.Property<int>("GroupId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("GroupId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserGroup");
-                });
-
-            modelBuilder.Entity("GroupLeader", b =>
+            modelBuilder.Entity("ApplicationUserUsersGroup", b =>
                 {
                     b.HasOne("Main.Models.UsersGroup", null)
                         .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("TeacherInGroupsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Main.Models.ApplicationUser", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("TeachersId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Main.Models.Exercise", b =>
+            modelBuilder.Entity("ApplicationUserUsersGroup1", b =>
+                {
+                    b.HasOne("Main.Models.UsersGroup", null)
+                        .WithMany()
+                        .HasForeignKey("StudentInGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Main.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Main.Models.Excersise", b =>
                 {
                     b.HasOne("Main.Models.Quiz", "Quiz")
-                        .WithMany("Exercises")
+                        .WithMany("Excersises")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -527,39 +559,39 @@ namespace Main.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("Main.Models.ExerciseResult", b =>
+            modelBuilder.Entity("Main.Models.ExcersiseResult", b =>
                 {
-                    b.HasOne("Main.Models.ExerciseSolution", "ExerciseSolution")
-                        .WithOne("ExerciseResult")
-                        .HasForeignKey("Main.Models.ExerciseResult", "ExerciseSolutionId")
+                    b.HasOne("Main.Models.ExcersiseSolution", "ExcersiseSolution")
+                        .WithOne("ExcersiseResult")
+                        .HasForeignKey("Main.Models.ExcersiseResult", "ExcersiseSolutionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Main.Models.QuizResult", "QuizResult")
-                        .WithMany("ExerciseResults")
+                        .WithMany("ExcersiseResults")
                         .HasForeignKey("QuizResultId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("ExerciseSolution");
+                    b.Navigation("ExcersiseSolution");
 
                     b.Navigation("QuizResult");
                 });
 
-            modelBuilder.Entity("Main.Models.ExerciseSolution", b =>
+            modelBuilder.Entity("Main.Models.ExcersiseSolution", b =>
                 {
-                    b.HasOne("Main.Models.Exercise", "Exercise")
-                        .WithMany("ExerciseSolutions")
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("Main.Models.Excersise", "Excersise")
+                        .WithMany("ExcersiseSolutions")
+                        .HasForeignKey("ExcersiseId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Main.Models.ApplicationUser", "User")
-                        .WithMany("ExerciseSolutions")
+                        .WithMany("ExcersiseSolutions")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Exercise");
+                    b.Navigation("Excersise");
 
                     b.Navigation("User");
                 });
@@ -585,12 +617,12 @@ namespace Main.Migrations
 
             modelBuilder.Entity("Main.Models.MistakeResult", b =>
                 {
-                    b.HasOne("Main.Models.ExerciseResult", "ExerciseResult")
+                    b.HasOne("Main.Models.ExcersiseResult", "ExcersiseResult")
                         .WithMany("MistakeResults")
-                        .HasForeignKey("ExerciseResultId")
+                        .HasForeignKey("ExcersiseResultId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("ExerciseResult");
+                    b.Navigation("ExcersiseResult");
                 });
 
             modelBuilder.Entity("Main.Models.Quiz", b =>
@@ -598,7 +630,7 @@ namespace Main.Migrations
                     b.HasOne("Main.Models.ApplicationUser", "Creator")
                         .WithMany("CreatedQuizes")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Creator");
@@ -609,13 +641,13 @@ namespace Main.Migrations
                     b.HasOne("Main.Models.Quiz", "Quiz")
                         .WithMany("QuizResults")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Main.Models.ApplicationUser", "User")
                         .WithMany("QuizResults")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Quiz");
@@ -684,48 +716,18 @@ namespace Main.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PublishedToQuizzes", b =>
+            modelBuilder.Entity("QuizUsersGroup", b =>
                 {
                     b.HasOne("Main.Models.UsersGroup", null)
                         .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("PublishedToGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Main.Models.Quiz", null)
                         .WithMany()
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("QuizParticipants", b =>
-                {
-                    b.HasOne("Main.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("ParticipantId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Main.Models.Quiz", null)
-                        .WithMany()
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("UserGroup", b =>
-                {
-                    b.HasOne("Main.Models.UsersGroup", null)
-                        .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("QuizzesId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Main.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -733,7 +735,7 @@ namespace Main.Migrations
                 {
                     b.Navigation("CreatedQuizes");
 
-                    b.Navigation("ExerciseSolutions");
+                    b.Navigation("ExcersiseSolutions");
 
                     b.Navigation("MasterInGroups");
 
@@ -742,31 +744,31 @@ namespace Main.Migrations
                     b.Navigation("Requests");
                 });
 
-            modelBuilder.Entity("Main.Models.Exercise", b =>
+            modelBuilder.Entity("Main.Models.Excersise", b =>
                 {
-                    b.Navigation("ExerciseSolutions");
+                    b.Navigation("ExcersiseSolutions");
                 });
 
-            modelBuilder.Entity("Main.Models.ExerciseResult", b =>
+            modelBuilder.Entity("Main.Models.ExcersiseResult", b =>
                 {
                     b.Navigation("MistakeResults");
                 });
 
-            modelBuilder.Entity("Main.Models.ExerciseSolution", b =>
+            modelBuilder.Entity("Main.Models.ExcersiseSolution", b =>
                 {
-                    b.Navigation("ExerciseResult");
+                    b.Navigation("ExcersiseResult");
                 });
 
             modelBuilder.Entity("Main.Models.Quiz", b =>
                 {
-                    b.Navigation("Exercises");
+                    b.Navigation("Excersises");
 
                     b.Navigation("QuizResults");
                 });
 
             modelBuilder.Entity("Main.Models.QuizResult", b =>
                 {
-                    b.Navigation("ExerciseResults");
+                    b.Navigation("ExcersiseResults");
                 });
 
             modelBuilder.Entity("Main.Models.UsersGroup", b =>
