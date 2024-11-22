@@ -23,11 +23,12 @@ namespace Main.Pages
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
 
+        public string Opinion { get; private set; } = "Brak opinii";
         public string GradeString { get; set; } = "";
         public Quiz Quiz { get; set; } = null!;
         public List<string> Questions = [];
         public List<string> Answers = [];
-        public List<ExerciseResultData> ExerciseResults = new List<ExerciseResultData>();
+        public List<ExerciseResultData> ExerciseResults = [];
 
         public BrowseModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
@@ -53,45 +54,62 @@ namespace Main.Pages
             );
 
             if (quiz == null)
-            {
                 return RedirectToPage("Error");
-            }
+
+            var quizNotStarted = quiz.State == QuizState.NotStarted;
+            var userIsParticipant = quiz.Participants.Count != 0; // TODO: To chyba nie oznacza, ¿e user nie jest participant...
 
             // quiz isnt started or user isnt participant so forbid browsing it
-            if (quiz.State == QuizState.NotStarted || !quiz.Participants.Any())
-            {
+            if (quizNotStarted || !userIsParticipant)
                 return Forbid();
-            }
 
             Quiz = quiz;
-
             var quizResult = quiz.QuizResults.FirstOrDefault();
+
             if (quizResult == null || quizResult.Grade == null)
             {
                 // quiz is open and quiz result isnt set
                 if (quiz.State == QuizState.Open)
-                {
                     return RedirectToPage("Solve", new { code = quiz.Code });
-                }
+
                 // here quiz must be closed so set grade to -
                 GradeString = "-";
             }
             else
-            {
                 GradeString = ((Grade)quizResult.Grade).AsString();
-            }
 
             Questions = quiz.Excersises.Select(e => e.Question).ToList();
             Answers = quiz.Excersises
-                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? "")
+                .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.Answer ?? string.Empty)
                 .ToList();
+
+            // Tutaj robimy b³êdy
+            var excersiseResult = quizResult?.ExcersiseResults
+                .FirstOrDefault();
+
+            if (excersiseResult != null)
+            {
+                _repository.Context.Entry(excersiseResult)
+                    .Collection(er => er.MistakeResults)
+                    .Load();
+
+                var showOpinion = quizResult?.ShowAlgorithmOpinion ?? false;
+                var mistakeResults = excersiseResult?.MistakeResults ?? [];
+
+                if (showOpinion)
+                    Opinion = Utils.Utils.MistakesToHTML(mistakeResults);
+                else
+                    Opinion = string.Empty;
+            }
+            else
+                Opinion = string.Empty;
 
             // TODO when added max points to excersise, assign this max points
             ExerciseResults = quiz.Excersises
                 .Select(e => e.ExcersiseSolutions.FirstOrDefault()?.ExcersiseResult)
-                .Select(result => result == null
-                    ? new ExerciseResultData { Points = 0 }
-                    : new ExerciseResultData
+                .Select(result => result == null ?
+                    new ExerciseResultData { Points = 0 } :
+                    new ExerciseResultData
                     {
                         Points = result.Points,
                         MaxPoints = result.MaxPoints,
@@ -101,6 +119,4 @@ namespace Main.Pages
             return Page();
         }
     }
-
-
 }

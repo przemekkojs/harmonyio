@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Main.Enumerations;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
-using Algorithm.New.Algorithm.Mistake.Solution;
 
 namespace Main.Pages
 {
@@ -26,8 +25,7 @@ namespace Main.Pages
         public List<List<string>> Solutions { get; set; } = [];
         public List<Excersise> Excersises { get; set; } = [];
         public List<List<int>> PointSuggestions { get; set; } = [];
-        public List<List<string>> Opinions { get; set; } = [];
-        public Dictionary<ExcersiseSolution, string> SolutionsToMistakes { get; set; } = [];
+        public List<List<string>> Opinions { get; set; } = [];        
 
         [BindProperty]
         public int QuizId { get; set; }
@@ -48,110 +46,7 @@ namespace Main.Pages
         {
             _userManager = userManager;
             _repository = repository;
-        }
-
-        private static string MistakesToHTML(ICollection<MistakeResult> mistakes)
-        {
-            var tmp = new Dictionary<(int, (int, int, int)), List<string>>();
-
-            foreach (var item in mistakes)
-            {
-                var barIndexes = item.Bars;
-                var functionIndexes = item.Functions;
-                var mistakeCodes = item.MistakeCodes;
-
-                var bar1 = barIndexes.Count > 0 ? barIndexes[0] : -1;
-                var bar2 = barIndexes.Count > 1 ? barIndexes[1] : bar1;
-
-                var function1 = functionIndexes.Count > 0 ? functionIndexes[0] : -1;
-                var function2 = functionIndexes.Count > 1 ? functionIndexes[1] : function1;
-
-                var key = (bar1, (function1, function2, bar2));
-
-                if (!tmp.ContainsKey(key))
-                    tmp[key] = [];
-
-                foreach (var mistakeCode in mistakeCodes)
-                {                    
-                    var description = Mistake.MistakeCodeToDescription(mistakeCode);
-                    tmp[key].Add(description);                    
-                }
-            }
-
-            var sortedKeys = tmp.Keys
-                .OrderBy(key => key.Item1)
-                    .ThenBy(key => key.Item2.Item1)
-                        .ThenBy(key => key.Item2.Item2)
-                            .ThenBy(key => key.Item2.Item3)
-                .ToList();
-
-            int lastBar = 0;
-            var result = "";
-
-            foreach (var key in sortedKeys)
-            {
-                var bar = key.Item1 + 1;
-
-                if (bar <= 0)
-                    bar = 1;
-
-                var function1 = key.Item2.Item1 + 1;
-                var function2 = key.Item2.Item2 + 1;
-                var bar2 = key.Item2.Item3 + 1;
-
-                if (bar2 <= 0)
-                    bar2 = 1;
-
-                if (bar != lastBar)
-                {
-                    if (lastBar > 0)
-                        result += $"</details>";
-
-                    result += $"<details><summary>Takt {bar}</summary>";
-                }
-
-                lastBar = bar;
-
-                if (function1 == function2)
-                    result += $"<details><summary>Funkcja na miar� {function1}</summary>";
-                else
-                {
-                    result += (bar == bar2 ?
-                        $"<details><summary>Funkcje na miary {function1}, {function2}</summary>" :
-                        $"<details><summary>Funkcje na miary {function1}, {function2} w takcie {bar2})</summary>");                    
-                }
-
-                foreach (var o in tmp[key])
-                {
-                    result += $"<span>{o}</span><br>";
-                }
-
-                result += "</details>";
-            }
-
-            return result;
-        }
-
-        // Tutaj inicjalizowane s� b��dy
-        private void InitializeMistakes(Quiz quiz)
-        {            
-            SolutionsToMistakes = [];
-
-            var resultDictionary = quiz.Excersises
-                .SelectMany(e => e.ExcersiseSolutions)
-                .Where(es => es.ExcersiseResult != null)
-                .ToDictionary(
-                    es => es,
-                    es => es.ExcersiseResult!.MistakeResults);
-
-            foreach (var key in resultDictionary.Keys)
-            {
-                var mistakes = resultDictionary[key];
-                var mistakeString = MistakesToHTML(mistakes);
-
-                SolutionsToMistakes[key] = mistakeString;
-            }
-        }
+        }       
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -186,7 +81,6 @@ namespace Main.Pages
             QuizId = quiz.Id;
             QuizName = quiz.Name;
             Excersises = [.. quiz.Excersises];
-            InitializeMistakes(quiz); // Tutaj inicjowane s� b��dy
 
             var allSolutions = quiz.Excersises.SelectMany(e => e.ExcersiseSolutions).ToList();
             var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
@@ -230,10 +124,9 @@ namespace Main.Pages
 				.Where(p => participantsAnsweredIds.Contains(p.Id))
 				.ToList();
 				
-            Users = Users
+            Users = [.. Users
 				.OrderBy(u => u.LastName)
-				.ThenBy(u => u.FirstName)
-				.ToList();
+				.ThenBy(u => u.FirstName)];
 				
             UserIds = Users
 				.Select(u => u.Id)
@@ -261,8 +154,6 @@ namespace Main.Pages
 					.Select(er => er?.AlgorithmPoints ?? 0)
 					.ToList());
 
-                // przemo tu wlasnie bedziesz tworzyl te elementy html i wkladal zamiast tego co ponizej
-                // ok
                 foreach (var result in userSolutionResults)
                 {
                     if (result == null)
@@ -274,7 +165,7 @@ namespace Main.Pages
                 }
 
                 Opinions.Add(userSolutionResults
-                    .Select(er => MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak b��d�w.")
+                    .Select(er => Utils.Utils.MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak błędów.")
                     .ToList());
             }
 
@@ -301,9 +192,7 @@ namespace Main.Pages
             );
 
             if (quiz == null)
-            {
                 return RedirectToPage("Error");
-            }
 
             // check if user can grade quiz
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
@@ -375,6 +264,8 @@ namespace Main.Pages
                     _repository.Update(curQuizResult);
                 }
 
+                // Tu dla każdego usera ustawiamy, czy chcemy opinię algorytmu uwzględniać czy nie
+                curQuizResult.ShowAlgorithmOpinion = ShareAlgorithmOpinion;
                 var curSolutionResults = userIdToSolutionResults[curUserId];
 
                 for (int j = 0; j < curSolutionResults.Count; j++)

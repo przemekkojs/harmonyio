@@ -9,6 +9,7 @@ namespace Main.Models
 
 		public Grade? Grade { get; set; }
         public DateTime GradeDate { get; set; }
+        public bool ShowAlgorithmOpinion { get; set; } = false;
 
         //FOREIGN KEYS
         public int QuizId { get; set; }
