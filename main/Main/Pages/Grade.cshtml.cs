@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Main.Enumerations;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
-using Algorithm.New.Algorithm.Mistake.Solution;
 
 namespace Main.Pages
 {
@@ -27,7 +26,6 @@ namespace Main.Pages
         public List<Exercise> Exercises { get; set; } = [];
         public List<List<int>> PointSuggestions { get; set; } = [];
         public List<List<string>> Opinions { get; set; } = [];
-        public Dictionary<ExerciseSolution, string> SolutionsToMistakes { get; set; } = [];
 
         [BindProperty]
         public int QuizId { get; set; }
@@ -48,7 +46,7 @@ namespace Main.Pages
         {
             _userManager = userManager;
             _repository = repository;
-        }
+        }       
 
         private static string MistakesToHTML(ICollection<MistakeResult> mistakes)
         {
@@ -132,27 +130,6 @@ namespace Main.Pages
             return result;
         }
 
-        // Tutaj inicjalizowane s� b��dy
-        private void InitializeMistakes(Quiz quiz)
-        {            
-            SolutionsToMistakes = [];
-
-            var resultDictionary = quiz.Exercises
-                .SelectMany(e => e.ExerciseSolutions)
-                .Where(es => es.ExerciseResult != null)
-                .ToDictionary(
-                    es => es,
-                    es => es.ExerciseResult!.MistakeResults);
-
-            foreach (var key in resultDictionary.Keys)
-            {
-                var mistakes = resultDictionary[key];
-                var mistakeString = MistakesToHTML(mistakes);
-
-                SolutionsToMistakes[key] = mistakeString;
-            }
-        }
-
         public async Task<IActionResult> OnGetAsync(int id)
         {
             var appUser = await _userManager.GetUserAsync(User);
@@ -185,10 +162,7 @@ namespace Main.Pages
 
             QuizId = quiz.Id;
             QuizName = quiz.Name;
-            
-            Exercises = [.. quiz.Exercises];
-
-            InitializeMistakes(quiz); // Tutaj inicjowane s� b��dy
+            Excersises = [.. quiz.Excersises];
 
             var allSolutions = quiz.Exercises.SelectMany(e => e.ExerciseSolutions).ToList();
             var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
@@ -232,10 +206,9 @@ namespace Main.Pages
 				.Where(p => participantsAnsweredIds.Contains(p.Id))
 				.ToList();
 				
-            Users = Users
+            Users = [.. Users
 				.OrderBy(u => u.LastName)
-				.ThenBy(u => u.FirstName)
-				.ToList();
+				.ThenBy(u => u.FirstName)];
 				
             UserIds = Users
 				.Select(u => u.Id)
@@ -263,8 +236,6 @@ namespace Main.Pages
 					.Select(er => er?.AlgorithmPoints ?? 0)
 					.ToList());
 
-                // przemo tu wlasnie bedziesz tworzyl te elementy html i wkladal zamiast tego co ponizej
-                // ok
                 foreach (var result in userSolutionResults)
                 {
                     if (result == null)
@@ -276,7 +247,7 @@ namespace Main.Pages
                 }
 
                 Opinions.Add(userSolutionResults
-                    .Select(er => MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak b��d�w.")
+                    .Select(er => Utils.Utils.MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak błędów.")
                     .ToList());
             }
 
@@ -303,9 +274,7 @@ namespace Main.Pages
             );
 
             if (quiz == null)
-            {
                 return RedirectToPage("Error");
-            }
 
             // check if user can grade quiz
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
@@ -377,6 +346,8 @@ namespace Main.Pages
                     _repository.Update(curQuizResult);
                 }
 
+                // Tu dla każdego usera ustawiamy, czy chcemy opinię algorytmu uwzględniać czy nie
+                curQuizResult.ShowAlgorithmOpinion = ShareAlgorithmOpinion;
                 var curSolutionResults = userIdToSolutionResults[curUserId];
 
                 for (int j = 0; j < curSolutionResults.Count; j++)

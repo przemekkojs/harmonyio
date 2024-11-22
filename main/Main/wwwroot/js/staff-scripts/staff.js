@@ -38,6 +38,7 @@ class GrandStaff {
       flatsCount: flatsCount,
       meterCount: this.metre.count,
       meterValue: this.metre.value,
+      minor: this.minor
     });
   }
 
@@ -135,6 +136,7 @@ class GrandStaff {
   }
 
   loadFromJson(taskJson, notesJsonString) {
+    this.minor = taskJson.minor;
     this.isLoaded = false;
     this.#clearFunctionSymbolGraphics();
     this.#clearMetreGraphics();

@@ -15,14 +15,16 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
 
         [JsonPropertyName("metreValue")]
         public int MetreValue { get; set; }
+        public int Minor { get; set; }
 
-        public JsonSolution(List<JsonNote> jsonNotes, int sharpsCount, int flatsCount, int metreValue, int metreCount)
+        public JsonSolution(List<JsonNote> jsonNotes, int sharpsCount, int flatsCount, int metreValue, int metreCount, int minor)
         {
             Notes = jsonNotes;
             SharpsCount = sharpsCount;
             FlatsCount = flatsCount;
             MetreCount = metreCount;
             MetreValue = metreValue;
+            Minor = minor;
         }
     }
 }

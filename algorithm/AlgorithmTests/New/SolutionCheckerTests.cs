@@ -30,7 +30,7 @@ namespace AlgorithmTests.New
         [Fact]
         public void CheckNoMistakes()
         {
-            var settings = new Settings([new VoiceCrossing()]);
+            var settings = Constants.Settings;
             var checkResult = SolutionChecker.CheckSolution(solution, settings);
 
             var mistakesCount = checkResult

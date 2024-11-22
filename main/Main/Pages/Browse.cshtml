@@ -87,6 +87,10 @@
                 <div id="p5_loading">Ładowanie rozwiązania</div>
                 @*SET VIA JS*@
             </div>
+
+            <div id="opinion">
+                @*SET VIA JS*@
+            </div>
         </div>
     </div>
 </div>
@@ -143,6 +147,19 @@
     const questions = questionsRaw.map(q => JSON.parse(q));
 
     const answers = @Html.Raw(JsonConvert.SerializeObject(Model.Answers));
+    const opinion = @Html.Raw(JsonConvert.SerializeObject(Model.Opinion));
+
+    if (opinion !== "")
+    {
+        const opinionDiv = document.getElementById('opinion');
+
+        opinionDiv.innerHTML = `
+            <details>
+                <summary>Opinia algorytmu</summary>
+                ${opinion}
+            </details>
+            `;
+    }
 
     let currentIndex = 0;
 

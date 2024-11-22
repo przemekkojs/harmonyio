@@ -392,9 +392,10 @@ class FunctionCreator {
 
         this.rightBraceContainer.appendChild(this.rightBrace);
 
-        [this.leftBraceContainer, this.minorContainer, this.symbolContainer, this.positionContainer, this.rootContainer,
-         this.addedContainer, this.suspensionContainer, this.alterationContainer, this.removedContainer,
-         this.rightBraceContainer].forEach(e => {
+        //this.leftBraceContainer, this.alterationContainer, this.suspensionContainer, this.rightBraceContainer
+        [this.minorContainer, this.symbolContainer, this.positionContainer, this.rootContainer,
+         this.addedContainer, this.removedContainer,
+         ].forEach(e => {
              this.gridContainer.appendChild(e);
         });
 
@@ -418,7 +419,8 @@ class FunctionCreator {
         this.resetCreator.className = "custom-button round-arrow-button button-small";
         this.resetCreator.value = " ";
 
-        [this.cancelCreator, this.resetCreator].forEach(e => {
+        //[this.cancelCreator, this.resetCreator]
+        [this.cancelCreator].forEach(e => {
             this.formButtons.appendChild(e);
         });
 
@@ -426,8 +428,8 @@ class FunctionCreator {
             this.functionCreator.appendChild(e);
         });
 
-        [this.suspensionPopup,
-         this.alterationPopup,
+        [//this.suspensionPopup,
+         //this.alterationPopup,
          this.addedPopup,
          this.functionCreator].forEach(e => {
             this.container.appendChild(e);

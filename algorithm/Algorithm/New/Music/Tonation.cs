@@ -46,7 +46,22 @@
                 throw new ArgumentException("Invalid accidentals count.");
         }
 
-        public static Tonation GetTonation(int sharpsCount, int flatsCount)
+        public static Tonation GetMirroredVersion(Tonation tonation)
+        {
+            var flatsCount = tonation.FlatsCount != 0 ? tonation.FlatsCount : -tonation.SharpsCount;
+            var newAccidentalsCount = flatsCount + 3;
+
+            var newFlatsCount = newAccidentalsCount >= 0 ? newAccidentalsCount : 0;
+            var newSharpsCount = newAccidentalsCount <= 0 ? -newAccidentalsCount : 0;
+
+            var newTonation = tonation.Mode == Mode.Minor ?
+                GetTonation(newSharpsCount, newFlatsCount).First(x => x.Mode == Mode.Major) :
+                GetTonation(newSharpsCount, newFlatsCount).First(x => x.Mode == Mode.Minor);
+
+            return newTonation;
+        }
+
+        public static IEnumerable<Tonation> GetTonation(int sharpsCount, int flatsCount)
         {
             List<Tonation> tonations = [
                 CFlatMajor, CMajor, CMinor, CSharpMajor, CSharpMinor,
@@ -58,7 +73,7 @@
             ];
 
             return tonations
-                .FirstOrDefault(t => t.FlatsCount == flatsCount && t.SharpsCount == sharpsCount) ??
+                .Where(t => t.FlatsCount == flatsCount && t.SharpsCount == sharpsCount) ??
                 throw new ArgumentException("Invalid number of accidentals.");
         }
 
