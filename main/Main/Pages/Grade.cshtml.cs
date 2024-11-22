@@ -74,7 +74,7 @@ namespace Main.Pages
             // check if user can grade quiz
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
             var userIsNotCreator = quiz.CreatorId != appUser.Id;
-            var isMasterOfGroup = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Count != 0);
+            var isMasterOfGroup = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Any(t => t.Id == appUser.Id));
 
             if (userIsNotCreator && !isMasterOfGroup)
                 return Forbid();
@@ -199,7 +199,7 @@ namespace Main.Pages
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
             // TODO: Tu nie powinno by� || zamiast && ?
             var userIsNotCreator = quiz.CreatorId != appUser.Id;
-            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Count != 0);
+            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Any(t => t.Id == appUser.Id));
 
             if (userIsNotCreator && !userIsMaster)
                 return Forbid();
