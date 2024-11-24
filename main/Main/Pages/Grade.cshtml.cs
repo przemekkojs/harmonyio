@@ -47,88 +47,6 @@ namespace Main.Pages
         {
             _userManager = userManager;
             _repository = repository;
-        }       
-
-        private static string MistakesToHTML(ICollection<MistakeResult> mistakes)
-        {
-            var tmp = new Dictionary<(int, (int, int, int)), List<string>>();
-
-            foreach (var item in mistakes)
-            {
-                var barIndexes = item.Bars;
-                var functionIndexes = item.Functions;
-                var mistakeCodes = item.MistakeCodes;
-
-                var bar1 = barIndexes.Count > 0 ? barIndexes[0] : -1;
-                var bar2 = barIndexes.Count > 1 ? barIndexes[1] : bar1;
-
-                var function1 = functionIndexes.Count > 0 ? functionIndexes[0] : -1;
-                var function2 = functionIndexes.Count > 1 ? functionIndexes[1] : function1;
-
-                var key = (bar1, (function1, function2, bar2));
-
-                if (!tmp.ContainsKey(key))
-                    tmp[key] = [];
-
-                foreach (var mistakeCode in mistakeCodes)
-                {                    
-                    var description = Mistake.MistakeCodeToDescription(mistakeCode);
-                    tmp[key].Add(description);                    
-                }
-            }
-
-            var sortedKeys = tmp.Keys
-                .OrderBy(key => key.Item1)
-                    .ThenBy(key => key.Item2.Item1)
-                        .ThenBy(key => key.Item2.Item2)
-                            .ThenBy(key => key.Item2.Item3)
-                .ToList();
-
-            int lastBar = 0;
-            var result = "";
-
-            foreach (var key in sortedKeys)
-            {
-                var bar = key.Item1 + 1;
-
-                if (bar <= 0)
-                    bar = 1;
-
-                var function1 = key.Item2.Item1 + 1;
-                var function2 = key.Item2.Item2 + 1;
-                var bar2 = key.Item2.Item3 + 1;
-
-                if (bar2 <= 0)
-                    bar2 = 1;
-
-                if (bar != lastBar)
-                {
-                    if (lastBar > 0)
-                        result += $"</details>";
-
-                    result += $"<details><summary>Takt {bar}</summary>";
-                }
-
-                lastBar = bar;
-
-                if (function1 == function2)
-                    result += $"<details><summary>Funkcja na miar� {function1}</summary>";
-                else
-                {
-                    result += (bar == bar2 ?
-                        $"<details><summary>Funkcje na miary {function1}, {function2}</summary>" :
-                        $"<details><summary>Funkcje na miary {function1}, {function2} w takcie {bar2})</summary>");                    
-                }
-
-                foreach (var o in tmp[key])
-                {
-                    result += $"<span>{o}</span><br>";
-                }
-
-                result += "</details>";
-            }
-
-            return result;
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -156,7 +74,7 @@ namespace Main.Pages
             // check if user can grade quiz
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
             var userIsNotCreator = quiz.CreatorId != appUser.Id;
-            var isMasterOfGroup = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Count != 0);
+            var isMasterOfGroup = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Any(t => t.Id == appUser.Id));
 
             if (userIsNotCreator && !isMasterOfGroup)
                 return Forbid();
@@ -204,38 +122,38 @@ namespace Main.Pages
                 );
 
             Users = quiz.Participants
-				.Where(p => participantsAnsweredIds.Contains(p.Id))
-				.ToList();
-				
+                .Where(p => participantsAnsweredIds.Contains(p.Id))
+                .ToList();
+
             Users = [.. Users
-				.OrderBy(u => u.LastName)
-				.ThenBy(u => u.FirstName)];
-				
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)];
+
             UserIds = Users
-				.Select(u => u.Id)
-				.ToList();
+                .Select(u => u.Id)
+                .ToList();
 
             foreach (var userId in UserIds)
             {
                 Grades.Add(userIdToQuizResult[userId]?.Grade ?? null);
-				
+
                 Solutions.Add(userIdToSolutions[userId]
-					.Select(es => es.Answer)
-					.ToList());
+                    .Select(es => es.Answer)
+                    .ToList());
 
                 var userSolutionResults = userIdToSolutionResults[userId];
-				
+
                 Points.Add(userSolutionResults
-					.Select(er => er?.Points ?? 0)
-					.ToList());
-					
+                    .Select(er => er?.Points ?? 0)
+                    .ToList());
+
                 Comments.Add(userSolutionResults
-					.Select(er => er?.Comment ?? "")
-					.ToList());
-					
+                    .Select(er => er?.Comment ?? "")
+                    .ToList());
+
                 PointSuggestions.Add(userSolutionResults
-					.Select(er => er?.AlgorithmPoints ?? 0)
-					.ToList());
+                    .Select(er => er?.AlgorithmPoints ?? 0)
+                    .ToList());
 
                 foreach (var result in userSolutionResults)
                 {
@@ -281,7 +199,7 @@ namespace Main.Pages
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
             // TODO: Tu nie powinno by� || zamiast && ?
             var userIsNotCreator = quiz.CreatorId != appUser.Id;
-            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Count != 0);
+            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Any(t => t.Id == appUser.Id));
 
             if (userIsNotCreator && !userIsMaster)
                 return Forbid();

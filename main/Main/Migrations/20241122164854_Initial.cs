@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Main.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrationSqlServer : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -252,6 +252,7 @@ namespace Main.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Grade = table.Column<int>(type: "INTEGER", nullable: true),
                     GradeDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ShowAlgorithmOpinion = table.Column<bool>(type: "INTEGER", nullable: false),
                     QuizId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },

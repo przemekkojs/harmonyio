@@ -53,7 +53,7 @@ namespace Main.Pages
                 return RedirectToPage("Error");
             }
 
-            var quizResult = quiz.QuizResults.FirstOrDefault();
+            var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
             var quizResultExists = quizResult != null && quizResult.Grade != null;
             var quizClosed = quiz.State == Enumerations.QuizState.Closed;
             var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
@@ -85,7 +85,7 @@ namespace Main.Pages
             }
 
             Answers = Quiz.Exercises
-                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.Answer ?? "")
+                .Select(e => e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.Answer ?? "")
                 .ToList();
 
             return Page();
@@ -111,7 +111,7 @@ namespace Main.Pages
             if (quiz == null)
                 return RedirectToPage("Error");
 
-            var quizResult = quiz.QuizResults.FirstOrDefault();
+            var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
 
             // quiz isnt open or user isnt participant
             var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
@@ -157,7 +157,7 @@ namespace Main.Pages
 
                 _repository.Add(newSolution);
 
-                var maxPointsForExercise = exercise.MaxPoints;                
+                var maxPointsForExercise = exercise.MaxPoints;
                 var algorithmGrade = _algorithm.Grade(exercise.Question, newAnswer, maxPointsForExercise);
                 var mistakes = algorithmGrade.Item3;
                 var mistakeResults = GenerateMistakeResults(mistakes);

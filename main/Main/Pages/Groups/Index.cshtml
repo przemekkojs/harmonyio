@@ -1,12 +1,11 @@
 ﻿@page
 @model Main.Pages.GroupsIndexModel
 @{
-    var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.TeacherInGroups);
+    var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.TeacherInGroups).ToList();
+    var joinedGroups = Model.AppUser.StudentInGroups.ToList();
 
-    var joinedGroups = Model.AppUser.StudentInGroups;
-
-    var studentRequests = Model.AppUser.Requests.Where(r => !r.ForTeacher);
-    var teacherRequests = Model.AppUser.Requests.Where(r => r.ForTeacher);
+    var studentRequests = Model.AppUser.Requests.Where(r => !r.ForTeacher).ToList();
+    var teacherRequests = Model.AppUser.Requests.Where(r => r.ForTeacher).ToList();
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
@@ -52,7 +51,7 @@
         </div>
 
         <div id="ownedGroupsList" class="flex-grow-1 pb-3">
-            @if (teacherRequests.Count() > 0)
+            @if (teacherRequests.Count > 0)
             {
                 <h4 class="mt-3 fw-semibold">Zaproszenia do administrowania</h4>
                 <div class="grid-quizes">
@@ -91,15 +90,15 @@
                         </div>
                     }
                 </div>
-                
+
             }
 
             <div class="mt-3"></div>
-            @if (ownedGroups.Count() > 0 && teacherRequests.Count() > 0)
+            @if (ownedGroups.Count > 0 && teacherRequests.Count > 0)
             {
                 <h4 class="fw-semibold">Grupy</h4>
             }
-            @if (ownedGroups.Count() > 0)
+            @if (ownedGroups.Count > 0)
             {
                 <div class="grid-quizes">
                     @foreach (var group in ownedGroups)
@@ -148,12 +147,14 @@
                     }
                 </div>
             }
-            else if (teacherRequests.Count() == 0)
+            else if (teacherRequests.Count == 0)
             {
-                <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                <div
+                    class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
                     <i class="fas fa-user mb-4 icon-giant"></i>
                     <div class="text-center fw-semibold" style="max-width: 400px;">
-                        Nie posiadasz żadnej grupy. Utwórz grupę lub poproś o zostanie administratorem grupy, a pojawi się tutaj!
+                        Nie posiadasz żadnej grupy. Utwórz grupę lub poproś o zostanie administratorem grupy, a pojawi się
+                        tutaj!
                     </div>
                 </div>
             }
@@ -162,7 +163,7 @@
 
 
         <div id="joinedGroupsList" class="flex-grow-1 pb-3">
-            @if (studentRequests.Count() > 0)
+            @if (studentRequests.Count > 0)
             {
                 <h4 class="mt-3 fw-semibold">Zaproszenia do grupy</h4>
                 <div class="grid-quizes">
@@ -205,12 +206,12 @@
             }
 
             <div class="mt-3"></div>
-            @if (joinedGroups.Count() > 0 && studentRequests.Count() > 0)
+            @if (joinedGroups.Count > 0 && studentRequests.Count > 0)
             {
                 <h4 class="fw-semibold">Grupy</h4>
-            }        
+            }
 
-            @if (joinedGroups.Count() > 0)
+            @if (joinedGroups.Count > 0)
             {
                 <div class="grid-quizes">
                     @foreach (var group in joinedGroups)
@@ -246,12 +247,14 @@
                     }
                 </div>
             }
-            else if (studentRequests.Count() == 0)
+            else if (studentRequests.Count == 0)
             {
-                <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                <div
+                    class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
                     <i class="fas fa-user-group mb-4 icon-giant"></i>
                     <div class="text-center fw-semibold" style="max-width: 400px;">
-                        Nie jesteś jeszcze członkiem żadnej grupy. <br/> Gdy zostaniesz do jakiejś zaproszony, będziesz mógł do niej dołączyć tutaj!
+                        Nie jesteś jeszcze członkiem żadnej grupy. <br /> Gdy zostaniesz do jakiejś zaproszony, będziesz
+                        mógł do niej dołączyć tutaj!
                     </div>
                 </div>
             }

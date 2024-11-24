@@ -57,15 +57,14 @@ namespace Main.Pages
                 return RedirectToPage("Error");
 
             var quizNotStarted = quiz.State == QuizState.NotStarted;
-            var userIsParticipant = quiz.Participants.Count != 0; // TODO: To chyba nie oznacza, �e user nie jest participant...
+            var userIsParticipant = quiz.Participants.Any(p => p.Id == appUser.Id);
 
             // quiz isnt started or user isnt participant so forbid browsing it
             if (quizNotStarted || !userIsParticipant)
                 return Forbid();
 
-            Quiz = quiz;
-            var quizResult = quiz.QuizResults.FirstOrDefault();
 
+            var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
             if (quizResult == null || quizResult.Grade == null)
             {
                 // quiz is open and quiz result isnt set
@@ -78,9 +77,10 @@ namespace Main.Pages
             else
                 GradeString = ((Grade)quizResult.Grade).AsString();
 
+            Quiz = quiz;
             Questions = quiz.Exercises.Select(e => e.Question).ToList();
             Answers = quiz.Exercises
-                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.Answer ?? string.Empty)
+                .Select(e => e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.Answer ?? string.Empty)
                 .ToList();
 
             // Tutaj robimy b��dy
@@ -106,17 +106,24 @@ namespace Main.Pages
 
             // TODO when added max points to excersise, assign this max points
             ExerciseResults = quiz.Exercises
-                .Select(e => e.ExerciseSolutions.FirstOrDefault()?.ExerciseResult)
-                .Select(result => result == null ?
-                    new ExerciseResultData { Points = 0 } :
-                    new ExerciseResultData
-
-                    {
-                        Points = result.Points,
-                        MaxPoints = result.MaxPoints,
-                        Comment = result.Comment
-                    })
-                .ToList();
+            .Select(e => new
+            {
+                e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.ExerciseResult,
+                e.MaxPoints
+            })
+            .Select(x => x.ExerciseResult == null
+                ? new ExerciseResultData
+                {
+                    Points = 0,
+                    MaxPoints = x.MaxPoints
+                }
+                : new ExerciseResultData
+                {
+                    Points = x.ExerciseResult.Points,
+                    MaxPoints = x.MaxPoints,
+                    Comment = x.ExerciseResult.Comment
+                })
+            .ToList();
             return Page();
         }
     }

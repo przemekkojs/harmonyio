@@ -10,11 +10,11 @@ namespace Main.Pages;
 
 [Authorize]
 public class JoinModel : PageModel
-{ 
+{
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationRepository _repository;
 
-    public Quiz Quiz {get; set;} = null!;
+    public Quiz Quiz { get; set; } = null!;
 
     public JoinModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
@@ -45,20 +45,15 @@ public class JoinModel : PageModel
 
         Quiz = quiz;
 
-        if (quiz.State != Enumerations.QuizState.Closed)
+        var isQuizClosed = quiz.State == Enumerations.QuizState.Closed;
+        var isUserParticipant = quiz.Participants.Any(p => p.Id == appUser.Id);
+        if (!isQuizClosed && !isUserParticipant)
         {
-            return Page();
-        } 
-        else 
-        {
-            if (!quiz.Participants.Any(p => p.Id == appUser.Id))
-            {
-                quiz.Participants.Add(appUser);
-                _repository.Update(Quiz);
-                await _repository.SaveChangesAsync();
-            }
-
-            return Page();
+            quiz.Participants.Add(appUser);
+            _repository.Update(Quiz);
+            await _repository.SaveChangesAsync();
         }
+
+        return Page();
     }
 }

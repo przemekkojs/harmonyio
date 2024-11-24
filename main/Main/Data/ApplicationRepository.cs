@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace Main.Data;
 
 public class ApplicationRepository : IRepository
-{    
+{
     public ApplicationDbContext Context => context;
 
     private readonly ApplicationDbContext context;
@@ -15,15 +15,15 @@ public class ApplicationRepository : IRepository
     {
         this.context = context;
     }
-    
-    public async Task<List<T>> GetAllAsync<T>(Func<IQueryable<T>, IQueryable<T>>? modifier = null) where T : class
+
+    public virtual async Task<List<T>> GetAllAsync<T>(Func<IQueryable<T>, IQueryable<T>>? modifier = null) where T : class
     {
         var set = context.Set<T>();
         var modifiedSet = modifier is null ? set : modifier(set);
         return await modifiedSet.ToListAsync();
     }
 
-    public async Task<T?> GetAsync<T>(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>>? modifier = null) where T : class
+    public virtual async Task<T?> GetAsync<T>(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>>? modifier = null) where T : class
     {
         var set = context.Set<T>();
         var modifiedSet = modifier is null ? set : modifier(set);
@@ -32,22 +32,22 @@ public class ApplicationRepository : IRepository
         return await modifiedSet.FirstOrDefaultAsync(filter);
     }
 
-    public void Add<T>(T value) where T : class
+    public virtual void Add<T>(T value) where T : class
     {
         context.Set<T>().Add(value);
     }
 
-    public void Update<T>(T value) where T : class
+    public virtual void Update<T>(T value) where T : class
     {
         context.Set<T>().Update(value);
     }
 
-    public void Delete<T>(T value) where T : class
+    public virtual void Delete<T>(T value) where T : class
     {
         context.Set<T>().Remove(value);
     }
 
-    public void Clear()
+    public virtual void Clear()
     {
         context.ExerciseResults.RemoveRange(context.ExerciseResults);
         context.ExerciseSolutions.RemoveRange(context.ExerciseSolutions);
@@ -60,8 +60,8 @@ public class ApplicationRepository : IRepository
         context.MistakeResults.RemoveRange(context.MistakeResults);
     }
 
-    public async Task SaveChangesAsync()
+    public virtual async Task SaveChangesAsync()
     {
         await context.SaveChangesAsync();
-    }    
+    }
 }

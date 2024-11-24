@@ -62,7 +62,7 @@ public class AssignedModel : PageModel
 
         foreach (var quiz in user.ParticipatedQuizes.Reverse())
         {
-            bool isSolved = quiz.Exercises.Any(e => e.ExerciseSolutions.Any());
+            bool isSolved = quiz.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.UserId == appUser.Id));
 
             if (isSolved)
             {
