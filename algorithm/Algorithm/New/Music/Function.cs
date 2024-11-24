@@ -17,8 +17,8 @@ namespace Algorithm.New.Music
         public string Removed { get; set; }
         public List<string> Alterations { get; set; }
         public List<string> Added { get; set; }        
-        public string BarIndex { get; set; }
-        public string VerticalIndex { get; set; }
+        public int BarIndex { get; set; }
+        public int VerticalIndex { get; set; }
 
         [JsonConstructor]
         public ParsedFunction(bool minor, string symbol, string position, string root, string removed,
@@ -31,8 +31,8 @@ namespace Algorithm.New.Music
             Removed = removed;
             Alterations = alterations;
             Added = added;
-            BarIndex = barIndex.ToString();
-            VerticalIndex = verticalIndex.ToString();
+            BarIndex = barIndex;
+            VerticalIndex = verticalIndex;
         }
 
         public ParsedFunction(Function function)
@@ -66,8 +66,8 @@ namespace Algorithm.New.Music
                 Added.Add(toAdd); // AddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAdd
             }
 
-            BarIndex = function.Index.Bar.ToString();
-            VerticalIndex = function.Index.Position.ToString();
+            BarIndex = function.Index.Bar;
+            VerticalIndex = function.Index.Position;
         }
     }
 
@@ -123,8 +123,8 @@ namespace Algorithm.New.Music
         {
             Index = new Index()
             {
-                Bar = Convert.ToInt32(parsedFunction.BarIndex),
-                Position = Convert.ToInt32(parsedFunction.VerticalIndex)
+                Bar = parsedFunction.BarIndex,
+                Position = parsedFunction.VerticalIndex
             };
 
             Symbol = parsedFunction.Symbol switch
