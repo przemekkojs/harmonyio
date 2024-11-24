@@ -17,8 +17,11 @@ namespace AlgorithmTests.New
             var solutionString = Constants.SOLUTION_STRING;
             var problemString = Constants.PROBLEM_STRING;
 
-            var parsedSolutionResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser.ParseJsonToSolutionParseResult(solutionString);
-            var parsedProblemResult = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser.ParseJsonToProblem(problemString);
+            var parsedSolutionResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                .ParseJsonToSolutionParseResult(solutionString);
+
+            var parsedProblemResult = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser
+                .ParseJsonToProblem(problemString);
 
             var parsedSolution = new Solution(parsedProblemResult, parsedSolutionResult.Stacks);
 
@@ -39,10 +42,10 @@ namespace AlgorithmTests.New
             Assert.Equal(0, mistakesCount);
         }
 
-        [Fact]
-        public void Check1Mistake()
-        {
+        //[Fact]
+        //public void Check1Mistake()
+        //{
 
-        }
+        //}
     }
 }

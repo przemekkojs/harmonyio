@@ -12,7 +12,7 @@ export class FunctionContainer {
         this.addFunctionButton.type = 'button';
         this.addFunctionButton.id = `add-function-${this.taskIndex}-${this.barIndex}`;
         this.addFunctionButton.className = "adder-button custom-button button-medium plus-button";
-        this.addFunctionButton.title = "Dodaj funkcję";
+        this.addFunctionButton.title = "Dodaj funkcję";        
 
         this.handleAddFunction = this.addFunction.bind(this);
         this.addFunctionButton.addEventListener('click', this.handleAddFunction);

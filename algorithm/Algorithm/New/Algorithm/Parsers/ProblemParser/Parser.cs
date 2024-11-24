@@ -20,7 +20,6 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
             var functions = parsedProblem.Functions;
             var minor = parsedProblem.Minor != 1;
 
-            // TODO: Poprawić tonację (dodać parametr minor itd.)
             var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
 
             var tonation = (minor ?
@@ -46,9 +45,19 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
             return result;
         }
 
-        public static string ParseProblemToString(Problem problem)
+        // TODO: To musi zwracać listę ParsedFunction jako JSON-string
+        public static string ParseProblemFunctionsToString(Problem problem)
         {
-            return "";
+            List<ParsedFunction> resultList = [];
+
+            foreach(var function in problem.Functions)
+            {
+                var toAppend = new ParsedFunction(function);
+                resultList.Add(toAppend);
+            }
+
+            var converted = JsonConvert.SerializeObject(resultList);
+            return converted;
         }
     }
 }

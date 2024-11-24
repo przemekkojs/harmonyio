@@ -1,6 +1,7 @@
 using System.CodeDom.Compiler;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Parsers.ProblemParser;
 using Algorithm.New.Music;
@@ -134,7 +135,17 @@ namespace Main.Pages
             var generatedFunctions = Algorithm.New.Algorithm.Generators.ProblemGenerator
                 .Generate(bars, metreValue, metreCount, sharpsCount, flatsCount, minor);
 
-            return new JsonResult(generatedFunctions);
+            var metre = Metre.GetMetre(metreCount, metreValue);
+            var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
+
+            var tonation = minor == 1 ?
+                tonationList.First(x => x.Mode == Mode.Major) :
+                tonationList.First(x => x.Mode == Mode.Minor);
+
+            var problem = new Problem(generatedFunctions, metre, tonation);
+            var parsedProblem = Parser.ParseProblemFunctionsToString(problem);
+
+            return new JsonResult(parsedProblem);
         }
 
         public async Task<IActionResult> OnPostSave()
@@ -189,10 +200,7 @@ namespace Main.Pages
             if (!ValidateEmptyExercises())
                 return new JsonResult(invalidQuestionsResult);
 
-            quiz.IsValid = true;
-
-            if (!ValidateExcersises())
-                quiz.IsValid = false;
+            quiz.IsValid = ValidateExcersises();
 
             if (EditedQuizId == null)
                 await _repository.SaveChangesAsync();

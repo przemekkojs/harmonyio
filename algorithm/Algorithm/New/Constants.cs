@@ -139,6 +139,7 @@ namespace Algorithm.New
             ""metreCount"": 2,
             ""sharpsCount"": 0,
             ""flatsCount"": 0,
+            ""minor"": 0,
             ""jsonNotes"": [
                 {
                     ""Line"": 1.5,
@@ -271,60 +272,6 @@ namespace Algorithm.New
             ]
         }";
 
-        public const string PROBLEM_STRING = @"
-            {
-                ""question"": """",
-                ""sharpsCount"": 0,
-                ""flatsCount"": 0,
-                ""metreValue"": ""4"",
-                ""metreCount"": ""2"",
-                ""task"": [
-                    {
-                        ""minor"": false,
-                        ""symbol"": ""T"",
-                        ""position"": """",
-                        ""root"": """",
-                        ""removed"": """",
-                        ""alterations"": [],
-                        ""added"": [],
-                        ""barIndex"": ""0"",
-                        ""verticalIndex"": ""0""
-                    },
-                    {
-                        ""minor"": false,
-                        ""symbol"": ""S"",
-                        ""position"": """",
-                        ""root"": """",
-                        ""removed"": """",
-                        ""alterations"": [],
-                        ""added"": [],
-                        ""barIndex"": ""0"",
-                        ""verticalIndex"": ""1""
-                    },
-                    {
-                        ""minor"": false,
-                        ""symbol"": ""D"",
-                        ""position"": """",
-                        ""root"": """",
-                        ""removed"": """",
-                        ""alterations"": [],
-                        ""added"": [],
-                        ""barIndex"": ""1"",
-                        ""verticalIndex"": ""0""
-                    },
-                    {
-                        ""minor"": false,
-                        ""symbol"": ""T"",
-                        ""position"": """",
-                        ""root"": """",
-                        ""removed"": """",
-                        ""alterations"": [],
-                        ""added"": [],
-                        ""barIndex"": ""1"",
-                        ""verticalIndex"": ""1""
-                    }
-                ]
-            }
-        ";
+        public const string PROBLEM_STRING = "{\"question\":\"\",\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"metreValue\":4,\"metreCount\":2,\"maxPoints\":10,\"task\":[{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"S\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"D\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":1}]}";
     }
 }

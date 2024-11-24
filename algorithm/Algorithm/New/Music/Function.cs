@@ -10,20 +10,19 @@ namespace Algorithm.New.Music
     
     public class ParsedFunction
     {
-        public string Symbol { get; set; }
-        public bool IsMain { get; set; }
         public bool Minor { get; set; }
-        public string Root { get; set; }
+        public string Symbol { get; set; }
         public string Position { get; set; }
+        public string Root { get; set; }        
         public string Removed { get; set; }
-        public List<string> Added { get; set; }
         public List<string> Alterations { get; set; }
+        public List<string> Added { get; set; }        
         public string BarIndex { get; set; }
         public string VerticalIndex { get; set; }
 
         [JsonConstructor]
         public ParsedFunction(bool minor, string symbol, string position, string root, string removed,
-            List<string> alterations, List<string> added, string barIndex, string verticalIndex)
+            List<string> alterations, List<string> added, int barIndex, int verticalIndex)
         {
             Minor = minor;
             Symbol = symbol;
@@ -32,8 +31,43 @@ namespace Algorithm.New.Music
             Removed = removed;
             Alterations = alterations;
             Added = added;
-            BarIndex = barIndex;
-            VerticalIndex = verticalIndex;
+            BarIndex = barIndex.ToString();
+            VerticalIndex = verticalIndex.ToString();
+        }
+
+        public ParsedFunction(Function function)
+        {
+            Minor = function.Minor;
+            Symbol = function.Symbol.ToString();
+            Position = function.Position != null ?
+                Component.ComponentTypeToString[function.Position.Type] :
+                string.Empty;
+
+            Root = function.Root != null ?
+                Component.ComponentTypeToString[function.Root.Type] :
+                string.Empty;
+
+            Removed = function.Removed != null ?
+                Component.ComponentTypeToString[function.Removed.Type] :
+                string.Empty;
+
+            // TODO: Zaimplementować, kiedy alteracje się pojawią w klasie Function
+            Alterations = [];
+            Added = [];
+
+            foreach (var added in function.Added)
+            {
+                // TODO: Co z '<' w np. 7< czy 6<...
+
+                var toAdd = added != null ?
+                    Component.ComponentTypeToString[added.Type] :
+                    string.Empty;
+
+                Added.Add(toAdd); // AddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAdd
+            }
+
+            BarIndex = function.Index.Bar.ToString();
+            VerticalIndex = function.Index.Position.ToString();
         }
     }
 
@@ -120,6 +154,7 @@ namespace Algorithm.New.Music
 
             foreach (var addedString in parsedFunction.Added)
             {
+                // TODO: Co z '<', '>', ...
                 var toAdd = Component.GetByString(addedString);
 
                 if (toAdd != null)

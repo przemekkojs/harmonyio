@@ -148,7 +148,7 @@ namespace Main.Pages
                     _repository.Delete(existingSolution);
                 }
 
-                var newSolution = new ExcersiseSolution
+                var newSolution = new ExerciseSolution
                 {
                     ExerciseId = exercise.Id,
                     Answer = newAnswer,
@@ -168,8 +168,8 @@ namespace Main.Pages
                     Points = 0,
                     AlgorithmPoints = algorithmGrade.Item1,
 
-                    MaxPoints = maxPointsForExcersise,
-                    ExcersiseSolution = newSolution,
+                    MaxPoints = maxPointsForExercise,
+                    ExerciseSolution = newSolution,
                     MistakeResults = mistakeResults
                 };
 
