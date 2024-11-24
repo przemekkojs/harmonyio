@@ -32,7 +32,11 @@ namespace Algorithm.New.Algorithm.Rules.Solution
         private static bool NoteCheckResult(Note? note1, Note? note2)
         {
             if (note1 != null && note2 != null)
-                return Interval.IsLower(note2, note1);
+            {
+                return
+                    Interval.IsLower(note2, note1) ||
+                    Interval.Determinant(note1) == Interval.Determinant(note2);
+            }
             else
                 return true;
         }

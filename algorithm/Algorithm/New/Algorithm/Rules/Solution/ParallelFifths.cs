@@ -46,8 +46,11 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
                 var pair1Interval = Interval.SemitonesBetween(note1_1, note1_2);
                 var pair2Interval = Interval.SemitonesBetween(note2_1, note2_2);
+                var notesSame =
+                    Interval.SemitonesBetween(note1_1, note2_1) +
+                    Interval.SemitonesBetween(note1_2, note2_2);
 
-                if (pair1Interval == 7 && pair2Interval == 7)
+                if (pair1Interval == 7 && pair2Interval == 7 && notesSame != 0)
                     return false;
             }
 

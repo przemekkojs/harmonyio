@@ -27,9 +27,17 @@ namespace Algorithm.New.Algorithm.Checkers
             return result;
         }
 
+        private static void ValidateStackToFunctionMapping(Solution solution)
+        {
+            if (solution.Stacks.Count != solution.Problem.Functions.Count)
+                throw new ArgumentException("Invalid solution to function mapping.");
+        }
+
         private static List<NoteMistake> CheckNoteMistakes(Solution solution)
         {
             List<NoteMistake> result = [];
+
+            ValidateStackToFunctionMapping(solution);
 
             for (int index = 0; index < solution.Stacks.Count; index++)
             {
@@ -67,6 +75,8 @@ namespace Algorithm.New.Algorithm.Checkers
         private static List<StackMistake> CheckStackMistakes(Solution solution, Settings settings)
         {
             List<StackMistake> result = [];
+
+            ValidateStackToFunctionMapping(solution);
 
             foreach (var rule in settings.ActiveRules)
             { 

@@ -1,7 +1,5 @@
 ﻿using Algorithm.New.Utils;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System.Linq;
 
 namespace Algorithm.New.Music
 {
@@ -10,50 +8,73 @@ namespace Algorithm.New.Music
     
     public class ParsedFunction
     {
-        public bool Minor { get; set; }
-        public string Symbol { get; set; }
-        public string Position { get; set; }
-        public string Root { get; set; }        
-        public string Removed { get; set; }
-        public List<string> Alterations { get; set; }
-        public List<string> Added { get; set; }        
-        public int BarIndex { get; set; }
-        public int VerticalIndex { get; set; }
+        public bool Minor { get; private set; }
+        public string Symbol { get; private set; }
+        public string Position { get; private set; }
+        public string Root { get; private set; }
+        public string Removed { get; private set; }
+        public List<string> Alterations { get; private set; }
+        public List<string> Added { get; private set; }
+        public int BarIndex { get; private set; }
+        public int VerticalIndex { get; private set; }
 
         [JsonConstructor]
-        public ParsedFunction(bool minor, string symbol, string position, string root, string removed,
-            List<string> alterations, List<string> added, int barIndex, int verticalIndex)
+        public ParsedFunction(
+            bool minor,
+            string symbol,
+            string position,
+            string root,
+            string removed,
+            List<string> alterations,
+            List<string> added,
+            int barIndex,
+            int verticalIndex)
         {
             Minor = minor;
             Symbol = symbol;
             Position = position;
             Root = root;
             Removed = removed;
-            Alterations = alterations;
-            Added = added;
+            Alterations = alterations ?? [];
+            Added = added ?? [];
             BarIndex = barIndex;
             VerticalIndex = verticalIndex;
         }
 
-        public ParsedFunction(Function function)
+        private ParsedFunction()
         {
-            Minor = function.Minor;
-            Symbol = function.Symbol.ToString();
-            Position = function.Position != null ?
+            Symbol = string.Empty;
+            Minor = false;
+            Position = string.Empty;
+            Root = string.Empty;
+            Removed = string.Empty;
+            Alterations = new List<string>();
+            Added = new List<string>();
+            BarIndex = 0;
+            VerticalIndex = 0;
+        }
+
+        public static ParsedFunction CreateFromFunction(Function function)
+        {
+            var result = new ParsedFunction();
+
+            result.Minor = function.Minor;
+            result.Symbol = function.Symbol.ToString();
+            result.Position = function.Position != null ?
                 Component.ComponentTypeToString[function.Position.Type] :
                 string.Empty;
 
-            Root = function.Root != null ?
+            result.Root = function.Root != null ?
                 Component.ComponentTypeToString[function.Root.Type] :
                 string.Empty;
 
-            Removed = function.Removed != null ?
+            result.Removed = function.Removed != null ?
                 Component.ComponentTypeToString[function.Removed.Type] :
                 string.Empty;
 
             // TODO: Zaimplementować, kiedy alteracje się pojawią w klasie Function
-            Alterations = [];
-            Added = [];
+            result.Alterations = [];
+            result.Added = [];
 
             foreach (var added in function.Added)
             {
@@ -63,11 +84,13 @@ namespace Algorithm.New.Music
                     Component.ComponentTypeToString[added.Type] :
                     string.Empty;
 
-                Added.Add(toAdd); // AddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAdd
+                result.Added.Add(toAdd); // AddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAdd
             }
 
-            BarIndex = function.Index.Bar;
-            VerticalIndex = function.Index.Position;
+            result.BarIndex = function.Index.Bar;
+            result.VerticalIndex = function.Index.Position;
+
+            return result;
         }
     }
 

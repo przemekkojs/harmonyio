@@ -26,9 +26,9 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             bool altoSatisfied1 = NoteCheckResult(stack1.Alto, stack2.Tenore);
             bool tenoreSatisfied1 = NoteCheckResult(stack1.Tenore, stack2.Bass);
 
-            bool sopranoSatisfied2 = NoteCheckResult(stack1.Alto, stack2.Soprano);
-            bool altoSatisfied2 = NoteCheckResult(stack1.Tenore, stack2.Alto);
-            bool tenoreSatisfied2 = NoteCheckResult(stack1.Bass, stack2.Tenore);
+            bool sopranoSatisfied2 = NoteCheckResult(stack2.Soprano, stack1.Alto);
+            bool altoSatisfied2 = NoteCheckResult(stack2.Alto, stack1.Tenore);
+            bool tenoreSatisfied2 = NoteCheckResult(stack2.Tenore, stack1.Bass);
 
             return sopranoSatisfied1 && sopranoSatisfied2 &&
                 altoSatisfied1 && altoSatisfied2 &&
@@ -38,7 +38,11 @@ namespace Algorithm.New.Algorithm.Rules.Solution
         private static bool NoteCheckResult(Note? note1, Note? note2)
         {
             if (note1 != null && note2 != null)
-                return Interval.IsLower(note2, note1);
+            {
+                return
+                    Interval.IsLower(note2, note1) ||
+                    Interval.Determinant(note1) == Interval.Determinant(note2);
+            }                
             else
                 return true;
         }

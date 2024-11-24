@@ -50,8 +50,6 @@ namespace Algorithm.New
             new EmptyFunction()
         ];
 
-        // public static readonly VoiceDistance VoiceDistance = new();
-
         public static readonly Dictionary<(float, string), (string, int)> NoteMappings = new()
         {
             { (6.5f, SOPRANO), (G, 3) },
@@ -133,145 +131,19 @@ namespace Algorithm.New
             { (-3.0f, BASS), (G, 4) },
         };
 
-        public const string SOLUTION_STRING = @"
-            {
-            ""metreValue"": 4,
-            ""metreCount"": 2,
-            ""sharpsCount"": 0,
-            ""flatsCount"": 0,
-            ""minor"": 0,
-            ""jsonNotes"": [
-                {
-                    ""Line"": 1.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""SOPRANO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 4.0,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""ALTO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 0.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""TENORE"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 2.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""BASS"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 1.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""SOPRANO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 1
-                },
-                {
-                    ""Line"": 3.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""ALTO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 1
-                },
-                {
-                    ""Line"": 0.0,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""TENORE"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 1
-                },
-                {
-                    ""Line"": 2.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""BASS"",
-                    ""Value"": 4,
-                    ""BarIndex"": 0,
-                    ""VerticalIndex"": 1
-                },
-                {
-                    ""Line"": 2.0,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""SOPRANO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 3.0,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""ALTO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 0.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""TENORE"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 2.0,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""BASS"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 0
-                },
-                {
-                    ""Line"": 1.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""SOPRANO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 1
-                },
-                {
-                    ""Line"": 4.0,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""ALTO"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 1
-                },
-                {
-                    ""Line"": 0.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""TENORE"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 1
-                },
-                {
-                    ""Line"": 2.5,
-                    ""AccidentalName"": """",
-                    ""Voice"": ""BASS"",
-                    ""Value"": 4,
-                    ""BarIndex"": 1,
-                    ""VerticalIndex"": 1
-                }
-            ]
-        }";
+        public const string SOLUTION_STRING_4_FUNCTIONS = "{\"metreValue\":4,\"metreCount\":2,\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"jsonNotes\":[{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":4.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":3.5,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":0.0,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":2.0,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":3.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":2.0,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":4.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1}]}";
+        public const string PROBLEM_STRING_4_FUNCTIONS = "{\"question\":\"\",\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"metreValue\":4,\"metreCount\":2,\"maxPoints\":10,\"task\":[{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"S\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"D\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":1}]}";
 
-        public const string PROBLEM_STRING = "{\"question\":\"\",\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"metreValue\":4,\"metreCount\":2,\"maxPoints\":10,\"task\":[{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"S\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"D\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":1}]}";
+        public const string SOLUTION_STRING_2_FUNCTIONS = "{\"metreValue\":4,\"metreCount\":2,\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"jsonNotes\":[{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":4.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":4.0,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1}]}";
+        public const string PROBLEM_STRING_2_FUNCTIONS = "{\"question\":\"\",\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"metreValue\":4,\"metreCount\":2,\"maxPoints\":10,\"task\":[{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":1}]}";
+
+        public const string SOLUTION_STRING_8_FUNCTIONS = "{\"metreValue\":4,\"metreCount\":2,\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"jsonNotes\":[{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1}]}";
+        public const string PROBLEM_STRING_8_FUNCTIONS = "{\"question\":\"\",\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"metreValue\":4,\"metreCount\":2,\"maxPoints\":10,\"task\":[{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":2,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":2,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":3,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":3,\"verticalIndex\":1}]}";
+
+        public const string SOLUTION_STRING_16_FUNCTIONS = "{\"metreValue\":4,\"metreCount\":2,\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"jsonNotes\":[{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":0,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":1,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":2,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":3,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":4,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":5,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":6,\"VerticalIndex\":1},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":0},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":0},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":0},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":0},{\"Line\":1.5,\"AccidentalName\":\"\",\"Voice\":\"SOPRANO\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":1},{\"Line\":4,\"AccidentalName\":\"\",\"Voice\":\"ALTO\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":1},{\"Line\":0.5,\"AccidentalName\":\"\",\"Voice\":\"TENORE\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":1},{\"Line\":2.5,\"AccidentalName\":\"\",\"Voice\":\"BASS\",\"Value\":4,\"BarIndex\":7,\"VerticalIndex\":1}]}";
+        public const string PROBLEM_STRING_16_FUNCTIONS = "{\"question\":\"\",\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"metreValue\":4,\"metreCount\":2,\"maxPoints\":10,\"task\":[{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":0,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":1,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":2,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":2,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":3,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":3,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":4,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":4,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":5,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":5,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":6,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":6,\"verticalIndex\":1},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":7,\"verticalIndex\":0},{\"minor\":false,\"symbol\":\"T\",\"position\":\"\",\"root\":\"\",\"removed\":\"\",\"alterations\":[],\"added\":[],\"barIndex\":7,\"verticalIndex\":1}]}";
+
+        public const string SOLUTION_STRING_EMPTY = "{\"metreValue\":4,\"metreCount\":2,\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"jsonNotes\":[]}";
+        public const string PROBLEM_STRING_EMPTY = "{\"question\":\"\",\"sharpsCount\":0,\"flatsCount\":0,\"minor\":1,\"metreValue\":4,\"metreCount\":2,\"maxPoints\":10,\"task\":[]}";
     }
 }

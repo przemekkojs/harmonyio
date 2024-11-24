@@ -17,7 +17,7 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
             var metreCount = parsedProblem.MetreCount;
             var flatsCount = parsedProblem.FlatsCount;
             var sharpsCount = parsedProblem.SharpsCount;
-            var functions = parsedProblem.Functions;
+            var functions = parsedProblem.Task;
             var minor = parsedProblem.Minor != 1;
 
             var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
@@ -52,7 +52,7 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
 
             foreach(var function in problem.Functions)
             {
-                var toAppend = new ParsedFunction(function);
+                var toAppend = ParsedFunction.CreateFromFunction(function);
                 resultList.Add(toAppend);
             }
 
