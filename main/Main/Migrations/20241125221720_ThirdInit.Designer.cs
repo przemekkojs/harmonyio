@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241122171217_InitAfterCrash")]
-    partial class InitAfterCrash
+    [Migration("20241125221720_ThirdInit")]
+    partial class ThirdInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -275,6 +275,9 @@ namespace Main.Migrations
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("ShowAlgorithmOpinion")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
@@ -295,9 +298,6 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("QuizId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("ShowAlgorithmOpinion")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")

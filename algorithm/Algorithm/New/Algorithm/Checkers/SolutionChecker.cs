@@ -15,8 +15,14 @@ namespace Algorithm.New.Algorithm.Checkers
         /// <param name="settings">Ustawienia sprawdzania - czyli wszystkie aktywne zasady</param>
         /// <returns>Lista błędów nutowych (NoteMistake) i funkcyjnych (StackMistake). Wszystko w jednej liście
         /// typu Mistake.</returns>
-        public static List<Mistake.Solution.Mistake> CheckSolution(Solution solution, Settings settings)
+        public static List<Mistake.Solution.Mistake>? CheckSolution(Solution solution, Settings settings)
         {
+            if (solution == null)
+                return null;
+
+            if (SolutionEmpty(solution))
+                return null;
+
             List<Mistake.Solution.Mistake> result = [];
             var noteMistakes = CheckNoteMistakes(solution);
             var stackMistakes = CheckStackMistakes(solution, settings);
@@ -25,6 +31,29 @@ namespace Algorithm.New.Algorithm.Checkers
             result.AddRange(stackMistakes);
 
             return result;
+        }
+
+        private static bool SolutionEmpty(Solution solution)
+        {
+            var stacks = solution.Stacks;
+
+            foreach (var stack in stacks)
+            {
+                var nullCount = 0;
+
+                foreach(var note in stack.Notes)
+                {
+                    if (note == null)
+                        nullCount++;
+                    else
+                        break;
+                }
+
+                if (nullCount != 4)
+                    return false;
+            }
+
+            return true;
         }
 
         private static void ValidateStackToFunctionMapping(Solution solution)

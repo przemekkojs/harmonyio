@@ -35,7 +35,7 @@ namespace Main.GradingAlgorithm
 
             var maxMistakesCount = GetMaxMistakesCount(problem, settings);
             var opinion = GenerateOpinion(checkResult);
-            var mistakesCount = checkResult.Sum(x => x.Quantity);
+            var mistakesCount = checkResult?.Sum(x => x.Quantity) ?? 0;
 
             var algorithmPoints = maxMistakesCount - mistakesCount > 0 ? maxMistakesCount - mistakesCount : 0;
             var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
@@ -122,8 +122,11 @@ namespace Main.GradingAlgorithm
             solution.Stacks.AddRange(tmpStacks);
         }
 
-        private static Dictionary<(int, (int, int, int)), List<int>> GenerateOpinion(List<Mistake> mistakes)
+        private static Dictionary<(int, (int, int, int)), List<int>> GenerateOpinion(List<Mistake>? mistakes)
         {
+            if (mistakes == null)
+                return [];
+
             // Takty, funkcje w taktach, ID błędu
             var tmp = new Dictionary<(int, (int, int, int)), List<int>>();
 

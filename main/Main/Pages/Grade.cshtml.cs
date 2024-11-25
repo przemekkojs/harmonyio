@@ -97,7 +97,8 @@ namespace Main.Pages
                 participantsAnsweredIds.AddRange(newSolutions.Select(es => es.UserId));
             }
 
-            // this is where nobody solved the quiz, maybe should be handled differently
+            // this is where nobody solved the quiz,
+            // TODO: maybe should be handled differently
             var noSolutions = allSolutions.Count == 0;
             if (noSolutions)
                 return RedirectToPage("Error");
@@ -150,7 +151,7 @@ namespace Main.Pages
                     .ToList());
 
                 Comments.Add(userSolutionResults
-                    .Select(er => er?.Comment ?? "")
+                    .Select(er => er?.Comment ?? string.Empty)
                     .ToList());
 
                 PointSuggestions.Add(userSolutionResults
@@ -168,7 +169,7 @@ namespace Main.Pages
                 // }
 
                 Opinions.Add(userSolutionResults
-                    .Select(er => Utils.Utils.MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak błędów.")
+                    .Select(er => Utils.Utils.MistakesToHTML(er?.MistakeResults ?? []) ?? "Puste rozwiązanie.")
                     .ToList());
             }
 
@@ -271,7 +272,7 @@ namespace Main.Pages
                     var curSolutionResult = curSolutionResults[j]!;
 
                     curSolutionResult.Points = Points[i][j];
-                    curSolutionResult.Comment = Comments[i][j] ?? "";
+                    curSolutionResult.Comment = Comments[i][j] ?? string.Empty;
                     curSolutionResult.QuizResult = curQuizResult;
                 }
             }

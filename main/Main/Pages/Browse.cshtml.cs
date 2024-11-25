@@ -92,34 +92,22 @@ namespace Main.Pages
                     e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.ExerciseResult,
                     e.MaxPoints
                 })
-                .Select(x => x.ExerciseResult == null
-                    ? new ExerciseResultData
+                .Select(x => x.ExerciseResult == null ?
+                    new ExerciseResultData
                     {
                         Points = 0,
                         MaxPoints = x.MaxPoints,
                         Comment = string.Empty,
                         Opinion = string.Empty
-                    }
-                    : new ExerciseResultData
+                    } :
+                    new ExerciseResultData
                     {
                         Points = x.ExerciseResult.Points,
                         MaxPoints = x.MaxPoints,
                         Comment = x.ExerciseResult.Comment,
                         Opinion = showOpinion ? Utils.Utils.MistakesToHTML(x.ExerciseResult.MistakeResults) : string.Empty
-                    })
-                    .Select(x => x.ExerciseResult == null
-                        ? new ExerciseResultData
-                        {
-                            Points = 0,
-                            MaxPoints = x.MaxPoints
-                        }
-                        : new ExerciseResultData
-                        {
-                            Points = x.ExerciseResult.Points,
-                            MaxPoints = x.MaxPoints,
-                            Comment = x.ExerciseResult.Comment
-                        })
-                    .ToList();
+                    })                
+                .ToList();
 
             return Page();
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Main.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class ThirdInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -169,6 +169,7 @@ namespace Main.Migrations
                     CloseDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsCreated = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsValid = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ShowAlgorithmOpinion = table.Column<bool>(type: "INTEGER", nullable: false),
                     Code = table.Column<string>(type: "TEXT", nullable: true),
                     CreatorId = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -252,7 +253,6 @@ namespace Main.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Grade = table.Column<int>(type: "INTEGER", nullable: true),
                     GradeDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ShowAlgorithmOpinion = table.Column<bool>(type: "INTEGER", nullable: false),
                     QuizId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -300,9 +300,9 @@ namespace Main.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ForTeacher = table.Column<bool>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    GroupId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ForTeacher = table.Column<bool>(type: "INTEGER", nullable: false)
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
