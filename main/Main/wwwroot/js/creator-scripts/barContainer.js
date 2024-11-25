@@ -54,6 +54,8 @@ export class BarContainer {
     addBar() {
         const barsLength = this.bars.length;
 
+        console.log(this.container);
+        
         if (barsLength < this.maxBars) {
             const newBar = new Bar(this, this.taskIndex, barsLength);
             this.bars.push(newBar);
@@ -116,5 +118,6 @@ export class BarContainer {
     removeAll() {
         this.bars = [];
         this.container.replaceChildren();
+        this.container.appendChild(this.addBarButton);
     }
 }

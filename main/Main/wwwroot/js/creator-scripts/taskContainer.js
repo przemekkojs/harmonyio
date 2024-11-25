@@ -256,27 +256,29 @@ class Task {
             const functionCountInBar = bar.functionContainer.functions.length;
             const newFunction = bar.functionContainer.functions[functionCountInBar - 1];
 
-            if (parsedFunction.minor)
+            if (parsedFunction.Minor != null && parsedFunction.Minor)
                 newFunction.functionCreator.minor.checked = true;
 
-            if (parsedFunction.symbol != null)
-                newFunction.functionCreator.symbol.value = parsedFunction.symbol;
+            if (parsedFunction.Symbol != null)
+                newFunction.functionCreator.symbol.value = parsedFunction.Symbol;
 
-            if (parsedFunction.root != null)
-                newFunction.functionCreator.root.value = parsedFunction.root;
+            if (parsedFunction.Root != null)
+                newFunction.functionCreator.root.value = parsedFunction.Root;
 
-            if (parsedFunction.position != null)
-                newFunction.functionCreator.position.value = parsedFunction.position;
+            if (parsedFunction.Position != null)
+                newFunction.functionCreator.position.value = parsedFunction.Position;
 
-            if (parsedFunction.removed != null)
-                newFunction.functionCreator.removed.value = parsedFunction.removed;
+            if (parsedFunction.Removed != null)
+                newFunction.functionCreator.removed.value = parsedFunction.Removed;
 
-            parsedFunction.added.forEach(a => {
-                const component = a[0];
-                const option = a.length == 1 ? "-" : a[1];
+            if (parsedFunction.Added != null) {
+                parsedFunction.Added.forEach(a => {
+                    const component = a[0];
+                    const option = a.length == 1 ? "-" : a[1];
 
-                newFunction.functionCreator.createAddedElement(component, option);
-            });
+                    newFunction.functionCreator.createAddedElement(component, option);
+                });
+            }            
 
             // TODO: Alteracje (Alterations)
             // TODO: Opóźnienia (Suspensions)
