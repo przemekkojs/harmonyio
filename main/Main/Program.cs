@@ -5,6 +5,8 @@ using Main.Data;
 using Main.Models;
 using Main.GradingAlgorithm;
 using Main.Services;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,13 +42,15 @@ builder.Services.AddSingleton<IGradingAlgorithm, GradingAlgorithm>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
-builder.Services.AddAuthentication().AddGoogle(options =>
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    })
+    .AddGoogle(options =>
         {
-            IConfigurationSection googleAuthNSection =
-                builder.Configuration.GetSection("Authentication:Google");
-
-            options.ClientId = googleAuthNSection["ClientId"];
-            options.ClientSecret = googleAuthNSection["ClientSecret"];
+            options.ClientId = builder.Configuration["Google:ClientId"];
+            options.ClientSecret = builder.Configuration["Google:ClientSecret"];
         });
 
 
