@@ -8,7 +8,7 @@ namespace Main.Utils
         public static string MistakesToHTML(ICollection<MistakeResult> mistakes)
         {
             if (mistakes.Count == 0)
-                return "Brak błędów";
+                return string.Empty;
 
             var tmp = new Dictionary<(int, (int, int, int)), List<string>>();
 
