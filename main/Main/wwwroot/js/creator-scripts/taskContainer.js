@@ -17,6 +17,11 @@ class Task {
         this.randomTaskButton.title = "Wygeneruj losowe zadanie";
         this.randomTaskButton.value = "Losowe zadanie";
 
+        this.randomTaskInput = document.createElement('input');
+        this.randomTaskInput.type = 'number';
+        this.randomTaskInput.id = `random-bars-${this.taskIndex}`;
+        this.randomTaskInput.placeholder = "Takty";
+
         // Ukryty input
         this.hiddenInput = document.createElement('input');
         this.hiddenInput.type = "hidden";
@@ -157,6 +162,7 @@ class Task {
         this.container.appendChild(this.hiddenInput);
         this.container.appendChild(this.params);
         this.container.appendChild(this.randomTaskButton);
+        this.container.appendChild(this.randomTaskInput);
         this.container.appendChild(this.barContainer.container);
 
         this.setId(this.taskIndex);
@@ -191,6 +197,7 @@ class Task {
         this.deleteButton.addEventListener('click', this.handleRemove);
 
         this.randomTaskButton.addEventListener('click', () => this.generate());
+        this.randomTaskInput.id = `random-bars-${this.taskIndex}`;
     }
 
     getResult() {
@@ -305,7 +312,18 @@ class Task {
         const minor = tonationParsed[2];
         const maxPoints = Number(this.maxPointsInput.value);
 
-        const bars = 8; // TODO
+        let barsValue = this.randomTaskInput.value;
+
+        if (barsValue == null || barsValue <= 0) {
+            barsValue = 2;
+        }
+
+        else if (barsValue > 16) {
+            barsValue = 16;
+        }            
+
+        this.randomTaskInput.value = barsValue;        
+        const bars = barsValue; // TODO
         const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
         // Call the backend
@@ -316,12 +334,12 @@ class Task {
                 "RequestVerificationToken": token
             },
             body: JSON.stringify({
-                bars: bars,
-                metreValue: metreValue,
-                metreCount: metreCount,
-                sharpsCount: sharpsCount,
-                flatsCount: flatsCount,
-                minor: minor
+                Bars: bars,
+                MetreValue: metreValue,
+                MetreCount: metreCount,
+                SharpsCount: sharpsCount,
+                FlatsCount: flatsCount,
+                Minor: minor
             })
         })
         .then(response => response.json())

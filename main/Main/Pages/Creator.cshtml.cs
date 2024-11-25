@@ -23,6 +23,16 @@ namespace Main.Pages
         public string QuizName { get; set; }
     }
 
+    public record GenerateData
+    {
+        public int Bars { get; set; }
+        public string MetreValue { get; set; }
+        public string MetreCount { get; set; }
+        public int SharpsCount { get; set; }
+        public int FlatsCount { get; set; }
+        public int Minor { get; set; }
+    }
+
     [Authorize]
     public class CreatorModel : PageModel
     {
@@ -130,15 +140,18 @@ namespace Main.Pages
             return true;
         }
 
-        public JsonResult OnPostGenerateTask(int bars, int metreValue, int metreCount, int sharpsCount, int flatsCount, int minor)
+        public JsonResult OnPostGenerateTask([FromBody] GenerateData data)
         {
+            var mV = Convert.ToInt32(data.MetreValue);
+            var mC = Convert.ToInt32(data.MetreCount);
+
             var generatedFunctions = Algorithm.New.Algorithm.Generators.ProblemGenerator
-                .Generate(bars, metreValue, metreCount, sharpsCount, flatsCount, minor);
+                .Generate(data.Bars, mV, mC, data.SharpsCount, data.FlatsCount, data.Minor);
 
-            var metre = Metre.GetMetre(metreCount, metreValue);
-            var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
+            var metre = Metre.GetMetre(mC, mV);
+            var tonationList = Tonation.GetTonation(data.SharpsCount, data.FlatsCount);
 
-            var tonation = minor == 1 ?
+            var tonation = data.Minor == 1 ?
                 tonationList.First(x => x.Mode == Mode.Major) :
                 tonationList.First(x => x.Mode == Mode.Minor);
 

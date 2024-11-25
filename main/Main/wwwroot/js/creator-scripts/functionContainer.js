@@ -76,8 +76,7 @@ export class FunctionContainer {
         this.container.removeChild(currentFunction.functionCreator.container);
     }
 
-    setId(taskIndex, barIndex, startFunctionIndex = 0) {     
-        console.log("Set bar index", this.barIndex, "to", barIndex);
+    setId(taskIndex, barIndex, startFunctionIndex = 0) {
         this.taskIndex = taskIndex;
         this.barIndex = barIndex;
         this.addFunctionButton.removeEventListener('click', this.handleAddFunction);
