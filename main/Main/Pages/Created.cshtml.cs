@@ -36,7 +36,7 @@ public class CreatedModel : PageModel
     public List<Quiz> Opened { get; set; } = [];
     public List<Quiz> NotOpened { get; set; } = [];
     public List<Quiz> Closed { get; set; } = [];
-    public Dictionary<Quiz, (int, int)> QuizesToUsersCompleted { get; set; } = [];
+    public Dictionary<int, (int, int)> QuizIdsToUsersCompleted { get; set; } = [];
     public Dictionary<int, string> Groups { get; set; } = [];
 
     public CreatedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
@@ -69,6 +69,7 @@ public class CreatedModel : PageModel
                 .Include(u => u.CreatedQuizes)
                 .Include(u => u.TeacherInGroups)
                 .Include(u => u.MasterInGroups)
+                .AsSplitQuery()
             );
 
         if (user == null)
@@ -81,17 +82,8 @@ public class CreatedModel : PageModel
         Sketches = allCreated.Where(q => !q.IsCreated).ToList();
         var published = allCreated.Where(q => q.IsCreated);
 
-        ReadyToGrade = published
-            .Where(q =>
-                q.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.ExerciseResult?.QuizResultId == null)) ||
-                q.QuizResults.Any(qr => qr.Grade == null)
-            ).ToList();
-        Opened = published.Where(q => q.State == QuizState.Open).ToList();
-        NotOpened = published.Where(q => q.State == QuizState.NotStarted).ToList();
-        Closed = published.Where(q => q.State == QuizState.Closed).ToList();
-
-        QuizesToUsersCompleted = published.ToDictionary(
-            q => q,
+        QuizIdsToUsersCompleted = published.ToDictionary(
+            q => q.Id,
             q => (
                 q.Exercises
                     .SelectMany(e => e.ExerciseSolutions)
@@ -100,6 +92,17 @@ public class CreatedModel : PageModel
                     .Count(),
                 q.Participants.Count)
         );
+
+        ReadyToGrade = published
+            .Where(q =>
+                q.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.ExerciseResult?.QuizResultId == null)) ||
+                q.QuizResults.Any(qr => qr.Grade == null) ||
+                (q.State == QuizState.Closed && QuizIdsToUsersCompleted[q.Id].Item1 != QuizIdsToUsersCompleted[q.Id].Item2)
+            ).ToList();
+        Opened = published.Where(q => q.State == QuizState.Open).ToList();
+        NotOpened = published.Where(q => q.State == QuizState.NotStarted).ToList();
+        Closed = published.Where(q => q.State == QuizState.Closed).ToList();
+
 
         Groups = user.TeacherInGroups
             .Concat(user.MasterInGroups)

@@ -6,12 +6,9 @@ namespace Main.Models
 	public class ExerciseSolution
 	{
 		public int Id { get; set; }
-
-		//Tymczasowo odpowiedź to po prostu jakis testowy string
 		public string Answer { get; set; } = "";
 
 		//FOREIGN KEYS
-
 		public int ExerciseId { get; set; }
 		[JsonIgnore]
 		public Exercise Exercise { get; set; } = null!;

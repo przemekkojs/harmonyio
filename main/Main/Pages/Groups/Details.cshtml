@@ -1,10 +1,6 @@
 ﻿@page
 @model Main.Pages.GroupDetailsModel
 @using Enumerations
-@{
-    var teacherRequests = Model.Group.Requests.Where(q => q.ForTeacher).Select(q => q.User);
-    var studentRequests = Model.Group.Requests.Where(q => !q.ForTeacher).Select(q => q.User);
-}
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
     <form method="post" asp-page-handler="DeleteUser" id="formForDeleteUser">
@@ -104,6 +100,7 @@
 
                     @if (Model.IsAdmin)
                     {
+                        var studentRequests = Model.Group.Requests.Where(q => !q.ForTeacher).Select(q => q.User);
                         <div class="d-flex flex-row fw-bold mb-2">
                             <span class="me-1">Oczekujący</span>
                             <span class="me-auto" id="student-requests-count">(@(studentRequests.Count()))</span>
@@ -176,6 +173,7 @@
 
                     @if (Model.IsMaster)
                     {
+                        var teacherRequests = Model.Group.Requests.Where(q => q.ForTeacher).Select(q => q.User);
                         <div class="d-flex flex-row fw-bold mb-2">
                             <span class="me-1">Oczekujący</span>
                             <span class="me-auto" id="teacher-requests-count">(@(teacherRequests.Count()))</span>

@@ -88,9 +88,12 @@
                 @*SET VIA JS*@
             </div>
 
-            <div id="opinion">
-                @*SET VIA JS*@
-            </div>
+            @if (Model.Quiz.ShowAlgorithmOpinion)
+            {
+                <div id="opinion">
+                    @*SET VIA JS*@
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -147,22 +150,8 @@
     const questions = questionsRaw.map(q => JSON.parse(q));
 
     const answers = @Html.Raw(JsonConvert.SerializeObject(Model.Answers));
-    const opinion = @Html.Raw(JsonConvert.SerializeObject(Model.Opinion));
-
-    if (opinion !== "")
-    {
-        const opinionDiv = document.getElementById('opinion');
-
-        opinionDiv.innerHTML = `
-            <details>
-                <summary>Opinia algorytmu</summary>
-                ${opinion}
-            </details>
-            `;
-    }
 
     let currentIndex = 0;
-
     function getCurrentSolution() {
         return answers[currentIndex];
     }
@@ -201,10 +190,25 @@
             }
             document.getElementById("points-text").innerText = results[index].points + " / " + results[index].maxPoints;
 
-            var isComment = results[index].comment != '';
+            const isComment = results[index].comment != '';
             document.getElementById("commentButton").style.display = isComment ? "inline-block" : "none";
             document.getElementById("noCommentElement").style.display = isComment ? "none" : "flex";
             document.getElementById("comment-text").innerText = results[index].comment;
+
+            const opinionDiv = document.getElementById("opinion");
+            if (opinionDiv) {
+                const opinion = results[index].opinion
+                if (opinion !== "") {
+                    opinionDiv.innerHTML = `
+                    <details>
+                        <summary>Opinia algorytmu</summary>
+                        ${opinion}
+                    </details>
+                    `;
+                } else {
+                    opinionDiv.innerHTML = "";
+                }
+            }
 
             generateButtons(index);
         }

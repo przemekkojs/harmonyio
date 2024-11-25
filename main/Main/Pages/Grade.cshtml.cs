@@ -63,7 +63,8 @@ namespace Main.Pages
                     .Include(q => q.QuizResults)
                     .Include(q => q.Exercises)
                         .ThenInclude(e => e.ExerciseSolutions)
-                            .ThenInclude(es => es.ExerciseResult)
+                            .ThenInclude(es => es.ExerciseResult!)
+                                .ThenInclude(er => er.MistakeResults)
                     .Include(q => q.PublishedToGroup)
                         .ThenInclude(q => q.Teachers.Where(u => u.Id == appUser.Id))
             );
@@ -80,6 +81,7 @@ namespace Main.Pages
                 return Forbid();
 
             QuizId = quiz.Id;
+            ShareAlgorithmOpinion = quiz.ShowAlgorithmOpinion;
             QuizName = quiz.Name;
             Exercises = [.. quiz.Exercises];
 
@@ -89,7 +91,7 @@ namespace Main.Pages
             // fill missing exercises only if quiz is closed
             if (quiz.State == QuizState.Closed && participantsAnsweredIds.Count != quiz.Participants.Count)
             {
-                var participantsNotAnsweredIds = quiz.Participants.Select(p => p.Id).Except(participantsAnsweredIds);
+                var participantsNotAnsweredIds = quiz.Participants.Where(p => !participantsAnsweredIds.Contains(p.Id)).Select(p => p.Id);
                 var newSolutions = await FillMissingExerciseSolutionsAndResults(participantsNotAnsweredIds, quiz.Exercises);
                 allSolutions.AddRange(newSolutions);
                 participantsAnsweredIds.AddRange(newSolutions.Select(es => es.UserId));
@@ -155,15 +157,15 @@ namespace Main.Pages
                     .Select(er => er?.AlgorithmPoints ?? 0)
                     .ToList());
 
-                foreach (var result in userSolutionResults)
-                {
-                    if (result == null)
-                        continue;
+                // foreach (var result in userSolutionResults)
+                // {
+                //     if (result == null)
+                //         continue;
 
-                    _repository.Context.Entry(result)
-                        .Collection(er => er.MistakeResults)
-                        .Load();
-                }
+                //     _repository.Context.Entry(result)
+                //         .Collection(er => er.MistakeResults)
+                //         .Load();
+                // }
 
                 Opinions.Add(userSolutionResults
                     .Select(er => Utils.Utils.MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak błędów.")
@@ -197,7 +199,6 @@ namespace Main.Pages
 
             // check if user can grade quiz
             // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
-            // TODO: Tu nie powinno by� || zamiast && ?
             var userIsNotCreator = quiz.CreatorId != appUser.Id;
             var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Any(t => t.Id == appUser.Id));
 
@@ -211,7 +212,7 @@ namespace Main.Pages
 
             var participantsAnsweredIds = allSolutions
                 .Select(es => es.UserId)
-                .ToHashSet(); // Kurde, poszala�e� XD
+                .ToHashSet();
 
             var userIdToSolutions = allSolutions
                 .GroupBy(es => es.UserId)
@@ -238,10 +239,9 @@ namespace Main.Pages
                 var curUserId = UserIds[i];
 
                 // trying to grade user who didnt submit solution, if quiz is closed then the solutions are automatically filled in onGet
-                var hasParticipanAnswered = participantsAnsweredIds.Contains(curUserId);
-
-                if (!hasParticipanAnswered)
-                    continue; // user wasnt graded so just continue
+                var hasParticipantAnswered = participantsAnsweredIds.Contains(curUserId);
+                if (!hasParticipantAnswered)
+                    continue; // user hasnt answered so continue without grading him
 
                 var curGrade = Grades[i];
                 var curQuizResult = userIdToQuizResult[curUserId];
@@ -265,10 +265,7 @@ namespace Main.Pages
                     _repository.Update(curQuizResult);
                 }
 
-                // Tu dla każdego usera ustawiamy, czy chcemy opinię algorytmu uwzględniać czy nie
-                curQuizResult.ShowAlgorithmOpinion = ShareAlgorithmOpinion;
                 var curSolutionResults = userIdToSolutionResults[curUserId];
-
                 for (int j = 0; j < curSolutionResults.Count; j++)
                 {
                     var curSolutionResult = curSolutionResults[j]!;
@@ -278,6 +275,9 @@ namespace Main.Pages
                     curSolutionResult.QuizResult = curQuizResult;
                 }
             }
+
+            quiz.ShowAlgorithmOpinion = ShareAlgorithmOpinion;
+            _repository.Update(quiz);
 
             await _repository.SaveChangesAsync();
             return RedirectToPage("Created");
@@ -301,11 +301,13 @@ namespace Main.Pages
 
                     var exerciseResult = new ExerciseResult
                     {
-                        Comment = "",
                         Points = 0,
-                        AlgorithmPoints = 0,
                         MaxPoints = exercise.MaxPoints,
+                        Comment = string.Empty,
+                        AlgorithmPoints = 0,
                         ExerciseSolution = solution,
+                        // TODO add mistake results that say exercise wasnt solved
+                        MistakeResults = []
                     };
 
                     _repository.Add(exerciseResult);
