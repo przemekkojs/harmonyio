@@ -1,11 +1,14 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
+using Algorithm.New.Utils;
+using System.Security;
+using System.Transactions;
 
 namespace Algorithm.New.Algorithm.Generators
 {
-    internal sealed record StackNode(Stack stack)
+    internal sealed record StackNode(Stack? stack)
     {
-        public Stack Stack { get; private set; } = stack;
+        public Stack? Stack { get; private set; } = stack;
         public List<StackNode> Nexts { get; private set; } = []; // Może słownik? Wtedy się uda z odległościami też
         public StackNode? Previous { get; set; } = null;
     }
@@ -13,17 +16,17 @@ namespace Algorithm.New.Algorithm.Generators
     internal sealed class StackTree
     {
         public StackNode Root { get; private set; }
-        public Settings Settings { get; private set; }
-        public StackTree(Stack stack) : this(stack, Constants.Settings) { }
+        public Settings Settings { get; private set; }        
         public Dictionary<List<StackNode>, int> Solutions { get; private set; }
         public List<StackNode> All { get; private set; }
 
-        private StackTree(Stack stack, Settings settings)
-        {
-            if (stack == null)
-                throw new ArgumentException("Cannot begin tree from null");
+        private static readonly StackNode _empty = new(null);
 
-            Root = new StackNode(stack);
+        public StackTree() : this( Constants.Settings) { }        
+
+        public StackTree(Settings settings)
+        {
+            Root = _empty;
             Settings = settings;
             Solutions = [];
             All = [Root];
@@ -49,7 +52,7 @@ namespace Algorithm.New.Algorithm.Generators
             EvaluateRecursive(Root);
 
             Solutions = Solutions
-                .OrderBy(x => x.Key)
+                .OrderBy(x => x.Value)
                 .ToDictionary();
         }
 
@@ -68,16 +71,21 @@ namespace Algorithm.New.Algorithm.Generators
                 EvaluateRecursive(next, currentMistakes, tolerance);
             }
 
-            var result = GetPreviousList(current);
-            Solutions[result] = prevMistakes;
+            if (current.Nexts.Count == 0)
+            {
+                var result = GetPreviousList(current);
+                Solutions[result] = prevMistakes;
+            }
         }
 
         private int EvaluatePair(StackNode prev, StackNode next)
         {
             var checkResult = StackPairChecker.CheckRules(prev.Stack, next.Stack, Settings);
 
-            return checkResult
-                .Sum(x => x.Quantity);
+            if (checkResult.Count == 0)
+                return 0;
+            else
+                return checkResult.Sum(x => x.Quantity);
         }
 
         private static List<StackNode> GetPreviousList(StackNode start)
@@ -90,7 +98,7 @@ namespace Algorithm.New.Algorithm.Generators
             {
                 result.Add(current);
                 current = current.Previous;
-            } while (current != null);
+            } while (current != null && current.stack != null);
 
             return result;
         }
@@ -101,16 +109,41 @@ namespace Algorithm.New.Algorithm.Generators
         public static List<Stack> Generate(Problem problem)
         {
             List<Stack> result = [];
+            StackTree tree = new();
+            StackNode current = tree.Root;
+            StackNode prev = current;
+
             var functions = problem.Functions;
 
-            Stack current = null;
+            GenerateRecursive(functions, prev, tree);
+            tree.EvaluateTree();
 
-            foreach (var function in functions)
-            {
-
-            }
+            var firstItem = tree.Solutions.First();
+            result = firstItem.Key
+                .Select(x => x.Stack!)
+                .ToList();
 
             return result;
+        }
+
+        private static void GenerateRecursive(List<Function> functions, StackNode prev, StackTree tree, int functionIndex = 0)
+        {
+            if (functionIndex >= functions.Count)
+                return;
+
+            var function = functions[functionIndex];
+            var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
+
+            foreach (var notesSet in possibleNotes)
+            {
+                var stack = new Stack(function.Index, notesSet);
+                var next = new StackNode(stack);
+                tree.AddNext(prev, next);
+
+                // TODO: Permutacje każdej czwórki nut
+
+                GenerateRecursive(functions, next, tree, functionIndex + 1);
+            }            
         }
     }
 }

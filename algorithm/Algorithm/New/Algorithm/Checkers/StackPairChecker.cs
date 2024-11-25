@@ -5,7 +5,7 @@ namespace Algorithm.New.Algorithm.Checkers
 {
     public static class StackPairChecker
     {
-        public static List<Mistake.Solution.Mistake> CheckRules(Stack stack1, Stack stack2, Settings settings)
+        public static List<Mistake.Solution.Mistake> CheckRules(Stack? stack1, Stack? stack2, Settings settings)
         {
             List<Mistake.Solution.Mistake> result = [];
             var rules = settings.ActiveRules;
@@ -14,29 +14,39 @@ namespace Algorithm.New.Algorithm.Checkers
             {
                 if (rule.OneFunction)
                 {
-                    var satisfied1 = rule.IsSatisfied(stacks: [stack1]);
-                    var satisfied2 = rule.IsSatisfied(stacks: [stack2]);
-
-                    if (!satisfied1)
+                    if (stack1 != null)
                     {
-                        var toAdd = new StackMistake([stack1], rule);
-                        result.Add(toAdd);
-                    }
+                        var satisfied1 = rule.IsSatisfied(stacks: [stack1]);
 
-                    if (!satisfied2)
-                    {
-                        var toAdd = new StackMistake([stack2], rule);
-                        result.Add(toAdd);
+                        if (!satisfied1)
+                        {
+                            var toAdd = new StackMistake([stack1], rule);
+                            result.Add(toAdd);
+                        }
                     }
+                    
+                    if (stack2 != null)
+                    {
+                        var satisfied2 = rule.IsSatisfied(stacks: [stack2]);
+
+                        if (!satisfied2)
+                        {
+                            var toAdd = new StackMistake([stack2], rule);
+                            result.Add(toAdd);
+                        }
+                    }                    
                 }
                 else
                 {
-                    var satisfied = rule.IsSatisfied(stacks: [stack1, stack2]);
-
-                    if (!satisfied)
+                    if (stack1 != null && stack2 != null)
                     {
-                        var toAdd = new StackMistake([stack1, stack2], rule);
-                        result.Add(toAdd);
+                        var satisfied = rule.IsSatisfied(stacks: [stack1, stack2]);
+
+                        if (!satisfied)
+                        {
+                            var toAdd = new StackMistake([stack1, stack2], rule);
+                            result.Add(toAdd);
+                        }
                     }
                 }
             }
