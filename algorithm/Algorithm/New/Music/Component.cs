@@ -8,6 +8,18 @@ namespace Algorithm.New.Music
 
     public class Component
     {
+        public static readonly Dictionary<ComponentType, string> ComponentTypeToString = new()
+        {
+            { ComponentType.Root, "1" },
+            { ComponentType.Second, "2" },
+            { ComponentType.Third, "3" },
+            { ComponentType.Fourth, "4" },
+            { ComponentType.Fifth, "5" },
+            { ComponentType.Sixth, "6" },
+            { ComponentType.Seventh, "7" },
+            { ComponentType.Ninth, "9" }
+        };
+
         public ComponentType Type { get; private set; }
         public bool Obligatory { get; private set; }
         public Alteration Alteration { get; set; }
