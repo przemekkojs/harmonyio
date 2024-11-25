@@ -83,6 +83,8 @@ namespace Main.Pages
                 .Select(e => e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.Answer ?? string.Empty)
                 .ToList();
 
+            var showOpinion = quiz.ShowAlgorithmOpinion;
+
             // Tutaj robimy b��dy
             var excersiseResult = quizResult?.ExerciseResults
                 .FirstOrDefault();
@@ -93,7 +95,6 @@ namespace Main.Pages
                     .Collection(er => er.MistakeResults)
                     .Load();
 
-                var showOpinion = quizResult?.ShowAlgorithmOpinion ?? false;
                 var mistakeResults = excersiseResult?.MistakeResults ?? [];
 
                 if (showOpinion)

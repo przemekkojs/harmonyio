@@ -6,8 +6,6 @@ namespace Main.Models
 	public class Exercise
 	{
 		public int Id { get; set; }
-
-		//Tymczasowo pytanie to po prostu jakiś testowy string
 		public string Question { get; set; } = "";
 		public int MaxPoints { get; set; }
 
