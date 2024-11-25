@@ -1,0 +1,35 @@
+@page
+@model ChangeAvatarModel
+
+<style>
+    .color-square {
+        height: 45px;
+        cursor: pointer;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+        gap: .5rem;
+    }
+</style>
+
+<div class="w-100">
+    <label class="ps-1 pb-1 fw-bold">Awatar</label>
+
+    <div class="grid-container">
+        @for (int i = 0; i < ApplicationUser.PossibleAvatarColors.Length; i++)
+        {
+            <form method="post" class="color-form">
+                <input type="hidden" name="colorIndex" value="@i" />
+                <div class="color-square rounded d-flex align-items-center justify-content-center" style="background-color: @(ApplicationUser.PossibleAvatarColors[i]);" 
+                        onclick="this.closest('form').submit()">
+                    @if (i == Model.CurrentUser.AvatarColorId)
+                    {
+                        <i class="fas fa-check icon-sm text-white"></i>
+                    }
+                </div>
+            </form>
+        }
+    </div>
+</div>

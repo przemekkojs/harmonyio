@@ -7,19 +7,19 @@
     var currentUser = await UserManager.GetUserAsync(User);
 }
 
-<ul class="navbar-nav pt-1">
+<ul class="navbar-nav pt-1"> 
     @if (SignInManager.IsSignedIn(User))
     {
         <ul class="navbar-nav position-relative">
             <li class="nav-item dropdown ml-auto d-flex align-items-center">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle border" style="width: 40px; height: 40px;" />
+                    <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; background-color: @currentUser!.AvatarColor;" />
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end p-1 overflow-hidden" aria-labelledby="profileDropdown">
                     <li class="d-flex flex-row align-items-center p-1">
-                        <a asp-area="Identity" asp-page="/Account/Manage" class="nav-link d-flex flex-row align-items-center text-decoration-none text-dark">
-                            <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle border" style="width: 20px; height: 20px;" />
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="d-flex flex-row align-items-center text-decoration-none text-dark p-0 g-0">
+                            <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 20px; height: 20px; background-color: @currentUser!.AvatarColor;" />
                             <span class="dropdown-item-text ps-2 text-truncate">@(currentUser?.FullName ?? "")</span>
                         </a>   
                     </li>
