@@ -3,6 +3,7 @@ using Algorithm.New.Music;
 using Algorithm.New.Utils;
 using System.Security;
 using System.Transactions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Algorithm.New.Algorithm.Generators
 {
@@ -78,7 +79,7 @@ namespace Algorithm.New.Algorithm.Generators
             }
         }
 
-        private int EvaluatePair(StackNode prev, StackNode next)
+        public int EvaluatePair(StackNode prev, StackNode next)
         {
             var checkResult = StackPairChecker.CheckRules(prev.Stack, next.Stack, Settings);
 
@@ -107,6 +108,70 @@ namespace Algorithm.New.Algorithm.Generators
 
     public static class SolutionGenerator
     {
+        public static Solution GenerateLinear(Problem problem, int tolerance = 2)
+        {
+            var functions = problem.Functions;
+            List<Stack> stacks = [];
+            Dictionary<Function, List<List<string>>> mappings = [];
+            List<int> usedNotesIndexes = [];
+
+            foreach (var function in functions)
+            {
+                var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
+                var notesSet = new List<List<string>>();
+
+                foreach (var possibleSet in possibleNotes)
+                {
+                    var combinations = Combinations
+                        .Generate(possibleSet);
+
+                    notesSet.AddRange(combinations);
+                }
+
+                mappings[function] = notesSet;
+                usedNotesIndexes.Add(0);
+            }
+
+            var currentIndex = 0;
+            var functionsCount = functions.Count;
+
+            while (currentIndex < functionsCount)
+            {
+                var function = functions[currentIndex];
+                var usedNotesIndex = usedNotesIndexes[currentIndex];
+                usedNotesIndexes[currentIndex]++;
+
+                var possibleNotes = mappings[function][usedNotesIndex];
+                var current = new Stack(function.Index, possibleNotes);
+                
+                if (stacks.Count == 0)
+                {
+                    stacks.Add(current);
+                    currentIndex++;
+                }
+                else
+                {
+                    var prev = stacks.Last();
+
+                    var checkResult = StackPairChecker
+                        .CheckRules(prev, current, Constants.Settings);
+
+                    if (checkResult.Count <= tolerance)
+                    {
+                        stacks.Add(current);
+                        currentIndex++;
+                    }
+                    else
+                    {                        
+                        currentIndex--;
+                        stacks.RemoveAt(currentIndex);                        
+                    }
+                }
+            }
+
+            return new Solution(problem, stacks);
+        }
+
         public static Solution Generate(Problem problem)
         {
             List<Stack> stacks = [];
@@ -116,7 +181,7 @@ namespace Algorithm.New.Algorithm.Generators
 
             var functions = problem.Functions;
 
-            GenerateRecursive(functions, prev, tree);
+            GenerateRecursive(functions, prev, tree, tolerance: 6);
             tree.EvaluateTree();
 
             var firstItem = tree.Solutions.First();
@@ -129,7 +194,9 @@ namespace Algorithm.New.Algorithm.Generators
             return new Solution(problem, stacks);
         }
 
-        private static void GenerateRecursive(List<Function> functions, StackNode prev, StackTree tree, int functionIndex = 0)
+        private static void GenerateRecursive(
+            List<Function> functions, StackNode prev, StackTree tree, 
+            int functionIndex = 0, int tolerance = 10, int currentMistakes = 0)
         {
             if (functionIndex >= functions.Count)
                 return;
@@ -137,18 +204,35 @@ namespace Algorithm.New.Algorithm.Generators
             var function = functions[functionIndex];
             var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
 
-            foreach (var notesSet in possibleNotes)
+            var notesSet = new List<List<string>>();
+
+            foreach (var possibleSet in possibleNotes)
             {
-                // TODO: Permutacje każdej czwórki nut
+                var combinations = Combinations
+                    .Generate(possibleSet);
 
-                var stack = new Stack(function.Index, notesSet);
+                notesSet.AddRange(combinations);
+            }
+
+            foreach (var notes in notesSet)
+            {
+                var stack = new Stack(function.Index, notes);
                 var next = new StackNode(stack);
-                tree.AddNext(prev, next);
 
-                
+                var checkResult = StackPairChecker
+                    .CheckRules(prev.Stack, next.Stack, tree.Settings);
 
-                GenerateRecursive(functions, next, tree, functionIndex + 1);
-            }            
+                var newMistakes = currentMistakes + checkResult.Count;
+
+                if (newMistakes < tolerance)
+                {
+                    tree.AddNext(prev, next);
+                    GenerateRecursive(functions, next, tree, 
+                        functionIndex: functionIndex + 1,
+                        tolerance: tolerance,
+                        currentMistakes: newMistakes);
+                }
+            }
         }
     }
 }

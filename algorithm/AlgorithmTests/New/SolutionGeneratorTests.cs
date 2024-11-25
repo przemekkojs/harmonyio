@@ -11,7 +11,7 @@ namespace AlgorithmTests.New
         public void Test4Functions()
         {
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_4_FUNCTIONS);
-            var solution = SolutionGenerator.Generate(problem);
+            var solution = SolutionGenerator.GenerateLinear(problem);
 
             var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
 

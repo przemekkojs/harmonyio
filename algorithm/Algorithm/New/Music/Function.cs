@@ -376,7 +376,7 @@ namespace Algorithm.New.Music
                 }
 
                 // Only one will always remain, so another set of permutations can be added
-                List<List<Component>> substitution = new();
+                List<List<Component>> substitution = [];
 
                 foreach (var componentList in PossibleComponents)
                 {
