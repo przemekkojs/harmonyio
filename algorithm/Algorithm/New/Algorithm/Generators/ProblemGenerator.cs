@@ -116,7 +116,7 @@ namespace Algorithm.New.Algorithm.Generators
         {
             var metre = Metre.GetMetre(metreCount, metreValue);
             var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
-            var isMinor = minor == 1;
+            var isMinor = minor != 1;
 
             var tonation = isMinor ?
                 tonationList.Where(x => x.Mode == Mode.Minor).First() :

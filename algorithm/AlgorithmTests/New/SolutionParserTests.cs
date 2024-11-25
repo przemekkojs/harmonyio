@@ -33,8 +33,8 @@ namespace AlgorithmTests.New
 
             var solution = new Solution(problem, stacks);
 
-            var solutionString = Constants.SOLUTION_STRING;
-            var problemString = Constants.PROBLEM_STRING;
+            var solutionString = Constants.SOLUTION_STRING_4_FUNCTIONS;
+            var problemString = Constants.PROBLEM_STRING_4_FUNCTIONS;
 
             var parsedSolutionResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser.ParseJsonToSolutionParseResult(solutionString);
             var parsedProblemResult = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser.ParseJsonToProblem(problemString);

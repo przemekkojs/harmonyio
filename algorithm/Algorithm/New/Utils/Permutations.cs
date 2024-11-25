@@ -11,11 +11,11 @@ namespace Algorithm.New.Utils
         public static List<List<T>> CreatePermutations<T>(List<T> set, int n)
         {
             var result = new List<List<T>>();
-            CreatePermutationsRecursive(set, new List<T>(), result, n, 0);
+            CreatePermutationsRecursive(set, [], result, n);
             return result;
         }
 
-        private static void CreatePermutationsRecursive<T>(List<T> set, List<T> current, List<List<T>> result, int n, int startIndex)
+        private static void CreatePermutationsRecursive<T>(List<T> set, List<T> current, List<List<T>> result, int n, int startIndex=0)
         {
             if (current.Count == n)
             {

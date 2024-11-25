@@ -1,7 +1,10 @@
+using System.CodeDom.Compiler;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Parsers.ProblemParser;
+using Algorithm.New.Music;
 using Main.Data;
 using Main.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +21,16 @@ namespace Main.Pages
         public int? EditedQuizId { get; set; }
         public List<string> Questions { get; set; }
         public string QuizName { get; set; }
+    }
+
+    public record GenerateData
+    {
+        public int Bars { get; set; }
+        public string MetreValue { get; set; }
+        public string MetreCount { get; set; }
+        public int SharpsCount { get; set; }
+        public int FlatsCount { get; set; }
+        public int Minor { get; set; }
     }
 
     [Authorize]
@@ -78,7 +91,7 @@ namespace Main.Pages
             return Page();
         }
 
-        private bool CheckProblem(string question)
+        private static bool CheckProblem(string question)
         {
             try
             {
@@ -125,6 +138,27 @@ namespace Main.Pages
             }
 
             return true;
+        }
+
+        public JsonResult OnPostGenerateTask([FromBody] GenerateData data)
+        {
+            var mV = Convert.ToInt32(data.MetreValue);
+            var mC = Convert.ToInt32(data.MetreCount);
+
+            var generatedFunctions = Algorithm.New.Algorithm.Generators.ProblemGenerator
+                .Generate(data.Bars, mV, mC, data.SharpsCount, data.FlatsCount, data.Minor);
+
+            var metre = Metre.GetMetre(mC, mV);
+            var tonationList = Tonation.GetTonation(data.SharpsCount, data.FlatsCount);
+
+            var tonation = data.Minor == 1 ?
+                tonationList.First(x => x.Mode == Mode.Major) :
+                tonationList.First(x => x.Mode == Mode.Minor);
+
+            var problem = new Problem(generatedFunctions, metre, tonation);
+            var parsedProblem = Parser.ParseProblemFunctionsToString(problem);
+
+            return new JsonResult(parsedProblem);
         }
 
         public async Task<IActionResult> OnPostSave()
@@ -179,10 +213,7 @@ namespace Main.Pages
             if (!ValidateEmptyExercises())
                 return new JsonResult(invalidQuestionsResult);
 
-            quiz.IsValid = true;
-
-            if (!ValidateExcersises())
-                quiz.IsValid = false;
+            quiz.IsValid = ValidateExcersises();
 
             if (EditedQuizId == null)
                 await _repository.SaveChangesAsync();

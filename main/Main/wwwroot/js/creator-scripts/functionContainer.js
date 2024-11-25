@@ -12,7 +12,7 @@ export class FunctionContainer {
         this.addFunctionButton.type = 'button';
         this.addFunctionButton.id = `add-function-${this.taskIndex}-${this.barIndex}`;
         this.addFunctionButton.className = "adder-button custom-button button-medium plus-button";
-        this.addFunctionButton.title = "Dodaj funkcję";
+        this.addFunctionButton.title = "Dodaj funkcję";        
 
         this.handleAddFunction = this.addFunction.bind(this);
         this.addFunctionButton.addEventListener('click', this.handleAddFunction);
@@ -76,8 +76,7 @@ export class FunctionContainer {
         this.container.removeChild(currentFunction.functionCreator.container);
     }
 
-    setId(taskIndex, barIndex, startFunctionIndex = 0) {     
-        console.log("Set bar index", this.barIndex, "to", barIndex);
+    setId(taskIndex, barIndex, startFunctionIndex = 0) {
         this.taskIndex = taskIndex;
         this.barIndex = barIndex;
         this.addFunctionButton.removeEventListener('click', this.handleAddFunction);

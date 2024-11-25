@@ -106,24 +106,25 @@ namespace Main.Pages
 
             // TODO when added max points to excersise, assign this max points
             ExerciseResults = quiz.Exercises
-            .Select(e => new
-            {
-                e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.ExerciseResult,
-                e.MaxPoints
-            })
-            .Select(x => x.ExerciseResult == null
-                ? new ExerciseResultData
+                .Select(e => new
                 {
-                    Points = 0,
-                    MaxPoints = x.MaxPoints
-                }
-                : new ExerciseResultData
-                {
-                    Points = x.ExerciseResult.Points,
-                    MaxPoints = x.MaxPoints,
-                    Comment = x.ExerciseResult.Comment
+                    e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.ExerciseResult,
+                    e.MaxPoints
                 })
-            .ToList();
+                .Select(x => x.ExerciseResult == null
+                    ? new ExerciseResultData
+                    {
+                        Points = 0,
+                        MaxPoints = x.MaxPoints
+                    }
+                    : new ExerciseResultData
+                    {
+                        Points = x.ExerciseResult.Points,
+                        MaxPoints = x.MaxPoints,
+                        Comment = x.ExerciseResult.Comment
+                    })
+                .ToList();
+
             return Page();
         }
     }
