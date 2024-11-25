@@ -3,6 +3,7 @@ using Algorithm.New.Music;
 using Algorithm.New.Utils;
 using System.Security;
 using System.Transactions;
+using System.Windows.Markup;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Algorithm.New.Algorithm.Generators
@@ -17,13 +18,13 @@ namespace Algorithm.New.Algorithm.Generators
     internal sealed class StackTree
     {
         public StackNode Root { get; private set; }
-        public Settings Settings { get; private set; }        
+        public Settings Settings { get; private set; }
         public Dictionary<List<StackNode>, int> Solutions { get; private set; }
         public List<StackNode> All { get; private set; }
 
         private static readonly StackNode _empty = new(null);
 
-        public StackTree() : this( Constants.Settings) { }        
+        public StackTree() : this(Constants.Settings) { }
 
         public StackTree(Settings settings)
         {
@@ -57,7 +58,7 @@ namespace Algorithm.New.Algorithm.Generators
                 .ToDictionary();
         }
 
-        private void EvaluateRecursive(StackNode current, int prevMistakes=0, int tolerance=15)
+        private void EvaluateRecursive(StackNode current, int prevMistakes = 0, int tolerance = 15)
         {
             var nexts = current.Nexts;
 
@@ -108,9 +109,10 @@ namespace Algorithm.New.Algorithm.Generators
 
     public static class SolutionGenerator
     {
-        public static Solution GenerateLinear(Problem problem, int tolerance = 2)
+        public static Solution GenerateLinear(Problem problem, int tolerance = 0)
         {
             var functions = problem.Functions;
+            var maxIterations = 0;
             List<Stack> stacks = [];
             Dictionary<Function, List<List<string>>> mappings = [];
             List<int> usedNotesIndexes = [];
@@ -120,30 +122,38 @@ namespace Algorithm.New.Algorithm.Generators
                 var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
                 var notesSet = new List<List<string>>();
 
+
                 foreach (var possibleSet in possibleNotes)
                 {
                     var combinations = Combinations
                         .Generate(possibleSet);
 
-                    notesSet.AddRange(combinations);
+                    notesSet.AddRange(combinations.Distinct());
                 }
 
+                maxIterations += notesSet.Count;
                 mappings[function] = notesSet;
                 usedNotesIndexes.Add(0);
             }
 
             var currentIndex = 0;
-            var functionsCount = functions.Count;
+            var currentIteration = 0;
+            var functionsCount = functions.Count;            
 
             while (currentIndex < functionsCount)
             {
+                if (currentIteration >= maxIterations)
+                    return new Solution(problem);
+
+                currentIteration++;
+
                 var function = functions[currentIndex];
                 var usedNotesIndex = usedNotesIndexes[currentIndex];
                 usedNotesIndexes[currentIndex]++;
 
                 var possibleNotes = mappings[function][usedNotesIndex];
                 var current = new Stack(function.Index, possibleNotes);
-                
+
                 if (stacks.Count == 0)
                 {
                     stacks.Add(current);
@@ -156,15 +166,20 @@ namespace Algorithm.New.Algorithm.Generators
                     var checkResult = StackPairChecker
                         .CheckRules(prev, current, Constants.Settings);
 
-                    if (checkResult.Count <= tolerance)
+                    var mistakesCount = checkResult.Count != 0 ?
+                        checkResult.Sum(x => x.Quantity) :
+                        0;
+
+                    if (mistakesCount <= tolerance)
                     {
                         stacks.Add(current);
                         currentIndex++;
                     }
-                    else
-                    {                        
+                    else if (usedNotesIndexes[currentIndex] >= mappings[function].Count)
+                    {
                         currentIndex--;
-                        stacks.RemoveAt(currentIndex);                        
+                        usedNotesIndexes[currentIndex] = 0;
+                        stacks.RemoveAt(currentIndex);
                     }
                 }
             }
@@ -190,12 +205,12 @@ namespace Algorithm.New.Algorithm.Generators
                 .ToList();
 
             // TODO: Trzeba jeszcze poprawić wartości rytmiczne
-            
+
             return new Solution(problem, stacks);
         }
 
         private static void GenerateRecursive(
-            List<Function> functions, StackNode prev, StackTree tree, 
+            List<Function> functions, StackNode prev, StackTree tree,
             int functionIndex = 0, int tolerance = 10, int currentMistakes = 0)
         {
             if (functionIndex >= functions.Count)
@@ -227,7 +242,7 @@ namespace Algorithm.New.Algorithm.Generators
                 if (newMistakes < tolerance)
                 {
                     tree.AddNext(prev, next);
-                    GenerateRecursive(functions, next, tree, 
+                    GenerateRecursive(functions, next, tree,
                         functionIndex: functionIndex + 1,
                         tolerance: tolerance,
                         currentMistakes: newMistakes);

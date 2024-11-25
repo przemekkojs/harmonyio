@@ -18,5 +18,41 @@ namespace AlgorithmTests.New
             Assert.True(solution.Stacks.Count == 4);
             Assert.True(mistakes.Count == 0);
         }
+
+        [Fact]
+        public void Test8FunctionsEasy()
+        {
+            var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_8_FUNCTIONS);
+            var solution = SolutionGenerator.GenerateLinear(problem);
+
+            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+
+            Assert.True(solution.Stacks.Count == 8);
+            Assert.True(mistakes.Count == 0);
+        }
+
+        [Fact]
+        public void Test8Functions()
+        {
+            var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_8_FUNCTIONS_2);
+            var solution = SolutionGenerator.GenerateLinear(problem);
+
+            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+
+            Assert.True(solution.Stacks.Count == 8);
+            Assert.True(mistakes.Count == 0);
+        }
+
+        [Fact]
+        public void Test16FunctionsEasy()
+        {
+            var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_16_FUNCTIONS);
+            var solution = SolutionGenerator.GenerateLinear(problem);
+
+            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+
+            Assert.True(solution.Stacks.Count == 16);
+            Assert.True(mistakes.Count == 0);
+        }
     }
 }
