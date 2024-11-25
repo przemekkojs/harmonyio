@@ -100,15 +100,16 @@ namespace Algorithm.New.Algorithm.Generators
                 current = current.Previous;
             } while (current != null && current.stack != null);
 
+            result.Reverse();
             return result;
         }
     }
 
     public static class SolutionGenerator
     {
-        public static List<Stack> Generate(Problem problem)
+        public static Solution Generate(Problem problem)
         {
-            List<Stack> result = [];
+            List<Stack> stacks = [];
             StackTree tree = new();
             StackNode current = tree.Root;
             StackNode prev = current;
@@ -119,11 +120,13 @@ namespace Algorithm.New.Algorithm.Generators
             tree.EvaluateTree();
 
             var firstItem = tree.Solutions.First();
-            result = firstItem.Key
+            stacks = firstItem.Key
                 .Select(x => x.Stack!)
                 .ToList();
 
-            return result;
+            // TODO: Trzeba jeszcze poprawić wartości rytmiczne
+            
+            return new Solution(problem, stacks);
         }
 
         private static void GenerateRecursive(List<Function> functions, StackNode prev, StackTree tree, int functionIndex = 0)
@@ -136,11 +139,13 @@ namespace Algorithm.New.Algorithm.Generators
 
             foreach (var notesSet in possibleNotes)
             {
+                // TODO: Permutacje każdej czwórki nut
+
                 var stack = new Stack(function.Index, notesSet);
                 var next = new StackNode(stack);
                 tree.AddNext(prev, next);
 
-                // TODO: Permutacje każdej czwórki nut
+                
 
                 GenerateRecursive(functions, next, tree, functionIndex + 1);
             }            
