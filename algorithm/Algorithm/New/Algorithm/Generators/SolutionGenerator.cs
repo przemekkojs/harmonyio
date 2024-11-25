@@ -109,6 +109,13 @@ namespace Algorithm.New.Algorithm.Generators
 
     public static class SolutionGenerator
     {
+        /// <summary>
+        /// Z tej funkcji NALEŻY korzystać, ponieważ jest nieporównywalnie szybsza. Jedyne co, to otrzymujemy pierwsze
+        /// znalezione poprawne rozwiązanie, a nie najlepsze.
+        /// </summary>
+        /// <param name="problem">Problem, na bazie którego będzie generowane rozwiązanie</param>
+        /// <param name="tolerance">Tolerancja dla błędów. Domyślnie = 0</param>
+        /// <returns>Wygenerowane rozwiązanie</returns>
         public static Solution GenerateLinear(Problem problem, int tolerance = 0)
         {
             var functions = problem.Functions;
@@ -184,9 +191,27 @@ namespace Algorithm.New.Algorithm.Generators
                 }
             }
 
-            return new Solution(problem, stacks);
+            var result = new Solution(problem, stacks);
+            Rhytmize(result);
+
+            return result;
         }
 
+        // TODO: Zaimplementować
+        private static void Rhytmize(Solution solution)
+        {
+
+        }
+
+        /// <summary>
+        /// Z tej funkcji NIE NALEŻY korzystać, chyba że do celów badawczych. Generuje ona wszystkie możliwe rozwiązania,
+        /// z obcinaniem dla zadanej tolerancji. Ma jednak gwarantowane zwrócenie najlepszego możliwego rozwiązania, jeżeli
+        /// takowie się znajdzie. <br/>
+        /// 
+        /// Funkcja <b>nie jest</b> zaimplementowana do końca, więc na razie proszę NIE RUSZAĆ.
+        /// </summary>
+        /// <param name="problem">Problem, na bazie którego będzie generowane rozwiązanie</param>
+        /// <returns>Najlepsze rozwiązanie.</returns>
         public static Solution Generate(Problem problem)
         {
             List<Stack> stacks = [];
