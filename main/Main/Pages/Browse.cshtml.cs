@@ -15,6 +15,7 @@ namespace Main.Pages
         public int Points { get; set; }
         public int MaxPoints { get; set; } = 10; // Default to 10 if no data
         public string Comment { get; set; } = string.Empty;
+        public string Opinion { get; set; } = string.Empty;
     }
 
     [Authorize]
@@ -48,7 +49,8 @@ namespace Main.Pages
                 query => query
                     .Include(q => q.Exercises)
                         .ThenInclude(e => e.ExerciseSolutions.Where(es => es.UserId == appUser.Id))
-                            .ThenInclude(es => es.ExerciseResult)
+                            .ThenInclude(es => es.ExerciseResult!)
+                                .ThenInclude(er => er.MistakeResults)
                     .Include(q => q.QuizResults.Where(qr => qr.UserId == appUser.Id))
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id))
             );
@@ -84,28 +86,6 @@ namespace Main.Pages
                 .ToList();
 
             var showOpinion = quiz.ShowAlgorithmOpinion;
-
-            // Tutaj robimy b��dy
-            var excersiseResult = quizResult?.ExerciseResults
-                .FirstOrDefault();
-
-            if (excersiseResult != null)
-            {
-                _repository.Context.Entry(excersiseResult)
-                    .Collection(er => er.MistakeResults)
-                    .Load();
-
-                var mistakeResults = excersiseResult?.MistakeResults ?? [];
-
-                if (showOpinion)
-                    Opinion = Utils.Utils.MistakesToHTML(mistakeResults);
-                else
-                    Opinion = string.Empty;
-            }
-            else
-                Opinion = string.Empty;
-
-            // TODO when added max points to excersise, assign this max points
             ExerciseResults = quiz.Exercises
             .Select(e => new
             {
@@ -116,13 +96,16 @@ namespace Main.Pages
                 ? new ExerciseResultData
                 {
                     Points = 0,
-                    MaxPoints = x.MaxPoints
+                    MaxPoints = x.MaxPoints,
+                    Comment = string.Empty,
+                    Opinion = string.Empty
                 }
                 : new ExerciseResultData
                 {
                     Points = x.ExerciseResult.Points,
                     MaxPoints = x.MaxPoints,
-                    Comment = x.ExerciseResult.Comment
+                    Comment = x.ExerciseResult.Comment,
+                    Opinion = showOpinion ? Utils.Utils.MistakesToHTML(x.ExerciseResult.MistakeResults) : string.Empty
                 })
             .ToList();
             return Page();

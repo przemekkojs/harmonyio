@@ -63,7 +63,8 @@ namespace Main.Pages
                     .Include(q => q.QuizResults)
                     .Include(q => q.Exercises)
                         .ThenInclude(e => e.ExerciseSolutions)
-                            .ThenInclude(es => es.ExerciseResult)
+                            .ThenInclude(es => es.ExerciseResult!)
+                                .ThenInclude(er => er.MistakeResults)
                     .Include(q => q.PublishedToGroup)
                         .ThenInclude(q => q.Teachers.Where(u => u.Id == appUser.Id))
             );
@@ -90,7 +91,7 @@ namespace Main.Pages
             // fill missing exercises only if quiz is closed
             if (quiz.State == QuizState.Closed && participantsAnsweredIds.Count != quiz.Participants.Count)
             {
-                var participantsNotAnsweredIds = quiz.Participants.Select(p => p.Id).Except(participantsAnsweredIds);
+                var participantsNotAnsweredIds = quiz.Participants.Where(p => !participantsAnsweredIds.Contains(p.Id)).Select(p => p.Id);
                 var newSolutions = await FillMissingExerciseSolutionsAndResults(participantsNotAnsweredIds, quiz.Exercises);
                 allSolutions.AddRange(newSolutions);
                 participantsAnsweredIds.AddRange(newSolutions.Select(es => es.UserId));
@@ -156,15 +157,15 @@ namespace Main.Pages
                     .Select(er => er?.AlgorithmPoints ?? 0)
                     .ToList());
 
-                foreach (var result in userSolutionResults)
-                {
-                    if (result == null)
-                        continue;
+                // foreach (var result in userSolutionResults)
+                // {
+                //     if (result == null)
+                //         continue;
 
-                    _repository.Context.Entry(result)
-                        .Collection(er => er.MistakeResults)
-                        .Load();
-                }
+                //     _repository.Context.Entry(result)
+                //         .Collection(er => er.MistakeResults)
+                //         .Load();
+                // }
 
                 Opinions.Add(userSolutionResults
                     .Select(er => Utils.Utils.MistakesToHTML(er?.MistakeResults ?? []) ?? "Brak błędów.")
@@ -300,11 +301,13 @@ namespace Main.Pages
 
                     var exerciseResult = new ExerciseResult
                     {
-                        Comment = "",
                         Points = 0,
-                        AlgorithmPoints = 0,
                         MaxPoints = exercise.MaxPoints,
+                        Comment = string.Empty,
+                        AlgorithmPoints = 0,
                         ExerciseSolution = solution,
+                        // TODO add mistake results that say exercise wasnt solved
+                        MistakeResults = []
                     };
 
                     _repository.Add(exerciseResult);
