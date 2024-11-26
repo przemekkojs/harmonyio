@@ -10,57 +10,79 @@ class Task {
         this.barContainer = new BarContainer(taskContainer, maxBars);
         this.handleRemove = this.taskContainer.removeTask.bind(this.taskContainer, this.taskIndex);
 
-        this.randomTaskButton = document.createElement('input');
-        this.randomTaskButton.type = 'button';
-        this.randomTaskButton.id = `random-task-${this.taskIndex}`;
-        this.randomTaskButton.className = "btn btn-secondary";
-        this.randomTaskButton.title = "Wygeneruj losowe zadanie";
-        this.randomTaskButton.value = "Losowe zadanie";
-
-        this.randomTaskInput = document.createElement('input');
-        this.randomTaskInput.type = 'number';
-        this.randomTaskInput.id = `random-bars-${this.taskIndex}`;
-        this.randomTaskInput.placeholder = "Takty";
-
         // Ukryty input
         this.hiddenInput = document.createElement('input');
         this.hiddenInput.type = "hidden";
 
-        // Zadanie
-        this.taskNumber = document.createElement('input');
-        this.taskNumber.type = "text";
-        this.taskNumber.readOnly = true;
-        this.taskNumber.className = "form-control task-id";
-                
+        // Główny kontener
+        this.form = document.createElement('div');
+        this.form.className = 'd-flex flex-row gap-2';
+        this.form.style.height = '132px';
+
+        // Pierwszy podkontener
+        const column1 = document.createElement('div');
+        column1.className = 'd-flex flex-column gap-2 h-100';
+
+        // Numer zadania
+        this.taskNumber = document.createElement('div');
+        this.taskNumber.className = 'bg-secondary text-white rounded align-items-center h-50 justify-content-center d-flex fs-4';
+        this.taskNumber.style.width = '60px';
+        this.taskNumber.textContent = '1';
+        column1.appendChild(this.taskNumber);
+
+        // Ikona kosza
+        this.deleteButton = document.createElement('button');
+        this.deleteButton.className = 'btn btn-danger h-50';
+        this.deleteButton.style.width = '60px';
+
+        const trashIcon = document.createElement('i');
+        trashIcon.className = 'fas fa-trash';
+        trashIcon.style.fontSize = '20px';
+        this.deleteButton.appendChild(trashIcon);
+
+        column1.appendChild(this.deleteButton);
+        this.form.appendChild(column1);
+
+        // Drugi podkontener
+        const column2 = document.createElement('div');
+        column2.className = 'flex-grow-1 d-flex flex-column gap-2 h-100';
+
+        // Wiersz pól wejściowych
+        const inputRow = document.createElement('div');
+        inputRow.className = 'h-50 d-flex flex-row gap-2';
+
+        // Pole "Max punkty"
+        const maxPointsSection = document.createElement('div');
+        maxPointsSection.className = 'h-100 d-flex flex-column';
+        maxPointsSection.style.maxWidth = '150px';
+        
+        const maxPointsLabel = document.createElement('div');
+        maxPointsLabel.className = 'fw-bold text-nowrap';
+        maxPointsLabel.textContent = 'Max punkty';
+        
         this.maxPointsInput = document.createElement('input');
         this.maxPointsInput.type = 'number';
-        this.maxPointsInput.className = "form-control bg-white border-secondary points-input no-arrows mt-1";
-        this.maxPointsInput.style = "width: 100px;";
-        this.maxPointsInput.maxLength = "3";
-        this.maxPointsInput.placeholder = "Punkty";
-        this.maxPointsInput.value = 10;
-        this.maxPointsInput.required = true;        
-
-        this.pointsDiv = document.createElement('div');
-        this.pointsDiv.className = "col-auto h-100 p-0 align-items-left";
-        this.pointsDiv.appendChild(this.taskNumber);
-        this.pointsDiv.appendChild(this.maxPointsInput);
+        this.maxPointsInput.value = '10';
+        this.maxPointsInput.className = 'form-control points-input border-secondary bg-white';
         
-        // Pytanie: 
-        this.questionInput = document.createElement('textarea');
-        this.questionInput.className = "form-control task-input bg-white border-secondary h-100";
-        this.questionInput.placeholder = "Wpisz polecenie (opcjonalne)";
+        maxPointsSection.appendChild(maxPointsLabel);
+        maxPointsSection.appendChild(this.maxPointsInput);
 
-        this.questionFormGroup = document.createElement('div');
-        this.questionFormGroup.className = "form-group h-100";
-        this.questionFormGroup.appendChild(this.questionInput);
+        inputRow.appendChild(maxPointsSection);
 
-        this.questionDiv = document.createElement('div');
-        this.questionDiv.className = "col h-100 px-2 pb-1";
-        this.questionDiv.appendChild(this.questionFormGroup);        
-
-        // Parametry (metrum i tonacja):
+        // Pole "Metrum"        
+        const metreSection = document.createElement('div');
+        metreSection.className = 'h-100 d-flex flex-column';
+        metreSection.style.maxWidth = '150px';
+        metreSection.style.width = '100px';
+        
+        const metreLabel = document.createElement('div');
+        metreLabel.className = 'fw-bold text-nowrap';
+        metreLabel.textContent = 'Metrum';
+        
         this.metreSelect = document.createElement('select');
+        this.metreSelect.value = '2/4';
+        this.metreSelect.className = 'form-control points-input border-secondary bg-white';
         this.metreSelect.innerHTML = `
             <option value="2/4">2/4</option>
             <option value="3/4">3/4</option>
@@ -68,14 +90,28 @@ class Task {
             <option value="3/8">3/8</option>
             <option value="6/8">6/8</option>
         `;
-        this.metreSelect.ariaLabel = "Metrum";
-        this.metreSelect.className = "form-control bg-white border-secondary";
+        
+        metreSection.appendChild(metreLabel);
+        metreSection.appendChild(this.metreSelect);
+        
+        inputRow.appendChild(metreSection);
 
-        this.tonationLabel = document.createElement('label');
-        this.tonationLabel.innerText = "Tonacja";
-        this.tonationLabel.className = "fw-bold ms-auto me-2";
+        // Pole "Tonacja"        
+        const keySignature = document.createElement('div');
+        keySignature.className = 'h-100 d-flex flex-column';
+        keySignature.style.maxWidth = '150px';
+
+        const keyLabel = document.createElement('div');
+        keyLabel.className = 'fw-bold text-nowrap';
+        keyLabel.textContent = 'Tonacja';
+        keySignature.appendChild(keyLabel);
+
+        const keyInputs = document.createElement('div');
+        keyInputs.className = 'd-flex flex-row gap-1';
 
         this.tonationNameSelect = document.createElement('select');
+        this.tonationNameSelect.value = 'C';
+        this.tonationNameSelect.className = 'form-control points-input border-secondary bg-white';
         this.tonationNameSelect.innerHTML = `
             <option value="C">C</option>
             <option value="Ces">Ces</option>
@@ -101,68 +137,95 @@ class Task {
 
             <option value="H">H</option>
             <option value="H">B</option>`;
-        this.tonationNameSelect.className = "form-control bg-white border-secondary";
 
         this.tonationModeSelect = document.createElement('select');
+        this.tonationModeSelect.value = 'dur';
+        this.tonationModeSelect.className = 'form-control points-input border-secondary bg-white';
         this.tonationModeSelect.innerHTML = `
             <option value="dur">Dur</option>
-            <option value="moll">moll</option>
+            <option value="moll">Moll</option>
         `;
-        this.tonationModeSelect.className = "form-control bg-white border-secondary";
 
-        const nameCol = document.createElement('div');
-        nameCol.className = "col";
-        nameCol.appendChild(this.tonationNameSelect);
+        keyInputs.appendChild(this.tonationNameSelect);
+        keyInputs.appendChild(this.tonationModeSelect);
+        keySignature.appendChild(keyInputs);
 
-        const modeCol = document.createElement('div');
-        modeCol.className = "col";
-        modeCol.appendChild(this.tonationModeSelect);
+        inputRow.appendChild(keySignature);
+        column2.appendChild(inputRow);
 
-        this.paramsInnerDiv = document.createElement('div');
-        this.paramsInnerDiv.className = "row mt-1 gx-1";
-        this.paramsInnerDiv.appendChild(nameCol);
-        this.paramsInnerDiv.appendChild(modeCol);
+        // Polecenie (textarea)
+        this.questionInput = document.createElement('textarea');
+        this.questionInput.className = 'rounded h-50 p-2';
+        this.questionInput.placeholder = 'Wpisz polecenie (opcjonalne)';
+        column2.appendChild(this.questionInput);
 
-        this.dropdownsFormGroup = document.createElement('div');
-        this.dropdownsFormGroup.className = "align-items-center h-100";
-        this.dropdownsFormGroup.appendChild(this.metreSelect);
-        // this.dropdownsFormGroup.appendChild(this.tonationLabel);
-        this.dropdownsFormGroup.appendChild(this.paramsInnerDiv);
+        this.form.appendChild(column2);
 
-        this.dropdownsDiv = document.createElement('div');
-        this.dropdownsDiv.className = "col-auto p-0 h-100";
-        this.dropdownsDiv.appendChild(this.dropdownsFormGroup);
+        // Trzeci podkontener
+        const column3 = document.createElement('div');
+        column3.className = 'd-flex flex-column rounded border border-secondary overflow-hidden';
+        column3.style.width = '180px';
 
-        this.deleteButtonContent = document.createElement('div');
-        this.deleteButtonContent.className = "trash-icon-white mx-auto w-100 h-100";
+        const randomTaskHeader = document.createElement('div');
+        randomTaskHeader.className = 'fw-bold bg-secondary text-white w-100 mb-auto p-2 text-center text-nowrap';
+        randomTaskHeader.textContent = 'Wylosuj zadanie';
+        column3.appendChild(randomTaskHeader);
 
-        this.deleteButton = document.createElement('button');
-        this.deleteButton.className = "col-auto ms-2 mb-1 btn btn-danger p-4";
-        this.deleteButton.style = "width: 81px;";
-        this.deleteButton.appendChild(this.deleteButtonContent);
+        const randomTaskBody = document.createElement('div');
+        randomTaskBody.className = 'd-flex flex-row gap-2 p-2';
 
-        // Główna forma:
-        this.form = document.createElement('div');
-        this.form.className = "d-flex flex-row";
-        this.form.style = "height: 85px;";
-        this.form.appendChild(this.pointsDiv);
-        this.form.appendChild(this.questionDiv);
-        this.form.appendChild(this.dropdownsDiv);
-        this.form.appendChild(this.deleteButton);
+        // Pole "Takty"         
+        const randomTaskInputSection = document.createElement('div');
+        randomTaskInputSection.className = 'h-100 d-flex flex-column';
+        randomTaskInputSection.style.maxWidth = 'auto';
+        
+        const randomTaskInputLabel = document.createElement('div');
+        randomTaskInputLabel.className = 'fw-bold text-nowrap';
+        randomTaskInputLabel.textContent = 'Takty';
+        
+        this.randomTaskInput = document.createElement('input');
+        this.randomTaskInput.type = 'number';
+        this.randomTaskInput.value = '2';
+        this.randomTaskInput.className = 'form-control points-input border-secondary bg-white';
+        
+        randomTaskInputSection.appendChild(randomTaskInputLabel);
+        randomTaskInputSection.appendChild(this.randomTaskInput);
+        
+        randomTaskBody.appendChild(randomTaskInputSection);
 
-        // Kontener parametrów
-        this.params = document.createElement('div');
-        this.params.appendChild(this.form);
+        // Przycisk kostki
+        this.randomTaskButton = document.createElement('button');
+        this.randomTaskButton.type = 'button';
+        this.randomTaskButton.className = 'btn btn-secondary';
+        this.randomTaskButton.style.minWidth = '62px';
+
+        const diceIcon = document.createElement('i');
+        diceIcon.className = 'fas fa-dice';
+        diceIcon.style.fontSize = '20px';
+        this.randomTaskButton.appendChild(diceIcon);
+
+        randomTaskBody.appendChild(this.randomTaskButton);
+        column3.appendChild(randomTaskBody);
+
+        this.form.appendChild(column3);
+
+        // Funkcja do tworzenia pola wejściowego
+        function createInput(type, value, className) {
+            const input = document.createElement('input');
+            input.type = type;
+            input.value = value;
+            input.className = className;
+            return input;
+        }
+
+        this.form.appendChild(this.hiddenInput);
+        this.form.appendChild(this.barContainer.container);
 
         // Pełny kontener zadania
-        // Kontener zadania: 
         this.container = document.createElement('div');
         this.container.className = "task-content w-100 rounded mb-4";
 
-        this.container.appendChild(this.hiddenInput);
-        this.container.appendChild(this.params);
-        this.container.appendChild(this.randomTaskButton);
-        this.container.appendChild(this.randomTaskInput);
+        this.container.appendChild(this.form);
         this.container.appendChild(this.barContainer.container);
 
         this.setId(this.taskIndex);
@@ -177,9 +240,8 @@ class Task {
         this.randomTaskButton.id = `random-task-${this.taskIndex}`;
 
         this.metreSelect.id = `metre-select-task-${taskIndex}`;
-        this.taskNumber.value = `Zadanie ${taskIndex + 1}`;
+        this.taskNumber.innerText = `${taskIndex + 1}`;
 
-        this.tonationLabel.for = `tonation-name-select-task-${taskIndex}`;
         this.tonationNameSelect.id = `tonation-name-select-task-${taskIndex}`;
         this.tonationModeSelect.id = `mode-task-${taskIndex}`;
 
