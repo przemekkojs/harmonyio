@@ -30,6 +30,7 @@ argumenty - quizId, openDate i closeDate
         var nextWeekDay = currentDay.AddDays(7).Date;
 
         var currentHour = DateTime.Now.Hour;
+        var currentMinute = DateTime.Now.Minute;
     }
 
     <div class=" modal-dialog modal-dialog-centered" role="document">
@@ -52,7 +53,7 @@ argumenty - quizId, openDate i closeDate
                     <div class="d-flex flex-row mb-3">
                         <div class="me-3 w-50">
                             <label class="form-label fw-bold">Data otwarcia</label>
-                            <select id="openDateSelect" class="form-select" style="text-overflow: ellipsis;">
+                            <select id="openDateSelect" class="form-select validate" style="text-overflow: ellipsis;">
                                 @foreach (var day in days)
                                 {
                                     <option value="@day.ToString("yyyy-MM-dd")" selected="@(day.Date == currentDay)">
@@ -63,12 +64,7 @@ argumenty - quizId, openDate i closeDate
                         </div>
                         <div class="w-50">
                             <label class="form-label fw-bold">Czas otwarcia</label>
-                            <select class="form-select" id="openHourSelect">
-                                @for (int hour = 0; hour < 24; hour++)
-                                {
-                                    <option value="@hour" selected="@(hour == currentHour)">@($"{hour:D2}:00")</option>
-                                }
-                            </select>
+                            <input type="time" id="openTimeSelect" name="time" class="form-select validate" value="@(currentHour.ToString("D2") + ":" + currentMinute.ToString("D2"))">
                         </div>
                     </div>
 
@@ -76,7 +72,7 @@ argumenty - quizId, openDate i closeDate
                     <div class="d-flex flex-row mb-3">
                         <div class="me-3 w-50">
                             <label class="form-label fw-bold">Data zamknięcia</label>
-                            <select id="closeDateSelect" class="form-select" style="text-overflow: ellipsis;">
+                            <select id="closeDateSelect" class="form-select validate" style="text-overflow: ellipsis;">
                                 @foreach (var day in days)
                                 {
                                     <option value="@day.ToString("yyyy-MM-dd")" selected="@(day.Date == nextWeekDay)">
@@ -87,12 +83,7 @@ argumenty - quizId, openDate i closeDate
                         </div>
                         <div class="w-50">
                             <label class="form-label fw-bold">Czas zamkniecia</label>
-                            <select class="form-select" id="closeHourSelect">
-                                @for (int hour = 0; hour < 24; hour++)
-                                {
-                                    <option value="@hour" selected="@(hour == currentHour)">@($"{hour:D2}:00")</option>
-                                }
-                            </select>
+                            <input type="time" id="closeTimeSelect" name="time" class="form-select validate" value="@(currentHour.ToString("D2") + ":" + currentMinute.ToString("D2"))">
                         </div>
                     </div>
                 </div>
@@ -120,7 +111,7 @@ argumenty - quizId, openDate i closeDate
         nameElement.textContent = quizName;
     });
 
-    publishPopup.querySelectorAll('select').forEach(function (select) {
+    publishPopup.querySelectorAll('.validate').forEach(function (select) {
         select.addEventListener('change', validatePublishButton);
     });
 
@@ -128,14 +119,14 @@ argumenty - quizId, openDate i closeDate
         if (!validatePublishButton()) return;
 
         const openDate = publishPopup.querySelector('#openDateSelect').value;
-        const openHour = publishPopup.querySelector('#openHourSelect').value.padStart(2, '0');
+        const openTime = publishPopup.querySelector('#openTimeSelect').value;
 
         const closeDate = publishPopup.querySelector('#closeDateSelect').value;
-        const closeHour = publishPopup.querySelector('#closeHourSelect').value.padStart(2, '0');
+        const closeTime = publishPopup.querySelector('#closeTimeSelect').value;
 
         // need to be like this because of time zone converts
-        const openDateTimeString = `${openDate}T${openHour}:00:00.000Z`;
-        const closeDateTimeString = `${closeDate}T${closeHour}:00:00.000Z`;
+        const openDateTimeString = `${openDate}T${openTime}:00.000Z`;
+        const closeDateTimeString = `${closeDate}T${closeTime}:00.000Z`;
 
         const callbackName = publishModalButton.getAttribute('data-callback-name');
 
@@ -151,29 +142,29 @@ argumenty - quizId, openDate i closeDate
 
     function validatePublishButton() {
         const openDateSelect = publishPopup.querySelector('#openDateSelect');
-        const openHourSelect = publishPopup.querySelector('#openHourSelect');
+        const openTimeSelect = publishPopup.querySelector('#openTimeSelect');
         const closeDateSelect = publishPopup.querySelector('#closeDateSelect');
-        const closeHourSelect = publishPopup.querySelector('#closeHourSelect');
+        const closeTimeSelect = publishPopup.querySelector('#closeTimeSelect');
 
         const openDate = publishPopup.querySelector('#openDateSelect').value;
-        const openHour = publishPopup.querySelector('#openHourSelect').value.padStart(2, '0');
+        const openTime = publishPopup.querySelector('#openTimeSelect').value;
 
         const closeDate = publishPopup.querySelector('#closeDateSelect').value;
-        const closeHour = publishPopup.querySelector('#closeHourSelect').value.padStart(2, '0');
+        const closeTime = publishPopup.querySelector('#closeTimeSelect').value;
 
-        const openDateTime = new Date(`${openDate}T${openHour}:00`);
-        const closeDateTime = new Date(`${closeDate}T${closeHour}:00`);
+        const openDateTime = new Date(`${openDate}T${openTime}`);
+        const closeDateTime = new Date(`${closeDate}T${closeTime}`);
         const currentDateTime = new Date();
 
         openDateSelect.classList.remove('input-error');
-        openHourSelect.classList.remove('input-error');
+        openTimeSelect.classList.remove('input-error');
         closeDateSelect.classList.remove('input-error');
-        closeHourSelect.classList.remove('input-error');
+        closeTimeSelect.classList.remove('input-error');
 
         let hasError = false;
         if (closeDateTime <= currentDateTime || closeDateTime <= openDateTime) {
             closeDateSelect.classList.add('input-error');
-            closeHourSelect.classList.add('input-error');
+            closeTimeSelect.classList.add('input-error');
             hasError = true;
         }
 

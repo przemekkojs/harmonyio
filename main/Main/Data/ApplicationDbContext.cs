@@ -129,15 +129,29 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Relacja jeden-do-wielu między GroupRequest a ApplicationUser
         modelBuilder.Entity<GroupRequest>()
             .HasOne(gr => gr.User)
-            .WithMany(u => u.Requests)
+            .WithMany(u => u.GroupRequests)
             .HasForeignKey(gr => gr.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Relacja jeden-do-wielu między GroupRequest a GroupRequest
+        // Relacja jeden-do-wielu między GroupRequest a Group
         modelBuilder.Entity<GroupRequest>()
             .HasOne(gr => gr.Group)
-            .WithMany(u => u.Requests)
+            .WithMany(g => g.Requests)
             .HasForeignKey(gr => gr.GroupId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Relacja jeden-do-wielu między QuizRequest a ApplicationUser
+        modelBuilder.Entity<QuizRequest>()
+            .HasOne(qr => qr.User)
+            .WithMany(u => u.QuizRequests)
+            .HasForeignKey(qr => qr.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Relacja jeden-do-wielu między QuizRequest a Quiz
+        modelBuilder.Entity<QuizRequest>()
+            .HasOne(gr => gr.Quiz)
+            .WithMany(q => q.Requests)
+            .HasForeignKey(gr => gr.QuizId)
             .OnDelete(DeleteBehavior.Cascade);
 
         // Relacja jeden-do-wielu między ExerciseResult a MistakeResult

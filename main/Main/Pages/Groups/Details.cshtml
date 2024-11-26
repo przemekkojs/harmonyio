@@ -2,6 +2,13 @@
 @model Main.Pages.GroupDetailsModel
 @using Enumerations
 
+<style>
+    .avatar{
+        width: 24px; 
+        height: 24px; 
+    }
+</style>
+
 <div class="h-100 w-100 d-flex flex-row pb-3">
     <form method="post" asp-page-handler="DeleteUser" id="formForDeleteUser">
         <input type="hidden" asp-for="GroupId" value="@Model.Group.Id" />
@@ -83,9 +90,10 @@
                         }
                         @foreach (var student in Model.Group.Students)
                         {
-                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
-                                id="students-list-element-@(studentIndex)">
+                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2" id="students-list-element-@(studentIndex)">
+                                <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle avatar me-2" style="background-color: @student.AvatarColor;" />
                                 <span class="text-truncate me-2">@(student.FullName)</span>
+                                
                                 @if (Model.IsAdmin)
                                 {
                                     <button type="button" class="ms-auto btn-close" aria-label="Close" data-bs-toggle="modal"
@@ -110,7 +118,8 @@
                             @foreach (var studentRequest in studentRequests)
                             {
                                 <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
-                                    <span class="text-truncate me-2">@(studentRequest.Email)</span>
+                                    <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle avatar me-2" style="background-color: @studentRequest.AvatarColor;" />
+                                    <span class="text-truncate me-2">@(studentRequest.FullName)</span>
                                 </div>
                             }
                         </div>
@@ -147,8 +156,7 @@
 
                     <div class="d-flex flex-column">
                         <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2">
-                            <i class="fas fa-crown icon-sm me-1"></i>
-
+                            <i class="rounded-circle avatar text-white align-items-center justify-content-center d-flex fas fa-crown me-2" style="font-size: 15px; background-color: @Model.Group.MasterUser.AvatarColor;"></i>
                             <span class="text-truncate me-2">@(Model.Group.MasterUser.FullName)</span>
                         </div>
                         @{
@@ -156,8 +164,8 @@
                         }
                         @foreach (var teacher in Model.Group.Teachers)
                         {
-                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2"
-                                id="teachers-list-element-@(teacherIndex)">
+                            <div class="bg-transparent rounded border d-flex flex-row p-2 mb-2" id="teachers-list-element-@(teacherIndex)">
+                                <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle avatar me-2" style="background-color: @teacher.AvatarColor;" />
                                 <span class="text-truncate me-2">@(teacher.FullName)</span>
 
                                 @if (Model.IsMaster)
@@ -183,6 +191,7 @@
                             @foreach (var teacherRequest in teacherRequests)
                             {
                                 <div class="bg-transparent rounded-bottom rounded border d-flex flex-row p-2 mb-2">
+                                    <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle avatar me-2" style="background-color: @teacherRequest.AvatarColor;" />
                                     <span class="text-truncate me-2">@(teacherRequest.FullName)</span>
                                 </div>
                             }

@@ -13,7 +13,7 @@
         currentNavState = NavState.Created;
     else if (currentPageRoute == "/Groups/Index" || currentPageRoute == "/Groups/Details")
         currentNavState = NavState.Groups;
-    else if (currentPageRoute.StartsWith("/Account"))
+    else if (currentPageRoute.StartsWith("/Account") && !currentPageRoute.StartsWith("/Account/Manage"))
         currentNavState = NavState.HiddenTabs;
 }
 

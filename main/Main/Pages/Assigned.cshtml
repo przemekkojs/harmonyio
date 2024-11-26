@@ -3,94 +3,171 @@
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 @using Main.Enumerations
 
-<head>
+@{
+    var quizRequests = Model.AppUser.QuizRequests.ToList();
+}
+
+<head> 
     <link rel="stylesheet" href="~/css/quiz-lists-style.css" /> 
 </head>
 
 <div class="h-100 w-100 d-flex flex-column flex-md-row mb-3">
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow p-3 me-3 mb-3">
-        @if (Model.NotSolvedOpen.Count != 0 || Model.NotSolvedPlanned.Count != 0)
+        @if (Model.NotSolvedOpen.Count != 0 || Model.NotSolvedPlanned.Count != 0 || quizRequests.Count != 0)
         {
+            @if (quizRequests.Count > 0)
+            {
+                <div>
+                    <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
+                        Zaproszenia (@quizRequests.Count)
+                        <a href="#quizRequestsSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="quizRequestsSection"
+                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                            <i class="fas fa-chevron-up icon-md" id="quizRequestsSectionCollapseBtnIcon"></i>
+                        </a>
+                    </div>
+
+                    <div class="collapse show" id="quizRequestsSection">
+                        @foreach (var request in quizRequests)
+                        {
+                            <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden mb-3">
+                                <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                    <div class="fw-bold fs-5 mb-3 text-truncate">@request.Quiz.Name</div>
+
+                                    <div class="d-flex flex-row mb-2">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Twórca:</span>
+                                            @request.Quiz.Creator.FullName
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column ms-auto">
+                                    <!-- Accept Request Button -->
+                                    <form method='get' action="/join">
+                                        <input type="hidden" id="code" name="code" value="@request.Quiz.Code"/>
+                                        <button class="btn-icon" type="submit">
+                                            <i class="fa fa-check icon-sm text-success"></i>
+                                        </button>                            
+                                    </form>
+
+                                    <!-- Decline Request Button -->
+                                    <form method="post" class="mt-auto">
+                                        <input type="hidden" asp-for="RequestId" value="@request.Id" />
+                                        <button class="btn-icon mt-2" type="submit" asp-page-handler="DeclineRequest">
+                                            <i class="fas fa-xmark icon-md text-danger"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+
             @if (Model.NotSolvedOpen.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Do rozwiązania (@Model.NotSolvedOpen.Count)</div>
-                @foreach (var quiz in Model.NotSolvedOpen)
-                {
-                    <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
-                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
-                            <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
-
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <i class="far fa-clock icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Pozostało:</span>
-                                    <span id="to-solve-time-@(quiz.Id)">
-                                        @*FILLED VIA JS*@
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <i class="fas fa-music icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Zadania:</span>
-                                    @quiz.Exercises.Count
-                                </span>
-                            </div>
-                            <div class="d-flex flex-row align-items-center">
-                                <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Twórca:</span>
-                                    @quiz.Creator.FullName
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column h-100" id="solveButtonElement@(quiz.Id)">
-                            <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
-                        </div>
+                <div>
+                    <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
+                        Do rozwiązania (@Model.NotSolvedOpen.Count)
+                        <a href="#toSolveQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="toSolveQuizzesSection"
+                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                            <i class="fas fa-chevron-up icon-md" id="toSolveQuizzesSectionCollapseBtnIcon"></i>
+                        </a>
                     </div>
-                }
+
+                    <div class="collapse show" id="toSolveQuizzesSection">
+                        @foreach (var quiz in Model.NotSolvedOpen)
+                        {
+                            <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
+                                <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                    <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
+
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="far fa-clock icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Pozostało:</span>
+                                            <span id="to-solve-time-@(quiz.Id)">
+                                                @*FILLED VIA JS*@
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="fas fa-music icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Zadania:</span>
+                                            @quiz.Exercises.Count
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i> 
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Twórca:</span>
+                                            @quiz.Creator.FullName
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column" id="solveButtonElement@(quiz.Id)">
+                                    <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             }
 
 
             @if (Model.NotSolvedPlanned.Count > 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zaplanowane (@Model.NotSolvedPlanned.Count)</div>
-                @foreach (var quiz in Model.NotSolvedPlanned)
-                {
-                    <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3" id="plannedElement@(quiz.Id)">
-                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
-                            <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
-
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <i class="far fa-clock icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Dostępny za:</span>
-                                    <span id="future-quiz-time-@(quiz.Id)">
-                                        @*FILLED VIA JS*@
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <i class="fas fa-music icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Zadania:</span>
-                                    @quiz.Exercises.Count
-                                </span>
-                            </div>
-                            <div class="d-flex flex-row align-items-center">
-                                <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Twórca:</span>
-                                    @quiz.Creator.FullName
-                                </span>
-                            </div>
-                        </div>
-                        <div class="d-flex flex-column h-100" id="solveButtonElement@(quiz.Id)">
-                            @* needed for js *@
-                        </div>
+                <div>
+                    <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
+                        Zaplanowane (@Model.NotSolvedPlanned.Count)
+                        <a href="#plannedQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="plannedQuizzesSection"
+                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                            <i class="fas fa-chevron-up icon-md" id="plannedQuizzesSectionCollapseBtnIcon"></i>
+                        </a>
                     </div>
-                }
+
+                    <div class="collapse show" id="plannedQuizzesSection">
+                        @foreach (var quiz in Model.NotSolvedPlanned)
+                        {
+                            <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3" id="plannedElement@(quiz.Id)">
+                                <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                    <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
+
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="far fa-clock icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Dostępny za:</span>
+                                            <span id="future-quiz-time-@(quiz.Id)">
+                                                @*FILLED VIA JS*@
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="fas fa-music icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Zadania:</span>
+                                            @quiz.Exercises.Count
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Twórca:</span>
+                                            @quiz.Creator.FullName
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column" id="solveButtonElement@(quiz.Id)">
+                                    @* needed for js *@
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             }
         }
         else
@@ -111,139 +188,161 @@
         {
             @if (Model.SolvedOpen.Count != 0)
             {
-                <div class="fw-bold fs-4 mb-3">Rozwiązane otwarte (@Model.SolvedOpen.Count)</div>
-                @foreach (var quiz in Model.SolvedOpen)
-                {
-                    Model.GradedQuizes.TryGetValue(quiz.Id, out var quizResult);
-                    <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
-                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
-                            <div class="fw-bold fs-5 text-truncate mb-3">@quiz.Name</div>
-
-                            @if (quizResult != null)
-                            {
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="far fa-calendar icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">Oceniono:</span>
-                                        @quizResult.GradeDate.ToString("dd.MM.yyyy, HH:mm")
-                                    </span>
-                                </div>
-                            }
-
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <i class="far fa-clock icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Pozostało:</span>
-                                    <span id="to-solve-time-@(quiz.Id)">
-                                        @*FILLED VIA JS*@
-                                    </span>
-                                </span>
-                            </div>
-
-                            @if (quizResult == null)
-                            {
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="fas fa-music icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">Zadania:</span>
-                                        @quiz.Exercises.Count
-                                    </span>
-                                </div>
-                            }
-                          
-                            <div class="d-flex flex-row align-items-center">
-                                <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Twórca:</span>
-                                    @quiz.Creator.FullName
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column h-100">
-                            @if (quizResult != null)
-                            {
-                                <div class="fw-bold fs-5 ms-auto mb-auto">
-                                    @(((Grade)(quizResult.Grade!)).AsString())
-                                </div>
-                                <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto">Przeglądaj</a>
-                            }
-                            else
-                            {
-                                <span class="text-truncate mb-auto">Oczekuje na ocenę...</span>
-                                <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-primary ms-auto mb-1"
-                                    id="solveButton@(quiz.Id)">Edytuj</a>
-                            }
-
-                        </div>
+                <div>
+                    <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
+                        Rozwiązane otwarte (@Model.SolvedOpen.Count)
+                        <a href="#solvedOpenQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="solvedOpenQuizzesSection"
+                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                            <i class="fas fa-chevron-up icon-md" id="solvedOpenQuizzesSectionCollapseBtnIcon"></i>
+                        </a>
                     </div>
-                }
+
+                    <div class="collapse show" id="solvedOpenQuizzesSection">
+                        @foreach (var quiz in Model.SolvedOpen)
+                        {
+                            Model.GradedQuizes.TryGetValue(quiz.Id, out var quizResult);
+                            <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
+                                <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                    <div class="fw-bold fs-5 text-truncate mb-3">@quiz.Name</div>
+
+                                    @if (quizResult != null)
+                                    {
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="far fa-calendar icon-sm me-2"></i>
+                                            <span class="text-truncate">
+                                                <span class="fw-bold">Oceniono:</span>
+                                                @quizResult.GradeDate.ToString("dd.MM.yyyy, HH:mm")
+                                            </span>
+                                        </div>
+                                    }
+
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="far fa-clock icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Pozostało:</span>
+                                            <span id="to-solve-time-@(quiz.Id)">
+                                                @*FILLED VIA JS*@
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    @if (quizResult == null)
+                                    {
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-music icon-sm me-2"></i>
+                                            <span class="text-truncate">
+                                                <span class="fw-bold">Zadania:</span>
+                                                @quiz.Exercises.Count
+                                            </span>
+                                        </div>
+                                    }
+                                
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Twórca:</span>
+                                            @quiz.Creator.FullName
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    @if (quizResult != null)
+                                    {
+                                        <div class="fw-bold fs-5 ms-auto mb-auto">
+                                            @(((Grade)(quizResult.Grade!)).AsString())
+                                        </div>
+                                        <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto">Przeglądaj</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-truncate mb-auto">Oczekuje na ocenę...</span>
+                                        <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-primary ms-auto mb-1"
+                                            id="solveButton@(quiz.Id)">Edytuj</a>
+                                    }
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             }
+
 
             @if (Model.Closed.Count != 0)
             {
-                <div class="fw-bold fs-4 mb-3">Zamknięte (@Model.Closed.Count)</div>
-                @foreach (var quiz in Model.Closed)
-                {
-                    Model.GradedQuizes.TryGetValue(quiz.Id, out var quizResult);
-                    <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
-                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
-                            <div class="fw-bold fs-5 text-truncate mb-3">@quiz.Name</div>
-
-                            @if (quizResult != null)
-                            {
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="far fa-calendar icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">Oceniono:</span>
-                                        @quizResult.GradeDate.ToString("dd.MM.yyyy, HH:mm")
-                                    </span>
-                                </div>
-                            } else 
-                            {
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">Zakończono:</span>
-                                        @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
-                                    </span>
-                                </div>
-                            }
-
-                            <div class="d-flex flex-row align-items-center mb-2">
-                                <i class="fas fa-music icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Zadania:</span>
-                                    @quiz.Exercises.Count
-                                </span>
-                            </div>
-                            <div class="d-flex flex-row align-items-center">
-                                <i class="fas fa-user icon-sm me-2"></i>
-                                <span class="text-truncate">
-                                    <span class="fw-bold">Twórca:</span>
-                                    @quiz.Creator.FullName
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column h-100">
-                            @if (quizResult != null)
-                            {
-                                <div class="fw-bold fs-5 ms-auto">
-                                    @(((Grade)(quizResult.Grade!)).AsString())
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-truncate">Oczekuje na ocenę...</span>
-                            }
-
-                            <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
-                        </div>
+                <div>
+                    <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
+                        Zamknięte (@Model.Closed.Count)
+                        <a href="#closedQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="closedQuizzesSection"
+                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                            <i class="fas fa-chevron-up icon-md" id="closedQuizzesSectionCollapseBtnIcon"></i>
+                        </a>
                     </div>
-                }
-            }
 
+                    <div class="collapse show" id="closedQuizzesSection">
+                        @foreach (var quiz in Model.Closed)
+                        {
+                            Model.GradedQuizes.TryGetValue(quiz.Id, out var quizResult);
+                            <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3">
+                                <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                                    <div class="fw-bold fs-5 text-truncate mb-3">@quiz.Name</div>
+
+                                    @if (quizResult != null)
+                                    {
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="far fa-calendar icon-sm me-2"></i>
+                                            <span class="text-truncate">
+                                                <span class="fw-bold">Oceniono:</span>
+                                                @quizResult.GradeDate.ToString("dd.MM.yyyy, HH:mm")
+                                            </span>
+                                        </div>
+                                    } else 
+                                    {
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="far fa-clock icon-sm me-2"></i>
+                                            <span class="text-truncate">
+                                                <span class="fw-bold">Zakończono:</span>
+                                                @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
+                                            </span>
+                                        </div>
+                                    }
+
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="fas fa-music icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Zadania:</span>
+                                            @quiz.Exercises.Count
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Twórca:</span>
+                                            @quiz.Creator.FullName
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    @if (quizResult != null)
+                                    {
+                                        <div class="fw-bold fs-5 ms-auto">
+                                            @(((Grade)(quizResult.Grade!)).AsString())
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-truncate">Oczekuje na ocenę...</span>
+                                    }
+
+                                    <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
         }
         else
         {
@@ -258,6 +357,71 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const quizRequestsElement = document.getElementById('quizRequestsSection');
+        const quizRequestsBtnIcon = document.getElementById('quizRequestsSectionCollapseBtnIcon');
+        const toSolveQuizzesElement = document.getElementById('toSolveQuizzesSection');
+        const toSolveQuizzesBtnIcon = document.getElementById('toSolveQuizzesSectionCollapseBtnIcon');
+        const plannedQuizzesElement = document.getElementById('plannedQuizzesSection');
+        const plannedQuizzesBtnIcon = document.getElementById('plannedQuizzesSectionCollapseBtnIcon');
+        const solvedOpenQuizzesElement = document.getElementById('solvedOpenQuizzesSection');
+        const solvedOpenQuizzesBtnIcon = document.getElementById('solvedOpenQuizzesSectionCollapseBtnIcon');
+        const closedQuizzesElement = document.getElementById('closedQuizzesSection');
+        const closedQuizzesBtnIcon = document.getElementById('closedQuizzesSectionCollapseBtnIcon');
+
+        if (quizRequestsElement != null){
+            quizRequestsElement.addEventListener('show.bs.collapse', () => {
+                quizRequestsBtnIcon.classList.add('fa-chevron-up');
+                quizRequestsBtnIcon.classList.remove('fa-chevron-down');
+            });
+            quizRequestsElement.addEventListener('hide.bs.collapse', () => {
+                quizRequestsBtnIcon.classList.remove('fa-chevron-up');
+                quizRequestsBtnIcon.classList.add('fa-chevron-down');
+            });
+        }
+        if (toSolveQuizzesElement != null){
+            toSolveQuizzesElement.addEventListener('show.bs.collapse', () => {
+                toSolveQuizzesBtnIcon.classList.add('fa-chevron-up');
+                toSolveQuizzesBtnIcon.classList.remove('fa-chevron-down');
+            });
+            toSolveQuizzesElement.addEventListener('hide.bs.collapse', () => {
+                toSolveQuizzesBtnIcon.classList.remove('fa-chevron-up');
+                toSolveQuizzesBtnIcon.classList.add('fa-chevron-down');
+            });
+        }
+        if (plannedQuizzesElement != null){
+            plannedQuizzesElement.addEventListener('show.bs.collapse', () => {
+                plannedQuizzesBtnIcon.classList.add('fa-chevron-up');
+                plannedQuizzesBtnIcon.classList.remove('fa-chevron-down');
+            });
+            plannedQuizzesElement.addEventListener('hide.bs.collapse', () => {
+                plannedQuizzesBtnIcon.classList.remove('fa-chevron-up');
+                plannedQuizzesBtnIcon.classList.add('fa-chevron-down');
+            });
+        }
+        if (solvedOpenQuizzesElement != null){
+            solvedOpenQuizzesElement.addEventListener('show.bs.collapse', () => {
+                solvedOpenQuizzesBtnIcon.classList.add('fa-chevron-up');
+                solvedOpenQuizzesBtnIcon.classList.remove('fa-chevron-down');
+            });
+            solvedOpenQuizzesElement.addEventListener('hide.bs.collapse', () => {
+                solvedOpenQuizzesBtnIcon.classList.remove('fa-chevron-up');
+                solvedOpenQuizzesBtnIcon.classList.add('fa-chevron-down');
+            });
+        }
+        if (closedQuizzesElement != null){
+            closedQuizzesElement.addEventListener('show.bs.collapse', () => {
+                closedQuizzesBtnIcon.classList.add('fa-chevron-up');
+                closedQuizzesBtnIcon.classList.remove('fa-chevron-down');
+            });
+            closedQuizzesElement.addEventListener('hide.bs.collapse', () => {
+                closedQuizzesBtnIcon.classList.remove('fa-chevron-up');
+                closedQuizzesBtnIcon.classList.add('fa-chevron-down');
+            });
+        }
+    });
+</script>
 
 <script>
     // TODO check if timers give correct time, in other screen it was giving less (or more) then it should
@@ -275,7 +439,7 @@
             {
                 <text>{id: "@quiz.Id", type: "to-solve", date: "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")" },</text>
             }
-        ];
+        ]; 
 
         quizzes.forEach(quiz => {
             const elementId = quiz.type === "to-solve"

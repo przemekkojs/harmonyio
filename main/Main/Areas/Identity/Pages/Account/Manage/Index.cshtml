@@ -5,8 +5,13 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
+<div class="w-100 d-flex flex-column gap-2">
+    <a class="btn btn-outline-primary w-100" asp-page="ChangeAvatar">Awatar</a>
+    <a class="btn btn-outline-primary w-100" asp-page="ChangeName">Imię i Nazwisko</a>
+    <a class="btn btn-outline-primary w-100" asp-page="ChangePassword">Zmień Hasło</a>
+</div>
+
+@* <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
         <form id="profile-form" method="post">
@@ -27,4 +32,4 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
+} *@
