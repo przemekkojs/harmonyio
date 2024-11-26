@@ -1,7 +1,8 @@
 ﻿import { FunctionContainer } from "./functionContainer.js"
 
 class Bar {
-    constructor(barContainer, taskIndex, barIndex, maxFunctionsCount = 8) {
+    // TODO: maxFunctionsCount
+    constructor(barContainer, taskIndex, barIndex, maxFunctionsCount = 6) {
         this.taskIndex = taskIndex;
         this.barIndex = barIndex;
         this.maxFunctionsCount = maxFunctionsCount;

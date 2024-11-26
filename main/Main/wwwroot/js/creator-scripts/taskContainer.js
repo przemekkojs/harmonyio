@@ -2,7 +2,7 @@ import { BarContainer } from "./barContainer.js";
 import { parseAccidentalsCountToTonationInfo, parseMetreValuesToMetre, parseTonationToAccidentalsCount } from "../utils.js";
 
 class Task {
-    constructor(taskContainer, taskIndex, maxBars = 16) {
+    constructor(taskContainer, taskIndex, maxBars = 32) {
         this.taskIndex = taskIndex;
         this.maxBars = maxBars;
         this.taskContainer = taskContainer;
@@ -70,6 +70,7 @@ class Task {
         `;
         this.metreSelect.ariaLabel = "Metrum";
         this.metreSelect.className = "form-control bg-white border-secondary";
+        this.metreSelect.value = "2/4";
 
         this.tonationLabel = document.createElement('label');
         this.tonationLabel.innerText = "Tonacja";
@@ -166,6 +167,25 @@ class Task {
         this.container.appendChild(this.barContainer.container);
 
         this.setId(this.taskIndex);
+
+        this.handleChangeMaxBars = this.changeMaxBars.bind(this);
+        this.metreSelect.addEventListener('change', this.handleChangeMaxBars);
+    }
+
+    changeMaxBars() {
+        const value = this.metreSelect.value;
+
+        this.barContainer.bars.forEach(b => {
+            if (value === "3/8") {
+                b.functionContainer.maxFunctionsCount = 6;
+                // TODO:
+                // b.functionContainer.trim();
+            }
+            else {
+                // TODO: Poprawić
+                b.functionContainer.maxFunctionsCount = 6;
+            }
+        });
     }
 
     setId(taskIndex) {
