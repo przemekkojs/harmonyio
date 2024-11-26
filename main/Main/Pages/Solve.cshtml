@@ -35,12 +35,17 @@
         <hr class="mt-0" />
 
         <button id="btn-finish" onclick="submitFormClicked()"
-            class="btn btn-primary btn-std-width mx-auto">Zapisz</button>
+            class="btn btn-primary btn-std-width mx-auto">Zapisz
+        </button>
 
         <a asp-page="Assigned" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
     </div>
 
     <div class="flex-grow-1 w-100 d-flex flex-column bg-white rounded shadow p-3 overflow-auto" id="staff-section-div">
+        <div id="excersise-tonation">
+            @*SET VIA JS*@
+        </div>
+        
         <p id="exercise-question" class="fw-semibold align-items-start mb-3">
             @*SET VIA JS*@
         </p>
@@ -97,30 +102,48 @@
 <script src="~/js/staff-scripts/menu.js"></script>
 <script src="~/js/staff-scripts/sketchSolving.js"></script>
 
-<script>
+<script type="module">
+    import { parseAccidentalsCountToTonationInfo } from "./js/utils.js";
+
     let currentIndex = 0;
 
-    function loadQuestion(index, loadToGrandStaff = true) {
+    window.loadQuestion = function (index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
-            document.getElementById("exercise-question").innerText = questions[index].question;
+            const excersiseTonation = document.getElementById("excersise-tonation");
+            const question = questions[index];
 
-            document.getElementById("exercise-question").style.display = questions[index].question == '' ? 'none' : 'inline-block';
+            const sharpsCount = question.sharpsCount;
+            const flatsCount = question.flatsCount;
+            const minor = question.minor;
+
+            const tonationInfo = parseAccidentalsCountToTonationInfo((sharpsCount, flatsCount, minor));
+            const tonation = `${tonationInfo[0]}-${tonationInfo[1]}`;
+
+            excersiseTonation.innerHTML = `
+                <p><span class="fw-semibold">Tonacja: </span> ${tonation}</p>
+            `;
+
+            document.getElementById("exercise-question").innerText = question.question;
+            document.getElementById("exercise-question").style.display = 
+                question.question == '' ?
+                    'none' :
+                    'inline-block';
 
             if (loadToGrandStaff) {
-                grandStaff.loadFromJson(questions[index], document.querySelector(`input[name="Answers[${index}]"]`).value);
+                grandStaff.loadFromJson(question, document.querySelector(`input[name="Answers[${index}]"]`).value);
             }
 
             generateButtons(index);
         }
     }
 
-    function safeStaffAnswer() {
+    window.safeStaffAnswer = function () {
         let hiddenInput = document.querySelector(`input[name="Answers[${currentIndex}]"]`);
         const staffJson = grandStaff.toJson();
         hiddenInput.value = staffJson;
     }
 
-    function generateButtons(index) {
+    window.generateButtons = function(index) {
         const questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
 
@@ -141,7 +164,7 @@
         }
     }
 
-    function submitFormClicked() {
+    window.submitFormClicked = function() {
         safeStaffAnswer();
         document.getElementById("solve-form").submit();
     }
@@ -149,7 +172,8 @@
     loadQuestion(currentIndex, false);
 
     const closeDate = new Date("@Model.Quiz.CloseDate.ToString("o")");
-    function updateTimer() {
+
+    window.updateTimer = function() {
         const now = new Date();
         const timeRemaining = closeDate - now;
 

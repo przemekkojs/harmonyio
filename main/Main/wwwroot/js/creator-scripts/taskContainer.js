@@ -1,5 +1,6 @@
 import { BarContainer } from "./barContainer.js";
 import { parseAccidentalsCountToTonationInfo, parseMetreValuesToMetre, parseTonationToAccidentalsCount } from "../utils.js";
+import { ParsedFunction } from "./parsedFunction.js";
 
 class Task {
     constructor(taskContainer, taskIndex, maxBars = 16) {
@@ -239,14 +240,16 @@ class Task {
         let lastBar = 0;
 
         taskObject.forEach(parsedFunction => {
-            const barIndex = Number(parsedFunction.BarIndex);
+            const barIndex = parsedFunction.BarIndex != null ?
+                Number(parsedFunction.BarIndex) : 
+                Number(parsedFunction.barIndex);
 
             if (barIndex != lastBar)
                 index = 0;
 
             let barCount = this.barContainer.bars.length;
 
-            while (barIndex >= barCount) {                
+            while (barIndex >= barCount) {
                 this.barContainer.addBar();
                 barCount++;
             }
@@ -254,7 +257,7 @@ class Task {
             const bar = this.barContainer.bars[barIndex];
             const functionCount = bar ?
                 bar.functionContainer.functions.length - 1 :
-                0;
+                0;   
 
             if (index >= functionCount) {
                 bar.functionContainer.addFunction();
@@ -263,23 +266,40 @@ class Task {
             const functionCountInBar = bar.functionContainer.functions.length;
             const newFunction = bar.functionContainer.functions[functionCountInBar - 1];
 
-            if (parsedFunction.Minor != null && parsedFunction.Minor)
+            const minor = parsedFunction.Minor != null ?
+                parsedFunction.Minor :
+                parsedFunction.minor;
+
+            const symbol = parsedFunction.Symbol != null ?
+                parsedFunction.Symbol :
+                parsedFunction.symbol;
+
+            const root = parsedFunction.Root != null ?
+                parsedFunction.Root :
+                parsedFunction.root;
+
+            const position = parsedFunction.Position != null ?
+                parsedFunction.Position :
+                parsedFunction.position;
+
+            const removed = parsedFunction.Removed != null ?
+                parsedFunction.Removed :
+                parsedFunction.removed;
+
+            const added = parsedFunction.Added != null ?
+                parsedFunction.Added :
+                parsedFunction.added;
+
+            if (minor)
                 newFunction.functionCreator.minor.checked = true;
 
-            if (parsedFunction.Symbol != null)
-                newFunction.functionCreator.symbol.value = parsedFunction.Symbol;
+            newFunction.functionCreator.symbol.value = symbol;
+            newFunction.functionCreator.root.value = root;
+            newFunction.functionCreator.position.value = position;
+            newFunction.functionCreator.removed.value = removed;
 
-            if (parsedFunction.Root != null)
-                newFunction.functionCreator.root.value = parsedFunction.Root;
-
-            if (parsedFunction.Position != null)
-                newFunction.functionCreator.position.value = parsedFunction.Position;
-
-            if (parsedFunction.Removed != null)
-                newFunction.functionCreator.removed.value = parsedFunction.Removed;
-
-            if (parsedFunction.Added != null) {
-                parsedFunction.Added.forEach(a => {
+            if (added != null) {
+                added.forEach(a => {
                     const component = a[0];
                     const option = a.length == 1 ? "-" : a[1];
 
@@ -323,7 +343,7 @@ class Task {
         }            
 
         this.randomTaskInput.value = barsValue;        
-        const bars = barsValue; // TODO
+        const bars = barsValue;
         const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
         // Call the backend
@@ -344,7 +364,7 @@ class Task {
         })
         .then(response => response.json())
         .then(data => {
-            const taskResult = JSON.parse(data);
+            const taskResult = JSON.parse(data);            
 
             const exercise = {
                 question: questionText,

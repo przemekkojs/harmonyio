@@ -84,7 +84,6 @@ namespace Main.Pages
             Code = quiz.Code;
             Questions = quiz.Exercises.Select(e => e.Question).ToList();
 
-
             if (triggerSubmit ?? false)
                 return await OnPostSubmit();
 
