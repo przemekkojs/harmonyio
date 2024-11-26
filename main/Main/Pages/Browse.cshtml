@@ -77,6 +77,11 @@
         </div>
 
         <div class="bg-white rounded shadow flex-grow-1 p-3 d-flex flex-column overflow-auto" id="staff-section-div">
+            <div id="playback-area">
+                <a id="play-file" href="#" class="ms-2 btn btn-secondary">Odtwórz</a>
+                <a id="stop-file" href="#" class="ms-2 btn btn-secondary">Stop</a>
+            </div>
+
             <div id="exercise-question-area">
                 <p id="exercise-question" class="m-0 fw-semibold">
                     @*SET VIA JS*@
@@ -123,7 +128,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
@@ -177,6 +181,8 @@
 <script src="~/js/staff-scripts/staff.js"></script>
 <script src="~/js/staff-scripts/sketchGrading.js"></script>
 
+<script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
+
 <script>
     const results = @Json.Serialize(Model.ExerciseResults);
     const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
@@ -191,6 +197,14 @@
 
     function loadQuestion(index, loadToGrandStaff = true) {
         const result = results[index];
+
+        // TODO: Tutaj trzeba brać plik z backendu
+        const file = "/js/midi-player-scripts/MIDI_sample.mid";
+        const midiPlay = document.getElementById('play-file');
+        const midiStop = document.getElementById('stop-file');
+
+        midiPlay.addEventListener('click', () => MIDIjs.play(file));
+        midiStop.addEventListener('click', () => MIDIjs.stop());
 
         if (index >= 0 && index < questions.length) {
             document.getElementById("exercise-number").innerText = index + 1;

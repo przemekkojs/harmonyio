@@ -14,12 +14,17 @@ using Microsoft.EntityFrameworkCore;
 namespace Main.Pages
 {
     // easy access to result data
-    public class ExerciseResultData
+    public record ExerciseResultData
     {
         public int Points { get; set; }
         public int MaxPoints { get; set; } = 10; // Default to 10 if no data
         public string Comment { get; set; } = string.Empty;
         public string Opinion { get; set; } = string.Empty;
+    }
+
+    public record PlayExerciseData
+    {
+        public int ExerciseId { get; set; }
     }
 
     [Authorize]
@@ -42,6 +47,12 @@ namespace Main.Pages
         {
             _repository = repository;
             _userManager = userManager;
+        }
+
+        // TODO: Implementacja
+        public JsonResult OnPostPlayFile([FromBody] PlayExerciseData data)
+        {
+            return new JsonResult(new { success = true });
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
