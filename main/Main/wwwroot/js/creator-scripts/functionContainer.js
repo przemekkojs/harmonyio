@@ -52,6 +52,19 @@ export class FunctionContainer {
         this.container.appendChild(this.addFunctionButton);
     }
 
+    // TODO:
+    trim() {
+        const functionCount = this.functions.length;
+
+        while (functionCount > this.maxFunctionsCount) {
+            const functionIndex = this.functions.length - 1;
+
+            const currentFunction = this.functions[functionIndex];
+            this.functions.splice(functionIndex, 1);
+            this.container.removeChild(currentFunction.functionCreator.container);
+        }
+    }
+
     addFunction() {
         const functionCount = this.functions.length;
 

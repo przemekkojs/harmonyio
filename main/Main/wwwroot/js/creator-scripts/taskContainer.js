@@ -3,7 +3,7 @@ import { parseAccidentalsCountToTonationInfo, parseMetreValuesToMetre, parseTona
 import { ParsedFunction } from "./parsedFunction.js";
 
 class Task {
-    constructor(taskContainer, taskIndex, maxBars = 16) {
+    constructor(taskContainer, taskIndex, maxBars = 32) {
         this.taskIndex = taskIndex;
         this.maxBars = maxBars;
         this.taskContainer = taskContainer;
@@ -91,12 +91,12 @@ class Task {
             <option value="3/8">3/8</option>
             <option value="6/8">6/8</option>
         `;
-        
+        this.metreSelect.value = "2/4";
+              
         metreSection.appendChild(metreLabel);
-        metreSection.appendChild(this.metreSelect);
-        
+        metreSection.appendChild(this.metreSelect);        
         inputRow.appendChild(metreSection);
-
+      
         // Pole "Tonacja"        
         const keySignature = document.createElement('div');
         keySignature.className = 'h-100 d-flex flex-column';
@@ -230,6 +230,25 @@ class Task {
         this.container.appendChild(this.barContainer.container);
 
         this.setId(this.taskIndex);
+
+        this.handleChangeMaxBars = this.changeMaxBars.bind(this);
+        this.metreSelect.addEventListener('change', this.handleChangeMaxBars);
+    }
+
+    changeMaxBars() {
+        const value = this.metreSelect.value;
+
+        this.barContainer.bars.forEach(b => {
+            if (value === "3/8") {
+                b.functionContainer.maxFunctionsCount = 6;
+                // TODO:
+                // b.functionContainer.trim();
+            }
+            else {
+                // TODO: Poprawić
+                b.functionContainer.maxFunctionsCount = 6;
+            }
+        });
     }
 
     setId(taskIndex) {

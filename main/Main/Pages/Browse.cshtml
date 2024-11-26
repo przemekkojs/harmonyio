@@ -90,17 +90,14 @@
 
             @if (Model.Quiz.ShowAlgorithmOpinion)
             {
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="showAlgorithmSolutionSwitch" onchange="switchBetweenSolutions(this)">
+                    <label class="form-check-label" for="showAlgorithmSolutionSwitch">Pokaż rozwiązanie algorytmu</label>
+                </div>
+
                 <div id="opinion">
                     @*SET VIA JS*@
                 </div>
-
-                <div>
-                    <h3>Przykładowe poprawne rozwiązanie</h3>
-
-                    <div id="algorithm-solution" class="flex-grow-1 d-flex flex-row bg-white rounded mt-3">
-                        @*SET VIA JS*@
-                    </div>
-                </div>                
             }
         </div>
     </div>
@@ -182,11 +179,18 @@
 
 <script>
     const results = @Json.Serialize(Model.ExerciseResults);
-    const algorithmSolutions = @Json.Serialize(Model.AlgorithmSolutions);
+    const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
+
+    function switchBetweenSolutions(checkbox) {
+        if(checkbox.checked) {
+            grandStaff.loadFromJson(questions[currentIndex], algorithmSolutions[currentIndex]);
+        } else {
+            grandStaff.loadFromJson(questions[currentIndex], answers[currentIndex]);
+        }
+    }
 
     function loadQuestion(index, loadToGrandStaff = true) {
         const result = results[index];
-        const algorithmSolution = algorithmSolutions[index];
 
         if (index >= 0 && index < questions.length) {
             document.getElementById("exercise-number").innerText = index + 1;
@@ -199,6 +203,11 @@
 
             if (loadToGrandStaff)
                 grandStaff.loadFromJson(questions[index], answers[index]);
+
+            const toggle = document.getElementById("showAlgorithmSolutionSwitch");
+            if (toggle) {
+                toggle.checked = false;
+            }
 
             document.getElementById("points-text").innerText = result.points + " / " + result.maxPoints;
 
@@ -233,7 +242,7 @@
                         </details>`;
                 }                    
 
-                algorithmDiv.replaceChildren();
+                @* algorithmDiv.replaceChildren();
 
                 if (algorithmSolutions !== "") {
                     // TODO: Tutaj ustawić rozwiązanie algorytmu do pięciolinii
@@ -251,7 +260,7 @@
                     inner.className = "text-danger";
 
                     algorithmDiv.appendChild(inner);
-                }                    
+                }                     *@
             }
 
             generateButtons(index);

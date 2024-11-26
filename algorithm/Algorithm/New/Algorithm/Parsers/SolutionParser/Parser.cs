@@ -1,6 +1,7 @@
 ﻿using Algorithm.New.Algorithm.Parsers.NoteParser;
 using Algorithm.New.Music;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Algorithm.New.Algorithm.Parsers.SolutionParser
 {
@@ -168,6 +169,8 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
 
                     if (toAdd != null)
                         jsonNotes.Add(toAdd);
+
+                    voiceIndex++;
                 }
             }
 
@@ -178,10 +181,17 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                 sharpsCount,
                 flatsCount,
                 minor,
-                jsonNotes
+                notes = jsonNotes
             };
 
-            return JsonConvert.SerializeObject(result);
+            // TODO: JAK KURNA ZROBIĆ ŻEBY TE KLUCZE BYŁY słowoSłowo a nie SłowoSłowo
+            JsonSerializerSettings settings = new()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.None
+            };
+
+            return JsonConvert.SerializeObject(result, settings);
         }
     }
 }
