@@ -179,14 +179,16 @@ public class CreatedModel : PageModel
             return RedirectToPage("Error");
         }
 
-        var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
-            u => u.Where(u => u.Email != null && emails.Contains(u.Email))
-        );
+        var (notFoundMails, foundUsers) = await _repository.GetAllUsersByEmailAsync(emails);
 
-        var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
-        var notFoundMails = emails
-                .Where(email => !usersByEmail.ContainsKey(email))
-                .ToList();
+        // var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
+        //     u => u.Where(u => u.Email != null && emails.Contains(u.Email))
+        // );
+
+        // var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
+        // var notFoundMails = emails
+        //         .Where(email => !usersByEmail.ContainsKey(email))
+        //         .ToList();
 
         if (notFoundMails.Count() != 0)
         {
