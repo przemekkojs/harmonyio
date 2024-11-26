@@ -137,8 +137,12 @@ namespace Main.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
+
+                var needsInfoCompletion = false;
+
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
+
                     var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
                     var user = await _userManager.FindByEmailAsync(email);
@@ -154,7 +158,37 @@ namespace Main.Areas.Identity.Pages.Account
                         Email = email
                     };
                 }
-                return Page();
+                else
+                {
+                    needsInfoCompletion = true;
+                }
+
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.GivenName))
+                {
+                    Input.FirstName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+                }
+                else
+                {
+                    needsInfoCompletion = true;
+                }
+
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Surname))
+                {
+                    Input.LastName = info.Principal.FindFirstValue(ClaimTypes.Surname);
+                }
+                else
+                {
+                    needsInfoCompletion = true;
+                }
+
+                if (needsInfoCompletion)
+                {
+                    return Page();
+                }
+                else
+                {
+                    return await OnPostConfirmationAsync(returnUrl);
+                }
             }
         }
 
