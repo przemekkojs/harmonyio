@@ -224,16 +224,16 @@ namespace Main.Areas.Identity.Pages.Account
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
                         
 
-                        // Did find a simpler way to confirm email
-                        await _emailStore.SetEmailConfirmedAsync(user, true, CancellationToken.None);
-                        // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        // var resultConfirmEmail = await _userManager.ConfirmEmailAsync(user, code);
+                        // Did not find a simpler way to confirm email
+                        // this don't work -> await _emailStore.SetEmailConfirmedAsync(user, true, CancellationToken.None);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var resultConfirmEmail = await _userManager.ConfirmEmailAsync(user, code);
 
 
-                        // if (!resultConfirmEmail.Succeeded)
-                        // {
-                        //     return RedirectToPage("/Error");
-                        // }
+                        if (!resultConfirmEmail.Succeeded)
+                        {
+                            return RedirectToPage("/Error");
+                        }
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         return LocalRedirect(returnUrl);
