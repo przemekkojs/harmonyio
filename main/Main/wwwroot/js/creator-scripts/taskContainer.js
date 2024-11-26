@@ -325,6 +325,10 @@ class Task {
                 Number(parsedFunction.BarIndex) : 
                 Number(parsedFunction.barIndex);
 
+            const functionIndex = parsedFunction.VerticalIndex != null ?
+                Number(parsedFunction.VerticalIndex) :
+                Number(parsedFunction.verticalIndex);
+
             if (barIndex != lastBar)
                 index = 0;
 
@@ -336,12 +340,13 @@ class Task {
             }
 
             const bar = this.barContainer.bars[barIndex];
-            const functionCount = bar ?
-                bar.functionContainer.functions.length - 1 :
-                0;   
+            let functionCount = bar ?
+                bar.functionContainer.functions.length :
+                0;
 
-            if (index >= functionCount) {
+            while (functionIndex >= functionCount) {
                 bar.functionContainer.addFunction();
+                functionCount++;
             }
 
             const functionCountInBar = bar.functionContainer.functions.length;
@@ -390,8 +395,6 @@ class Task {
 
             // TODO: Alteracje (Alterations)
             // TODO: Opóźnienia (Suspensions)
-
-            index++;
         });
     }
 
