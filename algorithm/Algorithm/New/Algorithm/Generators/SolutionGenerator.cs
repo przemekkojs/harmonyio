@@ -236,8 +236,10 @@ namespace Algorithm.New.Algorithm.Generators
                 }
             }
         }
-
-        private static List<int> GetRhytmicScheme(int functionsInBar, int metreCount, int metreValue)
+        
+        // public for tests only
+        // TODO: Set to private
+        public static List<int> GetRhytmicScheme(int functionsInBar, int metreCount, int metreValue)
         {
             List<int> result = [];
 

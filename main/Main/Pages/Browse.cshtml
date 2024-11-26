@@ -203,10 +203,11 @@
 
             if (loadToGrandStaff)
                 grandStaff.loadFromJson(questions[index], answers[index]);
-                const toggle = document.getElementById("showAlgorithmSolutionSwitch");
-                if (toggle) {
-                    toggle.checked = false;
-                }
+
+            const toggle = document.getElementById("showAlgorithmSolutionSwitch");
+            if (toggle) {
+                toggle.checked = false;
+            }
 
             document.getElementById("points-text").innerText = result.points + " / " + result.maxPoints;
 
