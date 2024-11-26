@@ -9,6 +9,14 @@
 /algorithm/AlgorithmTests/obj
 /algorithm/AlgorithmTests/Old
 
+/midi/MidiPlayback/.vs
+/midi/MidiPlayback/bin
+/midi/MidiPlayback/obj
+
+/midi/MidiPlaybackTests/.vs
+/midi/MidiPlaybackTests/bin
+/midi/MidiPlaybackTests/obj
+
 /main/Main/.vs
 /main/Main/bin
 /main/Main/obj

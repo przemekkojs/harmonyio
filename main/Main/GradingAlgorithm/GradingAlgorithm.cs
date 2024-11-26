@@ -3,9 +3,6 @@ using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Mistake.Solution;
 using Algorithm.New.Music;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Newtonsoft.Json;
 
 namespace Main.GradingAlgorithm
 {

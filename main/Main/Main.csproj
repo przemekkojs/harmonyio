@@ -48,5 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\algorithm\Algorithm\Algorithm.csproj" />
+    <ProjectReference Include="..\..\midi\MidiPlayback\MidiPlayback.csproj" />
   </ItemGroup>
 </Project>
