@@ -69,7 +69,7 @@
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="text-truncate">
                                             <span class="fw-bold">Wypełniono:</span>
-                                            @Model.QuizesToUsersCompleted[quiz].Item1 / <span id="gradeParticipantsCount@(quiz.Id)">@Model.QuizesToUsersCompleted[quiz].Item2</span>
+                                            @Model.QuizIdsToUsersCompleted[quiz.Id].Item1 / <span id="gradeParticipantsCount@(quiz.Id)">@Model.QuizIdsToUsersCompleted[quiz.Id].Item2</span>
                                         </span>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="text-truncate">
                                             <span class="fw-bold">Wypełniono:</span>
-                                            @Model.QuizesToUsersCompleted[quiz].Item1 / <span id="participantsCount@(quiz.Id)">@Model.QuizesToUsersCompleted[quiz].Item2</span>
+                                            @Model.QuizIdsToUsersCompleted[quiz.Id].Item1 / <span id="participantsCount@(quiz.Id)">@Model.QuizIdsToUsersCompleted[quiz.Id].Item2</span>
                                         </span>
                                     </div>
                                 </div>
@@ -164,7 +164,7 @@
                                         </a>
                                     </div>
 
-                                    @if(@Model.QuizesToUsersCompleted[quiz].Item1 != 0) {
+                                    @if(@Model.QuizIdsToUsersCompleted[quiz.Id].Item1 != 0) {
                                         <div class="d-flex flex-row ms-auto mt-auto">
                                             <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
                                         </div>
@@ -219,7 +219,7 @@
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="text-truncate">
                                             <span class="fw-bold">Przypisani:</span>
-                                            <span id="participantsCount@(quiz.Id)">@Model.QuizesToUsersCompleted[quiz].Item2</span>
+                                            <span id="participantsCount@(quiz.Id)">@Model.QuizIdsToUsersCompleted[quiz.Id].Item2</span>
                                         </span>
                                     </div>
                                 </div>
@@ -277,7 +277,7 @@
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="text-truncate">
                                             <span class="fw-bold">Wypełniono:</span>
-                                            @Model.QuizesToUsersCompleted[quiz].Item1 / @Model.QuizesToUsersCompleted[quiz].Item2
+                                            @Model.QuizIdsToUsersCompleted[quiz.Id].Item1 / @Model.QuizIdsToUsersCompleted[quiz.Id].Item2
                                         </span>
                                     </div>
                                 </div>
