@@ -116,7 +116,9 @@
             const flatsCount = question.flatsCount;
             const minor = question.minor;
 
-            const tonationInfo = parseAccidentalsCountToTonationInfo((sharpsCount, flatsCount, minor));
+            const obj = [sharpsCount, flatsCount, minor];
+
+            const tonationInfo = parseAccidentalsCountToTonationInfo(obj);
             const tonation = `${tonationInfo[0]}-${tonationInfo[1]}`;
 
             excersiseTonation.innerHTML = `
