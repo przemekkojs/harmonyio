@@ -73,6 +73,11 @@ export class FunctionContainer {
 
             this.functions.push(newFunction);
             this.container.insertBefore(newFunction.functionCreator.container, this.addFunctionButton);
+
+            this.bar.barContainer.container.scrollTo({
+                left: this.bar.barContainer.container.scrollWidth,
+                behavior: 'smooth'
+            });
         }        
     }
 

@@ -60,6 +60,11 @@ export class BarContainer {
             this.bars.push(newBar);
 
             this.container.insertBefore(newBar.functionContainer.container, this.addBarButton);
+
+            this.container.scrollTo({
+                left: this.container.scrollWidth,
+                behavior: 'smooth'
+            });
         }      
 
         // If more bars than one were added, show delete button.
