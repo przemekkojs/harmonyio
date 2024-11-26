@@ -1,7 +1,5 @@
 ﻿using Algorithm.New.Utils;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System.Linq;
 
 namespace Algorithm.New.Music
 {
@@ -10,30 +8,89 @@ namespace Algorithm.New.Music
     
     public class ParsedFunction
     {
-        public string Symbol { get; set; }
-        public bool IsMain { get; set; }
-        public bool Minor { get; set; }
-        public string Root { get; set; }
-        public string Position { get; set; }
-        public string Removed { get; set; }
-        public List<string> Added { get; set; }
-        public List<string> Alterations { get; set; }
-        public string BarIndex { get; set; }
-        public string VerticalIndex { get; set; }
+        public bool Minor { get; private set; }
+        public string Symbol { get; private set; }
+        public string Position { get; private set; }
+        public string Root { get; private set; }
+        public string Removed { get; private set; }
+        public List<string> Alterations { get; private set; }
+        public List<string> Added { get; private set; }
+        public int BarIndex { get; private set; }
+        public int VerticalIndex { get; private set; }
 
         [JsonConstructor]
-        public ParsedFunction(bool minor, string symbol, string position, string root, string removed,
-            List<string> alterations, List<string> added, string barIndex, string verticalIndex)
+        public ParsedFunction(
+            bool minor,
+            string symbol,
+            string position,
+            string root,
+            string removed,
+            List<string> alterations,
+            List<string> added,
+            int barIndex,
+            int verticalIndex)
         {
             Minor = minor;
             Symbol = symbol;
             Position = position;
             Root = root;
             Removed = removed;
-            Alterations = alterations;
-            Added = added;
+            Alterations = alterations ?? [];
+            Added = added ?? [];
             BarIndex = barIndex;
             VerticalIndex = verticalIndex;
+        }
+
+        private ParsedFunction()
+        {
+            Symbol = string.Empty;
+            Minor = false;
+            Position = string.Empty;
+            Root = string.Empty;
+            Removed = string.Empty;
+            Alterations = new List<string>();
+            Added = new List<string>();
+            BarIndex = 0;
+            VerticalIndex = 0;
+        }
+
+        public static ParsedFunction CreateFromFunction(Function function)
+        {
+            var result = new ParsedFunction();
+
+            result.Minor = function.Minor;
+            result.Symbol = function.Symbol.ToString();
+            result.Position = function.Position != null ?
+                Component.ComponentTypeToString[function.Position.Type] :
+                string.Empty;
+
+            result.Root = function.Root != null ?
+                Component.ComponentTypeToString[function.Root.Type] :
+                string.Empty;
+
+            result.Removed = function.Removed != null ?
+                Component.ComponentTypeToString[function.Removed.Type] :
+                string.Empty;
+
+            // TODO: Zaimplementować, kiedy alteracje się pojawią w klasie Function
+            result.Alterations = [];
+            result.Added = [];
+
+            foreach (var added in function.Added)
+            {
+                // TODO: Co z '<' w np. 7< czy 6<...
+
+                var toAdd = added != null ?
+                    Component.ComponentTypeToString[added.Type] :
+                    string.Empty;
+
+                result.Added.Add(toAdd); // AddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAddAdd
+            }
+
+            result.BarIndex = function.Index.Bar;
+            result.VerticalIndex = function.Index.Position;
+
+            return result;
         }
     }
 
@@ -89,8 +146,8 @@ namespace Algorithm.New.Music
         {
             Index = new Index()
             {
-                Bar = Convert.ToInt32(parsedFunction.BarIndex),
-                Position = Convert.ToInt32(parsedFunction.VerticalIndex)
+                Bar = parsedFunction.BarIndex,
+                Position = parsedFunction.VerticalIndex
             };
 
             Symbol = parsedFunction.Symbol switch
@@ -120,6 +177,7 @@ namespace Algorithm.New.Music
 
             foreach (var addedString in parsedFunction.Added)
             {
+                // TODO: Co z '<', '>', ...
                 var toAdd = Component.GetByString(addedString);
 
                 if (toAdd != null)
@@ -318,7 +376,7 @@ namespace Algorithm.New.Music
                 }
 
                 // Only one will always remain, so another set of permutations can be added
-                List<List<Component>> substitution = new();
+                List<List<Component>> substitution = [];
 
                 foreach (var componentList in PossibleComponents)
                 {

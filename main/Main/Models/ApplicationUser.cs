@@ -9,25 +9,21 @@ public class ApplicationUser : IdentityUser
 {
     [MaxLength(32), Display(Name = "First Name")]
     public required string FirstName { get; set; }
-    
+
     [MaxLength(32), Display(Name = "Last Name")]
     public required string LastName { get; set; }
     
     public int AvatarColorId { get; set; } = 0;
 
     //FOREIGN KEYS
-
     public ICollection<Quiz> CreatedQuizes = new List<Quiz>();
     public ICollection<Quiz> ParticipatedQuizes = new List<Quiz>();
 
     public ICollection<ExerciseSolution> ExerciseSolutions = new List<ExerciseSolution>();
     public ICollection<QuizResult> QuizResults = new List<QuizResult>();
 
-
     public ICollection<UsersGroup> StudentInGroups { get; set; } = new List<UsersGroup>();
-
     public ICollection<UsersGroup> TeacherInGroups { get; set; } = new List<UsersGroup>();
-
     public ICollection<UsersGroup> MasterInGroups { get; set; } = new List<UsersGroup>();
 
     public ICollection<GroupRequest> GroupRequests { get; set; } = new List<GroupRequest>();
@@ -35,7 +31,6 @@ public class ApplicationUser : IdentityUser
     public ICollection<QuizRequest> QuizRequests { get; set; } = new List<QuizRequest>();
 
     //NOT MAPPED
-
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}";
 

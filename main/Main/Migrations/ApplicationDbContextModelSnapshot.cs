@@ -275,6 +275,9 @@ namespace Main.Migrations
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("ShowAlgorithmOpinion")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
@@ -317,9 +320,6 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("QuizId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("ShowAlgorithmOpinion")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UserId")

@@ -2,7 +2,6 @@
 
 export class Function {
     constructor(functionContainer, functionIndex) {
-        //console.log("Function");
         this.functionContainer = functionContainer;        
         
         this.taskIndex = functionContainer.taskIndex;
@@ -47,7 +46,6 @@ export class Function {
 
 class FunctionCreator {
     constructor(taskIndex, barIndex, functionIndex) {
-        //console.log("FunctionCreator");
         this.id = `x-${taskIndex}-${barIndex}-${functionIndex}`;
 
         this.taskIndex = taskIndex;
@@ -608,7 +606,6 @@ class FunctionCreator {
             alterations, added
         );
 
-        console.log("Success");
         return functionResult;
     }
 

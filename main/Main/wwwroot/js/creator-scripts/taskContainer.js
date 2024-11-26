@@ -1,9 +1,8 @@
 import { BarContainer } from "./barContainer.js";
-import { parseAccidentalsCountToTonationInfo, parseMetreValuesToMetre  } from "../utils.js";
+import { parseAccidentalsCountToTonationInfo, parseMetreValuesToMetre, parseTonationToAccidentalsCount } from "../utils.js";
 
 class Task {
-    constructor(taskContainer, taskIndex, maxBars = 16) {     
-        //console.log("Task");
+    constructor(taskContainer, taskIndex, maxBars = 16) {
         this.taskIndex = taskIndex;
         this.maxBars = maxBars;
         this.taskContainer = taskContainer;
@@ -11,9 +10,21 @@ class Task {
         this.barContainer = new BarContainer(taskContainer, maxBars);
         this.handleRemove = this.taskContainer.removeTask.bind(this.taskContainer, this.taskIndex);
 
+        this.randomTaskButton = document.createElement('input');
+        this.randomTaskButton.type = 'button';
+        this.randomTaskButton.id = `random-task-${this.taskIndex}`;
+        this.randomTaskButton.className = "btn btn-secondary";
+        this.randomTaskButton.title = "Wygeneruj losowe zadanie";
+        this.randomTaskButton.value = "Losowe zadanie";
+
+        this.randomTaskInput = document.createElement('input');
+        this.randomTaskInput.type = 'number';
+        this.randomTaskInput.id = `random-bars-${this.taskIndex}`;
+        this.randomTaskInput.placeholder = "Takty";
+
         // Ukryty input
         this.hiddenInput = document.createElement('input');
-        this.hiddenInput.type = "hidden";        
+        this.hiddenInput.type = "hidden";
 
         // Zadanie
         this.taskNumber = document.createElement('input');
@@ -150,6 +161,8 @@ class Task {
 
         this.container.appendChild(this.hiddenInput);
         this.container.appendChild(this.params);
+        this.container.appendChild(this.randomTaskButton);
+        this.container.appendChild(this.randomTaskInput);
         this.container.appendChild(this.barContainer.container);
 
         this.setId(this.taskIndex);
@@ -157,8 +170,11 @@ class Task {
 
     setId(taskIndex) {
         this.deleteButton.removeEventListener('click', this.handleRemove);
+        this.randomTaskButton.removeEventListener('click', () => this.generate());
 
         this.taskIndex = taskIndex;
+
+        this.randomTaskButton.id = `random-task-${this.taskIndex}`;
 
         this.metreSelect.id = `metre-select-task-${taskIndex}`;
         this.taskNumber.value = `Zadanie ${taskIndex + 1}`;
@@ -179,6 +195,9 @@ class Task {
         this.barContainer.setId(taskIndex);
         this.handleRemove = this.taskContainer.removeTask.bind(this.taskContainer, this.taskIndex);
         this.deleteButton.addEventListener('click', this.handleRemove);
+
+        this.randomTaskButton.addEventListener('click', () => this.generate());
+        this.randomTaskInput.id = `random-bars-${this.taskIndex}`;
     }
 
     getResult() {
@@ -196,6 +215,8 @@ class Task {
 
     // Tutaj wlatuje obiekt zadania
     load(exerciseObject) {
+        this.barContainer.removeAll();
+
         const sharpsCount = exerciseObject.sharpsCount;
         const flatsCount = exerciseObject.flatsCount;
         const minor = exerciseObject.minor;
@@ -218,7 +239,7 @@ class Task {
         let lastBar = 0;
 
         taskObject.forEach(parsedFunction => {
-            const barIndex = parsedFunction.barIndex;
+            const barIndex = Number(parsedFunction.BarIndex);
 
             if (barIndex != lastBar)
                 index = 0;
@@ -231,7 +252,9 @@ class Task {
             }
 
             const bar = this.barContainer.bars[barIndex];
-            const functionCount = bar ? bar.functionContainer.functions.length - 1 : 0;
+            const functionCount = bar ?
+                bar.functionContainer.functions.length - 1 :
+                0;
 
             if (index >= functionCount) {
                 bar.functionContainer.addFunction();
@@ -240,33 +263,103 @@ class Task {
             const functionCountInBar = bar.functionContainer.functions.length;
             const newFunction = bar.functionContainer.functions[functionCountInBar - 1];
 
-            if (parsedFunction.minor)
+            if (parsedFunction.Minor != null && parsedFunction.Minor)
                 newFunction.functionCreator.minor.checked = true;
 
-            if (parsedFunction.symbol != null)
-                newFunction.functionCreator.symbol.value = parsedFunction.symbol;
+            if (parsedFunction.Symbol != null)
+                newFunction.functionCreator.symbol.value = parsedFunction.Symbol;
 
-            if (parsedFunction.root != null)
-                newFunction.functionCreator.root.value = parsedFunction.root;
+            if (parsedFunction.Root != null)
+                newFunction.functionCreator.root.value = parsedFunction.Root;
 
-            if (parsedFunction.position != null)
-                newFunction.functionCreator.position.value = parsedFunction.position;
+            if (parsedFunction.Position != null)
+                newFunction.functionCreator.position.value = parsedFunction.Position;
 
-            if (parsedFunction.removed != null)
-                newFunction.functionCreator.removed.value = parsedFunction.removed;
+            if (parsedFunction.Removed != null)
+                newFunction.functionCreator.removed.value = parsedFunction.Removed;
 
-            parsedFunction.added.forEach(a => {
-                const component = a[0];
-                const option = a.length == 1 ? "-" : a[1];
+            if (parsedFunction.Added != null) {
+                parsedFunction.Added.forEach(a => {
+                    const component = a[0];
+                    const option = a.length == 1 ? "-" : a[1];
 
-                newFunction.functionCreator.createAddedElement(component, option);
-            });
+                    newFunction.functionCreator.createAddedElement(component, option);
+                });
+            }            
 
             // TODO: Alteracje (Alterations)
             // TODO: Opóźnienia (Suspensions)
 
             index++;
         });
+    }
+
+    generate() {
+        const questionText = this.questionInput.value;
+
+        const tonationLetterSelect = this.tonationNameSelect;
+        const modeSelect = this.tonationModeSelect;
+        const metreSelect = this.metreSelect;
+
+        const metreSplitted = metreSelect.value.split('/');
+        const metreCount = metreSplitted[0];
+        const metreValue = metreSplitted[1];
+
+        const tonationString = `${tonationLetterSelect.value}${modeSelect.value}`;
+        const tonationParsed = parseTonationToAccidentalsCount(tonationString);
+        const sharpsCount = tonationParsed[0];
+        const flatsCount = tonationParsed[1];
+        const minor = tonationParsed[2];
+        const maxPoints = Number(this.maxPointsInput.value);
+
+        let barsValue = this.randomTaskInput.value;
+
+        if (barsValue == null || barsValue <= 0) {
+            barsValue = 2;
+        }
+
+        else if (barsValue > 16) {
+            barsValue = 16;
+        }            
+
+        this.randomTaskInput.value = barsValue;        
+        const bars = barsValue; // TODO
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        // Call the backend
+        fetch("/Creator?handler=GenerateTask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "RequestVerificationToken": token
+            },
+            body: JSON.stringify({
+                Bars: bars,
+                MetreValue: metreValue,
+                MetreCount: metreCount,
+                SharpsCount: sharpsCount,
+                FlatsCount: flatsCount,
+                Minor: minor
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const taskResult = JSON.parse(data);
+
+            const exercise = {
+                question: questionText,
+                sharpsCount: Number(sharpsCount),
+                flatsCount: Number(flatsCount),
+                minor: Number(minor),
+                metreValue: Number(metreValue),
+                metreCount: Number(metreCount),
+                maxPoints: Number(maxPoints),
+                task: taskResult
+            };
+
+            this.load(exercise);
+        })
+        .catch(error => console.error('Error:', error));
     }
 }
 
@@ -283,7 +376,7 @@ export class TaskContainer {
         const taskCount = this.tasks.length;
 
         if (taskCount < this.maxTasksCount) {
-            const toAdd = new Task(this, taskCount);
+            const toAdd = new Task(this, taskCount);            
             this.tasks.push(toAdd);
             this.parent.appendChild(toAdd.container);
         }

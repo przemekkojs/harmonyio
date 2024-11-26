@@ -2,7 +2,6 @@
 
 class Bar {
     constructor(barContainer, taskIndex, barIndex, maxFunctionsCount = 8) {
-        //console.log("Bar");
         this.taskIndex = taskIndex;
         this.barIndex = barIndex;
         this.maxFunctionsCount = maxFunctionsCount;
@@ -54,7 +53,7 @@ export class BarContainer {
 
     addBar() {
         const barsLength = this.bars.length;
-
+                
         if (barsLength < this.maxBars) {
             const newBar = new Bar(this, this.taskIndex, barsLength);
             this.bars.push(newBar);
@@ -96,7 +95,7 @@ export class BarContainer {
         }
     }
 
-    setId(taskIndex, startBarIndex=0) {
+    setId(taskIndex, startBarIndex = 0) {
         const barsLength = this.bars.length;
 
         this.addBarButton.removeEventListener('click', this.handleAddBar);
@@ -117,5 +116,6 @@ export class BarContainer {
     removeAll() {
         this.bars = [];
         this.container.replaceChildren();
+        this.container.appendChild(this.addBarButton);
     }
 }

@@ -5,27 +5,22 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
 {
     public class JsonProblem
     {
-        [JsonPropertyName("MetreValue")]
         public int MetreValue { get; set; }
-
-        [JsonPropertyName("MetreCount")]
         public int MetreCount { get; set; }
         public int SharpsCount { get; set; }
         public int FlatsCount { get; set; }
         public string Question { get; set; }
         public int Minor { get; set; }
-
-        [JsonPropertyName("Task")]
-        public List<ParsedFunction> Functions { get; set; }
+        public List<ParsedFunction> Task { get; set; } = [];
 
         [JsonConstructor]
-        public JsonProblem(string question, string metreCount, string metreValue, int sharpsCount, int flatsCount, int minor, List<ParsedFunction> task)
+        public JsonProblem(string question, int metreCount, int metreValue, int sharpsCount, int flatsCount, int minor, List<ParsedFunction> task)
         {
             MetreCount = Convert.ToInt32(metreCount);
             MetreValue = Convert.ToInt32(metreValue);
             SharpsCount = sharpsCount;
             FlatsCount = flatsCount;
-            Functions = task;
+            Task = task ?? [];
             Minor = minor;
             Question = question;
         }

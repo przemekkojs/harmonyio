@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Main.Pages
 {
@@ -43,8 +44,7 @@ namespace Main.Pages
                 query => query
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id))
                     .Include(q => q.Exercises)
-                        .ThenInclude(q => q.ExerciseSolutions
-                            .Where(es => es.UserId == appUser.Id))
+                        .ThenInclude(q => q.ExerciseSolutions.Where(es => es.UserId == appUser.Id))
                     .Include(q => q.QuizResults.Where(qr => qr.UserId == appUser.Id))
                     .Include(q => q.Requests)
             );
@@ -57,18 +57,15 @@ namespace Main.Pages
             var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
             var quizResultExists = quizResult != null && quizResult.Grade != null;
             var quizClosed = quiz.State == Enumerations.QuizState.Closed;
-            var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
-            var quizHasUsers = quiz.Participants != null && quiz.Participants.Count != 0;
-
-            // quiz result exists or quiz is closed and user is participant
-            if ((quizResultExists) || (quizClosed && quizHasUsers))
+            var userIsParticipant = quiz.Participants.Any(p => p.Id == appUser.Id);
+            if (quizResultExists || (quizClosed && userIsParticipant))
                 return RedirectToPage("Browse", new { id = quiz.Id });
 
-            // quiz is closed and user isnt participant
-            if (quizClosed && !quizHasUsers)
+            if (quizClosed && !userIsParticipant)
                 return Forbid();
 
             // TODO redirect to some quiz is not started page, adding this to solve page wil add one big if so i think new page is better
+            var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
             if (quizNotOpen)
             {
                 // also here can check if quiz.State == notStarted (published already) and add user as participant
@@ -78,7 +75,7 @@ namespace Main.Pages
 
             Quiz = quiz;
 
-            if (!quizHasUsers)
+            if (!userIsParticipant)
             {
                 quiz.Participants!.Add(appUser);
                 _repository.Update(Quiz);
@@ -111,37 +108,36 @@ namespace Main.Pages
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == QuizId,
                 query => query
-                    .Include(q => q.QuizResults
-                        .Where(qr => qr.UserId == appUser.Id))
+                    .Include(q => q.QuizResults.Where(qr => qr.UserId == appUser.Id))
                     .Include(q => q.Exercises)
-                    .ThenInclude(e => e.ExerciseSolutions
-                        .Where(es => es.UserId == appUser.Id))
+                        .ThenInclude(e => e.ExerciseSolutions.Where(es => es.UserId == appUser.Id))
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id)));
 
             if (quiz == null)
                 return RedirectToPage("Error");
 
-            var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
-
-            // quiz isnt open or user isnt participant
-            var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
-            var quizHasParticipants = quiz.Participants.Count != 0;
-
-            if (quizNotOpen || !quizHasParticipants)
+            var quizNotStarted = quiz.State == Enumerations.QuizState.NotStarted;
+            var userIsParticipant = quiz.Participants.Any(p => p.Id == appUser.Id);
+            if (quizNotStarted || !userIsParticipant)
                 return Forbid();
 
-            // quiz is graded so show the result
-            if (quizResult != null && quizResult.Grade != null)
+            var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
+            var quizIsGraded = quizResult != null && quizResult.Grade != null;
+            var quizIsClosed = quiz.State == Enumerations.QuizState.Closed;
+            if (quizIsGraded || quizIsClosed)
                 RedirectToPage("Browse", new { id = quiz.Id });
 
             if (Answers.Count != quiz.Exercises.Count)
                 return RedirectToPage("Error");
 
-            var exercises = quiz.Exercises.ToList();
             var userSolutionsMap = quiz.Exercises
-                .SelectMany(e => e.ExerciseSolutions)
-                .ToDictionary(es => es.ExerciseId);
+                .Where(e => e.ExerciseSolutions.Any(es => es.UserId == appUser.Id))
+                .ToDictionary(
+                    e => e.Id,
+                    e => e.ExerciseSolutions.First(es => es.UserId == appUser.Id)
+                );
 
+            var exercises = quiz.Exercises.ToList();
             for (int i = 0; i < quiz.Exercises.Count; i++)
             {
                 var exercise = exercises[i];
@@ -162,7 +158,7 @@ namespace Main.Pages
                 {
                     ExerciseId = exercise.Id,
                     Answer = newAnswer,
-                    UserId = appUser.Id
+                    UserId = appUser.Id,
                 };
 
                 _repository.Add(newSolution);
@@ -174,17 +170,16 @@ namespace Main.Pages
 
                 var exerciseResult = new ExerciseResult
                 {
-                    Comment = string.Empty,
                     Points = 0,
+                    MaxPoints = maxPointsForExercise,
+                    Comment = string.Empty,
                     AlgorithmPoints = algorithmGrade.Item1,
 
-                    MaxPoints = maxPointsForExercise,
                     ExerciseSolution = newSolution,
                     MistakeResults = mistakeResults
                 };
 
                 _repository.Add(exerciseResult);
-                await _repository.SaveChangesAsync();
             }
 
             await _repository.SaveChangesAsync();

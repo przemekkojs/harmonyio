@@ -24,7 +24,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
             int length = stack1.Notes.Count;
 
-            bool currentUp = Interval.IsLower(stack1.Notes[0], stack1.Notes[0]);
+            bool currentUp = Interval.IsLower(stack1.Notes[0], stack2.Notes[0]);
             bool lastUp = currentUp;
 
             for (int index = 1; index < length; index++)
@@ -35,7 +35,9 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 if (note1 == null || note2 == null)
                     continue;
 
-                currentUp = Interval.IsLower(note1, note2);
+                currentUp = 
+                    Interval.IsLower(note1, note2) || 
+                    Interval.Determinant(note1) == Interval.Determinant(note2); // Small fix
 
                 if (currentUp != lastUp)
                     return true;
