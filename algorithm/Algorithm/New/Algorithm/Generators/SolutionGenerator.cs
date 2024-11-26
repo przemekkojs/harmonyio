@@ -1,7 +1,9 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
+using System.Collections.Generic;
 using System.Security;
+using System.Security.AccessControl;
 using System.Transactions;
 using System.Windows.Markup;
 using static System.Net.Mime.MediaTypeNames;
@@ -109,6 +111,13 @@ namespace Algorithm.New.Algorithm.Generators
 
     public static class SolutionGenerator
     {
+        /// <summary>
+        /// Z tej funkcji NALEŻY korzystać, ponieważ jest nieporównywalnie szybsza. Jedyne co, to otrzymujemy pierwsze
+        /// znalezione poprawne rozwiązanie, a nie najlepsze.
+        /// </summary>
+        /// <param name="problem">Problem, na bazie którego będzie generowane rozwiązanie</param>
+        /// <param name="tolerance">Tolerancja dla błędów. Domyślnie = 0</param>
+        /// <returns>Wygenerowane rozwiązanie</returns>
         public static Solution GenerateLinear(Problem problem, int tolerance = 0)
         {
             var functions = problem.Functions;
@@ -184,9 +193,135 @@ namespace Algorithm.New.Algorithm.Generators
                 }
             }
 
-            return new Solution(problem, stacks);
+            var result = new Solution(problem, stacks);
+            Rhytmize(result);
+
+            return result;
         }
 
+        // TODO: Zaimplementować
+        private static void Rhytmize(Solution solution)
+        {
+            Dictionary<int, int> FunctionAmountsInBars = [];
+            Dictionary<int, List<Stack>> StacksInBars = [];
+
+            var metreCount = solution.Problem.Metre.Count;
+            var metreValue = solution.Problem.Metre.Value;
+
+            foreach (var stack in solution.Stacks)
+            {
+                var bar = stack.Index.Bar;
+
+                if (!FunctionAmountsInBars.ContainsKey(bar))
+                    FunctionAmountsInBars[bar] = 0;
+
+                if (!StacksInBars.ContainsKey(bar))
+                    StacksInBars[bar] = [];
+
+                FunctionAmountsInBars[bar]++;
+                StacksInBars[bar].Add(stack);
+            }
+
+            foreach (var key in FunctionAmountsInBars.Keys)
+            {
+                var functionsAmount = FunctionAmountsInBars[key];
+                var scheme = GetRhytmicScheme(functionsAmount, metreCount, metreValue);
+                var stacks = StacksInBars[key];
+
+                for (int stackIndex = 0; stackIndex < stacks.Count; stackIndex++)
+                {
+                    var stack = stacks[stackIndex];
+                    var duration = scheme[stackIndex];
+                    stack.Index.Duration = duration;
+                }
+            }
+        }
+
+        private static List<int> GetRhytmicScheme(int functionsInBar, int metreCount, int metreValue)
+        {
+            List<int> result = [];
+
+            var valueToMultipler = metreValue switch
+            {                
+                4 => 1,
+                8 => 2,                
+                _ => throw new ArgumentException("Invalid metre value")
+            };
+
+            var baseValue = (metreValue * metreCount) / valueToMultipler;
+            result.Add(baseValue);
+
+            for (int index = 0; index < functionsInBar - 1; index++)
+            {
+                var allSame = SameElementsInList(result);
+
+                if (allSame)
+                {
+                    var last = result.Last();
+                    var lastDivided = DivideNote(last, metreValue);
+
+                    result[^1] = lastDivided.Item1; // [^1] to jak [-1] w pythonie
+                    result.Add(lastDivided.Item2);
+                }
+                else
+                {
+                    var maxIndex = result.LastIndexOf(result.Max());
+                    var max = result[maxIndex];
+                    var divided = DivideNote(max, metreValue);
+
+                    result[maxIndex] = divided.Item1;
+                    result.Insert(maxIndex + 1, divided.Item2);
+                }
+            }
+
+            if (result.Count != functionsInBar)
+                throw new Exception("Something went wrong...");
+
+            return result;
+        }
+
+        private static (int, int) DivideNote (int rhytmicValue, int metreValue)
+        {
+            if (rhytmicValue == 12 && metreValue == 8)
+                return (6, 6);
+
+            return rhytmicValue switch
+            {
+                16 => (8, 8),
+                8 => (4, 4),
+                6 => (4, 2),
+                4 => (2, 2),
+                3 => (2, 1),
+                2 => (1, 1),
+                _ => throw new ArgumentException("Invalid rhytmic value")
+            };
+        }
+
+        private static bool SameElementsInList(List<int> list)
+        {
+            if (list.Count == 0)
+                return true;
+
+            var first = list[0];
+
+            foreach (var value in list)
+            {
+                if (first != value)
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Z tej funkcji NIE NALEŻY korzystać, chyba że do celów badawczych. Generuje ona wszystkie możliwe rozwiązania,
+        /// z obcinaniem dla zadanej tolerancji. Ma jednak gwarantowane zwrócenie najlepszego możliwego rozwiązania, jeżeli
+        /// takowie się znajdzie. <br/>
+        /// 
+        /// Funkcja <b>nie jest</b> zaimplementowana do końca, więc na razie proszę NIE RUSZAĆ.
+        /// </summary>
+        /// <param name="problem">Problem, na bazie którego będzie generowane rozwiązanie</param>
+        /// <returns>Najlepsze rozwiązanie.</returns>
         public static Solution Generate(Problem problem)
         {
             List<Stack> stacks = [];

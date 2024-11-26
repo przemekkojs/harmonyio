@@ -6,7 +6,7 @@ namespace Main.Models
 	public class Exercise
 	{
 		public int Id { get; set; }
-		public string Question { get; set; } = "";
+		public string Question { get; set; } = string.Empty;
 		public int MaxPoints { get; set; }
 
 		//FOREIGN KEYS

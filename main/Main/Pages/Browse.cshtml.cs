@@ -1,3 +1,7 @@
+using Algorithm.New.Algorithm.Generators;
+using Algorithm.New.Algorithm.Parsers.NoteParser;
+using Algorithm.New.Algorithm.Parsers.ProblemParser;
+using Algorithm.New.Algorithm.Parsers.SolutionParser;
 using Main.Data;
 using Main.Enumerations;
 using Main.Models;
@@ -24,12 +28,15 @@ namespace Main.Pages
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
 
+        public List<string> AlgorithmSolutions { get; private set; } = [];
         public string Opinion { get; private set; } = "Brak opinii";
-        public string GradeString { get; set; } = "";
+        public string GradeString { get; set; } = string.Empty;
         public Quiz Quiz { get; set; } = null!;
         public List<string> Questions = [];
         public List<string> Answers = [];
         public List<ExerciseResultData> ExerciseResults = [];
+
+        private const string EMPTY_GRADE = "-";
 
         public BrowseModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {
@@ -65,7 +72,6 @@ namespace Main.Pages
             if (quizNotStarted || !userIsParticipant)
                 return Forbid();
 
-
             var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
             if (quizResult == null || quizResult.Grade == null)
             {
@@ -74,7 +80,7 @@ namespace Main.Pages
                     return RedirectToPage("Solve", new { code = quiz.Code });
 
                 // here quiz must be closed so set grade to -
-                GradeString = "-";
+                GradeString = EMPTY_GRADE;
             }
             else
                 GradeString = ((Grade)quizResult.Grade).AsString();
@@ -83,9 +89,13 @@ namespace Main.Pages
             Questions = quiz.Exercises.Select(e => e.Question).ToList();
             Answers = quiz.Exercises
                 .Select(e => e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.Answer ?? string.Empty)
-                .ToList();
+                .ToList();            
 
             var showOpinion = quiz.ShowAlgorithmOpinion;
+
+            if (showOpinion)
+                GenerateExampleSolutions();
+
             ExerciseResults = quiz.Exercises
                 .Select(e => new
                 {
@@ -110,6 +120,30 @@ namespace Main.Pages
                 .ToList();
 
             return Page();
+        }
+
+        private void GenerateExampleSolutions()
+        {
+            foreach (var question in Questions)
+            {
+                try
+                {
+                    var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser
+                        .ParseJsonToProblem(question);
+
+                    var solution = SolutionGenerator.GenerateLinear(problem);
+                    var result = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                        .ParseSolutionToJson(solution);
+
+                    AlgorithmSolutions.Add(result);
+                }
+                catch (Exception)
+                {
+                    var result = string.Empty;
+                    AlgorithmSolutions.Add(result);
+                    continue;
+                }
+            }
         }
     }
 }
