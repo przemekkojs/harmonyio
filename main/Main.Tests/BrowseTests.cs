@@ -221,7 +221,7 @@ public class BrowseModelTests
             var quiz = new Quiz
             {
                 Id = 1,
-                Name = "Quiz closed",
+                Name = "Quiz open",
                 Code = "quiz-code",
                 CreatorId = creatorUser.Id,
                 IsCreated = true,

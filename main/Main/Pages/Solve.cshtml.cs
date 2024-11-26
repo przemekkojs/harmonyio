@@ -61,17 +61,10 @@ namespace Main.Pages
             if (quizResultExists || (quizClosed && userIsParticipant))
                 return RedirectToPage("Browse", new { id = quiz.Id });
 
-            if (quizClosed && !userIsParticipant)
-                return Forbid();
+            var quizNotStarted = quiz.State == Enumerations.QuizState.NotStarted;
 
-            // TODO redirect to some quiz is not started page, adding this to solve page wil add one big if so i think new page is better
-            var quizNotOpen = quiz.State != Enumerations.QuizState.Open;
-            if (quizNotOpen)
-            {
-                // also here can check if quiz.State == notStarted (published already) and add user as participant
-                // this way the quiz will be in Assigned planned section
-                return RedirectToPage("Error");
-            }
+            if ((quizClosed && !userIsParticipant) || quizNotStarted)
+                return Forbid();
 
             Quiz = quiz;
 
@@ -114,18 +107,24 @@ namespace Main.Pages
                     .Include(q => q.Participants.Where(p => p.Id == appUser.Id)));
 
             if (quiz == null)
+            {
                 return RedirectToPage("Error");
+            }
 
             var quizNotStarted = quiz.State == Enumerations.QuizState.NotStarted;
             var userIsParticipant = quiz.Participants.Any(p => p.Id == appUser.Id);
             if (quizNotStarted || !userIsParticipant)
+            {
                 return Forbid();
+            }
 
             var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);
-            var quizIsGraded = quizResult != null && quizResult.Grade != null;
+            var quizResultExists = quizResult != null && quizResult.Grade != null;
             var quizIsClosed = quiz.State == Enumerations.QuizState.Closed;
-            if (quizIsGraded || quizIsClosed)
-                RedirectToPage("Browse", new { id = quiz.Id });
+            if (quizResultExists || quizIsClosed)
+            {
+                return RedirectToPage("Browse", new { id = quiz.Id });
+            }
 
             if (Answers.Count != quiz.Exercises.Count)
                 return RedirectToPage("Error");
