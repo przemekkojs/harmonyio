@@ -157,10 +157,10 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                 {
                     var voice = voiceIndex switch
                     {
-                        0 => "S",
-                        1 => "A",
-                        2 => "T",
-                        _ => "B"
+                        0 => Constants.SOPRANO,
+                        1 => Constants.ALTO,
+                        2 => Constants.TENORE,
+                        _ => Constants.BASS
                     };                   
 
                     var toAdd = NoteParser.Parser

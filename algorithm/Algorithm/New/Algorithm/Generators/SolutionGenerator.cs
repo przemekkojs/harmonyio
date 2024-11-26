@@ -242,16 +242,13 @@ namespace Algorithm.New.Algorithm.Generators
             List<int> result = [];
 
             var valueToMultipler = metreValue switch
-            {
-                1 => 16,
-                2 => 8,
-                4 => 4,
-                8 => 2,
-                16 => 1,
+            {                
+                4 => 1,
+                8 => 2,                
                 _ => throw new ArgumentException("Invalid metre value")
             };
 
-            var baseValue = metreValue * metreCount * valueToMultipler;
+            var baseValue = (metreValue * metreCount) / valueToMultipler;
             result.Add(baseValue);
 
             for (int index = 0; index < functionsInBar - 1; index++)
@@ -283,14 +280,21 @@ namespace Algorithm.New.Algorithm.Generators
             return result;
         }
 
-        // TODO: Implementacja
         private static (int, int) DivideNote (int rhytmicValue, int metreValue)
         {
-            (int, int) divided = rhytmicValue % 2 == 0 ?
-                (rhytmicValue / 2, rhytmicValue / 2) :
-                (rhytmicValue / 2 + 1, 1); // To tylko dla dzielenia 3 na (2, 1)
+            if (rhytmicValue == 12 && metreValue == 8)
+                return (6, 6);
 
-            return (4, 4);
+            return rhytmicValue switch
+            {
+                16 => (8, 8),
+                8 => (4, 4),
+                6 => (4, 2),
+                4 => (2, 2),
+                3 => (2, 1),
+                2 => (1, 1),
+                _ => throw new ArgumentException("Invalid rhytmic value")
+            };
         }
 
         private static bool SameElementsInList(List<int> list)
