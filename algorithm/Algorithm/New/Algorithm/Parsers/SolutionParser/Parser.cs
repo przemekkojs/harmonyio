@@ -131,7 +131,57 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
 
         public static string ParseSolutionToJson(Solution solution)
         {
-            return "";
+            var metre = solution.Problem.Metre;
+            var tonation = solution.Problem.Tonation;
+            var stacks = solution.Stacks;
+
+            var metreValue = metre.Value;
+            var metreCount = metre.Count;
+
+            var sharpsCount = tonation.SharpsCount;
+            var flatsCount = tonation.FlatsCount;
+            var minor = tonation.Mode == Mode.Minor ?
+                0 :
+                1;
+
+            List<JsonNote> jsonNotes = [];
+
+            foreach (var stack in stacks)
+            {
+                var voiceIndex = 0;
+                var rhytmicValue = stack.Index.Duration;
+                var bar = stack.Index.Bar;
+                var vertical = stack.Index.Position;
+
+                foreach (var note in stack.Notes)
+                {
+                    var voice = voiceIndex switch
+                    {
+                        0 => "S",
+                        1 => "A",
+                        2 => "T",
+                        _ => "B"
+                    };                   
+
+                    var toAdd = NoteParser.Parser
+                        .ParseNoteToJsonNote(note, voice, rhytmicValue, bar, vertical);
+
+                    if (toAdd != null)
+                        jsonNotes.Add(toAdd);
+                }
+            }
+
+            var result = new
+            {
+                metreValue,
+                metreCount,
+                sharpsCount,
+                flatsCount,
+                minor,
+                jsonNotes
+            };
+
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

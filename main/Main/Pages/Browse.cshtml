@@ -93,6 +93,14 @@
                 <div id="opinion">
                     @*SET VIA JS*@
                 </div>
+
+                <div>
+                    <h3>Przykładowe poprawne rozwiązanie</h3>
+
+                    <div id="algorithm-solution" class="flex-grow-1 d-flex flex-row bg-white rounded mt-3">
+                        @*SET VIA JS*@
+                    </div>
+                </div>                
             }
         </div>
     </div>
@@ -174,8 +182,12 @@
 
 <script>
     const results = @Json.Serialize(Model.ExerciseResults);
+    const algorithmSolutions = @Json.Serialize(Model.AlgorithmSolutions);
 
     function loadQuestion(index, loadToGrandStaff = true) {
+        const result = results[index];
+        const algorithmSolution = algorithmSolutions[index];
+
         if (index >= 0 && index < questions.length) {
             document.getElementById("exercise-number").innerText = index + 1;
             document.getElementById("exercise-question").innerText = questions[index].question;
@@ -185,29 +197,61 @@
             else
                 document.getElementById('exercise-question-area').classList.remove('d-none');
 
-            if (loadToGrandStaff) {
+            if (loadToGrandStaff)
                 grandStaff.loadFromJson(questions[index], answers[index]);
-            }
-            document.getElementById("points-text").innerText = results[index].points + " / " + results[index].maxPoints;
 
-            const isComment = results[index].comment != '';
-            document.getElementById("commentButton").style.display = isComment ? "inline-block" : "none";
-            document.getElementById("noCommentElement").style.display = isComment ? "none" : "flex";
-            document.getElementById("comment-text").innerText = results[index].comment;
+            document.getElementById("points-text").innerText = result.points + " / " + result.maxPoints;
+
+            const isComment = result.comment != '';
+            document.getElementById("commentButton").style.display = isComment ? 
+                "inline-block" : 
+                "none";
+
+            document.getElementById("noCommentElement").style.display = isComment ? 
+                "none" :
+                "flex";
+
+            document.getElementById("comment-text").innerText = result.comment;
 
             const opinionDiv = document.getElementById("opinion");
+            const algorithmDiv = document.getElementById("algorithm-solution");
+            
             if (opinionDiv) {
-                const opinion = results[index].opinion
+                const opinion = result.opinion;
+
                 if (opinion !== "") {
                     opinionDiv.innerHTML = `
-                    <details>
-                        <summary>Opinia algorytmu</summary>
-                        ${opinion}
-                    </details>
-                    `;
-                } else {
-                    opinionDiv.innerHTML = "";
+                        <details>
+                            <summary>Opinia algorytmu</summary>
+                            ${opinion}
+                        </details>`;
                 }
+                else {
+                    opinionDiv.innerHTML = `
+                        <details>
+                            <summary>Opinia algorytmu</summary>
+                        </details>`;
+                }                    
+
+                algorithmDiv.replaceChildren();
+
+                if (algorithmSolutions !== "") {
+                    // TODO: Tutaj ustawić rozwiązanie algorytmu do pięciolinii
+                    // Kubaaa, ratuuuuj
+
+                    const inner = document.createElement('span');
+                    inner.innerText = "Tu się powinno pojawić proponowane rozwiązanie.";
+                    inner.className = "text-danger";
+
+                    algorithmDiv.appendChild(inner);
+                }
+                else {
+                    const inner = document.createElement('span');
+                    inner.innerText = "Nie udało się załadować rozwiązania.";
+                    inner.className = "text-danger";
+
+                    algorithmDiv.appendChild(inner);
+                }                    
             }
 
             generateButtons(index);

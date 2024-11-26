@@ -1,7 +1,9 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
+using System.Collections.Generic;
 using System.Security;
+using System.Security.AccessControl;
 using System.Transactions;
 using System.Windows.Markup;
 using static System.Net.Mime.MediaTypeNames;
@@ -200,7 +202,111 @@ namespace Algorithm.New.Algorithm.Generators
         // TODO: Zaimplementować
         private static void Rhytmize(Solution solution)
         {
+            Dictionary<int, int> FunctionAmountsInBars = [];
+            Dictionary<int, List<Stack>> StacksInBars = [];
 
+            var metreCount = solution.Problem.Metre.Count;
+            var metreValue = solution.Problem.Metre.Value;
+
+            foreach (var stack in solution.Stacks)
+            {
+                var bar = stack.Index.Bar;
+
+                if (!FunctionAmountsInBars.ContainsKey(bar))
+                    FunctionAmountsInBars[bar] = 0;
+
+                if (!StacksInBars.ContainsKey(bar))
+                    StacksInBars[bar] = [];
+
+                FunctionAmountsInBars[bar]++;
+                StacksInBars[bar].Add(stack);
+            }
+
+            foreach (var key in FunctionAmountsInBars.Keys)
+            {
+                var functionsAmount = FunctionAmountsInBars[key];
+                var scheme = GetRhytmicScheme(functionsAmount, metreCount, metreValue);
+                var stacks = StacksInBars[key];
+
+                for (int stackIndex = 0; stackIndex < stacks.Count; stackIndex++)
+                {
+                    var stack = stacks[stackIndex];
+                    var duration = scheme[stackIndex];
+                    stack.Index.Duration = duration;
+                }
+            }
+        }
+
+        private static List<int> GetRhytmicScheme(int functionsInBar, int metreCount, int metreValue)
+        {
+            List<int> result = [];
+
+            var valueToMultipler = metreValue switch
+            {
+                1 => 16,
+                2 => 8,
+                4 => 4,
+                8 => 2,
+                16 => 1,
+                _ => throw new ArgumentException("Invalid metre value")
+            };
+
+            var baseValue = metreValue * metreCount * valueToMultipler;
+            result.Add(baseValue);
+
+            for (int index = 0; index < functionsInBar - 1; index++)
+            {
+                var allSame = SameElementsInList(result);
+
+                if (allSame)
+                {
+                    var last = result.Last();
+                    var lastDivided = DivideNote(last, metreValue);
+
+                    result[^1] = lastDivided.Item1; // [^1] to jak [-1] w pythonie
+                    result.Add(lastDivided.Item2);
+                }
+                else
+                {
+                    var maxIndex = result.LastIndexOf(result.Max());
+                    var max = result[maxIndex];
+                    var divided = DivideNote(max, metreValue);
+
+                    result[maxIndex] = divided.Item1;
+                    result.Insert(maxIndex + 1, divided.Item2);
+                }
+            }
+
+            if (result.Count != functionsInBar)
+                throw new Exception("Something went wrong...");
+
+            return result;
+        }
+
+        // TODO: Implementacja
+        private static (int, int) DivideNote (int rhytmicValue, int metreValue)
+        {
+            (int, int) divided = rhytmicValue % 2 == 0 ?
+                (rhytmicValue / 2, rhytmicValue / 2) :
+                (rhytmicValue / 2 + 1, 1); // To tylko dla dzielenia 3 na (2, 1)
+
+            return (4, 4);
+        }
+
+        private static bool SameElementsInList(List<int> list)
+        {
+            if (list.Count == 0)
+                return true;
+
+            var first = list[0];
+
+            foreach (var value in list)
+            {
+                if (first != value)
+                    return false;
+            }
+
+            return true;
         }
 
         /// <summary>
