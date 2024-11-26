@@ -35,9 +35,12 @@ namespace Main.GradingAlgorithm
 
             var maxMistakesCount = GetMaxMistakesCount(problem, settings);
             var opinion = GenerateOpinion(checkResult);
-            var mistakesCount = checkResult?.Sum(x => x.Quantity) ?? 0;
+            var mistakesCount = checkResult?.Sum(x => x.Quantity) * 2 ?? 0;
 
-            var algorithmPoints = maxMistakesCount - mistakesCount > 0 ? maxMistakesCount - mistakesCount : 0;
+            var algorithmPoints = maxMistakesCount - mistakesCount > 0 ?
+                maxMistakesCount - mistakesCount :
+                0;
+
             var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
             var points = Convert.ToInt32(pointsPercent * maxPoints / 100);
 
