@@ -4,8 +4,8 @@
     var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.TeacherInGroups).ToList();
     var joinedGroups = Model.AppUser.StudentInGroups.ToList();
 
-    var studentRequests = Model.AppUser.Requests.Where(r => !r.ForTeacher).ToList();
-    var teacherRequests = Model.AppUser.Requests.Where(r => r.ForTeacher).ToList();
+    var studentRequests = Model.AppUser.GroupRequests.Where(r => !r.ForTeacher).ToList();
+    var teacherRequests = Model.AppUser.GroupRequests.Where(r => r.ForTeacher).ToList();
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">

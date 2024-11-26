@@ -125,6 +125,7 @@ public class CreatedModel : PageModel
             q => q
                 .Include(q => q.Participants)
                 .Include(q => q.PublishedToGroup)
+                .Include(q => q.Requests)
         );
 
         // check if user is creator of quiz, if not then he cant assign to this quiz
@@ -205,14 +206,30 @@ public class CreatedModel : PageModel
         );
 
         var existingParticipantIds = quizToAssign.Participants.Select(p => p.Id).ToHashSet();
-        var allNewQuizParticipants = foundUsers
-            .Concat(allUsersFromNewGroups)
+        var allNewQuizParticipants = allUsersFromNewGroups
             .Where(u => !existingParticipantIds.Contains(u.Id))
             .ToHashSet();
 
-        quizToAssign.Participants.AddRange(allNewQuizParticipants);
+        var existingRequestsParticipantsIds = quizToAssign.Requests.Select(r => r.UserId).ToHashSet();
+        var allNewQuizRequestedUsers = foundUsers
+            .Where(u => !existingParticipantIds.Contains(u.Id) && 
+                        !allNewQuizParticipants.Contains(u) &&
+                        !existingRequestsParticipantsIds.Contains(u.Id))
+            .ToHashSet();
 
+        quizToAssign.Participants.AddRange(allNewQuizParticipants);
         _repository.Update(quizToAssign);
+        await _repository.SaveChangesAsync();
+
+        foreach (var user in allNewQuizRequestedUsers)
+        {
+            var request = new QuizRequest
+            {
+                UserId = user.Id,
+                QuizId = quizToAssign.Id,
+            };
+            _repository.Add(request);
+        }
         await _repository.SaveChangesAsync();
 
         return new JsonResult(
@@ -222,7 +239,7 @@ public class CreatedModel : PageModel
                 addedParticipantsCount = allNewQuizParticipants.Count,
                 newGroupIds = newGroups.Select(g => g.Id).ToList()
             }
-            );
+        );
     }
 
     public async Task<IActionResult> OnPostPublish()

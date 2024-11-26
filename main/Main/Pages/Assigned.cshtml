@@ -3,14 +3,61 @@
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 @using Main.Enumerations
 
-<head>
+@{
+    var quizRequests = Model.AppUser.QuizRequests.ToList();
+}
+
+<head> 
     <link rel="stylesheet" href="~/css/quiz-lists-style.css" /> 
 </head>
 
 <div class="h-100 w-100 d-flex flex-column flex-md-row mb-3">
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow p-3 me-3 mb-3">
-        @if (Model.NotSolvedOpen.Count != 0 || Model.NotSolvedPlanned.Count != 0)
+        @if (Model.NotSolvedOpen.Count != 0 || Model.NotSolvedPlanned.Count != 0 || quizRequests.Count != 0)
         {
+            @if (quizRequests.Count > 0)
+            {
+                <div class="fw-bold fs-4 mb-3">Zaproszenia (@quizRequests.Count)</div>
+                @foreach (var request in quizRequests)
+                {
+                    <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden mb-3">
+                        <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
+                            <div class="fw-bold fs-5 mb-3 text-truncate">@request.Quiz.Name</div>
+
+                            <div class="d-flex flex-row mb-2">
+                                <i class="fas fa-user icon-sm me-2"></i>
+                                <span class="text-truncate">
+                                    <span class="fw-bold">Twórca:</span>
+                                    @request.Quiz.Creator.FullName
+                                </span>
+                            </div>
+                        </div>
+
+                        @{
+
+                        }
+
+                        <div class="d-flex flex-column h-100 ms-auto">
+                            <!-- Accept Request Button -->
+                            <form method='get' action="/join">
+                                <input type="hidden" id="code" name="code" value="@request.Quiz.Code"/>
+                                <button class="btn-icon" type="submit">
+                                    <i class="fa fa-check icon-sm text-success"></i>
+                                </button>                            
+                            </form>
+
+                            <!-- Decline Request Button -->
+                            <form method="post" class="mt-auto">
+                                <input type="hidden" asp-for="RequestId" value="@request.Id" />
+                                <button class="btn-icon mt-2" type="submit" asp-page-handler="DeclineRequest">
+                                    <i class="fas fa-xmark icon-md text-danger"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+
             @if (Model.NotSolvedOpen.Count > 0)
             {
                 <div class="fw-bold fs-4 mb-3">Do rozwiązania (@Model.NotSolvedOpen.Count)</div>
@@ -51,7 +98,6 @@
                     </div>
                 }
             }
-
 
             @if (Model.NotSolvedPlanned.Count > 0)
             {

@@ -25,6 +25,7 @@ namespace Main.Models
         public ICollection<ApplicationUser> Participants = new List<ApplicationUser>();
 		public ICollection<QuizResult> QuizResults = new List<QuizResult>();
 		public ICollection<UsersGroup> PublishedToGroup = new List<UsersGroup>();
+		public ICollection<QuizRequest> Requests { get; set; } = new List<QuizRequest>();
 
 		//NOT MAPPED 
 

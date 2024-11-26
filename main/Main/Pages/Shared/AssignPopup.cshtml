@@ -105,7 +105,7 @@ przypadku niepowodzenia
                         </div>
                     </div>
 
-                    <div id="assignValidationText" class="text-danger mx-3 mt-3 d-none">
+                    <div id="assignValidationText" class="text-danger mx-3 mb-3 d-none">
                         Niektórzy z podanych użytkowników nie istnieją!
                     </div>
                 </div>
@@ -175,6 +175,7 @@ przypadku niepowodzenia
         emailsNumber.innerHTML = "(0)";
         emailInput.value = "";
         emailInput.classList.remove("input-error");
+        validationText.classList.add('d-none');
     }
 
     assignSaveButton.addEventListener('click', async function (event) {

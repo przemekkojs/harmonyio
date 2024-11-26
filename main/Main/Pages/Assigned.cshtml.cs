@@ -23,15 +23,29 @@ public class AssignedModel : PageModel
     public List<Quiz> Closed = [];
     public Dictionary<int, QuizResult> GradedQuizes = [];
 
+    [BindProperty]
+    public int RequestId { get; set; }
+
     public AssignedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
-        _repository = repository;
+        _repository = repository; 
     }
 
     public async Task<IActionResult> OnGetAsync()
     {
         var appUser = await _userManager.GetUserAsync(User);
+        if (appUser == null)
+        {
+            return Forbid();
+        }
+
+        appUser = await _repository.GetAsync<ApplicationUser>(
+            au => au.Id == appUser.Id,
+            au => au.Include(u => u.QuizRequests)
+                        .ThenInclude(qr => qr.Quiz)
+                            .ThenInclude(q => q.Creator)
+        );
         if (appUser == null)
         {
             return Forbid();
@@ -82,5 +96,25 @@ public class AssignedModel : PageModel
             }
         }
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostDeclineRequest()
+    {
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Forbid();
+        }
+
+        var quizRequest = await _repository.GetAsync<QuizRequest>(qr => qr.Id == RequestId);
+        if (quizRequest == null)
+        {
+            return Forbid();
+        }
+
+        _repository.Delete(quizRequest);
+        await _repository.SaveChangesAsync();
+
+        return RedirectToPage();
     }
 }

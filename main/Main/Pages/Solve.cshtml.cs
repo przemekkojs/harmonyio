@@ -46,6 +46,7 @@ namespace Main.Pages
                         .ThenInclude(q => q.ExerciseSolutions
                             .Where(es => es.UserId == appUser.Id))
                     .Include(q => q.QuizResults.Where(qr => qr.UserId == appUser.Id))
+                    .Include(q => q.Requests)
             );
 
             if (quiz == null)
@@ -79,8 +80,17 @@ namespace Main.Pages
 
             if (!quizHasUsers)
             {
-                quiz.Participants.Add(appUser);
+                quiz.Participants!.Add(appUser);
                 _repository.Update(Quiz);
+
+                foreach (var request in quiz.Requests)
+                {
+                    if (request.UserId == appUser.Id)
+                    {
+                        _repository.Delete(request);
+                    }
+                }
+
                 await _repository.SaveChangesAsync();
             }
 

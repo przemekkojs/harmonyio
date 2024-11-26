@@ -30,7 +30,9 @@ public class ApplicationUser : IdentityUser
 
     public ICollection<UsersGroup> MasterInGroups { get; set; } = new List<UsersGroup>();
 
-    public ICollection<GroupRequest> Requests { get; set; } = new List<GroupRequest>();
+    public ICollection<GroupRequest> GroupRequests { get; set; } = new List<GroupRequest>();
+    
+    public ICollection<QuizRequest> QuizRequests { get; set; } = new List<QuizRequest>();
 
     //NOT MAPPED
 
