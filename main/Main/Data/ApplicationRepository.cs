@@ -65,6 +65,30 @@ public class ApplicationRepository : IRepository
         await context.SaveChangesAsync();
     }
 
+
+    public async Task<string> GenerateUniqueCodeAsync()
+    {
+        string code;
+        do
+        {
+            code = CodeGeneration();
+        } while (await CodeExistsInDatabaseAsync(code));
+
+        return code;
+    }
+
+    private async Task<bool> CodeExistsInDatabaseAsync(string code)
+    {
+        return await context.Set<Quiz>().AnyAsync(e => e.Code == code);
+    }
+
+    private static string CodeGeneration()
+    {
+        string path = Path.GetRandomFileName();
+        path = path.Replace(".", "");
+        return path[..6];
+    }
+    
     public async Task<(List<string>, List<ApplicationUser>)> GetAllUsersByEmailAsync(ICollection<string> emails, Func<IQueryable<ApplicationUser>, IQueryable<ApplicationUser>>? modifier = null)
     {
         if (emails == null || emails.Count == 0)
