@@ -186,7 +186,8 @@ namespace Main.Pages
                 quiz = new Quiz
                 {
                     Name = QuizName,
-                    CreatorId = currentUser.Id
+                    CreatorId = currentUser.Id,
+                    Code = await _repository.GenerateUniqueCodeAsync()
                 };
 
                 _repository.Add(quiz);
@@ -265,6 +266,7 @@ namespace Main.Pages
                     Name = QuizName,
                     CreatorId = currentUser.Id,
                     IsCreated = true,
+                    Code = await _repository.GenerateUniqueCodeAsync(),
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
                     Participants = new List<ApplicationUser>() { currentUser },
