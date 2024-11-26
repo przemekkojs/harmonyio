@@ -15,6 +15,12 @@ public class ApplicationUser : IdentityUser
     
     public int AvatarColorId { get; set; } = 0;
 
+    public ApplicationUser()
+    {
+        var random = new Random();
+        AvatarColorId = random.Next(PossibleAvatarColors.Length);
+    }
+
     //FOREIGN KEYS
     public ICollection<Quiz> CreatedQuizes = new List<Quiz>();
     public ICollection<Quiz> ParticipatedQuizes = new List<Quiz>();
