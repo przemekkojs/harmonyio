@@ -36,6 +36,7 @@ public class JoinModel : PageModel
                 .Include(q => q.Creator)
                 .Include(q => q.Exercises)
                 .Include(q => q.Participants)
+                .Include(q => q.Requests)
         );
 
         if (quiz == null)
@@ -51,8 +52,17 @@ public class JoinModel : PageModel
         {
             quiz.Participants.Add(appUser);
             _repository.Update(Quiz);
-            await _repository.SaveChangesAsync();
         }
+
+        foreach (var request in quiz.Requests)
+        {
+            if (request.UserId == appUser.Id)
+            {
+                _repository.Delete(request);
+            }
+        }
+        
+        await _repository.SaveChangesAsync();
 
         return Page();
     }

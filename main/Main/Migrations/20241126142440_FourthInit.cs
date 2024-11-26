@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Main.Migrations
 {
     /// <inheritdoc />
-    public partial class ThirdInit : Migration
+    public partial class FourthInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,7 @@ namespace Main.Migrations
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
                     LastName = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
+                    AvatarColorId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -243,6 +244,32 @@ namespace Main.Migrations
                         column: x => x.QuizId,
                         principalTable: "Quizes",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizRequest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    QuizId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizRequest", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuizRequest_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuizRequest_Quizes_QuizId",
+                        column: x => x.QuizId,
+                        principalTable: "Quizes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -544,6 +571,16 @@ namespace Main.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuizRequest_QuizId",
+                table: "QuizRequest",
+                column: "QuizId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizRequest_UserId",
+                table: "QuizRequest",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_QuizResults_QuizId",
                 table: "QuizResults",
                 column: "QuizId");
@@ -596,6 +633,9 @@ namespace Main.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuizParticipants");
+
+            migrationBuilder.DropTable(
+                name: "QuizRequest");
 
             migrationBuilder.DropTable(
                 name: "UserGroup");

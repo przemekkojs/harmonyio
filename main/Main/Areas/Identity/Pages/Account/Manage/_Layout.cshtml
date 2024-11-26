@@ -1,4 +1,11 @@
-﻿@{
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+    var currentPageRoute = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+}
+
+@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
     {
         Layout = parentLayout.ToString();
@@ -9,20 +16,25 @@
     }
 }
 
-<h1>Manage your account</h1>
+<div class="d-flex justify-content-center" style="min-height: 100%;"> 
+    <div class="bg-white rounded shadow d-flex flex-column align-items-center p-3 mb-3 position-relative" style="width: 400px;">
+        @if (!currentPageRoute.EndsWith("/Index"))
+        {
+            <a asp-page="Index" class="text-decoration-none text-dark position-absolute d-flex align-items-center justify-content-center border-0" 
+                style="top: 1rem; left: 1rem;">
+                <i class="fas fa-chevron-left icon-lg"></i>
+            </a>
+        }
 
-<div>
-    <h2>Change your account settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-            @RenderBody()
-        </div>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; background-color: @currentUser!.AvatarColor;" />
+
+        <div class="fw-semibold fs-4 mt-2">@currentUser?.FullName</div>
+        <div class="fw-light small mb-4" style="margin-top: -4px;">Harmony.io</div>
+
+        @RenderBody()
     </div>
 </div>
+
 
 @section Scripts {
     @RenderSection("Scripts", required: false)

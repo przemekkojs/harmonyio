@@ -53,7 +53,7 @@ namespace Main.Pages
                         .ThenInclude(g => g.Students)
                     .Include(u => u.MasterInGroups)
                         .ThenInclude(g => g.Students)
-                    .Include(u => u.Requests)
+                    .Include(u => u.GroupRequests)
                         .ThenInclude(r => r.Group)
                         .ThenInclude(g => g.MasterUser)
                     .AsSplitQuery()
@@ -189,7 +189,7 @@ namespace Main.Pages
             var user = await _repository.GetAsync<ApplicationUser>(
                 filter: u => u.Id == currentUser.Id,
                 modifier: u => u
-                    .Include(u => u.Requests)
+                    .Include(u => u.GroupRequests)
                         .ThenInclude(r => r.Group)
                     .Include(u => u.StudentInGroups)
                     .Include(u => u.TeacherInGroups));

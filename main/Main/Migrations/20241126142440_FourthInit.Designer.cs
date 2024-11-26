@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241125221720_ThirdInit")]
-    partial class ThirdInit
+    [Migration("20241126142440_FourthInit")]
+    partial class FourthInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace Main.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AvatarColorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -283,6 +286,28 @@ namespace Main.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Quizes");
+                });
+
+            modelBuilder.Entity("Main.Models.QuizRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuizId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuizRequest");
                 });
 
             modelBuilder.Entity("Main.Models.QuizResult", b =>
@@ -578,7 +603,7 @@ namespace Main.Migrations
                         .IsRequired();
 
                     b.HasOne("Main.Models.ApplicationUser", "User")
-                        .WithMany("Requests")
+                        .WithMany("GroupRequests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -607,6 +632,25 @@ namespace Main.Migrations
                         .IsRequired();
 
                     b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("Main.Models.QuizRequest", b =>
+                {
+                    b.HasOne("Main.Models.Quiz", "Quiz")
+                        .WithMany("Requests")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Main.Models.ApplicationUser", "User")
+                        .WithMany("QuizRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Main.Models.QuizResult", b =>
@@ -740,11 +784,13 @@ namespace Main.Migrations
 
                     b.Navigation("ExerciseSolutions");
 
+                    b.Navigation("GroupRequests");
+
                     b.Navigation("MasterInGroups");
 
-                    b.Navigation("QuizResults");
+                    b.Navigation("QuizRequests");
 
-                    b.Navigation("Requests");
+                    b.Navigation("QuizResults");
                 });
 
             modelBuilder.Entity("Main.Models.Exercise", b =>
@@ -767,6 +813,8 @@ namespace Main.Migrations
                     b.Navigation("Exercises");
 
                     b.Navigation("QuizResults");
+
+                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("Main.Models.QuizResult", b =>
