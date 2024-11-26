@@ -141,8 +141,6 @@ namespace Main.Areas.Identity.Pages.Account
                 {
                     var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
-                    email = _userManager.NormalizeEmail(email);
-
                     var user = await _userManager.FindByEmailAsync(email);
 
                     if (user != null)
@@ -178,7 +176,7 @@ namespace Main.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
 
-                var email = _userManager.NormalizeEmail(Input.Email);
+                var email = Input.Email;
 
                 await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, email, CancellationToken.None);
@@ -190,16 +188,18 @@ namespace Main.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                        
 
-                        // Did not find simpler way to confirm email
+                        // Did find a simpler way to confirm email
+                        await _emailStore.SetEmailConfirmedAsync(user, true, CancellationToken.None);
+                        // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        // var resultConfirmEmail = await _userManager.ConfirmEmailAsync(user, code);
 
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                        var resultConfirmEmail = await _userManager.ConfirmEmailAsync(user, code);
-                        if (!resultConfirmEmail.Succeeded)
-                        {
-                            return RedirectToPage("/Error");
-                        }
+                        // if (!resultConfirmEmail.Succeeded)
+                        // {
+                        //     return RedirectToPage("/Error");
+                        // }
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         return LocalRedirect(returnUrl);

@@ -261,32 +261,27 @@ namespace Main.Pages
                 .Select(e => e.Trim())
                 .ToHashSet();
 
-            var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
-                u => u.Where(u => u.Email != null && emails.Contains(u.Email))
-            );
+            // var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
+            //     u => u.Where(u => u.Email != null && emails.Contains(u.Email))
+            // );
 
-            HashSet<string> wrongEmails = new HashSet<string>();
+            // HashSet<string> wrongEmails = new HashSet<string>();
 
-            var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
-            var notFoundMails = emails.Except(usersByEmail.Keys.Select(e => e));
+            // var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
+            // var notFoundMails = emails.Except(usersByEmail.Keys.Select(e => e));
 
-            wrongEmails.AddRange(notFoundMails);
+            // wrongEmails.AddRange(notFoundMails);
+
+            var (wrongEmails, foundUsers) = await _repository.GetAllUsersByEmailAsync(emails);
 
             // check if users are already added to group
             if (AsAdmins)
             {
-                var addedTeachersEmails = group.Teachers.Where(u => usersByEmail.ContainsKey(u.Email!)).Select(u => u.Email!);
-                wrongEmails.AddRange(addedTeachersEmails);
-
-                if (usersByEmail.ContainsKey(appUser.Email!))
-                {
-                    wrongEmails.Add(appUser.Email!);
-                }
+                wrongEmails.AddRange(group.Teachers.Where(foundUsers.Contains).Select(u => u.Email!));
             }
             else
             {
-                var addedStudents = group.Students.Where(u => usersByEmail.ContainsKey(u.Email!)).Select(u => u.Email!);
-                wrongEmails.AddRange(addedStudents);
+                wrongEmails.AddRange(group.Students.Where(foundUsers.Contains).Select(u => u.Email!));
             }
 
             // check if users have request sent 
@@ -294,8 +289,10 @@ namespace Main.Pages
                 gr => gr
                     .Where(gr => gr.GroupId == GroupId && gr.ForTeacher == AsAdmins)
                     .Include(gr => gr.User)
-                )).Where(gr => usersByEmail.ContainsKey(gr.User.Email!))
-                .Select(gr => gr.User.Email!);
+                ))
+                .Select(gr => gr.User.Email!)
+                .Where(emails.Contains);
+            
             wrongEmails.AddRange(requestSentEmails);
 
             if (wrongEmails.Count() != 0)
