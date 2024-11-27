@@ -18,6 +18,8 @@ namespace Algorithm.New.Utils
 
     public static class Interval
     {
+        private const int OCTAVE_SEMITONES = 12;
+
         public static readonly Dictionary<string, int> NoteSemitones = new()
         {
             { "C", 0 }, { "Dbb", 0 }, { "B#", 0 },
@@ -49,11 +51,18 @@ namespace Algorithm.New.Utils
          * 11:  7<  8>
          */
 
-        private static readonly Dictionary<int, List<IntervalName>> _intervalNames = new()
+        // To działa tak:
+        // Klucz główny daje nam listę wszystkich możliwych interwałów o danej liczbie półtonów
+        // Klucze w liście dają nam informację, który interwał wybrać, w zależności jaki biały interwał wyjdzie
+        // Czyli mamy <semitonesReal, [(semitonesWhite1, name1), (semitonesWhite2, name2), ...]
+        // Niektóre są podwójnie, bo np. w przypadku tercji zmniejszonej (DiminishedThird), jako biały interwał
+        // możemy dostać albo tercję wielką (np. dla tercji zmniejszonej <C#, Eb> mamy biały interwał <C, E> = tercja wielka (MajorThird),
+        // a dla tercji zmniejszonej <B, Db> mamy biały interwał <B, D> = tercja mała (MinorThird)
+        private static readonly Dictionary<int, List<(int, IntervalName)>> _intervalNames = new()
         {
-            { 0, [IntervalName.Unisono, IntervalName.DiminishedSecond] },
-            { 1, [IntervalName.AugmentedUnisono, IntervalName.MinorSecond] },
-            { 2, [IntervalName.MajorSecond, IntervalName.DiminishedThird] },
+            { 0, [(0, IntervalName.Unisono), (2, IntervalName.DiminishedSecond)] },
+            { 1, [(0, IntervalName.AugmentedUnisono), (1, IntervalName.MinorSecond), (2, IntervalName.MinorSecond)] },
+            { 2, [(2, IntervalName.MajorSecond), (3, IntervalName.DiminishedThird), (4, IntervalName.DiminishedThird)] },
             { 3, [] },
             { 4, [] },
             { 5, [] },
@@ -146,22 +155,21 @@ namespace Algorithm.New.Utils
             var octave2 = note2.Octave;
 
             var tmp1 = new Note(whiteName1, octave1);
-            var tmp2 = new Note(whiteName2, octave2);
+            var tmp2 = new Note(whiteName2, octave2);            
 
-            var semitonesReal = SemitonesBetween(note1, note2);
-            var semitonesWhite = SemitonesBetween(tmp1, tmp2);            
+            var semitonesReal = SemitonesBetween(note1, note2) % OCTAVE_SEMITONES;
+            var semitonesWhite = SemitonesBetween(tmp1, tmp2) % OCTAVE_SEMITONES;            
 
             var possibleReal = _intervalNames[semitonesReal];
             var whiteInterval = _basicIntervals[semitonesWhite];
 
-            var whiteIndex = possibleReal
-                .IndexOf(whiteInterval);
+            var matching = possibleReal
+                .Where(x => x.Item2 == whiteInterval)
+                .First();
 
-            var diff = semitonesReal - semitonesWhite;
-            var realIndex = whiteIndex - diff;
-            var real = possibleReal[realIndex];
+            var matchingName = matching.Item2;
 
-            return real;
+            return matchingName;
         }
     }
 }
