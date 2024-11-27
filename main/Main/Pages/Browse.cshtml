@@ -259,13 +259,14 @@
 
             generateButtons(index);            
 
-            midiPlay.addEventListener('click', () => midiPlay(index));
+            midiPlay.addEventListener('click', () => playTask(index));
             midiStop.addEventListener('click', () => MIDIjs.stop());
         }
     }
 
-    async function midiPlay(index) {
+    async function playTask(index) {
         const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        console.log("abc");
 
         try {
             const response = await fetch('/Browse?handler=PlayFile', {
@@ -275,27 +276,37 @@
                     "RequestVerificationToken": token
                 },
                 body: JSON.stringify({
-                    SolutionIndex: index
+                    SolutionIndex: index,
+                    Task: algorithmSolutions[index]
                 })
-            });
-
-            console.log("Response", response);
-
-            if (response.ok) {
-                const contentType = response.headers.get('Content-Type');
-
-                if (contentType && contentType.includes("application/json")) {
-                    const result = await response.json();
-                    console.log(result);
-                    // TODO: Jakoś sparsować byte[] na MIDI
-
-                    if (result.success == true) {
-                        MIDIjs.play(result);
-                    }
-                }
-            }
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const reader = new FileReader();
+                reader.onload = function (e) { MIDIjs.play(e.target.result); };                
+                reader.readAsDataURL(blob);                
+            })
+            .catch(error => console.error('Error fetching MIDI file:', error));
         }
         catch (error) { console.error(error) }
+    }
+
+    function stringToArrayBuffer(str) {
+        const byteArray = new Uint8Array(str.length);
+        for (let i = 0; i < str.length; i++) {
+            byteArray[i] = str.charCodeAt(i);
+        }
+        return byteArray.buffer;
+    }
+
+    function base64ToArrayBuffer(base64) {
+        const binaryString = atob(base64);
+        const arrayBuffer = new ArrayBuffer(binaryString.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryString.length; i++) {
+            uint8Array[i] = binaryString.charCodeAt(i);
+        }
+        return arrayBuffer;
     }
 
     function generateButtons(index) {
