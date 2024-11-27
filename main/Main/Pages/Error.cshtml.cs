@@ -8,20 +8,16 @@ namespace Main.Pages
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel
     {
+        private const string DEFAULT_ERROR_MESSAGE = "Podczas przetwarzania twojego zapytania wystąpił błąd. Strona do której się odwołujesz nie istnieje lub nie masz do niej dostępu.";
+
+        public string ErrorMessage { get; set; } = null!;
+
         public string? RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
-        private readonly ILogger<ErrorModel> _logger;
-
-        public ErrorModel(ILogger<ErrorModel> logger)
-        {
-            _logger = logger;
-        }
-
-        public void OnGet()
+        public void OnGet(string? errorMessage)
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            ErrorMessage = errorMessage ?? DEFAULT_ERROR_MESSAGE;
         }
     }
 
