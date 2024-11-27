@@ -83,11 +83,6 @@
                                                             protocol: Request.Scheme);
 
                                         <div class="d-flex flex-row">
-                                            @* TODO: Tutaj jest kod QR. Trzeba zrobić, żeby ten popup działał. Skrypt generujący
-                                               Kod QR działa, jest w QRCodePopup.cshtml
-                                            *@
-                                            <a class="btn-icon ms-auto" href="#">QR</a>
-
                                             <a href="#" class="btn-icon ms-auto" data-bs-toggle="modal"
                                                 data-bs-target="#assignPopup" data-quiz-id="@quiz.Id" data-quiz-name="@quiz.Name"
                                                 data-pin="@quiz.Code" data-url="@(callbackUrl)"
@@ -166,7 +161,7 @@
                                             data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
                                             data-callback-name="assign">
                                             <i class="fas fa-share-alt icon-sm"></i>
-                                        </a>
+                                        </a>                                        
                                     </div>
 
                                     @if(@Model.QuizIdsToUsersCompleted[quiz.Id].Item1 != 0) {
