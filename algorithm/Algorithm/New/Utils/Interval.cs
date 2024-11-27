@@ -11,7 +11,7 @@ namespace Algorithm.New.Utils
         DoubleDiminishedFifth, DiminishedFifth, PerfectFifth, AugmentedFifth,
         DiminishedSixth, MinorSixth, MajorSixth, AugmentedSixth,
         DiminishedSeventh, MinorSeventh, MajorSeventh, AugmentedSeventh,
-        DiminishedOctave, Octave, AugmentedOctave,
+        DiminishedOctave
         WRONG
     }
 
@@ -33,11 +33,26 @@ namespace Algorithm.New.Utils
             { "B", 11 }, { "Ax", 11 }, { "Cb", 11 }
         };
 
+        /* INTERVAL MAPPINGS
+         * 0:   1   2>>
+         * 1:   1<  2>
+         * 2:   2   3>>
+         * 3:   2<  3>
+         * 4:   3   4>
+         * 5:   3<  4   5>>
+         * 6:   3<< 4<  5>
+         * 7:   5   6>>
+         * 8:   5<  6>
+         * 9:   6   7>
+         * 10:  6<  7
+         * 11:  7<  8>
+         */
+
         public static readonly Dictionary<int, List<IntervalName>> IntervalNames = new()
         {
             { 0, [IntervalName.Unisono, IntervalName.DiminishedSecond] },
-            { 1, [] },
-            { 2, [] },
+            { 1, [IntervalName.AugmentedUnisono, IntervalName.MinorSecond] },
+            { 2, [IntervalName.MajorSecond, IntervalName.DiminishedThird] },
             { 3, [] },
             { 4, [] },
             { 5, [] },
@@ -107,7 +122,22 @@ namespace Algorithm.New.Utils
         public static IntervalName IntervalBetween(Note? note1, Note? note2)
         {
             if (note1 == null || note2 == null)
-                return IntervalName.WRONG;
+                return IntervalName.WRONG;            
+
+            var whiteName1 = note1.Name[0].ToString();
+            var whiteName2 = note2.Name[0].ToString();
+            var octave1 = note1.Octave;
+            var octave2 = note2.Octave;
+
+            var tmp1 = new Note(whiteName1, octave1);
+            var tmp2 = new Note(whiteName2, octave2);
+
+            var semitonesReal = SemitonesBetween(note1, note2);
+            var semitonesWhite = SemitonesBetween(tmp1, tmp2);
+
+            var diff = semitonesReal - semitonesWhite;
+
+            
 
             return IntervalName.Unisono;
         }
