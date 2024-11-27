@@ -183,9 +183,12 @@
 
 <script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
 
-<script>
+<script defer>
     const results = @Json.Serialize(Model.ExerciseResults);
     const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
+
+    const midiPlay = document.getElementById('play-file');
+    const midiStop = document.getElementById('stop-file');
 
     function switchBetweenSolutions(checkbox) {
         if(checkbox.checked) {
@@ -198,15 +201,10 @@
     function loadQuestion(index, loadToGrandStaff = true) {
         const result = results[index];
 
-        // TODO: Tutaj trzeba brać plik z backendu
-        const file = "/js/midi-player-scripts/MIDI_sample.mid";
-        const midiPlay = document.getElementById('play-file');
-        const midiStop = document.getElementById('stop-file');
-
-        midiPlay.addEventListener('click', () => MIDIjs.play(file));
-        midiStop.addEventListener('click', () => MIDIjs.stop());
-
         if (index >= 0 && index < questions.length) {
+            midiPlay.removeEventListener('click', () => midiPlay(index));
+            midiStop.removeEventListener('click', () => MIDIjs.stop());
+
             document.getElementById("exercise-number").innerText = index + 1;
             document.getElementById("exercise-question").innerText = questions[index].question;
 
@@ -254,31 +252,48 @@
                         <details>
                             <summary>Opinia algorytmu</summary>
                         </details>`;
-                }                    
-
-                @* algorithmDiv.replaceChildren();
-
-                if (algorithmSolutions !== "") {
-                    // TODO: Tutaj ustawić rozwiązanie algorytmu do pięciolinii
-                    // Kubaaa, ratuuuuj
-
-                    const inner = document.createElement('span');
-                    inner.innerText = "Tu się powinno pojawić proponowane rozwiązanie.";
-                    inner.className = "text-danger";
-
-                    algorithmDiv.appendChild(inner);
                 }
-                else {
-                    const inner = document.createElement('span');
-                    inner.innerText = "Nie udało się załadować rozwiązania.";
-                    inner.className = "text-danger";
-
-                    algorithmDiv.appendChild(inner);
-                }                     *@
             }
 
-            generateButtons(index);
+            generateButtons(index);            
+
+            midiPlay.addEventListener('click', () => midiPlay(index));
+            midiStop.addEventListener('click', () => MIDIjs.stop());
         }
+    }
+
+    async function midiPlay(index) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        try {
+            const response = await fetch('/Browse?handler=PlayFile', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "RequestVerificationToken": token
+                },
+                body: JSON.stringify({
+                    SolutionIndex: index
+                })
+            });
+
+            console.log("Response", response);
+
+            if (response.ok) {
+                const contentType = response.headers.get('Content-Type');
+
+                if (contentType && contentType.includes("application/json")) {
+                    const result = await response.json();
+                    console.log(result);
+                    // TODO: Jakoś sparsować byte[] na MIDI
+
+                    if (result.success == true) {
+                        MIDIjs.play(result);
+                    }
+                }
+            }
+        }
+        catch (error) { console.error(error) }
     }
 
     function generateButtons(index) {

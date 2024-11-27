@@ -1,7 +1,4 @@
 using Algorithm.New.Algorithm.Generators;
-using Algorithm.New.Algorithm.Parsers.NoteParser;
-using Algorithm.New.Algorithm.Parsers.ProblemParser;
-using Algorithm.New.Algorithm.Parsers.SolutionParser;
 using Main.Data;
 using Main.Enumerations;
 using Main.Models;
@@ -10,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using MidiPlayback;
 
 namespace Main.Pages
 {
@@ -24,7 +22,7 @@ namespace Main.Pages
 
     public record PlayExerciseData
     {
-        public int ExerciseId { get; set; }
+        public int SolutionIndex { get; set; }
     }
 
     [Authorize]
@@ -52,7 +50,20 @@ namespace Main.Pages
         // TODO: Implementacja
         public JsonResult OnPostPlayFile([FromBody] PlayExerciseData data)
         {
-            return new JsonResult(new { success = true });
+            var solutionIndex = data.SolutionIndex;
+
+            if (AlgorithmSolutions.Count == 0)
+                return new JsonResult(new { success = false });
+
+            var solutionString = AlgorithmSolutions[solutionIndex];
+            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                .ParseJsonToSolutionParseResult(solutionString);
+
+            var stacks = solutionParseResult.Stacks;
+
+            var result = FileCreator.Create();
+
+            return new JsonResult(new { success = true, bytes = result });
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -104,7 +115,7 @@ namespace Main.Pages
 
             var showOpinion = quiz.ShowAlgorithmOpinion;
 
-            if (showOpinion)
+            if (showOpinion && AlgorithmSolutions.Count == 0)
                 GenerateExampleSolutions();
 
             ExerciseResults = quiz.Exercises
