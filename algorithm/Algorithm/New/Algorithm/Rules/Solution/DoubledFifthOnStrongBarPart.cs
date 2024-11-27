@@ -2,7 +2,7 @@
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class DoubledFifthOnStrongBarPart : Rule
+    public sealed class DoubledFifthOnStrongBarPart : Rule
     {
         public DoubledFifthOnStrongBarPart() : base(
             id: 100,

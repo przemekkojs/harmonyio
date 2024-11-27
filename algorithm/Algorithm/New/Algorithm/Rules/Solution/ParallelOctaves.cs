@@ -3,7 +3,7 @@ using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class ParallelOctaves : Rule
+    public sealed class ParallelOctaves : Rule
     {
         public ParallelOctaves() : base(
             id: 103,

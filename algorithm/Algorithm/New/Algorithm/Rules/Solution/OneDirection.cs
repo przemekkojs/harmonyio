@@ -3,7 +3,7 @@ using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class OneDirection : Rule
+    public sealed class OneDirection : Rule
     {
         public OneDirection() : base(
             id: 101,

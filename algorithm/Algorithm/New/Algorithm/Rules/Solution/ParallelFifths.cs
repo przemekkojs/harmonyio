@@ -3,7 +3,7 @@ using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class ParallelFifths : Rule
+    public sealed class ParallelFifths : Rule
     {
         public ParallelFifths() : base(
             id: 102,

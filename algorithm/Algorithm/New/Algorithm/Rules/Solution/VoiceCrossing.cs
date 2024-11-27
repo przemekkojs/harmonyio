@@ -3,7 +3,7 @@ using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class VoiceCrossing : Rule
+    public sealed class VoiceCrossing : Rule
     {
         public VoiceCrossing() : base(
             id: 104,
