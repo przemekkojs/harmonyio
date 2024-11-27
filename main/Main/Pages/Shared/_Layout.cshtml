@@ -20,7 +20,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Main</title>
+    <title>@(ViewData["Title"] != null ? ViewData["Title"] : "Harmony.io")</title>
+    <link rel="shortcut icon" href="~/images/circle-logo.ico">
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/custom.min.css" />
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>

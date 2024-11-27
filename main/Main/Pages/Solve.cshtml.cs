@@ -51,7 +51,7 @@ namespace Main.Pages
 
             if (quiz == null)
             {
-                return RedirectToPage("Error");
+                return RedirectToPage("Error", new { errorMessage = "Quiz z podanym kodem nie istnieje. Upewnij się, że dobrze wpisałeś kod lub poprawnie skopiowałeś link." });
             }
 
             var quizResult = quiz.QuizResults.FirstOrDefault(qr => qr.UserId == appUser.Id);

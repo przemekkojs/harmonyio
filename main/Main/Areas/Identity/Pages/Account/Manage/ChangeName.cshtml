@@ -1,16 +1,19 @@
 @page
 @model ChangeNameModel
+@{
+    ViewData["Title"] = "Harmony.io - Imię i Nazwisko";
+}
 
 <div class="w-100">
     <form method="post">
         <div class="mb-3">
-            <label asp-for="Name" class="ps-1 pb-1 fw-bold">Imię</label>
-            <input asp-for="Name" class="form-control" autocomplete="username" aria-required="true" value="@Model.CurrentUser.FirstName"/>
+            <label asp-for="Name" class="ps-1 pb-1 fw-bold"></label>
+            <input asp-for="Name" class="form-control" autocomplete="given-name" aria-required="true" value="@Model.CurrentUser.FirstName"/>
             <span asp-validation-for="Name" class="text-danger small"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="Surname" class="ps-1 pb-1 fw-bold">Nazwisko</label>
-            <input asp-for="Surname" class="form-control" autocomplete="username" aria-required="true" value="@Model.CurrentUser.LastName"/>
+            <label asp-for="Surname" class="ps-1 pb-1 fw-bold"></label>
+            <input asp-for="Surname" class="form-control" autocomplete="family-name" aria-required="true" value="@Model.CurrentUser.LastName"/>
             <span asp-validation-for="Surname" class="text-danger small"></span>
         </div>
 

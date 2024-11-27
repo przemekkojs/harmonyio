@@ -41,7 +41,7 @@ public class JoinModel : PageModel
 
         if (quiz == null)
         {
-            return RedirectToPage("Error");
+            return RedirectToPage("Error", new { errorMessage = "Quiz z podanym kodem nie istnieje. Upewnij się, że dobrze wpisałeś kod lub poprawnie skopiowałeś link." });
         }
 
         Quiz = quiz;

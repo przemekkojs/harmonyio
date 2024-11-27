@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "   Register";
+    ViewData["Title"] = "Zarejestruj się do Harmony.io";
 }
 
 <div class="d-flex justify-content-center" style="min-height: 100%;"> 
@@ -11,28 +11,28 @@
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             
             <div class="mb-3">
-                <label asp-for="Input.FirstName" class="fw-bold ps-1 pb-1">Imię</label>
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.FirstName" class="fw-bold ps-1 pb-1"></label>
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" />
                 <span asp-validation-for="Input.FirstName" class="text-danger small"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Input.LastName" class="fw-bold ps-1 pb-1">Nazwisko</label>
-                <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.LastName" class="fw-bold ps-1 pb-1"></label>
+                <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" />
                 <span asp-validation-for="Input.LastName" class="text-danger small"></span>
             </div>
             
             <div class="mb-3">
-                <label asp-for="Input.Email" class="fw-bold ps-1 pb-1">Email</label>
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.Email" class="fw-bold ps-1 pb-1"></label>
+                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" />
                 <span asp-validation-for="Input.Email" class="text-danger small"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Input.Password" class="fw-bold ps-1 pb-1">Hasło</label>
+                <label asp-for="Input.Password" class="fw-bold ps-1 pb-1"></label>
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
                 <span asp-validation-for="Input.Password" class="text-danger small"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Input.ConfirmPassword" class="fw-bold ps-1 pb-1">Powtórz hasło</label>
+                <label asp-for="Input.ConfirmPassword" class="fw-bold ps-1 pb-1"></label>
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
             </div>

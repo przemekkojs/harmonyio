@@ -12,6 +12,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Models;
+using Main.Resources;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -72,20 +73,20 @@ namespace Main.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required(ErrorMessage = "Podanie imienia jest obowiązkowe")]
-            [Display(Name = "First Name")]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [Display(Name = "Imię")]
             public string FirstName { get; set; }
 
-            [Required(ErrorMessage = "Podanie nazwiska jest obowiązkowe")]
-            [Display(Name = "Last Name")]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [Display(Name = "Nazwisko")]
             public string LastName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Podany email jest nieprawidłowy")]
-            [EmailAddress]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [EmailAddress(ErrorMessage = ErrorMessages.EmailAddress)]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -93,10 +94,10 @@ namespace Main.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Podane hasło jest nieprawidłowe")]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [StringLength(100, ErrorMessage = ErrorMessages.StringLength, MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
 
             /// <summary>
@@ -104,8 +105,8 @@ namespace Main.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "Powtórzone hasło musi być takie samo jak hasło")]
+            [Display(Name = "Powtórz hasło")]
+            [Compare("Password", ErrorMessage = ErrorMessages.Compare)]
             public string ConfirmPassword { get; set; }
         }
 

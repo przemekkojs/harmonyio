@@ -3,6 +3,8 @@
 @using Main.Enumerations;
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 @{
+    ViewData["Title"] = "Harmony.io - Przeglądaj";
+
     var totalPoints = Model.ExerciseResults.Sum(er => er.Points);
     var totalMax = Model.ExerciseResults.Sum(er => er.MaxPoints);
     var percent = Math.Round((totalPoints / (float)totalMax) * 100);

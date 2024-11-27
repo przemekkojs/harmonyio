@@ -5,6 +5,7 @@ using Main.Data;
 using Main.Models;
 using Main.GradingAlgorithm;
 using Main.Services;
+using Main.Areas.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +28,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         options.SignIn.RequireConfirmedAccount = true;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddErrorDescriber<PolishIdentityErrorDescriber>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthorizationBuilder();
