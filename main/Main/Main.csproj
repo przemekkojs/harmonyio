@@ -13,6 +13,7 @@
     <Folder Include="wwwroot\img\" />
     <Folder Include="Enumerations\" />
     <Folder Include="Pages\Groups\" />
+    <Folder Include="wwwroot\js\midi-player-scripts\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.10" />
@@ -48,5 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\algorithm\Algorithm\Algorithm.csproj" />
+    <ProjectReference Include="..\..\midi\MidiPlayback\MidiPlayback.csproj" />
   </ItemGroup>
 </Project>

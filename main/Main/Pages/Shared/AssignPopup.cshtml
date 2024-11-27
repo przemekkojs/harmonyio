@@ -42,7 +42,8 @@ przypadku niepowodzenia
                     <button type="button" class="ms-auto btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="d-flex flex-column pt-3">
+                <!-- Strona Główna -->
+                <div id="assignMainPage" class="d-flex flex-column pt-3">
                     <div class="mb-3 mx-3" id="pinUrlArea">
                         <div class="bg-white rounded shadow-sm border p-2 d-flex flex-row">
                             <div class="overflow-hidden text-truncate me-auto">
@@ -58,8 +59,10 @@ przypadku niepowodzenia
                                 <span class="fw-bold">URL</span> <br />
                                 <span id="assignedQuizUrl">https://harmony.io/join?q=021367</span>
                             </div>
-                            <button type="button" id="copyUrlBtn" class="btn btn-secondary ms-2 my-auto"
-                                onclick="copyUrl()">Kopiuj</button>
+                            <button type="button" id="copyUrlBtn" class="btn btn-secondary ms-2 my-auto" onclick="copyUrl()">Kopiuj</button>
+                            <button type="button" onclick="switchPage(1)" class="btn btn-secondary ms-2 my-auto py-2 d-flex align-items-center">
+                                <img src="~/images/qr-code.png" style="width: 20px; height: 20px;"/>
+                            </button>
                         </div>
                     </div>
 
@@ -110,27 +113,38 @@ przypadku niepowodzenia
                     </div>
                 </div>
 
+                <!-- Strona QR Kod -->
+                <div id="assignQrPage" class="d-flex flex-column align-items-center justify-content-center p-3 d-none">
+                    <div class="border border-3 rounded-4 p-3">
+                        <div id="qrcode"></div>
+                    </div>
+
+                    <span class="mt-3 text-center mx-4">Oto kod QR twojego quizu! Każdy kto go zeskanuje zostanie natychmiastowo dodany do listy uczestników!</span>   
+                </div>
+
                 <div class="modal-footer justify-content-center align-items-center">
-                    <button type="button" class="btn btn-secondary btn-sm-width" id="assignCancelButton"
-                        data-bs-dismiss="modal">Zamknij</button>
+                    <button type="button" class="btn btn-secondary btn-sm-width" id="assignCancelButton" data-bs-dismiss="modal">Zamknij</button>
                     <button type="button" class="btn btn-primary btn-sm-width" id="assignSaveButton">Zapisz</button>
+
+                    <button type="button" class="btn btn-secondary btn-sm-width d-none" id="assignQrReturnButton" onclick="switchPage(0)">Powrót</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
 <script>
 
     const assignPopup = document.getElementById('assignPopup');
     const assignSaveButton = assignPopup.querySelector('#assignSaveButton');
+    const assignCloseButton = assignPopup.querySelector('#assignCancelButton');
     const emailListContainer = document.getElementById("emailListContainer");
     const emailsNumber = document.getElementById("emailsNumber");
     let assignModalButton;
     let assignPinTimeoutId;
     let assignUrlTimeoutId;
 
+    let quizUrl;
     let assignedEmails = [];
     let wrongEmails = [];
     let allGroups = [];
@@ -149,9 +163,9 @@ przypadku niepowodzenia
 
     assignPopup.addEventListener('show.bs.modal', function (event) {
         assignModalButton = event.relatedTarget;
+        quizUrl = assignModalButton.getAttribute('data-url');
         const quizName = assignModalButton.getAttribute('data-quiz-name');
         const quizPin = assignModalButton.getAttribute('data-pin');
-        const quizUrl = assignModalButton.getAttribute('data-url');
 
         const nameElement = assignPopup.querySelector('#assignedQuizName');
         const pinElement = assignPopup.querySelector('#assignedQuizPin');
@@ -166,6 +180,8 @@ przypadku niepowodzenia
         allGroups = JSON.parse(assignModalButton.getAttribute('data-all-groups'));
         uneditableGroups = JSON.parse(assignModalButton.getAttribute('data-added-groups')).map(n => n + '');
         initGroups();
+
+        switchPage(0);
     });
 
     function clearEmailsList() {
@@ -190,8 +206,7 @@ przypadku niepowodzenia
             wrongEmails = await window[callbackName](quizId, assignedEmails, newGroups);
 
             if (wrongEmails == null || wrongEmails.length == 0) {
-                const closebutton = document.getElementById('assignCancelButton');
-                closebutton.click();
+                assignCloseButton.click();
             } else {
                 showWrongEmails();
             }
@@ -329,4 +344,57 @@ przypadku niepowodzenia
         }, 5000);
     }
 
+</script>
+
+@* Biblioteka kodu QR *@
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+
+<script>
+    const QRSize = 200;
+
+    const assignMainPage = assignPopup.querySelector('#assignMainPage');
+    const assignQrPage = assignPopup.querySelector('#assignQrPage');
+    const assignQrReturnButton = assignPopup.querySelector('#assignQrReturnButton');
+
+    function switchPage(pageIndex){
+        if (pageIndex == 0){
+            assignMainPage.classList.remove('d-none');
+            assignSaveButton.classList.remove('d-none');
+            assignCloseButton.classList.remove('d-none');
+
+            assignQrPage.classList.add('d-none');
+            assignQrReturnButton.classList.add('d-none');
+        } else {
+            assignQrPage.style.height = assignMainPage.offsetHeight + 'px';
+            
+            assignMainPage.classList.add('d-none');
+            assignSaveButton.classList.add('d-none');
+            assignCloseButton.classList.add('d-none');
+
+            assignQrPage.classList.remove('d-none');
+            assignQrReturnButton.classList.remove('d-none');
+
+            generateQrCode(quizUrl);
+        }
+    }
+
+    function generateQrCode(link) {
+        const qrCodeContainer = document.getElementById('qrcode');
+        qrCodeContainer.innerHTML = "";
+
+        new QRCode(qrCodeContainer, {
+            text: link,
+            width: QRSize,
+            height: QRSize
+        });
+    }
+
+    function showPopup(link) {
+        document.getElementById('qr-code-popup').style.display = 'block';
+        generateQrCode(link);
+    }
+
+    function hidePopup() {
+        document.getElementById('qr-code-popup').style.display = 'none';
+    }
 </script>

@@ -37,7 +37,7 @@ namespace AlgorithmTests.New
             var settings = Constants.Settings;
             var checkResult = SolutionChecker.CheckSolution(solutionNofunctions, settings);
 
-            var mistakesCount = checkResult.Count > 0 ?
+            var mistakesCount = checkResult?.Count > 0 ?
                 checkResult.Sum(x => x.Quantity) :
                 0;
 

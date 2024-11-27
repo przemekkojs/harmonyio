@@ -79,6 +79,11 @@
         </div>
 
         <div class="bg-white rounded shadow flex-grow-1 p-3 d-flex flex-column overflow-auto" id="staff-section-div">
+            <div id="playback-area">
+                <a id="play-file" href="#" class="ms-2 btn btn-secondary">Odtwórz</a>
+                <a id="stop-file" href="#" class="ms-2 btn btn-secondary">Stop</a>
+            </div>
+
             <div id="exercise-question-area">
                 <p id="exercise-question" class="m-0 fw-semibold">
                     @*SET VIA JS*@
@@ -125,7 +130,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
@@ -179,9 +183,14 @@
 <script src="~/js/staff-scripts/staff.js"></script>
 <script src="~/js/staff-scripts/sketchGrading.js"></script>
 
-<script>
+<script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
+
+<script defer>
     const results = @Json.Serialize(Model.ExerciseResults);
     const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
+
+    const midiPlay = document.getElementById('play-file');
+    const midiStop = document.getElementById('stop-file');
 
     function switchBetweenSolutions(checkbox) {
         if(checkbox.checked) {
@@ -195,6 +204,9 @@
         const result = results[index];
 
         if (index >= 0 && index < questions.length) {
+            midiPlay.removeEventListener('click', () => midiPlay(index));
+            midiStop.removeEventListener('click', () => MIDIjs.stop());
+
             document.getElementById("exercise-number").innerText = index + 1;
             document.getElementById("exercise-question").innerText = questions[index].question;
 
@@ -242,31 +254,48 @@
                         <details>
                             <summary>Opinia algorytmu</summary>
                         </details>`;
-                }                    
-
-                @* algorithmDiv.replaceChildren();
-
-                if (algorithmSolutions !== "") {
-                    // TODO: Tutaj ustawić rozwiązanie algorytmu do pięciolinii
-                    // Kubaaa, ratuuuuj
-
-                    const inner = document.createElement('span');
-                    inner.innerText = "Tu się powinno pojawić proponowane rozwiązanie.";
-                    inner.className = "text-danger";
-
-                    algorithmDiv.appendChild(inner);
                 }
-                else {
-                    const inner = document.createElement('span');
-                    inner.innerText = "Nie udało się załadować rozwiązania.";
-                    inner.className = "text-danger";
-
-                    algorithmDiv.appendChild(inner);
-                }                     *@
             }
 
-            generateButtons(index);
+            generateButtons(index);            
+
+            midiPlay.addEventListener('click', () => midiPlay(index));
+            midiStop.addEventListener('click', () => MIDIjs.stop());
         }
+    }
+
+    async function midiPlay(index) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        try {
+            const response = await fetch('/Browse?handler=PlayFile', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "RequestVerificationToken": token
+                },
+                body: JSON.stringify({
+                    SolutionIndex: index
+                })
+            });
+
+            console.log("Response", response);
+
+            if (response.ok) {
+                const contentType = response.headers.get('Content-Type');
+
+                if (contentType && contentType.includes("application/json")) {
+                    const result = await response.json();
+                    console.log(result);
+                    // TODO: Jakoś sparsować byte[] na MIDI
+
+                    if (result.success == true) {
+                        MIDIjs.play(result);
+                    }
+                }
+            }
+        }
+        catch (error) { console.error(error) }
     }
 
     function generateButtons(index) {

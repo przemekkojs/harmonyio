@@ -1,7 +1,4 @@
 using Algorithm.New.Algorithm.Generators;
-using Algorithm.New.Algorithm.Parsers.NoteParser;
-using Algorithm.New.Algorithm.Parsers.ProblemParser;
-using Algorithm.New.Algorithm.Parsers.SolutionParser;
 using Main.Data;
 using Main.Enumerations;
 using Main.Models;
@@ -10,16 +7,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using MidiPlayback;
 
 namespace Main.Pages
 {
     // easy access to result data
-    public class ExerciseResultData
+    public record ExerciseResultData
     {
         public int Points { get; set; }
         public int MaxPoints { get; set; } = 10; // Default to 10 if no data
         public string Comment { get; set; } = string.Empty;
         public string Opinion { get; set; } = string.Empty;
+    }
+
+    public record PlayExerciseData
+    {
+        public int SolutionIndex { get; set; }
     }
 
     [Authorize]
@@ -42,6 +45,25 @@ namespace Main.Pages
         {
             _repository = repository;
             _userManager = userManager;
+        }
+
+        // TODO: Implementacja
+        public JsonResult OnPostPlayFile([FromBody] PlayExerciseData data)
+        {
+            var solutionIndex = data.SolutionIndex;
+
+            if (AlgorithmSolutions.Count == 0)
+                return new JsonResult(new { success = false });
+
+            var solutionString = AlgorithmSolutions[solutionIndex];
+            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                .ParseJsonToSolutionParseResult(solutionString);
+
+            var stacks = solutionParseResult.Stacks;
+
+            var result = FileCreator.Create();
+
+            return new JsonResult(new { success = true, bytes = result });
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -93,7 +115,7 @@ namespace Main.Pages
 
             var showOpinion = quiz.ShowAlgorithmOpinion;
 
-            if (showOpinion)
+            if (showOpinion && AlgorithmSolutions.Count == 0)
                 GenerateExampleSolutions();
 
             ExerciseResults = quiz.Exercises
