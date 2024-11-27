@@ -8,7 +8,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
         public AugmentedInterval() : base(
             id: 107,
             name: "Ruch o interwał zwiększony",
-            description: "Skok o interwał zwiększony nie jest dozwolony",
+            description: "Ruch o interwał zwiększony w dowolnym głosie nie jest dozwolony",
             oneFunction: false) { }
 
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)

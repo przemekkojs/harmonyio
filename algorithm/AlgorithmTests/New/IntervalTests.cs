@@ -86,7 +86,7 @@ namespace AlgorithmTests.New
                 ((C4, G4), IntervalName.PerfectFifth),
                 ((C4, Gs4), IntervalName.AugmentedFifth),
                 ((C4, A4), IntervalName.MajorSixth),
-                ((C4, As4), IntervalName.MinorSeventh),
+                ((C4, As4), IntervalName.AugmentedSixth),
                 ((C4, B4), IntervalName.MajorSeventh),
                 ((C4, C5), IntervalName.Unisono),
             ];

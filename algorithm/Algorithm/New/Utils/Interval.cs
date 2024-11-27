@@ -69,8 +69,8 @@ namespace Algorithm.New.Utils
             {  6, [(3, IntervalName.DoubleAugmentedThird), (4, IntervalName.DoubleAugmentedThird), (5, IntervalName.AugmentedFourth), (7, IntervalName.DiminishedFifth)] },
             {  7, [(5, IntervalName.DoubleAugmentedFourth), (7, IntervalName.PerfectFifth), (8, IntervalName.DiminishedSixth), (9, IntervalName.DoubleDiminishedSixth)] },
             {  8, [(8, IntervalName.MinorSixth), (7, IntervalName.AugmentedFifth), (10, IntervalName.DoubleDiminishedSeventh)] },
-            {  9, [(7, IntervalName.DoubleAugmentedFifth), (9, IntervalName.MajorSixth), (10, IntervalName.DiminishedSeventh)] },
-            { 10, [(8, IntervalName.AugmentedSixth), (9, IntervalName.DoubleAugmentedSixth), (10, IntervalName.MinorSeventh), (11, IntervalName.MinorSeventh)] },
+            {  9, [(7, IntervalName.DoubleAugmentedFifth), (8, IntervalName.MajorSixth), (9, IntervalName.MajorSixth), (10, IntervalName.DiminishedSeventh)] },
+            { 10, [(8, IntervalName.AugmentedSixth), (9, IntervalName.AugmentedSixth), (10, IntervalName.MinorSeventh), (11, IntervalName.MinorSeventh)] },
             { 11, [(9, IntervalName.DoubleAugmentedSixth), (10, IntervalName.MajorSeventh), (11, IntervalName.MajorSeventh)] }            
         };
 
@@ -165,14 +165,13 @@ namespace Algorithm.New.Utils
             var semitonesWhite = SemitonesBetween(tmp1, tmp2) % OCTAVE_SEMITONES;            
 
             var possibleReal = _intervalNames[semitonesReal];
-            var whiteInterval = _basicIntervals[semitonesWhite];
-
+            
             // To się nie powinno nigdy wydarzyć, ale na potrzeby testowej implementacji można zostawić
             if (possibleReal.Count == 0)
                 return IntervalName.WRONG;
 
             var matching = possibleReal
-                .Where(x => x.Item2 == whiteInterval)
+                .Where(x => x.Item1 == semitonesWhite)
                 .First();
 
             var matchingName = matching.Item2;
