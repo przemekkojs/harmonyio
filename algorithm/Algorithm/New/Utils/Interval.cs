@@ -8,10 +8,11 @@ namespace Algorithm.New.Utils
         DiminishedSecond, MinorSecond, MajorSecond, AugmentedSecond,
         DiminishedThird, MinorThird, MajorThird, AugmentedThird, DoubleAugmentedThird,
         DoubleDiminishedFourth, DiminishedFourth, PerfectFourth, AugmentedFourth,
+        Tritone,
         DoubleDiminishedFifth, DiminishedFifth, PerfectFifth, AugmentedFifth,
         DiminishedSixth, MinorSixth, MajorSixth, AugmentedSixth,
         DiminishedSeventh, MinorSeventh, MajorSeventh, AugmentedSeventh,
-        DiminishedOctave
+        DiminishedOctave,
         WRONG
     }
 
@@ -48,7 +49,7 @@ namespace Algorithm.New.Utils
          * 11:  7<  8>
          */
 
-        public static readonly Dictionary<int, List<IntervalName>> IntervalNames = new()
+        private static readonly Dictionary<int, List<IntervalName>> _intervalNames = new()
         {
             { 0, [IntervalName.Unisono, IntervalName.DiminishedSecond] },
             { 1, [IntervalName.AugmentedUnisono, IntervalName.MinorSecond] },
@@ -63,7 +64,23 @@ namespace Algorithm.New.Utils
             { 10, [] },
             { 11, [] },
             { 12, [] },
-            { 13, [] },
+            { 13, [] }
+        };
+
+        private static readonly Dictionary<int, IntervalName> _basicIntervals = new()
+        {
+            { 0, IntervalName.Unisono },
+            { 1, IntervalName.MinorSecond },
+            { 2, IntervalName.MajorSecond },
+            { 3, IntervalName.MinorThird },
+            { 4, IntervalName.MajorThird },
+            { 5, IntervalName.PerfectFourth },
+            { 6, IntervalName.Tritone },
+            { 7, IntervalName.PerfectFifth },
+            { 8, IntervalName.MinorSixth },
+            { 9, IntervalName.MajorSixth },
+            { 10, IntervalName.MinorSeventh },
+            { 11, IntervalName.MajorSeventh }
         };
 
         public static int Determinant(Note? note)
@@ -118,7 +135,6 @@ namespace Algorithm.New.Utils
             return Math.Abs(det1 - det2);
         }
 
-        // TODO: Implementacja tego
         public static IntervalName IntervalBetween(Note? note1, Note? note2)
         {
             if (note1 == null || note2 == null)
@@ -133,13 +149,19 @@ namespace Algorithm.New.Utils
             var tmp2 = new Note(whiteName2, octave2);
 
             var semitonesReal = SemitonesBetween(note1, note2);
-            var semitonesWhite = SemitonesBetween(tmp1, tmp2);
+            var semitonesWhite = SemitonesBetween(tmp1, tmp2);            
+
+            var possibleReal = _intervalNames[semitonesReal];
+            var whiteInterval = _basicIntervals[semitonesWhite];
+
+            var whiteIndex = possibleReal
+                .IndexOf(whiteInterval);
 
             var diff = semitonesReal - semitonesWhite;
+            var realIndex = whiteIndex - diff;
+            var real = possibleReal[realIndex];
 
-            
-
-            return IntervalName.Unisono;
+            return real;
         }
     }
 }
