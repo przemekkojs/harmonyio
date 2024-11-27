@@ -11,6 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Septyma powinna być rozwiązywana w dół.",
             oneFunction: false) { }
 
+        // Korzysta z komponentów funkcji
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))

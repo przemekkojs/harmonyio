@@ -1,4 +1,5 @@
 ﻿using Algorithm.New.Music;
+using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
@@ -26,7 +27,13 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 var note1 = stack1.Notes[noteIndex];
                 var note2 = stack2.Notes[noteIndex];
 
-                
+                var intervalName = Interval.IntervalBetween(note1, note2);
+
+                if (intervalName == IntervalName.WRONG)
+                    return false;
+
+                if (intervalName.ToString().Contains("Augmented"))
+                    return false;
             }
 
             return true;

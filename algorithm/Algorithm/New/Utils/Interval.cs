@@ -103,6 +103,7 @@ namespace Algorithm.New.Utils
             return Math.Abs(det1 - det2);
         }
 
+        // TODO: Implementacja tego
         public static IntervalName IntervalBetween(Note? note1, Note? note2)
         {
             if (note1 == null || note2 == null)

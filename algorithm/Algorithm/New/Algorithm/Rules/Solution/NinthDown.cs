@@ -10,6 +10,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Nona dodana jako składnik dysonujący powinna rozwiązywać się w dół",
             oneFunction: false) { }
 
+        // Korzysta z komponentów funkcji
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))

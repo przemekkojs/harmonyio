@@ -11,6 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "W funkcjach innych niż dominanty, seksty powinne być rozwiązywane w górę.",
             oneFunction: false) { }
 
+        // Korzysta z komponentów funkcji
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))

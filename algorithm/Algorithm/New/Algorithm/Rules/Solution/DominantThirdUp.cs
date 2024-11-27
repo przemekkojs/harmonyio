@@ -10,6 +10,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Tercja dominanty powinna się rozwiązywać w górę",
             oneFunction: false) { }
 
+        // Korzysta z komponentów funkcji
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
             if (!ValidateParametersCount(stacks))
