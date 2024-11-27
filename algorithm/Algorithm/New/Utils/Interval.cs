@@ -7,11 +7,11 @@ namespace Algorithm.New.Utils
         Unisono, AugmentedUnisono,
         DiminishedSecond, MinorSecond, MajorSecond, AugmentedSecond,
         DiminishedThird, MinorThird, MajorThird, AugmentedThird, DoubleAugmentedThird,
-        DoubleDiminishedFourth, DiminishedFourth, PerfectFourth, AugmentedFourth,
+        DoubleDiminishedFourth, DiminishedFourth, PerfectFourth, AugmentedFourth, DoubleAugmentedFourth,
         Tritone,
-        DoubleDiminishedFifth, DiminishedFifth, PerfectFifth, AugmentedFifth,
-        DiminishedSixth, MinorSixth, MajorSixth, AugmentedSixth,
-        DiminishedSeventh, MinorSeventh, MajorSeventh, AugmentedSeventh,
+        DoubleDiminishedFifth, DiminishedFifth, PerfectFifth, AugmentedFifth, DoubleAugmentedFifth,
+        DoubleDiminishedSixth, DiminishedSixth, MinorSixth, MajorSixth, AugmentedSixth, DoubleAugmentedSixth,
+        DoubleDiminishedSeventh, DiminishedSeventh, MinorSeventh, MajorSeventh, AugmentedSeventh,
         DiminishedOctave,
         WRONG
     }
@@ -60,20 +60,18 @@ namespace Algorithm.New.Utils
         // a dla tercji zmniejszonej <B, Db> mamy biały interwał <B, D> = tercja mała (MinorThird)
         private static readonly Dictionary<int, List<(int, IntervalName)>> _intervalNames = new()
         {
-            { 0, [(0, IntervalName.Unisono), (2, IntervalName.DiminishedSecond)] },
-            { 1, [(0, IntervalName.AugmentedUnisono), (1, IntervalName.MinorSecond), (2, IntervalName.MinorSecond)] },
-            { 2, [(2, IntervalName.MajorSecond), (3, IntervalName.DiminishedThird), (4, IntervalName.DiminishedThird)] },
-            { 3, [(2, IntervalName.AugmentedSecond), (3, IntervalName.MinorThird), (4, IntervalName.MinorThird), (5, IntervalName.DoubleDiminishedFourth)] },
-            { 4, [(3, IntervalName.MajorThird), (4, IntervalName.MajorThird), (5, IntervalName.DiminishedFourth)] },
-            { 5, [(4, IntervalName.AugmentedThird), (5, IntervalName.PerfectFourth), (7, IntervalName.DoubleDiminishedFifth)] },
-            { 6, [(3, IntervalName.DoubleAugmentedThird), (4, IntervalName.DoubleAugmentedThird), (5, IntervalName.AugmentedFourth), (7, IntervalName.DiminishedFifth)] },
-            { 7, [] },
-            { 8, [] },
-            { 9, [] },
-            { 10, [] },
-            { 11, [] },
-            { 12, [] },
-            { 13, [] }
+            {  0, [(0, IntervalName.Unisono), (2, IntervalName.DiminishedSecond)] },
+            {  1, [(0, IntervalName.AugmentedUnisono), (1, IntervalName.MinorSecond), (2, IntervalName.MinorSecond)] },
+            {  2, [(2, IntervalName.MajorSecond), (3, IntervalName.DiminishedThird), (4, IntervalName.DiminishedThird)] },
+            {  3, [(2, IntervalName.AugmentedSecond), (3, IntervalName.MinorThird), (4, IntervalName.MinorThird), (5, IntervalName.DoubleDiminishedFourth)] },
+            {  4, [(3, IntervalName.MajorThird), (4, IntervalName.MajorThird), (5, IntervalName.DiminishedFourth)] },
+            {  5, [(4, IntervalName.AugmentedThird), (5, IntervalName.PerfectFourth), (7, IntervalName.DoubleDiminishedFifth)] },
+            {  6, [(3, IntervalName.DoubleAugmentedThird), (4, IntervalName.DoubleAugmentedThird), (5, IntervalName.AugmentedFourth), (7, IntervalName.DiminishedFifth)] },
+            {  7, [(5, IntervalName.DoubleAugmentedFourth), (7, IntervalName.PerfectFifth), (8, IntervalName.DiminishedSixth), (9, IntervalName.DoubleDiminishedSixth)] },
+            {  8, [(8, IntervalName.MinorSixth), (7, IntervalName.AugmentedFifth), (10, IntervalName.DoubleDiminishedSeventh)] },
+            {  9, [(7, IntervalName.DoubleAugmentedFifth), (9, IntervalName.MajorSixth), (10, IntervalName.DiminishedSeventh)] },
+            { 10, [(8, IntervalName.AugmentedSixth), (9, IntervalName.DoubleAugmentedSixth), (10, IntervalName.MinorSeventh), (11, IntervalName.MinorSeventh)] },
+            { 11, [(9, IntervalName.DoubleAugmentedSixth), (10, IntervalName.MajorSeventh), (11, IntervalName.MajorSeventh)] }            
         };
 
         private static readonly Dictionary<int, IntervalName> _basicIntervals = new()
