@@ -63,10 +63,10 @@ namespace Algorithm.New.Utils
             { 0, [(0, IntervalName.Unisono), (2, IntervalName.DiminishedSecond)] },
             { 1, [(0, IntervalName.AugmentedUnisono), (1, IntervalName.MinorSecond), (2, IntervalName.MinorSecond)] },
             { 2, [(2, IntervalName.MajorSecond), (3, IntervalName.DiminishedThird), (4, IntervalName.DiminishedThird)] },
-            { 3, [] },
-            { 4, [] },
-            { 5, [] },
-            { 6, [] },
+            { 3, [(2, IntervalName.AugmentedSecond), (3, IntervalName.MinorThird), (4, IntervalName.MinorThird), (5, IntervalName.DoubleDiminishedFourth)] },
+            { 4, [(3, IntervalName.MajorThird), (4, IntervalName.MajorThird), (5, IntervalName.DiminishedFourth)] },
+            { 5, [(4, IntervalName.AugmentedThird), (5, IntervalName.PerfectFourth), (7, IntervalName.DoubleDiminishedFifth)] },
+            { 6, [(3, IntervalName.DoubleAugmentedThird), (4, IntervalName.DoubleAugmentedThird), (5, IntervalName.AugmentedFourth), (7, IntervalName.DiminishedFifth)] },
             { 7, [] },
             { 8, [] },
             { 9, [] },
@@ -147,7 +147,13 @@ namespace Algorithm.New.Utils
         public static IntervalName IntervalBetween(Note? note1, Note? note2)
         {
             if (note1 == null || note2 == null)
-                return IntervalName.WRONG;            
+                return IntervalName.WRONG;
+
+            // Obsługa przypadku F-H, H-F
+            if (note1.Name.Equals("B") && note2.Name.Equals("F"))
+                return IntervalName.DiminishedFifth;
+            else if (note1.Name.Equals("F") && note2.Name.Equals("B"))
+                return IntervalName.AugmentedFourth;
 
             var whiteName1 = note1.Name[0].ToString();
             var whiteName2 = note2.Name[0].ToString();
@@ -162,6 +168,10 @@ namespace Algorithm.New.Utils
 
             var possibleReal = _intervalNames[semitonesReal];
             var whiteInterval = _basicIntervals[semitonesWhite];
+
+            // To się nie powinno nigdy wydarzyć, ale na potrzeby testowej implementacji można zostawić
+            if (possibleReal.Count == 0)
+                return IntervalName.WRONG;
 
             var matching = possibleReal
                 .Where(x => x.Item2 == whiteInterval)
