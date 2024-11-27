@@ -4,15 +4,21 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 {
     public sealed class DominantSixthDown : Rule
     {
-        public DominantSixthDown(int id, string name, string description, bool oneFunction = false) : base(
-            id,
-            name,
-            description,
-            oneFunction) { }
+        public DominantSixthDown() : base(
+            id: 108,
+            name: "Rozwiązanie seksty dominanty w dół",
+            description: "Seksta w dominancie powinna być rozwiązywana w dół",
+            oneFunction: false) { }
 
         public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
         {
-            throw new NotImplementedException();
+            if (!ValidateParametersCount(stacks))
+                return false;
+
+            if (!ValidateEmptyStacks(stacks))
+                return false;
+
+            return true;
         }
     }
 }

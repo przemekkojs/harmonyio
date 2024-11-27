@@ -2,9 +2,22 @@
 
 namespace Algorithm.New.Utils
 {
+    public enum IntervalName
+    {
+        Unisono, AugmentedUnisono,
+        DiminishedSecond, MinorSecond, MajorSecond, AugmentedSecond,
+        DiminishedThird, MinorThird, MajorThird, AugmentedThird, DoubleAugmentedThird,
+        DoubleDiminishedFourth, DiminishedFourth, PerfectFourth, AugmentedFourth,
+        DoubleDiminishedFifth, DiminishedFifth, PerfectFifth, AugmentedFifth,
+        DiminishedSixth, MinorSixth, MajorSixth, AugmentedSixth,
+        DiminishedSeventh, MinorSeventh, MajorSeventh, AugmentedSeventh,
+        DiminishedOctave, Octave, AugmentedOctave,
+        WRONG
+    }
+
     public static class Interval
     {
-        public static Dictionary<string, int> NoteSemitones = new()
+        public static readonly Dictionary<string, int> NoteSemitones = new()
         {
             { "C", 0 }, { "Dbb", 0 }, { "B#", 0 },
             { "C#", 1 }, { "Db", 1 }, { "Bx", 1 },
@@ -18,6 +31,24 @@ namespace Algorithm.New.Utils
             { "A", 9 }, { "Gx", 9 }, { "Bbb", 9 },
             { "A#", 10 }, { "Bb", 10 }, { "Cbb", 10 },
             { "B", 11 }, { "Ax", 11 }, { "Cb", 11 }
+        };
+
+        public static readonly Dictionary<int, List<IntervalName>> IntervalNames = new()
+        {
+            { 0, [IntervalName.Unisono, IntervalName.DiminishedSecond] },
+            { 1, [] },
+            { 2, [] },
+            { 3, [] },
+            { 4, [] },
+            { 5, [] },
+            { 6, [] },
+            { 7, [] },
+            { 8, [] },
+            { 9, [] },
+            { 10, [] },
+            { 11, [] },
+            { 12, [] },
+            { 13, [] },
         };
 
         public static int Determinant(Note? note)
@@ -70,6 +101,14 @@ namespace Algorithm.New.Utils
             var det2 = Determinant(note2);
 
             return Math.Abs(det1 - det2);
+        }
+
+        public static IntervalName IntervalBetween(Note? note1, Note? note2)
+        {
+            if (note1 == null || note2 == null)
+                return IntervalName.WRONG;
+
+            return IntervalName.Unisono;
         }
     }
 }

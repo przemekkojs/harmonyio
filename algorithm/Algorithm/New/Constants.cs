@@ -34,12 +34,18 @@ namespace Algorithm.New
 
         // Ustawienia dla sprawdzania rozwiązania
         public static readonly Settings Settings = new([
-            new VoiceCrossing(),
+            new AugmentedInterval(),
+            new DominantSixthDown(),
+            new DominantThirdUp(),
+            new DoubledFifthOnStrongBarPart(),
+            new NinthDown(),
             new OneDirection(),
             new ParallelFifths(),
-            new ParallelOctaves(),
-            new VoiceCrossingOneFunction(),
-            new DoubledFifthOnStrongBarPart()
+            new ParallelOctaves(),            
+            new SeventhDown(),
+            new SixthUp(),
+            new VoiceCrossing(),
+            new VoiceCrossingOneFunction()
         ]);
 
         // Ustawienia dla sprawdzania zadania
