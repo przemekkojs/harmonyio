@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Zaloguj się do Harmony.io";
 }
 
 <div class="d-flex justify-content-center" style="min-height: 100%;"> 
@@ -11,12 +11,12 @@
             <form id="account" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="mb-3">
-                    <label asp-for="Input.Email" class="ps-1 pb-1 fw-bold">Email</label>
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                    <label asp-for="Input.Email" class="ps-1 pb-1 fw-bold"></label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" />
                     <span asp-validation-for="Input.Email" class="text-danger small"></span>
                 </div>
                 <div class="mb-1">
-                    <label asp-for="Input.Password" class="ps-1 pb-1 fw-bold">Hasło</label>
+                    <label asp-for="Input.Password" class="ps-1 pb-1 fw-bold"></label>
                     <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
                     <span asp-validation-for="Input.Password" class="text-danger small"></span>
                 </div>

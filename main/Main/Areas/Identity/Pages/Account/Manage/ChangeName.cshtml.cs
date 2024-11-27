@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Main.Data;
 using Main.Models;
+using Main.Resources;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,11 +12,13 @@ namespace Main.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
 
-        [Required(ErrorMessage = "Imię nie moze być puste")]
+        [Required(ErrorMessage = ErrorMessages.Required)]
+        [Display(Name = "Imię")]
         [BindProperty]
         public string Name {get; set;} = null!;
 
-        [Required(ErrorMessage = "Nazwisko nie może być puste")]
+        [Required(ErrorMessage = ErrorMessages.Required)]
+        [Display(Name = "Nazwisko")]
         [BindProperty]
         public string Surname {get; set;} = null!;
 

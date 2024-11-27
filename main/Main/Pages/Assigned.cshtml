@@ -2,8 +2,9 @@
 @model Main.Pages.AssignedModel
 @using JsonConvert = Newtonsoft.Json.JsonConvert;
 @using Main.Enumerations
-
 @{
+    ViewData["Title"] = "Harmony.io - Przypisane quizy";
+
     var quizRequests = Model.AppUser.QuizRequests.ToList();
 }
 

@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Main.Models;
+using Main.Resources;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -53,19 +54,19 @@ namespace Main.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Aktualne hasło jest wymagane")]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [Display(Name = "Aktualne Hasło")]
             public string OldPassword { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Nowe hasło jest wymagane")]
-            [StringLength(100, ErrorMessage = "Hasło musi zawierać od {2} do {1} znaków.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [StringLength(100, ErrorMessage = ErrorMessages.StringLength, MinimumLength = 6)]
+            [Display(Name = "Nowe Hasło")]
             public string NewPassword { get; set; }
 
             /// <summary>
@@ -73,8 +74,8 @@ namespace Main.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "Powtórzone hasło nie jest takie samo jak hasło.")]
+            [Compare("NewPassword", ErrorMessage = ErrorMessages.Compare)]
+            [Display(Name = "Powtórz hasło")]
             public string ConfirmPassword { get; set; }
         }
 

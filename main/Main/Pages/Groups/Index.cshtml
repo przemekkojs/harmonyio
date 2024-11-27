@@ -1,6 +1,8 @@
 ﻿@page
 @model Main.Pages.GroupsIndexModel
 @{
+    ViewData["Title"] = "Harmony.io - Grupy";
+
     var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.TeacherInGroups).ToList();
     var joinedGroups = Model.AppUser.StudentInGroups.ToList();
 

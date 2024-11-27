@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using NuGet.Protocol;
+using Main.Resources;
 
 namespace Main.Areas.Identity.Pages.Account
 {
@@ -79,20 +80,21 @@ namespace Main.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required(ErrorMessage = "Podanie imienia jest obowiązkowe")]
-            [Display(Name = "First Name")]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [Display(Name = "Imię")]
             public string FirstName { get; set; }
             
-            [Required(ErrorMessage = "Podanie nazwiska jest obowiązkowe")]
-            [Display(Name = "Last Name")]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [Display(Name = "Nazwisko")]
             public string LastName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [EmailAddress(ErrorMessage = ErrorMessages.EmailAddress)]
+            [Display(Name = "Email")]            
             public string Email { get; set; }
         }
         

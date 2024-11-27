@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Main.Resources;
 
 namespace Main.Areas.Identity.Pages.Account
 {
@@ -65,16 +66,18 @@ namespace Main.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Podany email jest nieprawidłowy")]
-            [EmailAddress]
+            [Required(ErrorMessage = ErrorMessages.Required)]
+            [EmailAddress(ErrorMessage = ErrorMessages.EmailAddress)]
+            [Display(Name = "Email")]
             public string Email { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage = "Podane hasło jest nieprawidłowe")]
+            [Required(ErrorMessage = ErrorMessages.Required)]
             [DataType(DataType.Password)]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
         }
 
