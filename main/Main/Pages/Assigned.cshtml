@@ -4,31 +4,30 @@
 @using Main.Enumerations
 @{
     ViewData["Title"] = "Harmony.io - Przypisane quizy";
-
-    var quizRequests = Model.AppUser.QuizRequests.ToList();
 }
 
-<head> 
-    <link rel="stylesheet" href="~/css/quiz-lists-style.css" /> 
+<head>
+    <link rel="stylesheet" href="~/css/quiz-lists-style.css" />
 </head>
 
 <div class="h-100 w-100 d-flex flex-column flex-md-row mb-3">
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow p-3 me-3 mb-3">
-        @if (Model.NotSolvedOpen.Count != 0 || Model.NotSolvedPlanned.Count != 0 || quizRequests.Count != 0)
+        @if (Model.NotSolvedOpen.Count != 0 || Model.NotSolvedPlanned.Count != 0 || Model.QuizRequests.Count != 0)
         {
-            @if (quizRequests.Count > 0)
+            @if (Model.QuizRequests.Count > 0)
             {
                 <div>
                     <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
-                        Zaproszenia (@quizRequests.Count)
-                        <a href="#quizRequestsSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="quizRequestsSection"
-                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                        Zaproszenia (@Model.QuizRequests.Count)
+                        <a href="#quizRequestsSection" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                            aria-controls="quizRequestsSection"
+                            class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
                             <i class="fas fa-chevron-up icon-md" id="quizRequestsSectionCollapseBtnIcon"></i>
                         </a>
                     </div>
 
                     <div class="collapse show" id="quizRequestsSection">
-                        @foreach (var request in quizRequests)
+                        @foreach (var request in Model.QuizRequests)
                         {
                             <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden mb-3">
                                 <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
@@ -46,10 +45,10 @@
                                 <div class="d-flex flex-column ms-auto">
                                     <!-- Accept Request Button -->
                                     <form method='get' action="/join">
-                                        <input type="hidden" id="code" name="code" value="@request.Quiz.Code"/>
+                                        <input type="hidden" id="code" name="code" value="@request.Quiz.Code" />
                                         <button class="btn-icon" type="submit">
                                             <i class="fa fa-check icon-sm text-success"></i>
-                                        </button>                            
+                                        </button>
                                     </form>
 
                                     <!-- Decline Request Button -->
@@ -72,8 +71,9 @@
                 <div>
                     <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
                         Do rozwiązania (@Model.NotSolvedOpen.Count)
-                        <a href="#toSolveQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="toSolveQuizzesSection"
-                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                        <a href="#toSolveQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                            aria-controls="toSolveQuizzesSection"
+                            class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
                             <i class="fas fa-chevron-up icon-md" id="toSolveQuizzesSectionCollapseBtnIcon"></i>
                         </a>
                     </div>
@@ -102,7 +102,7 @@
                                         </span>
                                     </div>
                                     <div class="d-flex flex-row align-items-center">
-                                        <i class="fas fa-user icon-sm me-2"></i> 
+                                        <i class="fas fa-user icon-sm me-2"></i>
                                         <span class="text-truncate">
                                             <span class="fw-bold">Twórca:</span>
                                             @quiz.Creator.FullName
@@ -111,7 +111,8 @@
                                 </div>
 
                                 <div class="d-flex flex-column" id="solveButtonElement@(quiz.Id)">
-                                    <a asp-page="Solve" asp-route-code="@quiz.Code" class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
+                                    <a asp-page="Solve" asp-route-code="@quiz.Code"
+                                        class="btn btn-primary ms-auto mt-auto">Rozwiąż</a>
                                 </div>
                             </div>
                         }
@@ -125,8 +126,9 @@
                 <div>
                     <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
                         Zaplanowane (@Model.NotSolvedPlanned.Count)
-                        <a href="#plannedQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="plannedQuizzesSection"
-                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                        <a href="#plannedQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                            aria-controls="plannedQuizzesSection"
+                            class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
                             <i class="fas fa-chevron-up icon-md" id="plannedQuizzesSectionCollapseBtnIcon"></i>
                         </a>
                     </div>
@@ -134,7 +136,8 @@
                     <div class="collapse show" id="plannedQuizzesSection">
                         @foreach (var quiz in Model.NotSolvedPlanned)
                         {
-                            <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3" id="plannedElement@(quiz.Id)">
+                            <div class="quiz border rounded shadow-sm mb-3 p-0 flex-shrink-0 d-flex flex-row p-3"
+                                id="plannedElement@(quiz.Id)">
                                 <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
                                     <div class="fw-bold fs-5 mb-3 text-truncate">@quiz.Name</div>
 
@@ -192,8 +195,9 @@
                 <div>
                     <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
                         Rozwiązane otwarte (@Model.SolvedOpen.Count)
-                        <a href="#solvedOpenQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="solvedOpenQuizzesSection"
-                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                        <a href="#solvedOpenQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                            aria-controls="solvedOpenQuizzesSection"
+                            class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
                             <i class="fas fa-chevron-up icon-md" id="solvedOpenQuizzesSectionCollapseBtnIcon"></i>
                         </a>
                     </div>
@@ -237,7 +241,7 @@
                                             </span>
                                         </div>
                                     }
-                                
+
                                     <div class="d-flex flex-row align-items-center">
                                         <i class="fas fa-user icon-sm me-2"></i>
                                         <span class="text-truncate">
@@ -275,8 +279,9 @@
                 <div>
                     <div class="fw-bold fs-4 mb-3 d-flex flex-row justify-content-between">
                         Zamknięte (@Model.Closed.Count)
-                        <a href="#closedQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="closedQuizzesSection"
-                        class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
+                        <a href="#closedQuizzesSection" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                            aria-controls="closedQuizzesSection"
+                            class="text-decoration-none text-dark d-flex align-items-center justify-content-center border-0">
                             <i class="fas fa-chevron-up icon-md" id="closedQuizzesSectionCollapseBtnIcon"></i>
                         </a>
                     </div>
@@ -298,7 +303,8 @@
                                                 @quizResult.GradeDate.ToString("dd.MM.yyyy, HH:mm")
                                             </span>
                                         </div>
-                                    } else 
+                                    }
+                                    else
                                     {
                                         <div class="d-flex flex-row align-items-center mb-2">
                                             <i class="far fa-clock icon-sm me-2"></i>
@@ -337,7 +343,8 @@
                                         <span class="text-truncate">Oczekuje na ocenę...</span>
                                     }
 
-                                    <a asp-page="Browse" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
+                                    <a asp-page="Browse" asp-route-id="@quiz.Id"
+                                        class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
                                 </div>
                             </div>
                         }
@@ -371,7 +378,7 @@
         const closedQuizzesElement = document.getElementById('closedQuizzesSection');
         const closedQuizzesBtnIcon = document.getElementById('closedQuizzesSectionCollapseBtnIcon');
 
-        if (quizRequestsElement != null){
+        if (quizRequestsElement != null) {
             quizRequestsElement.addEventListener('show.bs.collapse', () => {
                 quizRequestsBtnIcon.classList.add('fa-chevron-up');
                 quizRequestsBtnIcon.classList.remove('fa-chevron-down');
@@ -381,7 +388,7 @@
                 quizRequestsBtnIcon.classList.add('fa-chevron-down');
             });
         }
-        if (toSolveQuizzesElement != null){
+        if (toSolveQuizzesElement != null) {
             toSolveQuizzesElement.addEventListener('show.bs.collapse', () => {
                 toSolveQuizzesBtnIcon.classList.add('fa-chevron-up');
                 toSolveQuizzesBtnIcon.classList.remove('fa-chevron-down');
@@ -391,7 +398,7 @@
                 toSolveQuizzesBtnIcon.classList.add('fa-chevron-down');
             });
         }
-        if (plannedQuizzesElement != null){
+        if (plannedQuizzesElement != null) {
             plannedQuizzesElement.addEventListener('show.bs.collapse', () => {
                 plannedQuizzesBtnIcon.classList.add('fa-chevron-up');
                 plannedQuizzesBtnIcon.classList.remove('fa-chevron-down');
@@ -401,7 +408,7 @@
                 plannedQuizzesBtnIcon.classList.add('fa-chevron-down');
             });
         }
-        if (solvedOpenQuizzesElement != null){
+        if (solvedOpenQuizzesElement != null) {
             solvedOpenQuizzesElement.addEventListener('show.bs.collapse', () => {
                 solvedOpenQuizzesBtnIcon.classList.add('fa-chevron-up');
                 solvedOpenQuizzesBtnIcon.classList.remove('fa-chevron-down');
@@ -411,7 +418,7 @@
                 solvedOpenQuizzesBtnIcon.classList.add('fa-chevron-down');
             });
         }
-        if (closedQuizzesElement != null){
+        if (closedQuizzesElement != null) {
             closedQuizzesElement.addEventListener('show.bs.collapse', () => {
                 closedQuizzesBtnIcon.classList.add('fa-chevron-up');
                 closedQuizzesBtnIcon.classList.remove('fa-chevron-down');
@@ -428,19 +435,19 @@
     // TODO check if timers give correct time, in other screen it was giving less (or more) then it should
     function updateTimers() {
         const quizzes = [
-            @foreach (var quiz in Model.NotSolvedOpen)
-            {
-                <text>{id: "@quiz.Id", type: "to-solve", date: "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")" },</text>
-            }
-            @foreach (var quiz in Model.NotSolvedPlanned)
-            {
-                <text>{id: "@quiz.Id", type: "future-quiz", date: "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")", code: "@quiz.Code", openDate: "@quiz.OpenDate.ToString("yyyy-MM-ddTHH:mm:ss")"},</text>
-            }
-            @foreach (var quiz in Model.SolvedOpen)
-            {
-                <text>{id: "@quiz.Id", type: "to-solve", date: "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")" },</text>
-            }
-        ]; 
+    @foreach (var quiz in Model.NotSolvedOpen)
+    {
+        <text>{id: "@quiz.Id", type: "to-solve", date: "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")" },</text>
+    }
+    @foreach (var quiz in Model.NotSolvedPlanned)
+    {
+        <text>{id: "@quiz.Id", type: "future-quiz", date: "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")", code: "@quiz.Code", openDate: "@quiz.OpenDate.ToString("yyyy-MM-ddTHH:mm:ss")"},</text>
+    }
+    @foreach (var quiz in Model.SolvedOpen)
+    {
+        <text>{id: "@quiz.Id", type: "to-solve", date: "@quiz.CloseDate.ToString("yyyy-MM-ddTHH:mm:ss")" },</text>
+    }
+        ];
 
         quizzes.forEach(quiz => {
             const elementId = quiz.type === "to-solve"

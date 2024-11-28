@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Security.Claims;
 using Main.Data;
 using Main.Enumerations;
@@ -37,6 +38,29 @@ public class AssignedModelTests
 
         // Assert
         Assert.IsType<ForbidResult>(result);
+    }
+
+    [Fact]
+    public async Task OnGetAsync_QueryIsNull_ReturnsError()
+    {
+        // Arrange
+        var appUser = new ApplicationUser { Id = "userId", FirstName = "John", LastName = "Doe" };
+        _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                        .ReturnsAsync(appUser);
+
+        _repositoryMock.Setup(repo => repo.GetAsync(
+            It.IsAny<Expression<Func<ApplicationUser, bool>>>(),
+            It.IsAny<Func<IQueryable<ApplicationUser>, IQueryable<ApplicationUser>>?>()))
+            .ReturnsAsync((ApplicationUser?)null);
+
+        var model = new AssignedModel(_repositoryMock.Object, _userManagerMock.Object);
+
+        // Act
+        var result = await model.OnGetAsync();
+
+        // Assert
+        var redirectResult = Assert.IsType<RedirectToPageResult>(result);
+        Assert.Equal("/Error", redirectResult.PageName);
     }
 
     [Fact]
@@ -94,6 +118,80 @@ public class AssignedModelTests
             Assert.Contains(2, pageModel.GradedQuizes.Keys);
         }
     }
+
+    [Fact]
+    public async Task OnPostDeclineRequest_UserNotFound_ReturnsForbid()
+    {
+        // Arrange
+        _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                       .ReturnsAsync((ApplicationUser?)null);
+
+        var model = new AssignedModel(_repositoryMock.Object, _userManagerMock.Object);
+
+        // Act
+        var result = await model.OnPostDeclineRequest();
+
+        // Assert
+        Assert.IsType<ForbidResult>(result);
+    }
+
+    [Fact]
+    public async Task OnPostDeclineRequest_RequestNotFound_ReturnsForbid()
+    {
+        // Arrange
+        var appUser = new ApplicationUser { Id = "userId", FirstName = "John", LastName = "Doe" };
+        _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                        .ReturnsAsync(appUser);
+
+        _repositoryMock.Setup(repo => repo.GetAsync(
+            It.IsAny<Expression<Func<QuizRequest, bool>>>(),
+            It.IsAny<Func<IQueryable<QuizRequest>, IQueryable<QuizRequest>>?>()))
+            .ReturnsAsync((QuizRequest?)null);
+
+        var model = new AssignedModel(_repositoryMock.Object, _userManagerMock.Object);
+
+        // Act
+        var result = await model.OnPostDeclineRequest();
+
+        // Assert
+        Assert.IsType<ForbidResult>(result);
+    }
+
+    [Fact]
+    public async Task OnPostDeclineRequest_DeletesRequest()
+    {
+        // Arrange
+        var appUser = new ApplicationUser { Id = "userId", FirstName = "John", LastName = "Doe" };
+        _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                        .ReturnsAsync(appUser);
+
+        var quizRequest = new QuizRequest
+        {
+            Id = 1,
+            UserId = appUser.Id,
+            QuizId = 1,
+        };
+
+        _repositoryMock.Setup(repo => repo.GetAsync(
+            It.IsAny<Expression<Func<QuizRequest, bool>>>(),
+            It.IsAny<Func<IQueryable<QuizRequest>, IQueryable<QuizRequest>>?>()))
+            .ReturnsAsync((QuizRequest?)quizRequest);
+
+        var model = new AssignedModel(_repositoryMock.Object, _userManagerMock.Object);
+
+        // Act
+        var result = await model.OnPostDeclineRequest();
+
+        // Assert
+        var redirectResult = Assert.IsType<RedirectToPageResult>(result);
+        Assert.Null(redirectResult.PageName);
+
+        _repositoryMock.Verify(r => r.Delete(It.IsAny<QuizRequest>()), Times.Once);
+        _repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
+
+    }
+
+
 
     private List<Quiz> GetSeedingQuizes(string creatorUserId, List<ApplicationUser> participants)
     {

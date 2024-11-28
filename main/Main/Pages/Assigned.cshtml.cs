@@ -16,7 +16,7 @@ public class AssignedModel : PageModel
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationRepository _repository;
 
-    public ApplicationUser AppUser { get; set; } = null!;
+    public List<QuizRequest> QuizRequests = [];
     public List<Quiz> SolvedOpen = [];
     public List<Quiz> NotSolvedOpen = [];
     public List<Quiz> NotSolvedPlanned = [];
@@ -29,7 +29,7 @@ public class AssignedModel : PageModel
     public AssignedModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
-        _repository = repository; 
+        _repository = repository;
     }
 
     public async Task<IActionResult> OnGetAsync()
@@ -40,19 +40,6 @@ public class AssignedModel : PageModel
             return Forbid();
         }
 
-        appUser = await _repository.GetAsync<ApplicationUser>(
-            au => au.Id == appUser.Id,
-            au => au.Include(u => u.QuizRequests)
-                        .ThenInclude(qr => qr.Quiz)
-                            .ThenInclude(q => q.Creator)
-        );
-        if (appUser == null)
-        {
-            return Forbid();
-        }
-
-        AppUser = appUser;
-
         var user = await _repository.GetAsync<ApplicationUser>(
             u => u.Id == appUser.Id,
             u => u
@@ -62,13 +49,17 @@ public class AssignedModel : PageModel
                         .ThenInclude(e => e.ExerciseSolutions.Where(es => es.UserId == appUser.Id))
                 .Include(u => u.ParticipatedQuizes)
                     .ThenInclude(q => q.Creator)
+                .Include(u => u.QuizRequests)
+                    .ThenInclude(qr => qr.Quiz)
+                        .ThenInclude(q => q.Creator)
         );
-
 
         if (user == null)
         {
             return RedirectToPage("/Error");
         };
+
+        QuizRequests = user.QuizRequests.ToList();
 
         GradedQuizes = user.QuizResults
             .Where(qr => qr.Grade != null)
