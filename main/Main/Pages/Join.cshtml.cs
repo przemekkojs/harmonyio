@@ -36,7 +36,7 @@ public class JoinModel : PageModel
                 .Include(q => q.Creator)
                 .Include(q => q.Exercises)
                 .Include(q => q.Participants)
-                .Include(q => q.Requests)
+                .Include(q => q.Requests.Where(qr => qr.UserId == appUser.Id))
         );
 
         if (quiz == null)
@@ -54,14 +54,11 @@ public class JoinModel : PageModel
             _repository.Update(Quiz);
         }
 
-        foreach (var request in quiz.Requests)
+        foreach (var request in quiz.Requests.Where(qr => qr.UserId == appUser.Id))
         {
-            if (request.UserId == appUser.Id)
-            {
-                _repository.Delete(request);
-            }
+            _repository.Delete(request);
         }
-        
+
         await _repository.SaveChangesAsync();
 
         return Page();

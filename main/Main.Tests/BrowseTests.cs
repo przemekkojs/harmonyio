@@ -7,7 +7,6 @@ using Main.Pages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace Main.Tests;
