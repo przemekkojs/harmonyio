@@ -325,7 +325,7 @@ var assemblies = [
       { "name": "Main.GradingAlgorithm.GradingAlgorithm", "rp": "Main_GradingAlgorithm.html", "cl": 0, "ucl": 103, "cal": 103, "tl": 156, "cb": 0, "tb": 40, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.GradingAlgorithm.TestGradingAlgorithm", "rp": "Main_TestGradingAlgorithm.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 13, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Migrations.ApplicationDbContextModelSnapshot", "rp": "Main_ApplicationDbContextModelSnapshot.html", "cl": 0, "ucl": 765, "cal": 765, "tl": 829, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Migrations.FifthInit", "rp": "Main_FifthInit.html", "cl": 0, "ucl": 1353, "cal": 1353, "tl": 1500, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Migrations.Initial", "rp": "Main_Initial.html", "cl": 0, "ucl": 1353, "cal": 1353, "tl": 1500, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.ApplicationUser", "rp": "Main_ApplicationUser.html", "cl": 38, "ucl": 2, "cal": 40, "tl": 70, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.Exercise", "rp": "Main_Exercise.html", "cl": 5, "ucl": 1, "cal": 6, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.ExerciseResult", "rp": "Main_ExerciseResult.html", "cl": 7, "ucl": 3, "cal": 10, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -334,7 +334,7 @@ var assemblies = [
       { "name": "Main.Models.MistakeResult", "rp": "Main_MistakeResult.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.Quiz", "rp": "Main_Quiz.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 35, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.QuizRequest", "rp": "Main_QuizRequest.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.QuizResult", "rp": "Main_QuizResult.html", "cl": 6, "ucl": 2, "cal": 8, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Models.QuizResult", "rp": "Main_QuizResult.html", "cl": 7, "ucl": 1, "cal": 8, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.UsersGroup", "rp": "Main_UsersGroup.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.AssignedModel", "rp": "Main_AssignedModel.html", "cl": 71, "ucl": 1, "cal": 72, "tl": 111, "cb": 24, "tb": 24, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.BrowseModel", "rp": "Main_BrowseModel.html", "cl": 70, "ucl": 32, "cal": 102, "tl": 171, "cb": 27, "tb": 36, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -343,7 +343,7 @@ var assemblies = [
       { "name": "Main.Pages.ErrorModel", "rp": "Main_ErrorModel.2.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 24, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.ExerciseResultData", "rp": "Main_ExerciseResultData.html", "cl": 4, "ucl": 1, "cal": 5, "tl": 171, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.GenerateData", "rp": "Main_GenerateData.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 324, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.GradeModel", "rp": "Main_GradeModel.html", "cl": 0, "ucl": 219, "cal": 219, "tl": 323, "cb": 0, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.GradeModel", "rp": "Main_GradeModel.html", "cl": 225, "ucl": 3, "cal": 228, "tl": 323, "cb": 59, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.GroupDetailsModel", "rp": "Main_GroupDetailsModel.html", "cl": 0, "ucl": 202, "cal": 202, "tl": 329, "cb": 0, "tb": 68, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.Groups.Pages_Groups_Details", "rp": "Main_Pages_Groups_Details.html", "cl": 0, "ucl": 84, "cal": 84, "tl": 630, "cb": 0, "tb": 106, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.Groups.Pages_Groups_Index", "rp": "Main_Pages_Groups_Index.html", "cl": 0, "ucl": 44, "cal": 44, "tl": 340, "cb": 0, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -367,7 +367,7 @@ var assemblies = [
       { "name": "Main.Pages.SolveModel", "rp": "Main_SolveModel.html", "cl": 126, "ucl": 37, "cal": 163, "tl": 239, "cb": 49, "tb": 62, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Services.AuthMessageSenderOptions", "rp": "Main_AuthMessageSenderOptions.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Services.EmailSender", "rp": "Main_EmailSender.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 50, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Utils.Utils", "rp": "Main_Utils.html", "cl": 0, "ucl": 62, "cal": 62, "tl": 93, "cb": 0, "tb": 32, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Utils.Utils", "rp": "Main_Utils.html", "cl": 4, "ucl": 58, "cal": 62, "tl": 93, "cb": 1, "tb": 32, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Program", "rp": "Main_Program.html", "cl": 0, "ucl": 46, "cal": 46, "tl": 76, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
@@ -430,16 +430,16 @@ var riskHotspots = [
       { "value": 32, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Utils.Utils", "reportPath": "Main_Utils.html", "methodName": "MistakesToHTML(System.Collections.Generic.ICollection`1<Main.Models.MistakeResult>)", "methodShortName": "MistakesToHTML(...)", "fileIndex": 0, "line": 9,
-    "metrics": [
-      { "value": 1056, "exceeded": true },
-      { "value": 32, "exceeded": true },
-    ]},
-  {
     "assembly": "Main", "class": "Main.Pages.Pages_Grade", "reportPath": "Main_Pages_Grade.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
     "metrics": [
       { "value": 930, "exceeded": true },
       { "value": 30, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Utils.Utils", "reportPath": "Main_Utils.html", "methodName": "MistakesToHTML(System.Collections.Generic.ICollection`1<Main.Models.MistakeResult>)", "methodShortName": "MistakesToHTML(...)", "fileIndex": 0, "line": 9,
+    "metrics": [
+      { "value": 870, "exceeded": true },
+      { "value": 32, "exceeded": true },
     ]},
   {
     "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__Layout", "reportPath": "Main_Pages_Shared__Layout.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 51,
@@ -466,12 +466,6 @@ var riskHotspots = [
       { "value": 20, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.GradeModel", "reportPath": "Main_GradeModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 53,
-    "metrics": [
-      { "value": 420, "exceeded": true },
-      { "value": 20, "exceeded": true },
-    ]},
-  {
     "assembly": "Main", "class": "Main.Pages.Pages_Creator", "reportPath": "Main_Pages_Creator.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 22,
     "metrics": [
       { "value": 420, "exceeded": true },
@@ -485,12 +479,6 @@ var riskHotspots = [
     ]},
   {
     "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnPostSubmit()", "methodShortName": "OnPostSubmit()", "fileIndex": 0, "line": 242,
-    "metrics": [
-      { "value": 342, "exceeded": true },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.GradeModel", "reportPath": "Main_GradeModel.html", "methodName": "OnPost()", "methodShortName": "OnPost()", "fileIndex": 0, "line": 180,
     "metrics": [
       { "value": 342, "exceeded": true },
       { "value": 18, "exceeded": true },
@@ -814,6 +802,12 @@ var riskHotspots = [
       { "value": 26, "exceeded": true },
     ]},
   {
+    "assembly": "Main", "class": "Main.Pages.GradeModel", "reportPath": "Main_GradeModel.html", "methodName": "OnPost()", "methodShortName": "OnPost()", "fileIndex": 0, "line": 150,
+    "metrics": [
+      { "value": 24, "exceeded": false },
+      { "value": 24, "exceeded": true },
+    ]},
+  {
     "assembly": "Main", "class": "Main.Pages.SolveModel", "reportPath": "Main_SolveModel.html", "methodName": "OnPost()", "methodShortName": "OnPost()", "fileIndex": 0, "line": 95,
     "metrics": [
       { "value": 22, "exceeded": false },
@@ -851,6 +845,12 @@ var riskHotspots = [
     ]},
   {
     "assembly": "Main", "class": "Main.Pages.BrowseModel", "reportPath": "Main_BrowseModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 70,
+    "metrics": [
+      { "value": 18, "exceeded": false },
+      { "value": 18, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.GradeModel", "reportPath": "Main_GradeModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 52,
     "metrics": [
       { "value": 18, "exceeded": false },
       { "value": 18, "exceeded": true },
