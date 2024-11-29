@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<UsersGroup> UsersGroups { get; set; }
     public DbSet<GroupRequest> GroupRequests { get; set; }
     public DbSet<MistakeResult> MistakeResults { get; set; }
+    public DbSet<QuizRequest> QuizRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

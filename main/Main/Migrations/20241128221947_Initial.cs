@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Main.Migrations
 {
     /// <inheritdoc />
-    public partial class FifthInit : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -247,7 +247,7 @@ namespace Main.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuizRequest",
+                name: "QuizRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -257,15 +257,15 @@ namespace Main.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuizRequest", x => x.Id);
+                    table.PrimaryKey("PK_QuizRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuizRequest_AspNetUsers_UserId",
+                        name: "FK_QuizRequests_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuizRequest_Quizes_QuizId",
+                        name: "FK_QuizRequests_Quizes_QuizId",
                         column: x => x.QuizId,
                         principalTable: "Quizes",
                         principalColumn: "Id",
@@ -571,13 +571,13 @@ namespace Main.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizRequest_QuizId",
-                table: "QuizRequest",
+                name: "IX_QuizRequests_QuizId",
+                table: "QuizRequests",
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizRequest_UserId",
-                table: "QuizRequest",
+                name: "IX_QuizRequests_UserId",
+                table: "QuizRequests",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -635,7 +635,7 @@ namespace Main.Migrations
                 name: "QuizParticipants");
 
             migrationBuilder.DropTable(
-                name: "QuizRequest");
+                name: "QuizRequests");
 
             migrationBuilder.DropTable(
                 name: "UserGroup");

@@ -88,7 +88,7 @@ public class ApplicationRepository : IRepository
         path = path.Replace(".", "");
         return path[..6];
     }
-    
+
     public async Task<(List<string>, List<ApplicationUser>)> GetAllUsersByEmailAsync(ICollection<string> emails, Func<IQueryable<ApplicationUser>, IQueryable<ApplicationUser>>? modifier = null)
     {
         if (emails == null || emails.Count == 0)
@@ -96,26 +96,27 @@ public class ApplicationRepository : IRepository
             return (new List<string>(), new List<ApplicationUser>());
         }
 
+        var lowercaseEmails = emails.Select(e => e.ToLower()).ToHashSet();
+
         var set = context.Set<ApplicationUser>()
             .Where(
-                    u => 
+                    u =>
                     u.Email != null &&
-                    emails.Any(e => e.ToLower() == u.Email.ToLower())
+                    lowercaseEmails.Contains(u.Email.ToLower())
             );
 
         var query = modifier is null ? set : modifier(set);
 
         var users = await query.ToListAsync();
 
-        List<string> NotFoudMails = emails.Where(
-            e => 
-                !users.Any(u => 
-                    e.ToLower() == u.Email!.ToLower()
-                )
+        var foundUserEmailsToLower = users.Select(u => u.Email!.ToLower()).ToHashSet();
+
+        List<string> notFoundEmails = emails.Where(
+            e => !foundUserEmailsToLower.Contains(e.ToLower())
             )
             .ToList();
 
-        return (NotFoudMails, users);
+        return (notFoundEmails, users);
     }
 
     public async Task<ApplicationUser?> GetUserByEmailAsync(string email, Func<IQueryable<ApplicationUser>, IQueryable<ApplicationUser>>? modifier = null)
@@ -127,7 +128,7 @@ public class ApplicationRepository : IRepository
 
         var set = context.Set<ApplicationUser>()
             .Where(
-                    u => 
+                    u =>
                     u.Email != null &&
                     email.ToLower() == u.Email.ToLower()
             );

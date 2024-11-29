@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Main.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241126172429_FifthInit")]
-    partial class FifthInit
+    [Migration("20241128221947_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -307,7 +307,7 @@ namespace Main.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("QuizRequest");
+                    b.ToTable("QuizRequests");
                 });
 
             modelBuilder.Entity("Main.Models.QuizResult", b =>

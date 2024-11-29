@@ -123,33 +123,7 @@ public class CreatedModel : PageModel
             return Forbid();
         }
 
-        var quizToAssign = await _repository.GetAsync<Quiz>(
-            q => q.Id == QuizId,
-            q => q
-                .Include(q => q.Participants)
-                .Include(q => q.PublishedToGroup)
-                .Include(q => q.Requests)
-        );
-
-        // check if user is creator of quiz, if not then he cant assign to this quiz
-        if (quizToAssign == null || appUser.Id != quizToAssign.CreatorId)
-        {
-            return RedirectToPage("Error");
-        }
-
-        var userGroups = await _repository.GetAsync<ApplicationUser>(
-            u => u.Id == appUser.Id,
-            u => u
-                .Include(u => u.TeacherInGroups)
-                .Include(u => u.MasterInGroups)
-        );
-
-        if (userGroups == null)
-        {
-            return RedirectToPage("Error");
-        }
-
-        // parse groupIds as int, delete those that cant be parsed, can also return error
+        // parse groupIds as int, delete those that cant be parsed
         var groupIds = GroupsIds != null ?
             GroupsIds
             .Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -169,9 +143,38 @@ public class CreatedModel : PageModel
             return RedirectToPage("Error");
         }
 
-        var validUserGroupIds = userGroups.TeacherInGroups
+        var quizToAssign = await _repository.GetAsync<Quiz>(
+            q => q.Id == QuizId,
+            q => q
+                .Include(q => q.Participants)
+                .Include(q => q.PublishedToGroup)
+                .Include(q => q.Requests)
+        );
+
+        // check if user is creator of quiz, if not then he cant assign to this quiz
+        if (quizToAssign == null || appUser.Id != quizToAssign.CreatorId)
+        {
+            return RedirectToPage("Error");
+        }
+
+        var userGroups = await _repository.GetAsync<ApplicationUser>(
+            u => u.Id == appUser.Id,
+            u => u
+                .Include(u => u.TeacherInGroups)
+                    .ThenInclude(g => g.Students)
+                .Include(u => u.MasterInGroups)
+                    .ThenInclude(g => g.Students)
+        );
+
+        if (userGroups == null)
+        {
+            return RedirectToPage("Error");
+        }
+
+        var curUserGroups = userGroups.TeacherInGroups.Concat(userGroups.MasterInGroups);
+
+        var validUserGroupIds = curUserGroups
             .Select(g => g.Id)
-            .Concat(userGroups.MasterInGroups.Select(g => g.Id))
             .ToHashSet();
 
         // check if user is teacher or master in all groups hes trying to assign
@@ -180,30 +183,22 @@ public class CreatedModel : PageModel
             return RedirectToPage("Error");
         }
 
-        var (notFoundMails, foundUsers) = await _repository.GetAllUsersByEmailAsync(emails);
+        var (notFoundEmails, foundUsers) = await _repository.GetAllUsersByEmailAsync(emails);
 
-        // var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
-        //     u => u.Where(u => u.Email != null && emails.Contains(u.Email))
-        // );
-
-        // var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
-        // var notFoundMails = emails
-        //         .Where(email => !usersByEmail.ContainsKey(email))
-        //         .ToList();
-
-        if (notFoundMails.Count() != 0)
+        if (notFoundEmails.Count != 0)
         {
-            return new JsonResult(new { notFoundEmails = notFoundMails });
+            return new JsonResult(new { notFoundEmails = notFoundEmails });
         }
 
         // at this point emails and groupIds are valid
 
-        var newGroups = await _repository.GetAllAsync<UsersGroup>(
-            g => g.Where(
-                g => groupIds.Contains(g.Id) &&
-                !quizToAssign.PublishedToGroup.Contains(g))
-                .Include(g => g.Students)
+        var puliishedToGroupsIds = quizToAssign.PublishedToGroup.Select(g => g.Id).ToHashSet();
+
+        var newGroups = curUserGroups.Where(
+            g => groupIds.Contains(g.Id) &&
+            !puliishedToGroupsIds.Contains(g.Id)
         );
+
         quizToAssign.PublishedToGroup.AddRange(newGroups);
 
         var allUsersFromNewGroups = newGroups.SelectMany(
@@ -217,14 +212,20 @@ public class CreatedModel : PageModel
 
         var existingRequestsParticipantsIds = quizToAssign.Requests.Select(r => r.UserId).ToHashSet();
         var allNewQuizRequestedUsers = foundUsers
-            .Where(u => !existingParticipantIds.Contains(u.Id) && 
+            .Where(u => !existingParticipantIds.Contains(u.Id) &&
                         !allNewQuizParticipants.Contains(u) &&
                         !existingRequestsParticipantsIds.Contains(u.Id))
             .ToHashSet();
 
         quizToAssign.Participants.AddRange(allNewQuizParticipants);
         _repository.Update(quizToAssign);
-        await _repository.SaveChangesAsync();
+
+        var allNewQuizParticipantsIds = allNewQuizParticipants.Select(u => u.Id).ToHashSet();
+        var requestsToDelete = quizToAssign.Requests.Where(r => allNewQuizParticipantsIds.Contains(r.UserId));
+        foreach (var request in requestsToDelete)
+        {
+            _repository.Delete(request);
+        }
 
         foreach (var user in allNewQuizRequestedUsers)
         {
@@ -235,6 +236,8 @@ public class CreatedModel : PageModel
             };
             _repository.Add(request);
         }
+
+
         await _repository.SaveChangesAsync();
 
         return new JsonResult(
@@ -254,12 +257,17 @@ public class CreatedModel : PageModel
         if (appUser == null)
             return Forbid();
 
-        var quizToPublish = await _repository.GetAsync<Quiz>(q => q.Id == QuizId && q.CreatorId == appUser.Id);
+        var quizToPublish = await _repository.GetAsync<Quiz>(q => q.Id == QuizId);
+
         var noClosedDate = CloseDate == null;
         var noOpenDate = OpenDate == null;
-
-        if (quizToPublish == null || quizToPublish.IsCreated || noClosedDate || noOpenDate)
+        if (quizToPublish == null || quizToPublish.CreatorId != appUser.Id || quizToPublish.IsCreated || noClosedDate || noOpenDate)
             return RedirectToPage("Error");
+
+        if (CloseDate <= OpenDate || CloseDate < DateTime.Now)
+        {
+            return RedirectToPage("Error");
+        }
 
         quizToPublish.CloseDate = (DateTime)CloseDate!;
         quizToPublish.OpenDate = (DateTime)OpenDate!;
@@ -279,9 +287,9 @@ public class CreatedModel : PageModel
         if (appUser == null)
             return Forbid();
 
-        var deletedQuiz = await _repository.GetAsync<Quiz>(q => q.Id == QuizId && q.CreatorId == appUser.Id);
+        var deletedQuiz = await _repository.GetAsync<Quiz>(q => q.Id == QuizId);
 
-        if (deletedQuiz == null)
+        if (deletedQuiz == null || deletedQuiz.CreatorId != appUser.Id || deletedQuiz.IsCreated)
             return RedirectToPage("Error");
 
         _repository.Delete(deletedQuiz);

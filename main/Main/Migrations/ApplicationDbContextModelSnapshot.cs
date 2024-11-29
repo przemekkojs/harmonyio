@@ -304,7 +304,7 @@ namespace Main.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("QuizRequest");
+                    b.ToTable("QuizRequests");
                 });
 
             modelBuilder.Entity("Main.Models.QuizResult", b =>
