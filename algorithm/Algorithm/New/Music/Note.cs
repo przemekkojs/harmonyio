@@ -2,15 +2,19 @@
 {
     public class Note
     {
-        public string Name { get; private set; }
+        public string Name { get => name; set => SetNewName(value); }
         public int Octave { get; set; }
         public string Accidental { get; private set; }
+
+        public Component? Component { get; set; } = null;
+
+        private string name;
 
         private static readonly List<string> PossibleAccidentals = ["#", "b", "x", "bb", "bq", ""];
 
         public Note (string name, int octave)
         {
-            Name = name;
+            this.name = name;
             Octave = octave;
 
             DeductAccidental();
@@ -18,7 +22,7 @@
 
         public void SetNewName(string newName)
         {
-            Name = newName;
+            name = newName;
             DeductAccidental();
         }
 
@@ -28,9 +32,9 @@
                 throw new ArgumentException("Invalid accidental");
 
             if (!accidental.Equals("bq"))
-                Name = name + accidental;
+                this.name = name + accidental;
             else
-                Name = name;
+                this.name = name;
 
             Octave = octave;
             Accidental = accidental;
@@ -53,7 +57,7 @@
 
             if (obj is Note casted)
             {
-                var checkName = Name == casted.Name;
+                var checkName = name == casted.Name;
                 var checkOctave = Octave == casted.Octave;
 
                 return checkName && checkOctave;
@@ -62,6 +66,6 @@
             return false;
         }
 
-        public override string ToString() => $"{Name}{Octave}";
+        public override string ToString() => $"{name}{Octave}";
     }
 }

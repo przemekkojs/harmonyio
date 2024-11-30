@@ -1,6 +1,5 @@
 ﻿using Algorithm.New.Utils;
 using System.Text.Json.Serialization;
-using System.Xml.Linq;
 
 namespace Algorithm.New.Music
 {
@@ -55,7 +54,6 @@ namespace Algorithm.New.Music
             SetOctaves();
         }
 
-        // TODO: Bind properties
         [JsonConstructor]
         public Stack(int bar, int beat, int duration, string soprano, string alto, string tenore, string bass) : 
             this(new Index() { Bar = bar, Position = beat, Duration = duration }, soprano, alto, tenore, bass) { }

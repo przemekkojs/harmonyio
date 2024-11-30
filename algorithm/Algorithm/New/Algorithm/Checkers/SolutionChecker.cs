@@ -23,6 +23,8 @@ namespace Algorithm.New.Algorithm.Checkers
             if (SolutionEmpty(solution))
                 return null;
 
+            MapNotesToComponents(solution);
+
             List<Mistake.Solution.Mistake> result = [];
             var noteMistakes = CheckNoteMistakes(solution);
             var stackMistakes = CheckStackMistakes(solution, settings);
@@ -31,6 +33,12 @@ namespace Algorithm.New.Algorithm.Checkers
             result.AddRange(stackMistakes);
 
             return result;
+        }
+
+        // TODO: Implementacja tego
+        private static void MapNotesToComponents(Solution solution)
+        {
+
         }
 
         private static bool SolutionEmpty(Solution solution)
@@ -74,7 +82,8 @@ namespace Algorithm.New.Algorithm.Checkers
                 var stackNotes = stack.Notes;
 
                 var function = solution.Problem.Functions[index];
-                var possibleVersions = PossibleNotes.GeneratePossibleNotes(function);
+                var possibleVersions = PossibleNotes
+                    .GeneratePossibleNotes(function);
 
                 var uniqueNotes = possibleVersions
                     .SelectMany(x => x)
@@ -88,7 +97,10 @@ namespace Algorithm.New.Algorithm.Checkers
                     var noteName = note?.Name;
                     noteName ??= string.Empty;
 
-                    if (!uniqueNotes.Contains(noteName))
+                    var uniqueNoteNames = uniqueNotes
+                        .Select(x => x.Item1);
+
+                    if (!uniqueNoteNames.Contains(noteName))
                     {
                         var toAppend = new NoteMistake(note, stack);
                         result.Add(toAppend);

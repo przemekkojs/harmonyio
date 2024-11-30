@@ -123,21 +123,22 @@ namespace Algorithm.New.Algorithm.Generators
             var functions = problem.Functions;
             var maxIterations = 0;
             List<Stack> stacks = [];
-            Dictionary<Function, List<List<string>>> mappings = [];
+            Dictionary<Function, List<List<(string, Component)>>> mappings = [];
             List<int> usedNotesIndexes = [];
 
             foreach (var function in functions)
             {
                 var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
-                var notesSet = new List<List<string>>();
+                var notesSet = new List<List<(string, Component)>>();
 
 
                 foreach (var possibleSet in possibleNotes)
                 {
                     var combinations = Combinations
-                        .Generate(possibleSet);
+                        .Generate(possibleSet)
+                        .Distinct();
 
-                    notesSet.AddRange(combinations.Distinct());
+                    notesSet.AddRange(combinations);
                 }
 
                 maxIterations += notesSet.Count;
@@ -161,7 +162,20 @@ namespace Algorithm.New.Algorithm.Generators
                 usedNotesIndexes[currentIndex]++;
 
                 var possibleNotes = mappings[function][usedNotesIndex];
-                var current = new Stack(function.Index, possibleNotes);
+                var possibleNoteNames = possibleNotes
+                    .Select(x => x.Item1)
+                    .ToList();
+
+                var possibleComponents = possibleNotes
+                    .Select(x => x.Item2)
+                    .ToList();
+
+                var current = new Stack(function.Index, possibleNoteNames);
+
+                for (int i = 0; i < possibleComponents.Count; i++)
+                {
+                    current.Notes[i].Component = possibleComponents[i];
+                }
 
                 if (stacks.Count == 0)
                 {
@@ -278,7 +292,7 @@ namespace Algorithm.New.Algorithm.Generators
             var function = functions[functionIndex];
             var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
 
-            var notesSet = new List<List<string>>();
+            var notesSet = new List<List<(string, Component)>>();
 
             foreach (var possibleSet in possibleNotes)
             {
@@ -290,7 +304,21 @@ namespace Algorithm.New.Algorithm.Generators
 
             foreach (var notes in notesSet)
             {
-                var stack = new Stack(function.Index, notes);
+                var noteNames = notes
+                    .Select(x => x.Item1)
+                    .ToList();
+
+                var components = notes
+                    .Select(x => x.Item2)
+                    .ToList();
+
+                var stack = new Stack(function.Index, noteNames);
+
+                for (int i = 0; i < stack.Notes.Count; i++)
+                {
+                    stack.Notes[i].Component = components[i];
+                }
+
                 var next = new StackNode(stack);
 
                 var checkResult = StackPairChecker
