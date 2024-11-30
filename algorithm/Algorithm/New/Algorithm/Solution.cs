@@ -1,4 +1,5 @@
 ﻿using Algorithm.New.Music;
+using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm
 {
@@ -14,7 +15,7 @@ namespace Algorithm.New.Algorithm
         }
 
         public Solution(Problem problem) : this(problem, []) { }
-
+        
         public override bool Equals(object? obj)
         {
             if (obj == null)
