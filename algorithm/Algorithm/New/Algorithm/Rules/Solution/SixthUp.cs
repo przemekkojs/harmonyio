@@ -23,12 +23,22 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             var stack1 = stacks[0];
             var stack2 = stacks[1];
 
-            for (int noteIndex = 0; noteIndex < stack1.Notes.Count; noteIndex++)
-            {
-                var note1 = stack1.Notes[noteIndex];
-                var note2 = stack2.Notes[noteIndex];
+            // TODO: Sprawdzenie, czy w ogóle jest dominanta
 
-                // Tutaj jakoś trzeba zrobić mapowanie nuty na komponent
+            var stack1Notes = stack1.Notes;
+            var stack2Notes = stack2.Notes;
+
+            for (int i = 0; i < stack1Notes.Count; i++)
+            {
+                var component1 = stack1Notes[i]?.Component ?? null;
+                var component2 = stack2Notes[i]?.Component ?? null;
+
+                if (component1 == null || component2 == null)
+                    continue;
+
+                if (component1.Type == ComponentType.Ninth &&
+                    component2.Type != ComponentType.Fifth)
+                    return false;
             }
 
             return true;

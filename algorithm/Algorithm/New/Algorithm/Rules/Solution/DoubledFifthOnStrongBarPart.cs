@@ -27,7 +27,13 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
             if (verticalIndex == 0)
             {
-                // TODO: Add logic here
+                var stackNotes = stack.Notes;
+                var fifthCount = stackNotes
+                    .Where(x => x?.Component?.Type == ComponentType.Fifth)
+                    .Count();
+
+                if (fifthCount > 1)
+                    return false;
             }
 
             return true;
