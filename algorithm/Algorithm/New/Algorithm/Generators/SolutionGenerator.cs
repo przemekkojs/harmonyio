@@ -213,7 +213,6 @@ namespace Algorithm.New.Algorithm.Generators
             return result;
         }
 
-        // TODO: Zaimplementować
         private static void Rhytmize(Solution solution)
         {
             Dictionary<int, int> FunctionAmountsInBars = [];
