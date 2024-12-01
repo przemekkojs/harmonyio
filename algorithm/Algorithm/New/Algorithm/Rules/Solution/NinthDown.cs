@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             oneFunction: false) { }
 
         // Korzysta z komponentów funkcji
-        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
+        public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale kwinty?")
         { }
 
-        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
+        public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

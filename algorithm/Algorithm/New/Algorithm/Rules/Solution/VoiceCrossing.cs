@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Czy nuty w obu funkcjach nie krzyżują się wysokościami w ramach tego samego głosu?")
         { }
 
-        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
+        public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

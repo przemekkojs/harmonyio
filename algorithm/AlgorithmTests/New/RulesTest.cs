@@ -70,11 +70,18 @@ namespace AlgorithmTests.New
 
             var problem = new Problem([function1, function2], metre, tonation);
             var solution = new Solution(problem, [stack1, stack2]);
-
             var mistakes = SolutionChecker.CheckSolution(solution, settings);
 
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 1);
+
+            // Sprawdzenie, czy działa w 2 strony
+            var problem2 = new Problem([function2, function1], metre, tonation);
+            var solution2 = new Solution(problem2, [stack2, stack1]);
+            var mistakes2 = SolutionChecker.CheckSolution(solution2, settings);
+
+            Assert.True(mistakes2 != null);
+            Assert.True(mistakes2.Count == 1);
         }
 
         [Fact]

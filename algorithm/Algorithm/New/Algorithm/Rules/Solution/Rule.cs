@@ -19,19 +19,19 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
         // Przy wejściu do zasady, dowolny stos ma GWARANTOWANE 4 głosy ustawione,
         // ale część z nich może być null-em
-        public abstract bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks);
+        public abstract bool IsSatisfied(List<Function> functions, List<Stack> stacks);
 
-        protected bool ValidateParametersCount(params Stack[] stacks)
+        protected bool ValidateParametersCount(List<Stack> stacks)
         {
-            if (OneFunction && stacks.Length != 1)
+            if (OneFunction && stacks.Count != 1)
                 return false;
-            else if (!OneFunction && stacks.Length != 2)
+            else if (!OneFunction && stacks.Count != 2)
                 return false;
 
             return true;
         }
 
-        protected bool ValidateEmptyStacks(params Stack[] stacks)
+        protected static bool ValidateEmptyStacks(List<Stack> stacks)
         {
             foreach (var stack in stacks)
             {

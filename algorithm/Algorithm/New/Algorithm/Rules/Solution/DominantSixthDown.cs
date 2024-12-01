@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             oneFunction: false) { }
 
         // Korzysta z komponentów funkcji
-        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
+        public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;
@@ -19,10 +19,13 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             if (!ValidateEmptyStacks(stacks))
                 return false;
 
-            var stack1 = stacks[0];
-            var stack2 = stacks[1];
+            var function1 = functions[0];
 
-            // TODO: Sprawdzenie, czy w ogóle jest dominanta
+            if (function1.Symbol != Symbol.D)
+                return true;
+
+            var stack1 = stacks[0];
+            var stack2 = stacks[1];            
 
             var notes1 = stack1.Notes;
             var notes2 = stack2.Notes;

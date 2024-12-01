@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Ruch o interwał zwiększony w dowolnym głosie nie jest dozwolony",
             oneFunction: false) { }
 
-        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
+        public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

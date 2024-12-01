@@ -75,5 +75,20 @@ namespace Algorithm.New.Music
 
             return false;
         }
+
+        public override string ToString()
+        {
+            return Type switch
+            {
+                ComponentType.Root => "1",
+                ComponentType.Second => "2",
+                ComponentType.Third => "3",
+                ComponentType.Fourth => "4",
+                ComponentType.Fifth => "5",
+                ComponentType.Sixth => "6",
+                ComponentType.Seventh => "7",
+                _ => "9"
+            };
+        }
     }
 }

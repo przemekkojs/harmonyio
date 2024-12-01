@@ -82,9 +82,15 @@ namespace Algorithm.New.Algorithm.Generators
             }
         }
 
+        /// <summary>
+        /// TA FUNKCJA NIE DZIAŁA - NIE KORZYSTAĆ
+        /// </summary>
+        /// <param name="prev"></param>
+        /// <param name="next"></param>
+        /// <returns></returns>
         public int EvaluatePair(StackNode prev, StackNode next)
         {
-            var checkResult = StackPairChecker.CheckRules(prev.Stack, next.Stack, Settings);
+            var checkResult = StackPairChecker.CheckRules(functions: [], stacks: [prev.Stack, next.Stack], Settings);
 
             if (checkResult.Count == 0)
                 return 0;
@@ -121,8 +127,8 @@ namespace Algorithm.New.Algorithm.Generators
         public static Solution GenerateLinear(Problem problem, int tolerance = 0)
         {
             var functions = problem.Functions;
-            var maxIterations = 0;
             List<Stack> stacks = [];
+            List<Function> functionsTmp = [];
             Dictionary<Function, List<List<(string, Component)>>> mappings = [];
             List<int> usedNotesIndexes = [];
 
@@ -130,7 +136,6 @@ namespace Algorithm.New.Algorithm.Generators
             {
                 var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
                 var notesSet = new List<List<(string, Component)>>();
-
 
                 foreach (var possibleSet in possibleNotes)
                 {
@@ -140,11 +145,15 @@ namespace Algorithm.New.Algorithm.Generators
 
                     notesSet.AddRange(combinations);
                 }
-
-                maxIterations += notesSet.Count;
+                
                 mappings[function] = notesSet;
                 usedNotesIndexes.Add(0);
             }
+
+            var maxIterations = mappings.Values
+                .Sum(x => x
+                    .Sum(y => y.Count)
+            );
 
             var currentIndex = 0;
             var currentIteration = 0;
@@ -156,12 +165,14 @@ namespace Algorithm.New.Algorithm.Generators
                     return new Solution(problem);
 
                 currentIteration++;
-
-                var function = functions[currentIndex];
+                
+                var currentFunction = functions[currentIndex];
+                var mapping = mappings[currentFunction];
                 var usedNotesIndex = usedNotesIndexes[currentIndex];
+
                 usedNotesIndexes[currentIndex]++;
 
-                var possibleNotes = mappings[function][usedNotesIndex];
+                var possibleNotes = mapping[usedNotesIndex];
                 var possibleNoteNames = possibleNotes
                     .Select(x => x.Item1)
                     .ToList();
@@ -170,24 +181,26 @@ namespace Algorithm.New.Algorithm.Generators
                     .Select(x => x.Item2)
                     .ToList();
 
-                var current = new Stack(function.Index, possibleNoteNames);
+                var currentStack = new Stack(currentFunction.Index, possibleNoteNames);
 
                 for (int i = 0; i < possibleComponents.Count; i++)
                 {
-                    current.Notes[i].Component = possibleComponents[i];
+                    currentStack.Notes[i].Component = possibleComponents[i];
                 }
 
                 if (stacks.Count == 0)
                 {
-                    stacks.Add(current);
+                    stacks.Add(currentStack);
+                    functionsTmp.Add(currentFunction);
                     currentIndex++;
                 }
                 else
                 {
-                    var prev = stacks.Last();
+                    var prevStack = stacks.Last();
+                    var prevFunction = functionsTmp.Last();
 
                     var checkResult = StackPairChecker
-                        .CheckRules(prev, current, Constants.Settings);
+                        .CheckRules([prevFunction, currentFunction], [prevStack, currentStack], Constants.Settings);
 
                     var mistakesCount = checkResult.Count != 0 ?
                         checkResult.Sum(x => x.Quantity) :
@@ -195,14 +208,16 @@ namespace Algorithm.New.Algorithm.Generators
 
                     if (mistakesCount <= tolerance)
                     {
-                        stacks.Add(current);
+                        stacks.Add(currentStack);
+                        functionsTmp.Add(currentFunction);
                         currentIndex++;
                     }
-                    else if (usedNotesIndexes[currentIndex] >= mappings[function].Count)
+                    else if (usedNotesIndexes[currentIndex] >= mapping.Count)
                     {
-                        currentIndex--;
                         usedNotesIndexes[currentIndex] = 0;
+                        currentIndex--;                        
                         stacks.RemoveAt(currentIndex);
+                        functionsTmp.RemoveAt(currentIndex);
                     }
                 }
             }
@@ -288,6 +303,7 @@ namespace Algorithm.New.Algorithm.Generators
             if (functionIndex >= functions.Count)
                 return;
 
+            var prevFunction = functionIndex > 0 ? functions[functionIndex - 1] : null;
             var function = functions[functionIndex];
             var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
 
@@ -320,8 +336,9 @@ namespace Algorithm.New.Algorithm.Generators
 
                 var next = new StackNode(stack);
 
+
                 var checkResult = StackPairChecker
-                    .CheckRules(prev.Stack, next.Stack, tree.Settings);
+                    .CheckRules([prevFunction, function], [prev.Stack, next.Stack], tree.Settings);
 
                 var newMistakes = currentMistakes + checkResult.Count;
 

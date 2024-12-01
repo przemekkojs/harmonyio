@@ -173,8 +173,9 @@ namespace Algorithm.New.Algorithm.Checkers
                     for (int index = 0; index < solution.Stacks.Count; index++)
                     {
                         var stack = solution.Stacks[index];
+                        var function = solution.Problem.Functions[index];
                         
-                        if (!rule.IsSatisfied(stacks: stack))
+                        if (!rule.IsSatisfied(functions: [function], stacks: [stack]))
                         {
                             var toAdd = new StackMistake([stack], rule);
                             result.Add(toAdd);
@@ -188,7 +189,10 @@ namespace Algorithm.New.Algorithm.Checkers
                         var stack1 = solution.Stacks[index];
                         var stack2 = solution.Stacks[index + 1];
 
-                        if (!rule.IsSatisfied(stacks: [stack1, stack2]))
+                        var function1 = solution.Problem.Functions[index];
+                        var function2 = solution.Problem.Functions[index + 1];
+
+                        if (!rule.IsSatisfied(functions: [function1, function2], stacks: [stack1, stack2]))
                         {
                             var toAdd = new StackMistake([stack1, stack2], rule);
                             result.Add(toAdd);
