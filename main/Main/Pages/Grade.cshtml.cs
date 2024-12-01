@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Main.Enumerations;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
-using Algorithm.New.Algorithm.Mistake.Solution;
 
 namespace Main.Pages
 {
@@ -72,21 +71,16 @@ namespace Main.Pages
             if (quiz == null)
                 return RedirectToPage("Error");
 
-            // check if user can grade quiz
-            // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
-            var userIsNotCreator = quiz.CreatorId != appUser.Id;
-            var isMasterOfGroup = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Any(t => t.Id == appUser.Id));
-
-            if (userIsNotCreator && !isMasterOfGroup)
+            if (!CanUserGradeQuiz(quiz, appUser.Id))
                 return Forbid();
 
             QuizId = quiz.Id;
             ShareAlgorithmOpinion = quiz.ShowAlgorithmOpinion;
             QuizName = quiz.Name;
-            Exercises = [.. quiz.Exercises];
+            Exercises = [.. quiz.Exercises.OrderBy(e => e.Id)];
 
-            var allSolutions = quiz.Exercises.SelectMany(e => e.ExerciseSolutions).ToList();
-            var participantsAnsweredIds = allSolutions.Select(es => es.UserId).ToHashSet();
+            var allSolutions = GetAllExerciseSolutions(Exercises);
+            var participantsAnsweredIds = GetParticipantsWhoAnsweredIds(allSolutions);
 
             // fill missing exercises only if quiz is closed
             if (quiz.State == QuizState.Closed && participantsAnsweredIds.Count != quiz.Participants.Count)
@@ -106,23 +100,9 @@ namespace Main.Pages
             // just to make sure that soutions are in good order
             allSolutions = [.. allSolutions.OrderBy(es => es.ExerciseId)];
 
-            var userIdToSolutions = allSolutions
-                .GroupBy(es => es.UserId)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            var userIdToSolutionResults = userIdToSolutions
-                .ToDictionary(
-                    userToSolutions => userToSolutions.Key,
-                    userToSolutions => userToSolutions.Value
-                        .Select(es => es.ExerciseResult)
-                        .ToList()
-                );
-
-            var userIdToQuizResult = userIdToSolutions.Keys
-                .ToDictionary(
-                    userId => userId,
-                    userId => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == userId)
-                );
+            var userIdToSolutions = GetUserIdToSolutions(allSolutions);
+            var userIdToSolutionResults = GetUserIdToExerciseResults(userIdToSolutions);
+            var userIdToQuizResult = GetUserIdToQuizResult(userIdToSolutions, quiz);
 
             Users = quiz.Participants
                 .Where(p => participantsAnsweredIds.Contains(p.Id))
@@ -158,16 +138,6 @@ namespace Main.Pages
                     .Select(er => er?.AlgorithmPoints ?? 0)
                     .ToList());
 
-                // foreach (var result in userSolutionResults)
-                // {
-                //     if (result == null)
-                //         continue;
-
-                //     _repository.Context.Entry(result)
-                //         .Collection(er => er.MistakeResults)
-                //         .Load();
-                // }
-
                 Opinions.Add(userSolutionResults
                     .Select(er => Utils.Utils.MistakesToHTML(er?.MistakeResults ?? []) ?? "Puste rozwiązanie.")
                     .ToList());
@@ -184,6 +154,15 @@ namespace Main.Pages
                 return Forbid();
             }
 
+            if (
+                UserIds.Count != Grades.Count ||
+                UserIds.Count != Points.Count ||
+                UserIds.Count != Comments.Count
+            )
+            {
+                return RedirectToPage("Error");
+            }
+
             var quiz = await _repository.GetAsync<Quiz>(
                 q => q.Id == QuizId,
                 query => query
@@ -198,43 +177,16 @@ namespace Main.Pages
             if (quiz == null)
                 return RedirectToPage("Error");
 
-            // check if user can grade quiz
-            // he cant if he is not creator of quiz or he isnt teacher or master in any of the groups the quiz is published to
-            var userIsNotCreator = quiz.CreatorId != appUser.Id;
-            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == appUser.Id || g.Teachers.Any(t => t.Id == appUser.Id));
-
-            if (userIsNotCreator && !userIsMaster)
+            if (!CanUserGradeQuiz(quiz, appUser.Id))
                 return Forbid();
 
-            var allSolutions = quiz.Exercises
-                .SelectMany(e => e.ExerciseSolutions)
-                .OrderBy(es => es.ExerciseId)
-                .ToList();
-
-            var participantsAnsweredIds = allSolutions
-                .Select(es => es.UserId)
-                .ToHashSet();
-
-            var userIdToSolutions = allSolutions
-                .GroupBy(es => es.UserId)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            var userIdToSolutionResults = userIdToSolutions
-                .ToDictionary(
-                    userToSolutions => userToSolutions.Key,
-                    userToSolutions => userToSolutions.Value
-                        .Select(es => es.ExerciseResult)
-                        .ToList()
-                );
-
-            var userIdToQuizResult = userIdToSolutions.Keys
-                .ToDictionary(
-                    userId => userId,
-                    userId => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == userId)
-                );
+            var allSolutions = GetAllExerciseSolutions(quiz.Exercises);
+            var participantsAnsweredIds = GetParticipantsWhoAnsweredIds(allSolutions);
+            var userIdToSolutions = GetUserIdToSolutions(allSolutions);
+            var userIdToSolutionResults = GetUserIdToExerciseResults(userIdToSolutions);
+            var userIdToQuizResult = GetUserIdToQuizResult(userIdToSolutions, quiz);
 
             var gradingTime = DateTime.Now;
-
             for (int i = 0; i < UserIds.Count; i++)
             {
                 var curUserId = UserIds[i];
@@ -271,7 +223,7 @@ namespace Main.Pages
                 {
                     var curSolutionResult = curSolutionResults[j]!;
 
-                    curSolutionResult.Points = Points[i][j];
+                    curSolutionResult.Points = Points[i][j] <= curSolutionResult.MaxPoints ? Points[i][j] : curSolutionResult.MaxPoints;
                     curSolutionResult.Comment = Comments[i][j] ?? string.Empty;
                     curSolutionResult.QuizResult = curQuizResult;
                 }
@@ -282,6 +234,54 @@ namespace Main.Pages
 
             await _repository.SaveChangesAsync();
             return RedirectToPage("Created");
+        }
+
+        private static List<ExerciseSolution> GetAllExerciseSolutions(ICollection<Exercise> exercises)
+        {
+            return exercises
+                .SelectMany(e => e.ExerciseSolutions)
+                .OrderBy(es => es.ExerciseId)
+                .ToList();
+        }
+
+        private static HashSet<string> GetParticipantsWhoAnsweredIds(ICollection<ExerciseSolution> solutions)
+        {
+            return solutions.Select(es => es.UserId).ToHashSet();
+        }
+
+        private static Dictionary<string, List<ExerciseSolution>> GetUserIdToSolutions(ICollection<ExerciseSolution> solutions)
+        {
+            return solutions
+                .GroupBy(es => es.UserId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        private static Dictionary<string, List<ExerciseResult?>> GetUserIdToExerciseResults(Dictionary<string, List<ExerciseSolution>> userIdToSolutions)
+        {
+            return userIdToSolutions
+                .ToDictionary(
+                    userToSolutions => userToSolutions.Key,
+                    userToSolutions => userToSolutions.Value
+                        .Select(es => es.ExerciseResult)
+                        .ToList()
+                );
+        }
+
+        private static Dictionary<string, QuizResult?> GetUserIdToQuizResult(Dictionary<string, List<ExerciseSolution>> userIdToSolutions, Quiz quiz)
+        {
+            return userIdToSolutions.Keys
+                .ToDictionary(
+                    userId => userId,
+                    userId => quiz.QuizResults.FirstOrDefault(qr => qr.UserId == userId)
+                );
+        }
+
+        private bool CanUserGradeQuiz(Quiz quiz, string userId)
+        {
+            var userIsCreator = quiz.CreatorId == userId;
+            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == userId || g.Teachers.Any(t => t.Id == userId));
+
+            return userIsCreator || userIsMaster;
         }
 
         private async Task<List<ExerciseSolution>> FillMissingExerciseSolutionsAndResults(IEnumerable<string> participantsNotAnsweredIds, IEnumerable<Exercise> exercises)
