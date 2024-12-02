@@ -125,7 +125,12 @@ namespace Main.GradingAlgorithm
         private static Dictionary<(int, (int, int, int)), List<int>> GenerateOpinion(List<Mistake>? mistakes)
         {
             if (mistakes == null)
-                return [];
+            {
+                return new Dictionary<(int, (int, int, int)), List<int>>()
+                {
+                    { (0, (0, 0, 0)), [999] }
+                };
+            }                
 
             // Takty, funkcje w taktach, ID błędu
             var tmp = new Dictionary<(int, (int, int, int)), List<int>>();
