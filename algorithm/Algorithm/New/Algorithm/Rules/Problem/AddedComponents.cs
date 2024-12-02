@@ -11,7 +11,21 @@ namespace Algorithm.New.Algorithm.Rules.Problem
 
         public override bool IsSatisfied(params Function[] functions)
         {
-            throw new NotImplementedException();
+            if (!ValidateParametersCount())
+                return false;
+
+            var function = functions[0];
+            var added = function.Added;
+
+            // Jak nie ma składników dodanych to są dobrze
+            if (added == null || added.Count == 0)
+                return true;
+
+            var containsSixth = added.Contains(Component.Sixth);
+            var containsSeventh = added.Contains(Component.Seventh);
+            var containsNinth = added.Contains(Component.Ninth);
+
+            return true;
         }
     }
 }
