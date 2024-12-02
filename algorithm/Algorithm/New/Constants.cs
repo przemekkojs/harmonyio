@@ -53,7 +53,8 @@ namespace Algorithm.New
         public static readonly List<Algorithm.Rules.Problem.Rule> ProblemSettings =
         [
             new SubdominantAfterDominant(),
-            new EmptyFunction()
+            new EmptyFunction(),
+            new AddedComponents()
         ];
 
         public static readonly Dictionary<(float, string), (string, int)> NoteMappings = new()

@@ -4,6 +4,7 @@
     {
         public const string UNKNOWN_MISTAKE = "Niesprecyzowany błąd";
         public const string MISSING_VOICE = "Brakujący głos.";
+        public const string EMPTY_SOLUTION = "Puste rozwiązanie";
 
         public int MistakeCode { get; set; }        
         public abstract int Quantity { get; }
@@ -20,6 +21,9 @@
 
         public static string MistakeCodeToDescription(int mistakeCode)
         {
+            if (mistakeCode == 999)
+                return EMPTY_SOLUTION;
+
             if (mistakeCode == -1)
                 return MISSING_VOICE;
 

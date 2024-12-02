@@ -9,6 +9,22 @@ namespace Main.Utils
         {
             if (mistakes.Count == 0)
                 return string.Empty;
+            else if (mistakes.Count == 1)
+            {
+                var mistake = mistakes.First();
+                var codes = mistake.MistakeCodes;
+
+                if (codes.Count == 1)
+                {
+                    var code = codes[0];
+                    
+                    if (code == 999)
+                    {
+                        var desc = Mistake.MistakeCodeToDescription(code);
+                        return desc;
+                    }
+                }                
+            }
 
             var tmp = new Dictionary<(int, (int, int, int)), List<string>>();
 

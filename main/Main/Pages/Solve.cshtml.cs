@@ -187,6 +187,31 @@ namespace Main.Pages
 
         private static List<MistakeResult> GenerateMistakeResults(Dictionary<(int, (int, int, int)), List<int>> tmp)
         {
+            var values = tmp.Values
+                .ToList();
+
+            if (values.Count == 1)
+            {
+                var valueList = values[0];
+
+                if (valueList.Count == 1)
+                {
+                    var value = valueList[0];
+
+                    if (value == 999)
+                    {
+                        var toReturn = new MistakeResult()
+                        {
+                            MistakeCodes = [999],
+                            Bars = [],
+                            Functions = []
+                        };
+
+                        return [toReturn];
+                    }
+                }
+            }
+
             var sortedKeys = tmp.Keys
                 .OrderBy(key => key.Item1)
                     .ThenBy(key => key.Item2.Item1)

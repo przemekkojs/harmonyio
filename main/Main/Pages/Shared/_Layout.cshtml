@@ -2,7 +2,7 @@
 <html lang="en">
 @using Enumerations
 @{
-    var currentPageRoute = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+    var currentPageRoute = ViewContext.RouteData.Values["page"]?.ToString() ?? string.Empty;
     NavState currentNavState = NavState.Unselected;
 
     if (currentPageRoute == "/Index")
@@ -68,7 +68,7 @@
                             <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Assigned">
                                     <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : string.Empty)">Rozwiąż</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : string.Empty)">Rozwiąż i przejrzyj</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
                                 </a>
                             </li>                            
