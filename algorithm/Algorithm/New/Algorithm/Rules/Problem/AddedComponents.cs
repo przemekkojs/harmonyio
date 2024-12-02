@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
 
         public override bool IsSatisfied(params Function[] functions)
         {
-            if (!ValidateParametersCount())
+            if (!ValidateParametersCount(functions))
                 return false;
 
             var function = functions[0];
