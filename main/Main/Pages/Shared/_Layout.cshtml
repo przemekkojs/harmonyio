@@ -54,28 +54,28 @@
                             <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Index">
                                     <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : "")">Strona główna</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : string.Empty)">Strona główna</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Home ? "visible" : "invisible")" />
                                 </a> 
                             </li>
                             <li class="nav-item h-100 d-flex">
-                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Assigned">
-                                    <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : "")">Przypisane</span>
-                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
-                                </a>
-                            </li>
-                            <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Created">
-                                    <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : "")">Utworzone</span>
+                                    <hr class="m-0 border-primary border-3 invisible" />
+                                    <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : string.Empty)">Utwórz i oceń</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Created ? "visible" : "invisible")" />
                                 </a>
                             </li>
                             <li class="nav-item h-100 d-flex">
+                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Assigned">
+                                    <hr class="m-0 border-primary border-3 invisible"/>
+                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : string.Empty)">Rozwiąż</span>
+                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
+                                </a>
+                            </li>                            
+                            <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Groups/Index">
                                     <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Groups ? "text-primary" : "")">Grupy</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Groups ? "text-primary" : string.Empty)">Grupy</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Groups ? "visible" : "invisible")" />
                                 </a> 
                             </li>

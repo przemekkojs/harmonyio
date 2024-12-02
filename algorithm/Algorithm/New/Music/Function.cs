@@ -309,6 +309,10 @@ namespace Algorithm.New.Music
 
                         doubled.Add(Component.Seventh);
                     }
+                    else
+                    {
+                        added.Add(Component.Seventh);
+                    }
                 }
                 else if (Added.Contains(Component.Ninth))
                 {

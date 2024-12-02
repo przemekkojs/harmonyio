@@ -3,7 +3,7 @@ using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class ParallelOctaves : Rule
+    public sealed class ParallelOctaves : Rule
     {
         public ParallelOctaves() : base(
             id: 103,
@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale oktawy?")
         { }
 
-        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
+        public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;

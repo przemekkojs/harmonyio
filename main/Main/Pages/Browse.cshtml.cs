@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MidiPlayback;
+using System.Text;
 
 namespace Main.Pages
 {
@@ -23,6 +24,7 @@ namespace Main.Pages
     public record PlayExerciseData
     {
         public int SolutionIndex { get; set; }
+        public string Task { get; set; }
     }
 
     [Authorize]
@@ -48,22 +50,22 @@ namespace Main.Pages
         }
 
         // TODO: Implementacja
-        public JsonResult OnPostPlayFile([FromBody] PlayExerciseData data)
+        public IActionResult OnPostPlayFile([FromBody] PlayExerciseData data)
         {
             var solutionIndex = data.SolutionIndex;
+            var task = data.Task;
 
-            if (AlgorithmSolutions.Count == 0)
-                return new JsonResult(new { success = false });
-
-            var solutionString = AlgorithmSolutions[solutionIndex];
-            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
-                .ParseJsonToSolutionParseResult(solutionString);
+            var solutionParseResult = AlgorithmSolutions.Count == 0 ?
+                Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                    .ParseJsonToSolutionParseResult(task) :
+                Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                    .ParseJsonToSolutionParseResult(AlgorithmSolutions[solutionIndex]);
+            
 
             var stacks = solutionParseResult.Stacks;
-
             var result = FileCreator.Create();
 
-            return new JsonResult(new { success = true, bytes = result });
+            return File(result, "audio/midi", "output.mid");
         }
 
         public async Task<IActionResult> OnGetAsync(int id)

@@ -1,8 +1,6 @@
 ﻿using Algorithm.New;
 using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
-using Algorithm.New.Algorithm.Rules;
-using System.Reflection.Metadata;
 
 namespace AlgorithmTests.New
 {

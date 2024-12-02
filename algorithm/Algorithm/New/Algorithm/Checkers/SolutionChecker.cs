@@ -1,4 +1,5 @@
 ﻿using Algorithm.New.Algorithm.Mistake.Solution;
+using Algorithm.New.Music;
 using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Checkers
@@ -23,6 +24,9 @@ namespace Algorithm.New.Algorithm.Checkers
             if (SolutionEmpty(solution))
                 return null;
 
+            ValidateStackToFunctionMapping(solution);
+            MapNotesToComponents(solution);
+
             List<Mistake.Solution.Mistake> result = [];
             var noteMistakes = CheckNoteMistakes(solution);
             var stackMistakes = CheckStackMistakes(solution, settings);
@@ -31,6 +35,61 @@ namespace Algorithm.New.Algorithm.Checkers
             result.AddRange(stackMistakes);
 
             return result;
+        }
+
+        private static void MapNotesToComponents(Solution solution)
+        {
+            var stacks = solution.Stacks;
+            var functions = solution.Problem.Functions;
+
+            for (int stackIndex = 0; stackIndex < stacks.Count; stackIndex++)
+            {
+                var stack = stacks[stackIndex];
+                var function = functions[stackIndex];
+
+                var stackNotes = stack.Notes;
+                var symbolOffset = FunctionSymbolToOffset(function);
+
+                var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
+                var possibleNotesFlattened = possibleNotes
+                    .SelectMany(x => x)
+                    .ToList();
+
+                foreach (var note in stackNotes)
+                {
+                    if (note == null)
+                        continue;
+
+                    var matchingComponent = possibleNotesFlattened
+                        .FirstOrDefault(x => x.Item1.Equals(note.Name))
+                        .Item2;
+
+                    note.Component = matchingComponent;
+                }
+            }
+        }
+
+        private static int FunctionSymbolToOffset(Symbol symbol)
+        {
+            return symbol switch
+            {
+                Symbol.T => 0,
+                Symbol.Sii => 1,
+                Symbol.Tiii => 2,
+                Symbol.Diii => 2,
+                Symbol.S => 3,
+                Symbol.D => 4,
+                Symbol.Tvi => 5,
+                Symbol.Svi => 5,
+                Symbol.Dvii => 6,
+                _ => 6
+            };
+        }
+
+        private static int FunctionSymbolToOffset(Function function)
+        {
+            var symbol = function.Symbol;
+            return FunctionSymbolToOffset(symbol);
         }
 
         private static bool SolutionEmpty(Solution solution)
@@ -64,9 +123,7 @@ namespace Algorithm.New.Algorithm.Checkers
 
         private static List<NoteMistake> CheckNoteMistakes(Solution solution)
         {
-            List<NoteMistake> result = [];
-
-            ValidateStackToFunctionMapping(solution);
+            List<NoteMistake> result = [];            
 
             for (int index = 0; index < solution.Stacks.Count; index++)
             {
@@ -74,7 +131,8 @@ namespace Algorithm.New.Algorithm.Checkers
                 var stackNotes = stack.Notes;
 
                 var function = solution.Problem.Functions[index];
-                var possibleVersions = PossibleNotes.GeneratePossibleNotes(function);
+                var possibleVersions = PossibleNotes
+                    .GeneratePossibleNotes(function);
 
                 var uniqueNotes = possibleVersions
                     .SelectMany(x => x)
@@ -88,7 +146,10 @@ namespace Algorithm.New.Algorithm.Checkers
                     var noteName = note?.Name;
                     noteName ??= string.Empty;
 
-                    if (!uniqueNotes.Contains(noteName))
+                    var uniqueNoteNames = uniqueNotes
+                        .Select(x => x.Item1);
+
+                    if (!uniqueNoteNames.Contains(noteName))
                     {
                         var toAppend = new NoteMistake(note, stack);
                         result.Add(toAppend);
@@ -103,9 +164,7 @@ namespace Algorithm.New.Algorithm.Checkers
 
         private static List<StackMistake> CheckStackMistakes(Solution solution, Settings settings)
         {
-            List<StackMistake> result = [];
-
-            ValidateStackToFunctionMapping(solution);
+            List<StackMistake> result = [];            
 
             foreach (var rule in settings.ActiveRules)
             { 
@@ -114,8 +173,9 @@ namespace Algorithm.New.Algorithm.Checkers
                     for (int index = 0; index < solution.Stacks.Count; index++)
                     {
                         var stack = solution.Stacks[index];
+                        var function = solution.Problem.Functions[index];
                         
-                        if (!rule.IsSatisfied(stacks: stack))
+                        if (!rule.IsSatisfied(functions: [function], stacks: [stack]))
                         {
                             var toAdd = new StackMistake([stack], rule);
                             result.Add(toAdd);
@@ -129,7 +189,10 @@ namespace Algorithm.New.Algorithm.Checkers
                         var stack1 = solution.Stacks[index];
                         var stack2 = solution.Stacks[index + 1];
 
-                        if (!rule.IsSatisfied(stacks: [stack1, stack2]))
+                        var function1 = solution.Problem.Functions[index];
+                        var function2 = solution.Problem.Functions[index + 1];
+
+                        if (!rule.IsSatisfied(functions: [function1, function2], stacks: [stack1, stack2]))
                         {
                             var toAdd = new StackMistake([stack1, stack2], rule);
                             result.Add(toAdd);

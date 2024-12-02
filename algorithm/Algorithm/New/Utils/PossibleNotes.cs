@@ -4,18 +4,18 @@ namespace Algorithm.New.Utils
 {
     public static class PossibleNotes
     {
-        public static List<List<string>> GeneratePossibleNotes(Function function)
+        public static List<List<(string, Component)>> GeneratePossibleNotes(Function function)
         {
-            List<List<string>> result = [];
+            List<List<(string, Component)>> result = [];
 
             foreach (var componentSet in function.PossibleComponents)
             {
-                List<string> toAdd = [];
+                List<(string, Component)> toAdd = [];
 
                 foreach (var component in componentSet)
                 {
                     string noteName = Converters.ComponentToNote(component, function);
-                    toAdd.Add(noteName);
+                    toAdd.Add((noteName, component));
                 }
 
                 result.Add(toAdd);

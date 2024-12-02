@@ -3,7 +3,7 @@ using Algorithm.New.Utils;
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class ParallelFifths : Rule
+    public sealed class ParallelFifths : Rule
     {
         public ParallelFifths() : base(
             id: 102,
@@ -11,7 +11,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             description: "Czy w ramach dwóch funkcji, dwa dowolne głowy poruszają się równolegle do siebie, w interwale kwinty?")
         { }
 
-        public override bool IsSatisfied(string additionalParamsJson = "", params Stack[] stacks)
+        public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
             if (!ValidateParametersCount(stacks))
                 return false;
