@@ -1,4 +1,4 @@
-﻿export async function playTask(taskObject) {
+﻿export async function playTask(taskObject, currentIndex) {
     const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
     try {

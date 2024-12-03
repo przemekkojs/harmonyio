@@ -245,7 +245,9 @@
 
 <script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
 
-<script>
+<script type="module">
+    import { playTask } from "../js/midi-player-scripts/midiPlayer.js";
+
     const usernames = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => u.FullName)));
 
     const userGrades = @Html.Raw(JsonConvert.SerializeObject(Model.Grades.Select(g => new[] { g?.ToString() ?? "-", g?.AsString() ?? "-" })));
@@ -269,6 +271,9 @@
     const suggestionElement = document.getElementById("suggestion");
     const maxElement = document.getElementById("max");
     const commentElement = document.getElementById("comment");
+
+    let midiPlay = document.getElementById('play-file');
+    let midiStop = document.getElementById('stop-file');
 
     for (let i = 0; i < @Model.Users.Count; i++) {
         if (userGrades[i][0] != "-") {
@@ -452,17 +457,10 @@
     function submitFormClicked() {
         document.getElementById("gradeForm").submit();
     }
-
-</script>
-
-<script type="module" defer>
-    import { playTask } from "../wwwroot/js/midi-player-scripts/midiPlayer.js";
-
-    let midiPlay = document.getElementById('play-file');
-    let midiStop = document.getElementById('stop-file');
-
+    
+    // DLA MIDI:
     function playAnswer() {
-        return () => playTask(userSolutions[currentUserIndex][currentQuestionIndex]);
+        return () => playTask(userSolutions[currentUserIndex][currentQuestionIndex], currentQuestionIndex);
     }
 
     function stopMidi() {
@@ -479,4 +477,5 @@
         midiPlay.addEventListener('click', playAnswer(index));
         midiStop.addEventListener('click', stopMidi);
     }
+
 </script>
