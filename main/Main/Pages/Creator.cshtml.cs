@@ -242,18 +242,12 @@ namespace Main.Pages
         public async Task<IActionResult> OnPostSubmit()
         {
             if (Questions!.Count == 0)
-            {
                 ModelState.AddModelError(nameof(Questions), "Wymagane jest przynajmniej jedno zadanie.");
-            }
             else if (Questions.Any(q => q == "" || q == null))
-            {
                 ModelState.AddModelError(nameof(Questions), "Nie można dodaż pustych zadań.");
-            }
 
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
 
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
