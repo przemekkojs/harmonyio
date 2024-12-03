@@ -1,7 +1,6 @@
 ﻿import { FunctionContainer } from "./functionContainer.js"
 
 class Bar {
-    // TODO: maxFunctionsCount
     constructor(barContainer, taskIndex, barIndex, maxFunctionsCount = 6) {
         this.taskIndex = taskIndex;
         this.barIndex = barIndex;
@@ -48,7 +47,7 @@ export class BarContainer {
 
         this.handleAddBar = this.addBar.bind(this);
         this.addBarButton.addEventListener('click', this.handleAddBar);
-                
+
         this.container.appendChild(this.addBarButton);
         this.addBar();
     }
