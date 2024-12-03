@@ -49,7 +49,6 @@ namespace Main.Pages
             _userManager = userManager;
         }
 
-        // TODO: Implementacja
         public IActionResult OnPostPlayFile([FromBody] PlayExerciseData data)
         {
             var solutionIndex = data.SolutionIndex;
@@ -59,8 +58,7 @@ namespace Main.Pages
                 Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
                     .ParseJsonToSolutionParseResult(task) :
                 Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
-                    .ParseJsonToSolutionParseResult(AlgorithmSolutions[solutionIndex]);
-            
+                    .ParseJsonToSolutionParseResult(AlgorithmSolutions[solutionIndex]);            
 
             var stacks = solutionParseResult.Stacks;
             var result = FileCreator.Create(stacks);

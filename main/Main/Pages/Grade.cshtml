@@ -282,7 +282,7 @@
         }
     }
 
-    function loadUser(index, loadToGrandStaff = true) {
+    window.loadUser = function(index, loadToGrandStaff = true) {
         handleStudentsList(index);
         handleTotalPoints(index);
 
@@ -292,13 +292,13 @@
         loadQuestion(0, loadToGrandStaff);
     }
 
-    function handleTotalPoints(index) {
+    window.handleTotalPoints = function (index) {
         const totalPoints = getUserTotalPoints(index);
         pointsText.innerText = totalPoints + " / " + maxesSum;
         percentageText.innerText = Math.round((totalPoints / maxesSum) * 100) + "%";
     }
 
-    function handleStudentsList(index) {
+    window.handleStudentsList = function (index) {
         const currentStudentRow = studentRows.filter(div => div.textContent.includes(usernames[index]))[0];
         const otherStudentsRow = studentRows.filter(div => div != currentStudentRow);
 
@@ -311,12 +311,12 @@
         });
     }
 
-    function selectUser(index) {
+    window.selectUser = function (index) {
         currentUserIndex = index;
         loadUser(currentUserIndex);
     }
 
-    function getUserTotalPoints(userIndex) {
+    window.getUserTotalPoints = function (userIndex) {
         let totalPoints = 0;
         const points = userPoints[userIndex];
         points.forEach(num => {
@@ -325,14 +325,14 @@
         return totalPoints;
     }
 
-    function onGradeChange(value, strValue) {
+    window.onGradeChange = function(value, strValue) {
         userGrades[currentUserIndex] = [value, strValue];
         document.getElementById(`user-grade-${currentUserIndex}`).innerText = strValue;
         document.getElementById(`grade-hidden-${currentUserIndex}`).value = value;
     @*  document.getElementById("grades-validation-text").innerText = ''; *@
         }
 
-    function onPointsChange(value) {
+    window.onPointsChange = function (value) {
         let numValue = Number(value);
         const maxValue = exerciseMaxes[currentQuestionIndex];
 
@@ -351,18 +351,18 @@
         handleTotalPoints(currentUserIndex);
     }
 
-    function onCommentChange(value) {
+    window.onCommentChange = function(value) {
         userComments[currentUserIndex][currentQuestionIndex] = value;
         document.getElementById(`comment-hidden-${currentQuestionIndex}-${currentUserIndex}`).value = value;
     }
 
-    function integerKeyPress(e) {
+    window.integerKeyPress = function(e) {
         if (!/\d/.test(e.key)) {
             e.preventDefault();
         }
     }
 
-    function loadQuestion(index, loadToGrandStaff = true) {
+    window.loadQuestion = function(index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
 
@@ -405,7 +405,7 @@
     const maxVisibleButtons = 9;
     const targetVisibleOneSide = Math.floor(maxVisibleButtons / 2)
 
-    function generateButtons(index) {
+    window.generateButtons = function (index) {
         let questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
 
@@ -454,13 +454,15 @@
 
     loadUser(currentUserIndex, false);
 
-    function submitFormClicked() {
+    window.submitFormClicked = function () {
         document.getElementById("gradeForm").submit();
     }
     
     // DLA MIDI:
     function playAnswer() {
-        return () => playTask(userSolutions[currentUserIndex][currentQuestionIndex], currentQuestionIndex);
+        return () => playTask(
+            userSolutions[currentUserIndex][currentQuestionIndex], currentQuestionIndex
+        );
     }
 
     function stopMidi() {
@@ -474,8 +476,7 @@
         midiPlay = document.getElementById('play-file');
         midiStop = document.getElementById('stop-file');
 
-        midiPlay.addEventListener('click', playAnswer(index));
+        midiPlay.addEventListener('click', playAnswer());
         midiStop.addEventListener('click', stopMidi);
     }
-
 </script>
