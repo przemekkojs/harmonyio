@@ -42,8 +42,9 @@ export class BarContainer {
         this.addBarButton = document.createElement('input');
         this.addBarButton.type = 'button';
         this.addBarButton.id = `add-bar-${this.taskIndex}`;
-        this.addBarButton.className = "adder-button custom-button button-large plus-button";
+        this.addBarButton.className = "add-bar-button components-place";
         this.addBarButton.title = "Dodaj takt";
+        this.addBarButton.value = "Dodaj takt";
 
         this.handleAddBar = this.addBar.bind(this);
         this.addBarButton.addEventListener('click', this.handleAddBar);

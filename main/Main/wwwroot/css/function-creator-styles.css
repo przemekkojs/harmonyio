@@ -16,8 +16,8 @@
     text-align: center;
     padding: 0;
     margin: 0;
-    background-color: white;
-    border: 1px dashed #222222;
+    background-color: #dddddd;
+    border: 1px #dddddd;
     border-radius: 2px;
     font-family: inherit;
     font-size: 8px;
@@ -49,13 +49,13 @@
     background-color: #dddddd;
     transition-duration: 0.3s;
 }
-
+/*
 .grid-container select:disabled,
 .grid-container input[type="checkbox"]:disabled,
 .grid-container input[type="button"]:disabled {
     background-color: #ffffff;
     border: none;
-}
+}*/
 
 .reset-bootstrap {
     all: unset !important;
@@ -262,7 +262,8 @@
 }
 
 .checkmark-border {
-    border: 1px dashed black;
+    border: 1px solid #dddddd;
+    background-color: #dddddd;
 }
 
 .function-creator .custom-checkbox input:checked + .checkmark::after {
@@ -335,6 +336,16 @@
     background-image: url('../images/creator-images/plus.png');
 }
 
+.add-bar-button {
+    padding: 102px 10px;
+    border: 3px solid #eeeeee;
+    border-radius: 8px;
+    width: inherit;
+    height: inherit;
+    background-color: white;
+    color: #666666;
+}
+
 .trash-icon-white {
     background-image: url('../images/creator-images/thrash-can-white.png');
     background-size: cover;
@@ -365,7 +376,6 @@
 .hide-border {
     border: none;
 }
-
 
 .no-arrows::-webkit-outer-spin-button,
 .no-arrows::-webkit-inner-spin-button {
