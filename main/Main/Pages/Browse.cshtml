@@ -185,7 +185,9 @@
 
 <script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
 
-<script defer>
+<script type="module" defer>
+    import { playTask } from "../wwwroot/js/midi-player-scripts/midiPlayer.js";
+
     const results = @Json.Serialize(Model.ExerciseResults);
     const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
 
@@ -295,57 +297,14 @@
             playUser = true;
             updateListeners(index);
         }
-    }
-
-    async function playTask(taskObject) {
-        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-
-        try {
-            const response = await fetch('/Browse?handler=PlayFile', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "RequestVerificationToken": token
-                },
-                body: JSON.stringify({
-                    SolutionIndex: currentIndex,
-                    Task: taskObject
-                })
-            })
-            .then(response => response.blob())
-            .then(blob => {
-                const reader = new FileReader();
-                reader.onload = function (e) { MIDIjs.play(e.target.result); };                
-                reader.readAsDataURL(blob);                
-            })
-            .catch(error => console.error('Error fetching MIDI file:', error));
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
-
-    function stringToArrayBuffer(str) {
-        const byteArray = new Uint8Array(str.length);
-        for (let i = 0; i < str.length; i++) {
-            byteArray[i] = str.charCodeAt(i);
-        }
-        return byteArray.buffer;
-    }
-
-    function base64ToArrayBuffer(base64) {
-        const binaryString = atob(base64);
-        const arrayBuffer = new ArrayBuffer(binaryString.length);
-        const uint8Array = new Uint8Array(arrayBuffer);
-        for (let i = 0; i < binaryString.length; i++) {
-            uint8Array[i] = binaryString.charCodeAt(i);
-        }
-        return arrayBuffer;
-    }
+    }    
 
     function generateButtons(index) {
         var questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
+
+        if (questions.length == 1)
+            return;
 
         for (var i = 0; i < questions.length; i++) {
             var button = document.createElement("button");

@@ -13,7 +13,6 @@
     <Folder Include="wwwroot\img\" />
     <Folder Include="Enumerations\" />
     <Folder Include="Pages\Groups\" />
-    <Folder Include="wwwroot\js\midi-player-scripts\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="6.0.2">

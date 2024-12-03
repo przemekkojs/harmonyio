@@ -495,40 +495,24 @@
             }
         }
 
-        let timeDifference = targetTime - now;
+        let timeRemaining = targetTime - now;
 
-        let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-        timeDifference -= days * (1000 * 60 * 60 * 24);
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-        let hours = Math.floor(timeDifference / (1000 * 60 * 60));
-        timeDifference -= hours * (1000 * 60 * 60);
-
-        let minutes = Math.floor(timeDifference / (1000 * 60));
-        timeDifference -= minutes * (1000 * 60);
-
-        let seconds = Math.floor(timeDifference / 1000);
-
-        let result = "";
-        let nonZeroFound = false;
+        let displayText = "";
 
         if (days > 0) {
-            result += days + "d ";
-            nonZeroFound = true;
+            displayText = `${days}d ${hours}h`;
+        } else if (hours > 0) {
+            displayText = `${hours}h ${minutes}m`;
+        } else {
+            displayText = `${minutes}m ${seconds}s`;
         }
 
-        if (hours > 0 || nonZeroFound) {
-            result += hours + "h ";
-            nonZeroFound = true;
-        }
-
-        if (minutes > 0 || nonZeroFound) {
-            result += minutes + "m ";
-            nonZeroFound = true;
-        }
-
-        result += seconds + "s";
-
-        return result.trim();
+        return displayText.trim();
     }
 
     updateTimers();

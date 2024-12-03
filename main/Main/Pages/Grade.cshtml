@@ -150,6 +150,11 @@
                     </p>
                 </div>
 
+                <div id="playback-area">
+                    <a id="play-file" href="#" class="ms-2 btn btn-secondary">Odtwórz</a>
+                    <a id="stop-file" href="#" class="ms-2 btn btn-secondary">Stop</a>
+                </div>
+
                 <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white rounded mt-3">
                     <div id="p5_loading">Ładowanie rozwiązania</div>
                     @*SET VIA JS*@
@@ -237,6 +242,8 @@
 <script src="~/js/staff-scripts/accidental.js"></script>
 <script src="~/js/staff-scripts/staff.js"></script>
 <script src="~/js/staff-scripts/sketchGrading.js"></script>
+
+<script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
 
 <script>
     const usernames = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => u.FullName)));
@@ -385,6 +392,7 @@
 
             commentElement.value = comment;
 
+            updateListeners(currentQuestionIndex);
             generateButtons(currentQuestionIndex);
         }
     }
@@ -395,6 +403,9 @@
     function generateButtons(index) {
         let questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
+
+        if (questions.length == 1)
+            return;
 
         let start = Math.max(index - targetVisibleOneSide, 0);
         let end = Math.min(index + targetVisibleOneSide, questions.length - 1);
@@ -442,4 +453,30 @@
         document.getElementById("gradeForm").submit();
     }
 
+</script>
+
+<script type="module" defer>
+    import { playTask } from "../wwwroot/js/midi-player-scripts/midiPlayer.js";
+
+    let midiPlay = document.getElementById('play-file');
+    let midiStop = document.getElementById('stop-file');
+
+    function playAnswer() {
+        return () => playTask(userSolutions[currentUserIndex][currentQuestionIndex]);
+    }
+
+    function stopMidi() {
+        MIDIjs.stop();
+    }
+
+    function updateListeners(index) {
+        midiPlay.replaceWith(midiPlay.cloneNode(true));
+        midiStop.replaceWith(midiStop.cloneNode(true));
+
+        midiPlay = document.getElementById('play-file');
+        midiStop = document.getElementById('stop-file');
+
+        midiPlay.addEventListener('click', playAnswer(index));
+        midiStop.addEventListener('click', stopMidi);
+    }
 </script>
