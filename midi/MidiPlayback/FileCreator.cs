@@ -8,8 +8,8 @@ namespace MidiPlayback
 {
     public class FileCreator
     {
-        private const int SPACE_BETWEEN_CHORDS = 10;
-        private const int SIXTEENTH_NOTE_DURATION = 25;
+        private const int SPACE_BETWEEN_CHORDS = 2;
+        private const int SIXTEENTH_NOTE_DURATION = 10;
 
         public static byte[] Create(List<Stack> stacks)
         {
