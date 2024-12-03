@@ -409,8 +409,10 @@
         let questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
 
-        if (questions.length == 1)
+        if (questions.length == 1) {
+            document.getElementById("div-last-ex").style.display = "none";
             return;
+        }            
 
         let start = Math.max(index - targetVisibleOneSide, 0);
         let end = Math.min(index + targetVisibleOneSide, questions.length - 1);
@@ -430,14 +432,14 @@
         }
 
         for (let i = start; i <= end; i++) {
-            let button = document.createElement("button");
+            let button = document.createElement("input");
+            button.type = 'button';
             button.className = "btn " + (i === index ? "btn-secondary btn-current" : "btn-outline-secondary btn-hidable") + " btn-tiny-width p-1";
-            button.innerText = i + 1;
+            button.value = i + 1;
 
             button.onclick = (function (i) {
                 return function () {
-                    currentIndex = i;
-                    loadQuestion(currentIndex);
+                    loadQuestion(i);
                 };
             })(i);
 

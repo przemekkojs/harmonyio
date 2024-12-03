@@ -186,7 +186,7 @@
 <script type='text/javascript' src='https://www.midijs.net/lib/midi.js'></script>
 
 <script type="module" defer>
-    import { playTask } from "../wwwroot/js/midi-player-scripts/midiPlayer.js";
+    import { playTask } from "../js/midi-player-scripts/midiPlayer.js";
 
     const results = @Json.Serialize(Model.ExerciseResults);
     const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
@@ -223,7 +223,7 @@
         }
     }
 
-    function switchBetweenSolutions(checkbox) {
+    window.switchBetweenSolutions = function (checkbox) {
         if (checkbox.checked) {
             grandStaff.loadFromJson(questions[currentIndex], algorithmSolutions[currentIndex]);
             playUser = false;
@@ -235,7 +235,7 @@
         updateListeners(currentIndex);
     }
 
-    function loadQuestion(index, loadToGrandStaff = true) {
+    window.loadQuestion = function (index, loadToGrandStaff = true) {
         const result = results[index];
 
         if (index >= 0 && index < questions.length) {
