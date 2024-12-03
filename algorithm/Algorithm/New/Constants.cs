@@ -45,7 +45,8 @@ namespace Algorithm.New
             new SeventhDown(),
             new SixthUp(),
             new VoiceCrossing(),
-            new VoiceCrossingOneFunction()
+            new VoiceCrossingOneFunction(),
+            new VoiceDistance()
         ]);
 
         // Ustawienia dla sprawdzania zadania

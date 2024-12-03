@@ -50,25 +50,25 @@
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between" id="navbarNav"> 
                     @if (currentNavState != NavState.HiddenTabs)
                     {
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav gap-1">
                             <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Index">
                                     <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : string.Empty)">Strona główna</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : string.Empty)">Strona Główna</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Home ? "visible" : "invisible")" />
                                 </a> 
                             </li>
                             <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Created">
                                     <hr class="m-0 border-primary border-3 invisible" />
-                                    <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : string.Empty)">Utwórz i oceń</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : string.Empty)">Utworzone Quizy</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Created ? "visible" : "invisible")" />
                                 </a>
                             </li>
                             <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Assigned">
                                     <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : string.Empty)">Rozwiąż i przejrzyj</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : string.Empty)">Przypisane Quizy</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
                                 </a>
                             </li>                            
@@ -78,7 +78,7 @@
                                     <span class="text-nowrap @(currentNavState == NavState.Groups ? "text-primary" : string.Empty)">Grupy</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Groups ? "visible" : "invisible")" />
                                 </a> 
-                            </li>
+                            </li>                            
                         </ul>
                     } else 
                     { 

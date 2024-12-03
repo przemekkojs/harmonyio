@@ -7,7 +7,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     {
         public SemitonesCrossing() : base(
             id: 112,
-            name: "Skośne półtony",
+            name: "Skośne brzmienie półtonów",
             description: "Ruch o półton nie powinien występować między dwoma różnymi głosami.",
             oneFunction: false) { }
 

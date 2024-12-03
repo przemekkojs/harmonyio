@@ -39,7 +39,7 @@ namespace MidiPlayback
             return Create(stacks);
         }
 
-        private static (List<(NoteName, int)>, int) CreateChord(Algorithm.New.Music.Stack stack)
+        private static (List<(NoteName, int)>, int) CreateChord(Stack stack)
         {
             List<(NoteName, int)> result = [];
             var stackNotes = stack.Notes;
@@ -128,7 +128,6 @@ namespace MidiPlayback
                 trackChunk.Events.Add(new NoteOffEvent(noteNumber, (SevenBitNumber)0) { DeltaTime = duration });
             }
         }
-
 
         private static byte[] GetMidiFileData(MidiFile midiFile)
         {
