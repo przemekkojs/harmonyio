@@ -16,7 +16,7 @@
     text-align: center;
     padding: 0;
     margin: 0;
-    background-color: #dddddd;
+    background-color: #eeeeee;
     border: 1px #dddddd;
     border-radius: 2px;
     font-family: inherit;
@@ -262,8 +262,8 @@
 }
 
 .checkmark-border {
-    border: 1px solid #dddddd;
-    background-color: #dddddd;
+    border: 1px solid #eeeeee;
+    background-color: #eeeeee;
 }
 
 .function-creator .custom-checkbox input:checked + .checkmark::after {
@@ -337,7 +337,7 @@
 }
 
 .add-bar-button {
-    padding: 102px 20px;
+    padding: 90px 20px;
     border: 3px dashed #eeeeee;
     border-radius: 8px;
     width: inherit;
