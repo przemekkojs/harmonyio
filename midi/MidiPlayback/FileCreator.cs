@@ -1,32 +1,30 @@
 ﻿using Algorithm.New.Algorithm;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.MusicTheory;
 
 namespace MidiPlayback
 {
     public class FileCreator
     {
-        private const int SPACE_BETWEEN_CHORDS = 100;
-        private const int CHORD_DURATION = 500;
+        private const int SPACE_BETWEEN_CHORDS = 10;
+        private const int CHORD_DURATION = 120;
 
         public static byte[] Create(Solution solution)
         {
             var midiFile = new MidiFile();
             var trackChunk = new TrackChunk();
+            var stacks = solution.Stacks;
             long currentTime = 0;
 
             midiFile.Chunks.Add(trackChunk);
 
-            var cMajor = new[] { NoteName.C, NoteName.E, NoteName.G };
-            var fMajor = new[] { NoteName.F, NoteName.A, NoteName.C };
-
-            AddChord(trackChunk, cMajor, 4, CHORD_DURATION, currentTime);
-            currentTime = SPACE_BETWEEN_CHORDS;
-            AddChord(trackChunk, fMajor, 4, CHORD_DURATION, currentTime);
-            currentTime = SPACE_BETWEEN_CHORDS;
-            AddChord(trackChunk,cMajor, 4, CHORD_DURATION, currentTime);
+            foreach (var stack in stacks)
+            {
+                var chord = CreateChord(stack);
+                AddChord(trackChunk, chord, CHORD_DURATION, currentTime);
+                currentTime += SPACE_BETWEEN_CHORDS; // Możliwe, że zwykłe = trzeba dać...
+            }
 
             byte[] midiData = GetMidiFileData(midiFile);
             return midiData;
@@ -95,11 +93,13 @@ namespace MidiPlayback
             return (noteName, octave);
         }
 
-        private static void AddChord(
-            TrackChunk trackChunk, NoteName[] notes, int octave, long duration, long startTime)
+        private static void AddChord(TrackChunk trackChunk, List<(NoteName, int)> notes, long duration, long startTime)
         {
-            foreach (var noteName in notes)
+            foreach (var note in notes)
             {
+                var noteName = note.Item1;
+                var octave = note.Item2;
+
                 var noteNumber = (SevenBitNumber)(12 * (octave + 1) + (int)noteName);
                 trackChunk.Events.Add(new NoteOnEvent(noteNumber, (SevenBitNumber)100) { DeltaTime = startTime });
                 trackChunk.Events.Add(new NoteOffEvent(noteNumber, (SevenBitNumber)0) { DeltaTime = duration });
