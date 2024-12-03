@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiPlayback", "MidiPlayback.csproj", "{1ABDCDDC-556D-4430-84E1-872662150AB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MidiPlayback", "MidiPlayback.csproj", "{1ABDCDDC-556D-4430-84E1-872662150AB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiPlaybackTests", "..\MidiPlaybackTests\MidiPlaybackTests.csproj", "{DE745709-FBD0-4148-A2F3-F054572460BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MidiPlaybackTests", "..\MidiPlaybackTests\MidiPlaybackTests.csproj", "{DE745709-FBD0-4148-A2F3-F054572460BA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algorithm", "..\..\algorithm\Algorithm\Algorithm.csproj", "{4CE2A90D-415A-41BD-9F5C-1EF631ED157F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DE745709-FBD0-4148-A2F3-F054572460BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE745709-FBD0-4148-A2F3-F054572460BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE745709-FBD0-4148-A2F3-F054572460BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CE2A90D-415A-41BD-9F5C-1EF631ED157F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CE2A90D-415A-41BD-9F5C-1EF631ED157F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CE2A90D-415A-41BD-9F5C-1EF631ED157F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CE2A90D-415A-41BD-9F5C-1EF631ED157F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

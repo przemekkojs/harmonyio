@@ -62,13 +62,13 @@ namespace Algorithm.New.Utils
         {
             {  0, [(0, IntervalName.Unisono), (2, IntervalName.DiminishedSecond)] },
             {  1, [(0, IntervalName.AugmentedUnisono), (1, IntervalName.MinorSecond), (2, IntervalName.MinorSecond)] },
-            {  2, [(2, IntervalName.MajorSecond), (3, IntervalName.DiminishedThird), (4, IntervalName.DiminishedThird)] },
+            {  2, [(1, IntervalName.MajorSecond), (2, IntervalName.MajorSecond), (3, IntervalName.DiminishedThird), (4, IntervalName.DiminishedThird)] },
             {  3, [(2, IntervalName.AugmentedSecond), (3, IntervalName.MinorThird), (4, IntervalName.MinorThird), (5, IntervalName.DoubleDiminishedFourth)] },
             {  4, [(3, IntervalName.MajorThird), (4, IntervalName.MajorThird), (5, IntervalName.DiminishedFourth)] },
-            {  5, [(4, IntervalName.AugmentedThird), (5, IntervalName.PerfectFourth), (7, IntervalName.DoubleDiminishedFifth)] },
-            {  6, [(3, IntervalName.DoubleAugmentedThird), (4, IntervalName.DoubleAugmentedThird), (5, IntervalName.AugmentedFourth), (7, IntervalName.DiminishedFifth)] },
-            {  7, [(5, IntervalName.DoubleAugmentedFourth), (7, IntervalName.PerfectFifth), (8, IntervalName.DiminishedSixth), (9, IntervalName.DoubleDiminishedSixth)] },
-            {  8, [(8, IntervalName.MinorSixth), (7, IntervalName.AugmentedFifth), (10, IntervalName.DoubleDiminishedSeventh)] },
+            {  5, [(4, IntervalName.AugmentedThird), (5, IntervalName.PerfectFourth), (6, IntervalName.DiminishedFifth), (7, IntervalName.DoubleDiminishedFifth)] },
+            {  6, [(3, IntervalName.DoubleAugmentedThird), (4, IntervalName.DoubleAugmentedThird), (5, IntervalName.AugmentedFourth), (6, IntervalName.DoubleDiminishedFifth), (7, IntervalName.DiminishedFifth)] },
+            {  7, [(5, IntervalName.DoubleAugmentedFourth), (6, IntervalName.DiminishedFifth), (7, IntervalName.PerfectFifth), (8, IntervalName.DiminishedSixth), (9, IntervalName.DoubleDiminishedSixth)] },
+            {  8, [(7, IntervalName.AugmentedFifth), (8, IntervalName.MinorSixth), (9, IntervalName.MinorSixth), (10, IntervalName.DoubleDiminishedSeventh)] },
             {  9, [(7, IntervalName.DoubleAugmentedFifth), (8, IntervalName.MajorSixth), (9, IntervalName.MajorSixth), (10, IntervalName.DiminishedSeventh)] },
             { 10, [(8, IntervalName.AugmentedSixth), (9, IntervalName.AugmentedSixth), (10, IntervalName.MinorSeventh), (11, IntervalName.MinorSeventh)] },
             { 11, [(9, IntervalName.DoubleAugmentedSixth), (10, IntervalName.MajorSeventh), (11, IntervalName.MajorSeventh)] }            
@@ -168,6 +168,13 @@ namespace Algorithm.New.Utils
             
             // To się nie powinno nigdy wydarzyć, ale na potrzeby testowej implementacji można zostawić
             if (possibleReal.Count == 0)
+                return IntervalName.WRONG;
+
+            var containsSemitone = possibleReal
+                .Select(x => x.Item1)
+                .Contains(semitonesWhite);
+
+            if (!containsSemitone)
                 return IntervalName.WRONG;
 
             var matching = possibleReal
