@@ -63,7 +63,7 @@ namespace Main.Pages
             
 
             var stacks = solutionParseResult.Stacks;
-            var result = FileCreator.Create();
+            var result = FileCreator.Create(stacks);
 
             return File(result, "audio/midi", "output.mid");
         }

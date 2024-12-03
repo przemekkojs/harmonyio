@@ -1,4 +1,5 @@
 ﻿using Algorithm.New.Algorithm;
+using Algorithm.New.Music;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.MusicTheory;
@@ -8,32 +9,41 @@ namespace MidiPlayback
     public class FileCreator
     {
         private const int SPACE_BETWEEN_CHORDS = 10;
-        private const int CHORD_DURATION = 120;
+        private const int SIXTEENTH_NOTE_DURATION = 25;
 
-        public static byte[] Create(Solution solution)
+        public static byte[] Create(List<Stack> stacks)
         {
             var midiFile = new MidiFile();
             var trackChunk = new TrackChunk();
-            var stacks = solution.Stacks;
             long currentTime = 0;
 
             midiFile.Chunks.Add(trackChunk);
 
             foreach (var stack in stacks)
             {
-                var chord = CreateChord(stack);
-                AddChord(trackChunk, chord, CHORD_DURATION, currentTime);
-                currentTime += SPACE_BETWEEN_CHORDS; // Możliwe, że zwykłe = trzeba dać...
+                var chordInfo = CreateChord(stack);
+                var chord = chordInfo.Item1;
+                var duration = chordInfo.Item2;
+
+                AddChord(trackChunk, chord, duration, currentTime);
+                currentTime = SPACE_BETWEEN_CHORDS; // Możliwe, że zwykłe = trzeba dać...
             }
 
             byte[] midiData = GetMidiFileData(midiFile);
             return midiData;
         }
 
-        private static List<(NoteName, int)> CreateChord(Algorithm.New.Music.Stack stack)
+        public static byte[] Create(Solution solution)
+        {
+            var stacks = solution.Stacks;
+            return Create(stacks);
+        }
+
+        private static (List<(NoteName, int)>, int) CreateChord(Algorithm.New.Music.Stack stack)
         {
             List<(NoteName, int)> result = [];
             var stackNotes = stack.Notes;
+            var duration = stack.Index.Duration;
 
             foreach(var note in stackNotes)
             {
@@ -44,7 +54,7 @@ namespace MidiPlayback
                 result.Add(midiNote);
             }
 
-            return result;
+            return (result, duration * SIXTEENTH_NOTE_DURATION);
         }
 
         private static (NoteName, int) NoteToMidiNote(Algorithm.New.Music.Note note)
@@ -93,19 +103,32 @@ namespace MidiPlayback
             return (noteName, octave);
         }
 
+        private static SevenBitNumber GetNoteNumber(NoteName noteName, int octave) =>
+            (SevenBitNumber)(12 * (octave + 1) + (int)noteName);
+
         private static void AddChord(TrackChunk trackChunk, List<(NoteName, int)> notes, long duration, long startTime)
         {
             foreach (var note in notes)
             {
                 var noteName = note.Item1;
                 var octave = note.Item2;
+                var noteNumber = GetNoteNumber(noteName, octave);
 
-                var noteNumber = (SevenBitNumber)(12 * (octave + 1) + (int)noteName);
                 trackChunk.Events.Add(new NoteOnEvent(noteNumber, (SevenBitNumber)100) { DeltaTime = startTime });
-                trackChunk.Events.Add(new NoteOffEvent(noteNumber, (SevenBitNumber)0) { DeltaTime = duration });
+
                 startTime = 0;
             }
+
+            foreach (var note in notes)
+            {
+                var noteName = note.Item1;
+                var octave = note.Item2;
+                var noteNumber = GetNoteNumber(noteName, octave);
+
+                trackChunk.Events.Add(new NoteOffEvent(noteNumber, (SevenBitNumber)0) { DeltaTime = duration });
+            }
         }
+
 
         private static byte[] GetMidiFileData(MidiFile midiFile)
         {
