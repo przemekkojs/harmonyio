@@ -189,22 +189,55 @@
     const results = @Json.Serialize(Model.ExerciseResults);
     const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
 
-    const midiPlay = document.getElementById('play-file');
-    const midiStop = document.getElementById('stop-file');
+    let midiPlay = document.getElementById('play-file');
+    let midiStop = document.getElementById('stop-file');
+    let playUser = true;
+
+    function playAlgorithmSolution(index) {
+        return () => playTask(algorithmSolutions[index]);
+    }
+
+    function playAnswer(index) {
+        return () => playTask(answers[index]);
+    }
+
+    function stopMidi() {
+        MIDIjs.stop();
+    }
+
+    function updateListeners(index) {
+        midiPlay.replaceWith(midiPlay.cloneNode(true));
+        midiStop.replaceWith(midiStop.cloneNode(true));
+
+        midiPlay = document.getElementById('play-file');
+        midiStop = document.getElementById('stop-file');
+
+        if (playUser) {
+            midiPlay.addEventListener('click', playAnswer(index));
+            midiStop.addEventListener('click', stopMidi);
+        } else {
+            midiPlay.addEventListener('click', playAlgorithmSolution(index));
+            midiStop.addEventListener('click', stopMidi);
+        }
+    }
 
     function switchBetweenSolutions(checkbox) {
-        if(checkbox.checked) {
+        if (checkbox.checked) {
             grandStaff.loadFromJson(questions[currentIndex], algorithmSolutions[currentIndex]);
+            playUser = false;
         } else {
             grandStaff.loadFromJson(questions[currentIndex], answers[currentIndex]);
+            playUser = true;
         }
+
+        updateListeners(currentIndex);
     }
 
     function loadQuestion(index, loadToGrandStaff = true) {
         const result = results[index];
 
         if (index >= 0 && index < questions.length) {
-            midiPlay.removeEventListener('click', () => midiPlay(index));
+            midiPlay.removeEventListener('click', () => playTask(algorithmSolutions[index]));
             midiStop.removeEventListener('click', () => MIDIjs.stop());
 
             document.getElementById("exercise-number").innerText = index + 1;
@@ -257,16 +290,15 @@
                 }
             }
 
-            generateButtons(index);            
+            generateButtons(index);
 
-            midiPlay.addEventListener('click', () => playTask(index));
-            midiStop.addEventListener('click', () => MIDIjs.stop());
+            playUser = true;
+            updateListeners(index);
         }
     }
 
-    async function playTask(index) {
+    async function playTask(taskObject) {
         const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-        console.log("abc");
 
         try {
             const response = await fetch('/Browse?handler=PlayFile', {
@@ -276,8 +308,8 @@
                     "RequestVerificationToken": token
                 },
                 body: JSON.stringify({
-                    SolutionIndex: index,
-                    Task: algorithmSolutions[index]
+                    SolutionIndex: currentIndex,
+                    Task: taskObject
                 })
             })
             .then(response => response.blob())
@@ -288,7 +320,9 @@
             })
             .catch(error => console.error('Error fetching MIDI file:', error));
         }
-        catch (error) { console.error(error) }
+        catch (error) {
+            console.error(error)
+        }
     }
 
     function stringToArrayBuffer(str) {
@@ -330,5 +364,4 @@
     }
 
     loadQuestion(currentIndex, false);
-
 </script>
