@@ -90,7 +90,9 @@
                         <div class="me-auto"></div>
                     }
 
-                    <a asp-page="Creator" class="btn btn-primary me-3 fw-bold text-nowrap d-none d-lg-block">+ Utwórz quiz</a>
+                    @if (currentNavState != NavState.HiddenTabs){
+                        <a asp-page="Creator" class="btn btn-primary me-3 fw-bold text-nowrap d-none d-lg-block">+ Utwórz quiz</a>
+                    }
                     <partial name="_LoginPartial" /> 
                 </div>
             </div>
