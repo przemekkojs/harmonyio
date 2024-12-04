@@ -23,6 +23,9 @@ public class CreatedModel : PageModel
     public DateTime? CloseDate { get; set; }
 
     [BindProperty]
+    public bool SelfAssign { get; set; } = false;
+
+    [BindProperty]
     public int QuizId { get; set; }
 
     [BindProperty]
@@ -272,6 +275,11 @@ public class CreatedModel : PageModel
         quizToPublish.CloseDate = (DateTime)CloseDate!;
         quizToPublish.OpenDate = (DateTime)OpenDate!;
         quizToPublish.IsCreated = true;
+
+        if (SelfAssign)
+        {
+            quizToPublish.Participants.Add(appUser);
+        }
 
         _repository.Update(quizToPublish);
         await _repository.SaveChangesAsync();

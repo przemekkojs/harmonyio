@@ -53,7 +53,6 @@ namespace Main.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Required(ErrorMessage = ErrorMessages.Required)]
-            [EmailAddress(ErrorMessage = ErrorMessages.EmailAddress)]
             [StringLength(100, ErrorMessage = ErrorMessages.StringLength, MinimumLength = 6)]
             [Display(Name = "Hasło")]
             public string Password { get; set; }
@@ -96,6 +95,7 @@ namespace Main.Areas.Identity.Pages.Account
         {
             if (!ModelState.IsValid)
             {
+                Console.WriteLine("not valid");
                 return Page();
             }
 

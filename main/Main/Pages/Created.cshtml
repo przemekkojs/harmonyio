@@ -19,6 +19,7 @@
         <input type="hidden" asp-for="QuizId" value="" id="publishFormQuizId" />
         <input type="hidden" asp-for="OpenDate" value="" id="publishFormOpenDateForQuiz" />
         <input type="hidden" asp-for="CloseDate" value="" id="publishFormCloseDateForQuiz" />
+        <input type="hidden" asp-for="SelfAssign" value="" id="publishFormSelfAssign" />
     </form>
 
     <form method="post" asp-page-handler="Assign" id="assignFormForQuiz">
@@ -307,9 +308,8 @@
     <div class="w-100 w-md-50 flex-grow-1 overflow-md-auto d-flex flex-column bg-white rounded shadow px-3 pt-3 mb-3">
         <div class="mb-3 d-flex flex-row">
             <div class="fw-bold fs-4 ">Szkice (@Model.Sketches.Count)</div>
-            <a asp-page="Creator" class="btn btn-primary ms-auto text-nowrap">
-               <i class="fas fa-plus me-1"></i>
-               Utwórz
+            <a asp-page="Creator" class="btn btn-primary ms-auto text-nowrap fw-bold">
+               + Utwórz
             </a>
         </div>
 
@@ -464,13 +464,14 @@
         document.getElementById("deleteFormForQuiz").submit();
     }
 
-    window.publish = function (quizId, openDateTime, closeDateTime) {
+    window.publish = function (quizId, openDateTime, closeDateTime, selfAssign) {
         //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
 
         const form = document.getElementById("publishFormForQuiz");
         document.getElementById("publishFormQuizId").value = quizId;
         document.getElementById("publishFormOpenDateForQuiz").value = openDateTime;
         document.getElementById("publishFormCloseDateForQuiz").value = closeDateTime;
+        document.getElementById("publishFormSelfAssign").value = selfAssign;
         form.submit();
         
         //TODO: Po opublikowaniu powinien od razu włączyć się assign popup

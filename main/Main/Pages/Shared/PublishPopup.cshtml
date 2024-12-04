@@ -5,7 +5,7 @@ ATRYBUTY:
 - data-quiz-id: Id quizu
 - data-quiz-name: Nazwa quizu
 - data-callback-name: Nazwa callbacku js, wywołanego przy wciśnięciu przycisku publish. Callback ten musi zawierać 3
-argumenty - quizId, openDate i closeDate
+argumenty - quizId, openDate, closeDate i selfAssing
 *@
 
 <style>
@@ -39,7 +39,8 @@ argumenty - quizId, openDate i closeDate
                 class="d-none d-sm-flex bg-pattern-sm text-white flex-column text-center align-items-center justify-content-center p-3">
                 <span class="fw-bold fs-4 mb-1">Publikacja quizu</span>
                 <p>W momencie opublikowania quizu nie będziesz miał już możliwości jego edycji, ani usunięcia. Dostęp do
-                    niego uzyskają wszyscy użytkownicy, z którymi podzielisz się quizem.</p>
+                    niego uzyskają wszyscy użytkownicy, z którymi podzielisz się quizem. Możesz też teraz od razu przypisać 
+                    siebie samego do quizu, jeżeli również chcesz go rozwiązywać.</p>
             </div>
 
             <div class="flex-grow-1 d-flex flex-column">
@@ -86,6 +87,14 @@ argumenty - quizId, openDate i closeDate
                             <input type="time" id="closeTimeSelect" name="time" class="form-control validate" value="@(currentHour.ToString("D2") + ":" + currentMinute.ToString("D2"))">
                         </div>
                     </div>
+
+                    <span class="mb-2">Czy chcesz samemu uczestniczyć w quizie?</span>
+                    <label class="form-label fw-bold">Samodzielna nauka</label>
+                    <div class="d-flex flex-row">
+                        <input type="checkbox" class="form-check-input me-2" id="selfAssign">
+                        <span class="text-secondary">Tak, chcę być uczestnikiem quizu</span>
+                    </div>
+
                 </div>
 
                 <div class="modal-footer justify-content-center align-items-center">
@@ -124,6 +133,8 @@ argumenty - quizId, openDate i closeDate
         const closeDate = publishPopup.querySelector('#closeDateSelect').value;
         const closeTime = publishPopup.querySelector('#closeTimeSelect').value;
 
+        const selfAssign = publishPopup.querySelector('#selfAssign').checked;
+
         // need to be like this because of time zone converts
         const openDateTimeString = `${openDate}T${openTime}:00.000Z`;
         const closeDateTimeString = `${closeDate}T${closeTime}:00.000Z`;
@@ -132,7 +143,7 @@ argumenty - quizId, openDate i closeDate
 
         if (typeof window[callbackName] === 'function') {
             const quizId = publishModalButton.getAttribute('data-quiz-id');
-            window[callbackName](quizId, openDateTimeString, closeDateTimeString);
+            window[callbackName](quizId, openDateTimeString, closeDateTimeString, selfAssign);
             const closebutton = document.getElementById('publishCancelButton');
             closebutton.click();
         } else {

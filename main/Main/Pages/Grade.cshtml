@@ -61,14 +61,20 @@
             </div>
 
             <hr class="m-0 mb-3" />
+            <a class="btn btn-outline-primary btn-std-width mx-auto" 
+                data-bs-toggle="modal" data-bs-target="#helpPopup" data-header="Ocenianie quizu"
+                data-text="<p>Znajdujesz się aktualnie w ekranie oceny quizu. Ekran podzielony jest na kilka głównych paneli: lewy, prawy-górny oraz prawy-dolny.</p><p>Lewy panel dotyczy całego quizu. Na samej górze widoczna jest tam jego nazwa, a pod nią lista wszystkich uczestników quizu, którzy nadesłali rozwiązania. Możesz wybierać z tej listy kolejnych uczestników, aby skupić się na ich rozwiązaniach i móc je ocenić. Zawartość paneli z prawej strony dostosuje się do twojego wyboru.</p><p>Prawy-górny panel dotyczy rozwiązań wybranego użytkownika. Podzielony jest on dodatkowo na dwie podsekcje - górną i dolną. W górnej podsekcji widoczna jest nazwa ocenianego użytkownika, jego całościowy wynik za quiz (wyliczany jako suma wyników za każde z zadań) oraz jego ocena, którą można edytować. Dolna podsekcja dotyczy rozwiązań konkretnych zadań. O ile w quizie występuje więcej niż jedno zadanie, możemy przechodzić po nich za pomocą przycisków z lewej strony sekcji.  Z prawej strony widoczna jest sugestia algorytmu, co do punktacji wybranego zadania, dla wybranego uczestnika oraz rzeczywista punktacja, którą możemy uzupełnić. Dodatkowo, za pomocą przycisku „Komentarz” jesteś w stanie dodać komentarz do tego konkretnego zadania dla wybranego uczestnika</p><p>Prawy-dolny panel skupia się na rozwiązaniu wybranego zadania, przez wybranego użytkownika. Na samej górze widoczne jest polecenie do zadania (o ile zostało one dodane) oraz przyciski umożliwiające dźwiękowe odtworzenie go. Poniżej, na pięciolinii zaprezentowane jest rozwiązanie uczestnika, a pod nim opinia algorytmu sprawdzającego na jego temat.</p><p>Po ocenieniu wszystkich uczestników możesz wybrać czy chcesz dzielić się z nimi opiniami algofrymu za pomocą pola wyboru na dole lewego panelu. Po wszystkim zostaje już tylko zapisać oceny.</p>">           
+                <i class="far fa-circle-question"></i>
+                Pomoc
+            </a>
+            <hr class="m-0 my-3" />
 
             <div class="d-flex flex-row px-3 mb-3">
                 <input asp-for="ShareAlgorithmOpinion" type="checkbox" class="form-check-input me-2">
                 <span class="text-secondary">Udostępnij uwagi algorytmu</span>
             </div>
 
-            <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz
-                oceny</button>
+            <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz oceny</button>
             <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
         </div>
 
@@ -144,16 +150,22 @@
 
             <div class="flex-grow-1 bg-white rounded shadow d-flex flex-column p-3 overflow-auto"
                 id="staff-section-div">
-                <div class="flex-grow-1" id="question-area">
-                    <p class="m-0 fw-semibold" id="question">
+                <div class="flex-grow-1 d-flex flex-row justify-content-between align-items-start" id="question-area">
+                    <p class="m-0 me-3 fw-semibold" id="question">
                         @* FILLED VIA JS *@
                     </p>
+
+                    <div id="playback-area" class="d-flex">
+                        <span class="ms-auto fw-semibold">Odtwórz</span>
+                        <button id="play-file" type="button" class="btn-icon">
+                            <i class="fas fa-play icon-sm"></i>
+                        </button>
+                        <button id="stop-file" type="button" class="btn-icon">
+                            <i class="fas fa-stop icon-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div id="playback-area">
-                    <a id="play-file" href="#" class="ms-2 btn btn-secondary">Odtwórz</a>
-                    <a id="stop-file" href="#" class="ms-2 btn btn-secondary">Stop</a>
-                </div>
 
                 <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white rounded mt-3">
                     <div id="p5_loading">Ładowanie rozwiązania</div>
@@ -190,6 +202,7 @@
     </div>
 </div>
 
+<partial name="~/Pages/Shared/HelpPopup.cshtml" />
 
 <script>
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")';
@@ -329,8 +342,7 @@
         userGrades[currentUserIndex] = [value, strValue];
         document.getElementById(`user-grade-${currentUserIndex}`).innerText = strValue;
         document.getElementById(`grade-hidden-${currentUserIndex}`).value = value;
-    @*  document.getElementById("grades-validation-text").innerText = ''; *@
-        }
+    }
 
     window.onPointsChange = function (value) {
         let numValue = Number(value);
@@ -366,11 +378,10 @@
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
 
-            questionElement.innerText = questions[currentQuestionIndex].question;
             if (questions[currentQuestionIndex].question == '')
-                document.getElementById('question-area').classList.add('d-none');
+                questionElement.innerText = 'Brak polecenia dla tego zadania';
             else
-                document.getElementById('question-area').classList.remove('d-none');
+                questionElement.innerText = questions[currentQuestionIndex].question;
 
             const points = userPoints[currentUserIndex][currentQuestionIndex];
             const maxPoints = exerciseMaxes[currentQuestionIndex];

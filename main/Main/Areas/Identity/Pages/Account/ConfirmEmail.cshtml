@@ -1,8 +1,17 @@
 ﻿@page
 @model ConfirmEmailModel
 @{
-    ViewData["Title"] = "Potwierdź email";
+    ViewData["Title"] = "Email potwierdzony";
 }
 
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="d-flex justify-content-center align-items-center h-100 pb-3"> 
+    <div class="bg-white rounded shadow p-3 mb-3" style="width: 400px;">
+        <i class="fas fa-circle-check my-4 w-100 text-center" style="font-size: 100px;"></i>
+
+        <div class="fw-semibold fs-5 text-center mb-2">Konto zostało utworzone</div>
+
+        <div class="small text-center">Udało ci się pomyślnie utworzyć konto! Kliknij w przycisk poniżej, aby się zalogować.</div>
+
+        <a asp-page="./Login" class="w-100 btn btn-primary p-2 mt-4">Zaloguj się</a>
+    </div>
+</div> 
