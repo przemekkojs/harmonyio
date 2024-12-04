@@ -97,7 +97,7 @@ public class CreatedModel : PageModel
         );
 
         ReadyToGrade = published
-            .Where(q => q.QuizResults.Any())
+            .Where(q => q.Exercises.Any(e => e.ExerciseSolutions.Any()))
             .Where(q =>
                 q.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.ExerciseResult?.QuizResultId == null)) ||
                 q.QuizResults.Any(qr => qr.Grade == null) ||
