@@ -97,9 +97,8 @@ public class AssignedModelTests
             // Assert
             Assert.NotNull(result);
 
-            Assert.Single(pageModel.SolvedOpen);
-            Assert.Equal("Quiz 1", pageModel.SolvedOpen[0].Name);
-            Assert.Equal(QuizState.Open, pageModel.SolvedOpen[0].State);
+            Assert.Single(pageModel.WaitingForGrade);
+            Assert.Equal("Quiz 5", pageModel.WaitingForGrade[0].Name);
 
             Assert.Single(pageModel.NotSolvedPlanned);
             Assert.Equal("Quiz 4", pageModel.NotSolvedPlanned[0].Name);
@@ -109,9 +108,9 @@ public class AssignedModelTests
             Assert.Equal("Quiz 3", pageModel.NotSolvedOpen[0].Name);
             Assert.Equal(QuizState.Open, pageModel.NotSolvedOpen[0].State);
 
-            Assert.Equal(2, pageModel.Closed.Count); // one quiz with solution, one without solution
-            Assert.Contains(pageModel.Closed, q => q.Name == "Quiz 2" && q.State == QuizState.Closed);
-            Assert.Contains(pageModel.Closed, q => q.Name == "Quiz 5" && q.State == QuizState.Closed);
+            Assert.Equal(2, pageModel.Graded.Count); // one quiz with solution, one without solution
+            Assert.Contains(pageModel.Graded, q => q.Name == "Quiz 1");
+            Assert.Contains(pageModel.Graded, q => q.Name == "Quiz 2");
 
             Assert.Equal(2, pageModel.GradedQuizes.Count); // one open and one closed has grade
             Assert.Contains(1, pageModel.GradedQuizes.Keys);

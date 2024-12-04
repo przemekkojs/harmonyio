@@ -55,7 +55,10 @@ namespace Algorithm.New
         [
             new SubdominantAfterDominant(),
             new EmptyFunction(),
-            new AddedComponents()
+            new AddedComponents(),
+            new EmptyBar(),
+            new DeletedEqualsPosition(),
+            new DeletedEqualsRoot()
         ];
 
         public static readonly Dictionary<(float, string), (string, int)> NoteMappings = new()

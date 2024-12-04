@@ -74,8 +74,14 @@
                 <span class="text-secondary">Udostępnij uwagi algorytmu</span>
             </div>
 
-            <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">Zapisz oceny</button>
-            <a asp-page="Created" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
+            <button onclick="submitFormClicked()" class="btn btn-primary btn-std-width mt-auto mx-auto">
+                Zapisz oceny
+            </button>
+
+            <a href="#" class="btn btn-danger btn-std-width mt-2 mx-auto" data-bs-toggle="modal"
+                data-bs-target="#confirmLeaveModal" data-confirm-redirect="/Created">
+                Wyjdź
+            </a>
         </div>
 
         <div class="flex-grow-1 d-flex flex-column overflow-auto ">
@@ -99,7 +105,7 @@
                         onchange="onGradeChange(this.value, this.options[this.selectedIndex].text)"
                         class="grade-select bg-transparent form-select border border-secondary text-secondary"
                         aria-label="Wybierz ocenę">
-                        <option selected disabled>-</option>
+                        <option selected value="">-</option>
                         @foreach (Grade grade in Enum.GetValues(typeof(Grade)))
                         {
                             <option value="@grade">@grade.AsString()</option>
@@ -201,6 +207,7 @@
         </div>
     </div>
 </div>
+<partial name="~/Pages/Shared/ConfirmLeavePopup.cshtml" />
 
 <partial name="~/Pages/Shared/HelpPopup.cshtml" />
 
@@ -292,15 +299,22 @@
         if (userGrades[i][0] != "-") {
             document.getElementById(`user-grade-${i}`).innerText = userGrades[i][1];
             document.getElementById(`grade-hidden-${i}`).value = userGrades[i][0];
+        } else {
+            document.getElementById(`user-grade-${i}`).innerText = "-";
         }
     }
 
-    window.loadUser = function(index, loadToGrandStaff = true) {
+    window.loadUser = function (index, loadToGrandStaff = true) {
         handleStudentsList(index);
         handleTotalPoints(index);
 
         currentUserText.innerText = usernames[index];
-        gradeSelect.value = userGrades[index][0];
+
+        if (userGrades[index][0] === '-') {
+            gradeSelect.value = "";
+        } else {
+            gradeSelect.value = userGrades[index][0];
+        }
 
         loadQuestion(0, loadToGrandStaff);
     }
@@ -338,7 +352,7 @@
         return totalPoints;
     }
 
-    window.onGradeChange = function(value, strValue) {
+    window.onGradeChange = function (value, strValue) {
         userGrades[currentUserIndex] = [value, strValue];
         document.getElementById(`user-grade-${currentUserIndex}`).innerText = strValue;
         document.getElementById(`grade-hidden-${currentUserIndex}`).value = value;
@@ -363,18 +377,18 @@
         handleTotalPoints(currentUserIndex);
     }
 
-    window.onCommentChange = function(value) {
+    window.onCommentChange = function (value) {
         userComments[currentUserIndex][currentQuestionIndex] = value;
         document.getElementById(`comment-hidden-${currentQuestionIndex}-${currentUserIndex}`).value = value;
     }
 
-    window.integerKeyPress = function(e) {
+    window.integerKeyPress = function (e) {
         if (!/\d/.test(e.key)) {
             e.preventDefault();
         }
     }
 
-    window.loadQuestion = function(index, loadToGrandStaff = true) {
+    window.loadQuestion = function (index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
             currentQuestionIndex = index;
 
@@ -423,7 +437,7 @@
         if (questions.length == 1) {
             document.getElementById("div-last-ex").style.display = "none";
             return;
-        }            
+        }
 
         let start = Math.max(index - targetVisibleOneSide, 0);
         let end = Math.min(index + targetVisibleOneSide, questions.length - 1);
@@ -470,7 +484,7 @@
     window.submitFormClicked = function () {
         document.getElementById("gradeForm").submit();
     }
-    
+
     // DLA MIDI:
     function playAnswer() {
         return () => playTask(

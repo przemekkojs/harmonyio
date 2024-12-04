@@ -1,6 +1,4 @@
-using System.CodeDom.Compiler;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
 using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Parsers.ProblemParser;
@@ -101,6 +99,8 @@ namespace Main.Pages
                     if (parsed.Functions.Count == 0)
                         return false;
 
+                    // TODO: Tutaj trzeba zrobić tak jak przy sprawdzaniu rozwiązania
+                    // czyli kody błędów itd
                     var mistakes = ProblemChecker.CheckProblem(parsed);
                     return mistakes.Count == 0;
                 }
@@ -162,6 +162,7 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnPostSave()
         {
+            // Fixes-2: Kurna, który ma utf-16 włączone? XD
             // Generalnie, z Creator.cshtml przychodzi lista jako JSON i si� �aduje jako zerowy element listy,
             // wi�c te linijki jakby rozpakowuj� t� lit�.
             // Je�eli na froncie nie ma b��d�w, to to zawsze si� wykona poprawnie.
@@ -241,18 +242,12 @@ namespace Main.Pages
         public async Task<IActionResult> OnPostSubmit()
         {
             if (Questions!.Count == 0)
-            {
                 ModelState.AddModelError(nameof(Questions), "Wymagane jest przynajmniej jedno zadanie.");
-            }
             else if (Questions.Any(q => q == "" || q == null))
-            {
-                ModelState.AddModelError(nameof(Questions), "Nie mo�na doda� pustych zada�.");
-            }
+                ModelState.AddModelError(nameof(Questions), "Nie można dodaż pustych zadań.");
 
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
 
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
@@ -268,7 +263,7 @@ namespace Main.Pages
                     Code = await _repository.GenerateUniqueCodeAsync(),
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
-                    Participants = new List<ApplicationUser>() { currentUser },
+                    Participants = [currentUser],
                 };
 
                 _repository.Add(quiz);
