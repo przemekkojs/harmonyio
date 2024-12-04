@@ -118,6 +118,13 @@ namespace Main.Pages
             if (showOpinion && AlgorithmSolutions.Count == 0)
                 GenerateExampleSolutions();
 
+            var emptySolutionResult = new MistakeResult()
+            {
+                Bars = [],
+                Functions = [],
+                MistakeCodes = [999]
+            };
+
             ExerciseResults = quiz.Exercises
                 .Select(e => new
                 {
@@ -130,7 +137,7 @@ namespace Main.Pages
                         Points = 0,
                         MaxPoints = x.MaxPoints,
                         Comment = string.Empty,
-                        Opinion = string.Empty
+                        Opinion = showOpinion ? Utils.Utils.MistakesToHTML([emptySolutionResult]) : string.Empty
                     } :
                     new ExerciseResultData
                     {

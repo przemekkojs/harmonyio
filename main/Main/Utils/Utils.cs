@@ -7,9 +7,13 @@ namespace Main.Utils
     {
         public static string MistakesToHTML(ICollection<MistakeResult> mistakes)
         {
+            if (mistakes == null)
+                return string.Empty;
+
             if (mistakes.Count == 0)
                 return string.Empty;
-            else if (mistakes.Count == 1)
+            
+            if (mistakes.Count == 1)
             {
                 var mistake = mistakes.First();
                 var codes = mistake.MistakeCodes;
