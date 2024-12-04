@@ -44,18 +44,23 @@
         </a>
         <hr class="m-0 my-3" />
 
-        <button id="btn-finish" onclick="submitFormClicked()"
-            class="btn btn-primary btn-std-width mx-auto">Zapisz
+        <button id="btn-next" type="button" onclick="nextQuestion()"
+            class="btn btn-secondary btn-std-width mx-auto">Następne</button>
+        <button id="btn-finish" onclick="submitFormClicked()" class="btn btn-primary btn-std-width mx-auto"
+            style="display: none;">Zapisz
         </button>
 
-        <a asp-page="Assigned" class="btn btn-danger btn-std-width mt-2 mx-auto">Wyjdź</a>
+        <button class="btn btn-danger btn-std-width mt-2 mx-auto" data-bs-toggle="modal"
+            data-bs-target="#confirmLeaveModal" data-confirm-redirect="/Assigned">
+            Wyjdź
+        </button>
     </div>
 
     <div class="flex-grow-1 w-100 d-flex flex-column bg-white rounded shadow p-3 overflow-auto" id="staff-section-div">
         <div id="excersise-tonation">
             @*SET VIA JS*@
         </div>
-        
+
         <p id="exercise-question" class="fw-semibold align-items-start mb-3">
             @*SET VIA JS*@
         </p>
@@ -67,6 +72,8 @@
         </div>
     </div>
 </div>
+<partial name="~/Pages/Shared/ConfirmLeavePopup.cshtml" />
+
 
 <partial name="~/Pages/Shared/HelpPopup.cshtml" />
 
@@ -121,6 +128,9 @@
 
     window.loadQuestion = function (index, loadToGrandStaff = true) {
         if (index >= 0 && index < questions.length) {
+            document.getElementById("btn-next").style.display = index === questions.length - 1 ? 'none' : 'inline-block';
+            document.getElementById("btn-finish").style.display = index === questions.length - 1 ? 'inline-block' : 'none';
+
             const excersiseTonation = document.getElementById("excersise-tonation");
             const question = questions[index];
 
@@ -138,7 +148,7 @@
             `;
 
             document.getElementById("exercise-question").innerText = question.question;
-            document.getElementById("exercise-question").style.display = 
+            document.getElementById("exercise-question").style.display =
                 question.question == '' ?
                     'none' :
                     'inline-block';
@@ -157,7 +167,7 @@
         hiddenInput.value = staffJson;
     }
 
-    window.generateButtons = function(index) {
+    window.generateButtons = function (index) {
         const questionButtonsContainer = document.getElementById("exercises-buttons");
         questionButtonsContainer.innerHTML = '';
 
@@ -181,16 +191,24 @@
         }
     }
 
-    window.submitFormClicked = function() {
+    window.submitFormClicked = function () {
         safeStaffAnswer();
         document.getElementById("solve-form").submit();
+    }
+
+    window.nextQuestion = function () {
+        if (currentIndex < questions.length - 1) {
+            safeStaffAnswer();
+            currentIndex++;
+            loadQuestion(currentIndex);
+        }
     }
 
     loadQuestion(currentIndex, false);
 
     const closeDate = new Date("@Model.Quiz.CloseDate.ToString("o")");
 
-    window.updateTimer = function() {
+    window.updateTimer = function () {
         const now = new Date();
         const timeRemaining = closeDate - now;
 

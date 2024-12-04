@@ -544,7 +544,6 @@ class TwoNotes {
   }
 
   drawAdditionalLinesOnAdding(lineNumber, noteWidth) {
-    console.log(lineNumber);
     const lineX = this.parent.getNotesCenterLineX();
     const lineX0 = lineX - noteWidth;
     const lineX1 = lineX + noteWidth;

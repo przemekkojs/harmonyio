@@ -15,7 +15,9 @@
             <div class="sidebar d-flex flex-column bg-white rounded shadow me-3 py-3">
                 <div class="mb-auto mx-3">
                     <label asp-for="QuizName" class="form-label fw-bold"></label>
-                    <input id="QuizName" name="QuizName" asp-for="QuizName" class="form-control bg-white border-secondary" readonly="@Model.BrowseOnly" placeholder="Nazwa quizu">
+                    <input id="QuizName" name="QuizName" asp-for="QuizName"
+                        class="form-control bg-white border-secondary" readonly="@Model.BrowseOnly"
+                        placeholder="Nazwa quizu">
                     <span asp-validation-for="QuizName" class="text-danger" id="quiz-name-validation"></span>
                 </div>
 
@@ -34,7 +36,10 @@
                         onclick="submitForm(event)">Zapisz</button>
                 }
 
-                <a asp-page="Created" class="btn btn-danger btn-std-width mx-auto mt-2">Wyjdź</a>
+                <button class="btn btn-danger btn-std-width mt-2 mx-auto" data-bs-toggle="modal"
+                    data-bs-target="#confirmLeaveModal" data-confirm-redirect="/Created">
+                    Wyjdź
+                </button>
             </div>
 
             <div class="flex-grow-1 bg-white rounded shadow p-3 d-flex flex-column overflow-auto">
@@ -59,6 +64,7 @@
         <input name="Questions" type="hidden" asp-for="Questions" />
     </div>
 </form>
+<partial name="~/Pages/Shared/ConfirmLeavePopup.cshtml" />
 
 <partial name="~/Pages/Shared/HelpPopup.cshtml" />
 
@@ -79,11 +85,11 @@
             .Select(q => q ?? "")
             .ToList() ?? new List<string>()
         )
-    );
+        );
 
     window.submitForm = async function submitForm(event) {
         questionsValidationError.innerText = "";
-        const tasksResult = confirmExercises(event);       
+        const tasksResult = confirmExercises(event);
 
         if (!tasksResult) {
             // TODO: Ładniejszy popup
@@ -131,7 +137,7 @@
 
         const editedQuizId = form
             .querySelector("[name='EditedQuizId']")
-            .value;        
+            .value;
 
         const formData = new FormData();
         formData.append("__RequestVerificationToken", verificationToken);
@@ -146,14 +152,11 @@
                 body: formData
             });
 
-            console.log("Response", response);
-
             if (response.ok) {
                 const contentType = response.headers.get('Content-Type');
 
                 if (contentType && contentType.includes("application/json")) {
                     const result = await response.json();
-                    console.log("Result", result);
 
                     if (result.success) {
                         window.location.href = result.redirectUrl;
@@ -173,13 +176,12 @@
             }
         }
         catch (error) {
-            console.log(error);
             questionsValidationError.innerText = "Błąd serwera.";
         }
     }
 
     function addExisting() {
-        taskContainer.load(exercises);        
+        taskContainer.load(exercises);
         questionsValidationError.innerText = '';
     }
 
@@ -191,8 +193,6 @@
         questionsValidationError.innerText = '';
         answer.length = 0;
         const tasks = taskContainer.tasks;
-
-        console.log(tasks.length);
 
         for (let i = 0; i < tasks.length; i++) {
             const currentTask = tasks[i];
@@ -220,7 +220,6 @@
                 return false;
 
             const taskResult = currentTask.getResult();
-            console.log("Task result:", taskResult);
 
             if (taskResult.includes(null))
                 return false;
@@ -239,11 +238,11 @@
             answer.push(toPush);
 
             const hiddenInput = currentTask.hiddenInput;
-            hiddenInput.value = JSON.stringify(toPush);   
+            hiddenInput.value = JSON.stringify(toPush);
         }
 
         return true;
-    }        
+    }
 
     addExisting();
 </script>

@@ -170,7 +170,7 @@
 
                                     @if(@Model.QuizIdsToUsersCompleted[quiz.Id].Item1 != 0) {
                                         <div class="d-flex flex-row ms-auto mt-auto">
-                                            <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Oceń</a>
+                                            <a asp-page="Grade" asp-route-id="@quiz.Id" class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
                                         </div>
                                     }
                                 </div>
@@ -481,7 +481,6 @@
     async function assign(quizId, assignedEmails, assignedGroups) {
         // no new email or groups so just return null and close modal
         if(assignedEmails.length === 0 && assignedGroups.length === 0) {
-            console.log("early return");
             return null;
         }
 
@@ -520,7 +519,6 @@
                 }
 
                 if (result.success) {
-                    console.log('Users added successfully');
                     updateQuizElements(quizId, result);
                     return null;
                 }
