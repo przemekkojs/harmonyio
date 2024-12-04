@@ -238,10 +238,9 @@ namespace Main.Pages
 
         private static List<ExerciseSolution> GetAllExerciseSolutions(ICollection<Exercise> exercises)
         {
-            return exercises
+            return [.. exercises
                 .SelectMany(e => e.ExerciseSolutions)
-                .OrderBy(es => es.ExerciseId)
-                .ToList();
+                .OrderBy(es => es.ExerciseId)];
         }
 
         private static HashSet<string> GetParticipantsWhoAnsweredIds(ICollection<ExerciseSolution> solutions)
@@ -276,7 +275,7 @@ namespace Main.Pages
                 );
         }
 
-        private bool CanUserGradeQuiz(Quiz quiz, string userId)
+        private static bool CanUserGradeQuiz(Quiz quiz, string userId)
         {
             var userIsCreator = quiz.CreatorId == userId;
             var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == userId || g.Teachers.Any(t => t.Id == userId));
@@ -300,6 +299,13 @@ namespace Main.Pages
 
                     _repository.Add(solution);
 
+                    var emptySolutionResult = new MistakeResult()
+                    {
+                        Bars = [],
+                        Functions = [],
+                        MistakeCodes = [999]
+                    };
+
                     var exerciseResult = new ExerciseResult
                     {
                         Points = 0,
@@ -307,8 +313,7 @@ namespace Main.Pages
                         Comment = string.Empty,
                         AlgorithmPoints = 0,
                         ExerciseSolution = solution,
-                        // TODO add mistake results that say exercise wasnt solved
-                        MistakeResults = []
+                        MistakeResults = [emptySolutionResult]
                     };
 
                     _repository.Add(exerciseResult);

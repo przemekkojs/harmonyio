@@ -1,7 +1,6 @@
 ﻿import { FunctionContainer } from "./functionContainer.js"
 
 class Bar {
-    // TODO: maxFunctionsCount
     constructor(barContainer, taskIndex, barIndex, maxFunctionsCount = 6) {
         this.taskIndex = taskIndex;
         this.barIndex = barIndex;
@@ -44,11 +43,11 @@ export class BarContainer {
         this.addBarButton.id = `add-bar-${this.taskIndex}`;
         this.addBarButton.className = "add-bar-button components-place";
         this.addBarButton.title = "Dodaj takt";
-        this.addBarButton.value = "Dodaj takt";
+        this.addBarButton.value = "+ Dodaj\ntakt";
 
         this.handleAddBar = this.addBar.bind(this);
         this.addBarButton.addEventListener('click', this.handleAddBar);
-                
+
         this.container.appendChild(this.addBarButton);
         this.addBar();
     }
