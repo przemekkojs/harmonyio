@@ -1,11 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+@using Microsoft.AspNetCore.Identity
 @using Enumerations
+@using Main.Models
+@inject SignInManager<ApplicationUser> SignInManager
 @{
     var currentPageRoute = ViewContext.RouteData.Values["page"]?.ToString() ?? string.Empty;
     NavState currentNavState = NavState.Unselected;
 
-    if (currentPageRoute == "/Index")
+    if (!SignInManager.IsSignedIn(User))
+        currentNavState = NavState.HiddenTabs;
+    else if (currentPageRoute == "/Index") 
         currentNavState = NavState.Home;
     else if (currentPageRoute == "/Assigned")
         currentNavState = NavState.Assigned;
@@ -47,31 +52,31 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between" id="navbarNav"> 
+                <div class="navbar-collapse collapse d-md-inline-flex" id="navbarNav"> 
                     @if (currentNavState != NavState.HiddenTabs)
                     {
-                        <ul class="navbar-nav gap-1">
+                        <ul class="navbar-nav gap-1 me-auto">
                             <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Index">
                                     <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : string.Empty)">Strona Główna</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Home ? "text-primary" : string.Empty)">Strona główna</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Home ? "visible" : "invisible")" />
                                 </a> 
                             </li>
                             <li class="nav-item h-100 d-flex">
-                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Created">
-                                    <hr class="m-0 border-primary border-3 invisible" />
-                                    <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : string.Empty)">Utworzone Quizy</span>
-                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Created ? "visible" : "invisible")" />
-                                </a>
-                            </li>
-                            <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Assigned">
                                     <hr class="m-0 border-primary border-3 invisible"/>
-                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : string.Empty)">Przypisane Quizy</span>
+                                    <span class="text-nowrap @(currentNavState == NavState.Assigned ? "text-primary" : string.Empty)">Przypisane quizy</span>
                                     <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Assigned ? "visible" : "invisible")" />
                                 </a>
-                            </li>                            
+                            </li>     
+                            <li class="nav-item h-100 d-flex">
+                                <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Created">
+                                    <hr class="m-0 border-primary border-3 invisible" />
+                                    <span class="text-nowrap @(currentNavState == NavState.Created ? "text-primary" : string.Empty)">Utworzone quizy</span>
+                                    <hr class="m-0 border-primary border-3 nav-underline @(currentNavState == NavState.Created ? "visible" : "invisible")" />
+                                </a>
+                            </li>                       
                             <li class="nav-item h-100 d-flex">
                                 <a class="nav-link text-secondary py-0 h-100 d-flex flex-column justify-content-between" asp-area="" asp-page="/Groups/Index">
                                     <hr class="m-0 border-primary border-3 invisible"/>
@@ -82,9 +87,12 @@
                         </ul>
                     } else 
                     { 
-                        <div></div>
+                        <div class="me-auto"></div>
                     }
 
+                    @if (currentNavState != NavState.HiddenTabs){
+                        <a asp-page="Creator" class="btn btn-primary me-3 fw-bold text-nowrap d-none d-lg-block">+ Utwórz quiz</a>
+                    }
                     <partial name="_LoginPartial" /> 
                 </div>
             </div>

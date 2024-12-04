@@ -52,7 +52,14 @@
             @* FILLED VIA JS *@
         </div>
 
-        <hr class="mt-0" />
+        <hr class="m-0 mb-3" />
+        <a class="btn btn-outline-primary btn-std-width mx-auto" 
+            data-bs-toggle="modal" data-bs-target="#helpPopup" data-header="Przeglądanie ocenionego quizu"
+            data-text="<p>Znajdujesz się aktualnie w ekranie przeglądania ocenionego quizu. Ekran podzielony jest na trzy główne panele: lewy, prawy-górny oraz prawy-dolny</p><p>Lewy panel skupia się na całości quizu. Jest na nim widoczna jego nazwa oraz twoja całościowa ocena i punktacja. Jeżeli quiz zawiera więcej niż jedno zadanie, poniżej wyświetlona jest lista wszystkich zadań, po której możemy przechodzić, wpływając na zawartość paneli z prawej strony.</p><p>Prawy-górny panel Zawiera numer zadania, uzyskane za nie punkty oraz przycisk „Komentarz”, jeżeli został on dodany przez sprawdzającego. Klikając w ten przycisk możemy go wyświetlić.</p><p>W prawym-dolnym panelu widoczne jest polecenie wybranego zadania (o ile zostało dodane przez twórcę) oraz przyciski do dźwiękowego odtwarzania twojego rozwiązania. Poniżej umiejscowiona jest pięciolinia z twoim rozwiązaniem. Jeżeli sprawdzający udostępnił nam wgląd w opinię algorytmu, pod pięciolinią widoczny jest również przełącznik pozwalający nam wyświetlić rozwiązanie proponowane przez algorytm. Pod nim widoczna jest pełna opinia algorytmu, dotycząca twojego rozwiązania.</p>">            
+            <i class="far fa-circle-question"></i>
+            Pomoc
+        </a>
+        <hr class="m-0 my-3" />
         <a asp-page="Assigned" class="btn btn-danger btn-std-width mx-auto">Wyjdź</a>
     </div>
 
@@ -79,15 +86,20 @@
         </div>
 
         <div class="bg-white rounded shadow flex-grow-1 p-3 d-flex flex-column overflow-auto" id="staff-section-div">
-            <div id="playback-area">
-                <a id="play-file" href="#" class="ms-2 btn btn-secondary">Odtwórz</a>
-                <a id="stop-file" href="#" class="ms-2 btn btn-secondary">Stop</a>
-            </div>
-
-            <div id="exercise-question-area">
-                <p id="exercise-question" class="m-0 fw-semibold">
-                    @*SET VIA JS*@
+            <div class="flex-grow-1 d-flex flex-row justify-content-between align-items-start">
+                <p class="m-0 me-3 fw-semibold" id="exercise-question">
+                    @* FILLED VIA JS *@
                 </p>
+
+                <div id="playback-area" class="d-flex">
+                    <span class="ms-auto fw-semibold">Odtwórz</span>
+                    <button id="play-file" type="button" class="btn-icon">
+                        <i class="fas fa-play icon-sm"></i>
+                    </button>
+                    <button id="stop-file" type="button" class="btn-icon">
+                        <i class="fas fa-stop icon-sm"></i>
+                    </button>
+                </div>
             </div>
 
             <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white rounded mt-3">
@@ -97,7 +109,7 @@
 
             @if (Model.Quiz.ShowAlgorithmOpinion)
             {
-                <div class="form-check form-switch">
+                <div class="form-check form-switch mb-2">
                     <input class="form-check-input" type="checkbox" role="switch" id="showAlgorithmSolutionSwitch" onchange="switchBetweenSolutions(this)">
                     <label class="form-check-label" for="showAlgorithmSolutionSwitch">Pokaż rozwiązanie algorytmu</label>
                 </div>
@@ -130,6 +142,8 @@
         </div>
     </div>
 </div>
+
+<partial name="~/Pages/Shared/HelpPopup.cshtml" />
 
 <script>
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
@@ -246,9 +260,9 @@
             document.getElementById("exercise-question").innerText = questions[index].question;
 
             if (questions[index].question == '')
-                document.getElementById('exercise-question-area').classList.add('d-none');
+                document.getElementById("exercise-question").innerText = 'Brak polecenia dla tego zadania';
             else
-                document.getElementById('exercise-question-area').classList.remove('d-none');
+                document.getElementById("exercise-question").innerText = questions[index].question;
 
             if (loadToGrandStaff)
                 grandStaff.loadFromJson(questions[index], answers[index]);

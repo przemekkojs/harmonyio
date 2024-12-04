@@ -35,7 +35,14 @@
             @* FILLED VIA JS *@
         </div>
 
-        <hr class="mt-0" />
+        <hr class="m-0 mb-3" />
+            <a class="btn btn-outline-primary btn-std-width mx-auto" 
+                data-bs-toggle="modal" data-bs-target="#helpPopup" data-header="Rozwiązywanie quizu"
+                data-text="<p>Znajdujesz się aktualnie w ekranie rozwiązywania quizu. Jeżeli quiz zawiera więcej niż jedno zadanie, możesz swobodnie przechodzić po nich za pomocą przycisków widocznych w lewym panelu strony, pod nazwą i pozostałym czasem quizu.</p><p>Aktualnie wybrane zadanie rozwiązywać możesz w prawym panelu strony. Znajdują się tam informacje takie jak polecenie do zadania (o ile zostało ono dodane przez twórcę), czy jego tonacja. Twoim zadaniem jest odpowiednie ułożenie nut na pięciolinii, zgodnie z wypisanymi poniżej funkcjami harmonicznymi oraz zasadami harmonii. Dokonać tego możesz za pomocą wyboru odpowiednich symboli muzycznych z prawej strony edytora (poprzez kliknięcie lub skrót klawiszowy), a następnie kliknięcia w odpowiednie miejsce na pięciolinii. Nuty wprowadzać musisz po kolei, w ramach każdego taktu. Miejsca do których możesz wprowadzić nowe nuty podświetlone są na niebiesko</p><p>Po uzupełnieniu zadania możesz przejść do kolejnego za pomocą przycisku „Następne” na dole lewego panelu strony. Jeżeli jesteś już na ostatnim zadaniu, możesz, za pomocą przycisku „Zapisz”, zapisać swoje rozwiązania i zakończyć quiz, przesyłając go jednocześnie do oceny.</p>"> 
+            <i class="far fa-circle-question"></i>
+            Pomoc
+        </a>
+        <hr class="m-0 my-3" />
 
         <button id="btn-next" type="button" onclick="nextQuestion()"
             class="btn btn-secondary btn-std-width mx-auto">Następne</button>
@@ -67,6 +74,8 @@
 </div>
 <partial name="~/Pages/Shared/ConfirmLeavePopup.cshtml" />
 
+
+<partial name="~/Pages/Shared/HelpPopup.cshtml" />
 
 <script>
     const fontUrl = '@Url.Content("~/fonts/Inconsolata.otf")'
