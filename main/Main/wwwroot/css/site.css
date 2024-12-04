@@ -141,9 +141,13 @@ body {
     padding: 0;
     color: black;
     cursor: pointer;
+    transition: color 0.3s, background-color 0.3s;
 }
 .btn-icon:focus {
     outline: none; 
+}
+.btn-icon:hover {
+    color: var(--bs-primary);
 }
 
 .icon-sm {
