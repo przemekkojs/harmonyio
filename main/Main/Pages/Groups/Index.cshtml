@@ -304,7 +304,6 @@
             ownedGroupsShown = false;
         }
 
-        console.log(tabIndex)
         smallTabSelect.value = tabIndex;
         searchInput.value = "";
         filterGroups("");
@@ -328,13 +327,11 @@
 
     function deleteGroup(groupId) {
         document.getElementById(`formForDeleteGroup${groupId}`).submit();
-        console.log("deleting group " + groupId);
     }
 
     function createGroup(groupName) {
         document.getElementById("groupNameInput").value = groupName;
         document.getElementById(`formForCreateGroup`).submit();
-        console.log("creating group " + groupName);
     }
 
 </script>

@@ -17,10 +17,10 @@ public class AssignedModel : PageModel
     private readonly ApplicationRepository _repository;
 
     public List<QuizRequest> QuizRequests = [];
-    public List<Quiz> SolvedOpen = [];
     public List<Quiz> NotSolvedOpen = [];
     public List<Quiz> NotSolvedPlanned = [];
-    public List<Quiz> Closed = [];
+    public List<Quiz> WaitingForGrade = [];
+    public List<Quiz> Graded = [];
     public Dictionary<int, QuizResult> GradedQuizes = [];
 
     [BindProperty]
@@ -69,12 +69,16 @@ public class AssignedModel : PageModel
         {
             bool isSolved = quiz.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.UserId == appUser.Id));
 
-            if (isSolved)
+            if (isSolved || quiz.State == QuizState.Closed)
             {
-                if (quiz.State == QuizState.Open)
-                    SolvedOpen.Add(quiz);
-                else if (quiz.State == QuizState.Closed)
-                    Closed.Add(quiz);
+                if (GradedQuizes.ContainsKey(quiz.Id))
+                {
+                    Graded.Add(quiz);
+                }
+                else
+                {
+                    WaitingForGrade.Add(quiz);
+                }
             }
             else
             {
@@ -82,8 +86,6 @@ public class AssignedModel : PageModel
                     NotSolvedOpen.Add(quiz);
                 else if (quiz.State == QuizState.NotStarted)
                     NotSolvedPlanned.Add(quiz);
-                else if (quiz.State == QuizState.Closed)
-                    Closed.Add(quiz);
             }
         }
         return Page();
