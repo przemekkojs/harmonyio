@@ -24,8 +24,14 @@
             <div class="fw-bold mt-2">@Model.Email</div>
 
             <div class="small mt-4 text-center w-100">
-                @* TODO: ZRÓB, ŻEBY TO DZIAŁAŁO // CHYBA NIE JEST POTRZEBNY PRZYCISK JEST TO AUTOMATYCZNE W BIBLIOTECE *@
-                @* <a href="#">Wyślij ponownie weryfikacyjną wiadomość e-mail</a> *@
+                <form method="post">
+                    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-3">
+                        <input type="hidden" asp-for="Email"/>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">Wyślij Ponownie</button>
+                </form>
             </div>
         }
     </div>
