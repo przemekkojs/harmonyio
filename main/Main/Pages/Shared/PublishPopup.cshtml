@@ -124,7 +124,7 @@ argumenty - quizId, openDate, closeDate i selfAssing
         select.addEventListener('change', validatePublishButton);
     });
 
-    publishButton.addEventListener('click', function (event) {
+    publishButton.addEventListener('click', async function (event) {
         if (!validatePublishButton()) return;
 
         const openDate = publishPopup.querySelector('#openDateSelect').value;
@@ -143,9 +143,14 @@ argumenty - quizId, openDate, closeDate i selfAssing
 
         if (typeof window[callbackName] === 'function') {
             const quizId = publishModalButton.getAttribute('data-quiz-id');
-            window[callbackName](quizId, openDateTimeString, closeDateTimeString, selfAssign);
+            const ErrorMessage = await window[callbackName](quizId, openDateTimeString, closeDateTimeString, selfAssign);
+            if (ErrorMessage) {
+                //TODO: można pokazać error jeśli trzeba
+            }
+            else {
             const closebutton = document.getElementById('publishCancelButton');
             closebutton.click();
+            }
         } else {
             console.error("Callback function not found:", callbackName);
         }
