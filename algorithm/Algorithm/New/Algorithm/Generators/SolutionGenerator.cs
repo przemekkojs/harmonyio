@@ -120,16 +120,23 @@ namespace Algorithm.New.Algorithm.Generators
         /// <param name="tolerance">Tolerancja dla błędów. Domyślnie = 0</param>
         /// <returns>Wygenerowane rozwiązanie</returns>
         public static Solution GenerateLinear(Problem problem, int tolerance = 0)
-        {
-            var functions = problem.Functions;
+        {            
             List<Stack> stacks = [];
             List<Function> functionsTmp = [];
-            Dictionary<Function, List<List<(string, Component)>>> mappings = [];
             List<int> usedNotesIndexes = [];
+            Dictionary<Function, List<List<(string, Component)>>> mappings = [];
+            
+            var functions = problem.Functions;
+            var currentIndex = 0;
+            var functionsCount = functions.Count;
+
+            UInt128 maxIterations = 1;
+            UInt128 currentIteration = 0;
 
             // DEBUG ONLY
-            Dictionary<int, int> mistakeIds = new();
+            Dictionary<int, int> mistakeIds = [];
             List<Mistake.Solution.Mistake> lastCheckResult = [];
+            // END DEBUG ONLY
 
             foreach (var function in functions)
             {
@@ -149,8 +156,6 @@ namespace Algorithm.New.Algorithm.Generators
                 usedNotesIndexes.Add(0);
             }
 
-            UInt128 maxIterations = 1;
-
             foreach (var key in mappings.Keys)
             {
                 var valueList = mappings[key];
@@ -161,32 +166,27 @@ namespace Algorithm.New.Algorithm.Generators
                     1;
             }
 
-            var currentIndex = 0;
-            UInt128 currentIteration = 0;
-            var functionsCount = functions.Count;            
-
-            while (currentIndex < functionsCount)
+            while (currentIndex < functionsCount && currentIteration >= maxIterations)
             {
-                if (currentIteration >= maxIterations)
-                    return new Solution(problem, stacks);
-
-                currentIteration++;
-                
                 var currentFunction = functions[currentIndex];
+                var usedNotesIndex = usedNotesIndexes[currentIndex];
                 var mapping = mappings[currentFunction];
-                var usedNotesIndex = usedNotesIndexes[currentIndex];                
+                var possibleNotes = new List<(string, Component)>();
 
-                List<(string, Component)> possibleNotes = [];
-
+                #region debug
+                //TRY CATCH DEBUG ONLY
                 try
                 {
                     possibleNotes = mapping[usedNotesIndex];
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    return new Solution(problem, stacks);
+                    break;
                 }
+                // END DEBUG ONLY
+                #endregion
 
+                currentIteration++;
                 usedNotesIndexes[currentIndex]++;
 
                 var possibleNoteNames = possibleNotes
@@ -197,7 +197,8 @@ namespace Algorithm.New.Algorithm.Generators
                     .Select(x => x.Item2)
                     .ToList();
 
-                var currentStack = new Stack(currentFunction.Index, possibleNoteNames);
+                var currentStack =
+                    new Stack(currentFunction.Index, possibleNoteNames);
 
                 for (int i = 0; i < possibleComponents.Count; i++)
                 {
@@ -214,47 +215,49 @@ namespace Algorithm.New.Algorithm.Generators
                     stacks.Add(currentStack);
                     functionsTmp.Add(currentFunction);
                     currentIndex++;
+
+                    continue;
                 }
-                else
-                {
-                    var prevStack = stacks.Last();
-                    var prevFunction = functionsTmp.Last();
 
-                    var checkResult = StackPairChecker
-                        .CheckRules([prevFunction, currentFunction], [prevStack, currentStack], Constants.Settings);
+                var prevStack = stacks.Last();
+                var prevFunction = functionsTmp.Last();
 
-                    // DEBUG ONLY
-                    lastCheckResult = checkResult;
+                var checkResult = StackPairChecker
+                    .CheckRules([prevFunction, currentFunction], [prevStack, currentStack], Constants.Settings);
+
+                var mistakesCount = checkResult.Count != 0 ?
+                    checkResult.Sum(x => x.Quantity) :
+                    0;
+
+                #region debug
+                // DEBUG ONLY
+                lastCheckResult = checkResult;
                     
-                    foreach (var mistake in checkResult)
-                    {
-                        var code = mistake.MistakeCode;
+                foreach (var mistake in checkResult)
+                {
+                    var code = mistake.MistakeCode;
 
-                        if (!mistakeIds.ContainsKey(code))
-                            mistakeIds[code] = 0;
+                    if (!mistakeIds.ContainsKey(code))
+                        mistakeIds[code] = 0;
 
-                        mistakeIds[code]++;
-                    }
+                    mistakeIds[code]++;
+                }
 
-                    // END DEBUG ONLY
+                // END DEBUG ONLY
+                #endregion
 
-                    var mistakesCount = checkResult.Count != 0 ?
-                        checkResult.Sum(x => x.Quantity) :
-                        0;
-
-                    if (mistakesCount <= tolerance)
-                    {
-                        stacks.Add(currentStack);
-                        functionsTmp.Add(currentFunction);
-                        currentIndex++;
-                    }
-                    else if (usedNotesIndexes[currentIndex] >= mapping.Count)
-                    {
-                        usedNotesIndexes[currentIndex] = 0;
-                        currentIndex--;                        
-                        stacks.RemoveAt(currentIndex);
-                        functionsTmp.RemoveAt(currentIndex);
-                    }
+                if (mistakesCount <= tolerance)
+                {
+                    stacks.Add(currentStack);
+                    functionsTmp.Add(currentFunction);
+                    currentIndex++;
+                }
+                else if (usedNotesIndexes[currentIndex] >= mapping.Count)
+                {
+                    usedNotesIndexes[currentIndex] = 0;
+                    currentIndex--;                        
+                    stacks.RemoveAt(currentIndex);
+                    functionsTmp.RemoveAt(currentIndex);
                 }
             }
 
