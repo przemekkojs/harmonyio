@@ -17,11 +17,11 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             var function1 = functions[0];
             var function2 = functions[1];
 
-            var containsSeventh = function1.PossibleComponents
+            var containsSixth = function1.PossibleComponents
                 .SelectMany(x => x)
-                .Contains(Component.Seventh);
+                .Contains(Component.Sixth);
             
-            if (containsSeventh)
+            if (containsSixth)
             {
                 var index1 = Function.SymbolIndexes[function1.Symbol];
                 var index2 = Function.SymbolIndexes[function2.Symbol];

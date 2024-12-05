@@ -16,7 +16,7 @@ namespace Algorithm.New.Algorithm.Generators
         private const int PRIORITY_LOW = 35;
         private const int PRIORITY_LOWEST = 20;
 
-        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
+        private static readonly Random _random = new(DateTime.Now.Millisecond);
 
         private static readonly Dictionary<Symbol, List<(int, Symbol)>> NextSymbols = new()
         {
@@ -269,14 +269,16 @@ namespace Algorithm.New.Algorithm.Generators
                     }
 
                     var tmpProblem = new Problem([current, next], metre, tonation);
-                    var mistakesCount = ProblemChecker.CheckProblem(tmpProblem).Count;
+                    var mistakes = ProblemChecker.CheckProblem(tmpProblem);
+                    var mistakesCount = mistakes.Count;
 
                     // Dopóki są błędy w takim czymś, to nie można raczej tak zrobić
                     while (mistakesCount != 0)
                     {
                         next = Next(current, metre, tonation, barIndex, functionIndex);
                         tmpProblem = new Problem([current, next], metre, tonation);
-                        mistakesCount = ProblemChecker.CheckProblem(tmpProblem).Count;
+                        mistakes = ProblemChecker.CheckProblem(tmpProblem);
+                        mistakesCount = mistakes.Count;
                     }
 
                     current = next;
@@ -378,12 +380,12 @@ namespace Algorithm.New.Algorithm.Generators
         private static void AddAddedComponents(Function function)
         {
             var symbol = function.Symbol;
-            var randomValue = _random.Next();
+            var randomValue = _random.Next(MAX_WEIGHT);
 
             var toAddWeights = ComponentWeights[symbol];
 
             var possibleToAdd = toAddWeights
-                .Where(x => x.Item1 <= randomValue)
+                .Where(x => x.Item1 > randomValue)
                 .Select(x => x.Item2);
 
             foreach(var possible in possibleToAdd)
@@ -404,7 +406,7 @@ namespace Algorithm.New.Algorithm.Generators
         /// <param name="function">Funkcja, do której mają być dodane oparcie i pozycja</param>
         private static void AddRootAndPosition(Function function)
         {
-            var rootRandomValue = _random.Next();
+            var rootRandomValue = _random.Next(MAX_WEIGHT);
 
             var possibleRoots = RootWeights
                 .Where(x => x.Item2 <= rootRandomValue)
@@ -418,7 +420,7 @@ namespace Algorithm.New.Algorithm.Generators
                 function.Root = root;
             }
 
-            var positionRandomValue = _random.Next();
+            var positionRandomValue = _random.Next(MAX_WEIGHT);
 
             var possiblePositions = PositionWeights
                 .Where(x => x.Item2 <= rootRandomValue)
@@ -458,12 +460,43 @@ namespace Algorithm.New.Algorithm.Generators
             var newDuration = metre.Value;
 
             var prevSymbol = prev.Symbol;
+
+            var hasSixth = prev.Added
+                .Contains(Component.Sixth);
+
+            // Obsługa seksty
+            if (hasSixth)
+            {
+                var symbolIndex = Function.SymbolIndexes[prevSymbol];
+                var newIndex = symbolIndex - 3;
+
+                if (newIndex < 0)
+                    newIndex += 7;
+
+                var newSymbolIndex = Function.SymbolIndexes
+                    .Where(x => x.Value == newIndex)
+                    .FirstOrDefault()
+                    .Key;
+
+                return new Function(
+                    index: new Music.Index()
+                    {
+                        Bar = newBar,
+                        Position = newPosition,
+                        Duration = newDuration
+                    },
+                    symbol: newSymbolIndex,
+                    minor: tonation.Mode == Mode.Minor,
+                    tonation: tonation
+                );
+            }
+            
             var possibleSymbols = NextSymbols[prevSymbol];
             var bestSymbol = GetBestFittingSymbol(possibleSymbols);
 
             var minor = MinorWeights[bestSymbol] == MINOR_DEPENDANT ?
                 tonation.Mode == Mode.Minor :
-                _random.Next() <= MinorWeights[bestSymbol];            
+                _random.Next(MAX_WEIGHT) <= MinorWeights[bestSymbol];            
 
             return new Function(
                 index: new Music.Index()

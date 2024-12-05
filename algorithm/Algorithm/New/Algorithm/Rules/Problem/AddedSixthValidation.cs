@@ -16,6 +16,11 @@ namespace Algorithm.New.Algorithm.Rules.Problem
                 return false;
 
             var function = functions[0];
+            var added = function.Added;
+
+            if (!added.Contains(Component.Sixth))
+                return true;
+
             var functionSymbol = function.Symbol;
             var goodSymbols = new List<Symbol>() { Symbol.T, Symbol.S, Symbol.D };
             var symbolInSet = goodSymbols.Contains(functionSymbol);
