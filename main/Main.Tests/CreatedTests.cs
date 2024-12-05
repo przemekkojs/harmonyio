@@ -565,7 +565,7 @@ public class CreatedModelTests
     }
 
     [Fact]
-    public async Task OnPostPublish_WrongDatesProvided_ReturnsError()
+    public async Task OnPostPublish_WrongDatesProvided_1_ReturnsErrorJsonResult()
     {
         // Arrange
         var appUser = new ApplicationUser { Id = "userId", FirstName = "John", LastName = "Doe" };
@@ -587,15 +587,65 @@ public class CreatedModelTests
             .ReturnsAsync((Quiz?)returnedQuiz);
 
         var model = new CreatedModel(_repositoryMock.Object, _userManagerMock.Object);
-        model.OpenDate = DateTime.Now.AddHours(-1);
+        model.OpenDate = DateTime.Now.AddHours(-3);
         model.CloseDate = DateTime.Now.AddHours(-2);
 
         // Act
         var result = await model.OnPostPublish();
 
         // Assert
-        var redirectResult = Assert.IsType<RedirectToPageResult>(result);
-        Assert.Equal("Error", redirectResult.PageName);
+        var jsonResult = Assert.IsType<JsonResult>(result);
+        Assert.NotNull(jsonResult.Value);
+
+        var resultData = jsonResult.Value;
+
+        var errorProperty = resultData.GetType().GetProperty("error");
+        Assert.NotNull(errorProperty);
+
+        var errorMessage = (string)errorProperty.GetValue(resultData);
+        Assert.Equal("AfterCloseDate", errorMessage);
+    }
+
+    [Fact]
+    public async Task OnPostPublish_WrongDatesProvided_2_ReturnsErrorJsonResult()
+    {
+        // Arrange
+        var appUser = new ApplicationUser { Id = "userId", FirstName = "John", LastName = "Doe" };
+        _userManagerMock.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                        .ReturnsAsync(appUser);
+
+        var returnedQuiz = new Quiz
+        {
+            Id = 1,
+            Name = "Quiz name",
+            Code = "quiz-code",
+            CreatorId = "userId",
+            IsCreated = false,
+        };
+
+        _repositoryMock.Setup(repo => repo.GetAsync(
+            It.IsAny<Expression<Func<Quiz, bool>>>(),
+            It.IsAny<Func<IQueryable<Quiz>, IQueryable<Quiz>>?>()))
+            .ReturnsAsync((Quiz?)returnedQuiz);
+
+        var model = new CreatedModel(_repositoryMock.Object, _userManagerMock.Object);
+        model.OpenDate = DateTime.Now.AddHours(10);
+        model.CloseDate = DateTime.Now.AddHours(2);
+
+        // Act
+        var result = await model.OnPostPublish();
+
+        // Assert
+        var jsonResult = Assert.IsType<JsonResult>(result);
+        Assert.NotNull(jsonResult.Value);
+
+        var resultData = jsonResult.Value;
+
+        var errorProperty = resultData.GetType().GetProperty("error");
+        Assert.NotNull(errorProperty);
+
+        var errorMessage = (string)errorProperty.GetValue(resultData);
+        Assert.Equal("OpenAfterCloseDate", errorMessage);
     }
 
     [Fact]
@@ -628,11 +678,19 @@ public class CreatedModelTests
         var result = await model.OnPostPublish();
 
         // Assert
-        var redirectResult = Assert.IsType<RedirectToPageResult>(result);
+        var jsonResult = Assert.IsType<JsonResult>(result);
 
         _repositoryMock.Verify(r => r.Update(It.IsAny<Quiz>()), Times.Once);
         Assert.True(returnedQuiz.IsCreated);
-        Assert.Null(redirectResult.PageName);
+        Assert.NotNull(jsonResult.Value);
+
+        var resultData = jsonResult.Value;
+
+        var errorProperty = resultData.GetType().GetProperty("success");
+        Assert.NotNull(errorProperty);
+
+        var errorMessage = (bool)errorProperty.GetValue(resultData);
+        Assert.True(errorMessage);
     }
 
 

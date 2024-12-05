@@ -440,7 +440,7 @@ public class GradeModelTests
 
             Assert.Equal(1, pageModel.QuizId);
             Assert.Equal("Quiz name", pageModel.QuizName);
-            Assert.False(pageModel.ShareAlgorithmOpinion);
+            Assert.True(pageModel.ShareAlgorithmOpinion);
 
             Assert.Equal("q1", pageModel.Exercises[0].Question);
             Assert.Equal("q2", pageModel.Exercises[1].Question);
