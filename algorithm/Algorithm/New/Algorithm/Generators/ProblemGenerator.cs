@@ -260,6 +260,14 @@ namespace Algorithm.New.Algorithm.Generators
                 for (int functionIndex = 0; functionIndex < functionsInBar; functionIndex++)
                 {
                     var next = Next(current, metre, tonation, barIndex, functionIndex);
+
+                    if (current == null)
+                    {
+                        current = next;
+                        result.Add(current);
+                        continue;
+                    }
+
                     var tmpProblem = new Problem([current, next], metre, tonation);
                     var mistakesCount = ProblemChecker.CheckProblem(tmpProblem).Count;
 

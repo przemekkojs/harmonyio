@@ -41,7 +41,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 .Where(x => x.Equals(Component.Third))
                 .Count();
 
-            return thirdCount == 0 || (fifthCount == 0 && rootCount == 0);
+            return thirdCount != 0 && (fifthCount != 0 || rootCount != 0);
         }
     }
 }

@@ -32,10 +32,12 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                     .Where(x => x != null)
                     .Select(x => x?.Component);
 
-                var fifths = components
+                var thirds = components
                     .Where(x => x.Equals(Component.Third));
 
-                return fifths.Count() > 1;
+                var thirdsCount = thirds.Count();
+
+                return thirdsCount == 1;
             }
 
             return true;

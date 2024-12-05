@@ -1,6 +1,7 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
+using System.Numerics;
 
 namespace Algorithm.New.Algorithm.Generators
 {
@@ -126,6 +127,8 @@ namespace Algorithm.New.Algorithm.Generators
             Dictionary<Function, List<List<(string, Component)>>> mappings = [];
             List<int> usedNotesIndexes = [];
 
+            Dictionary<int, int> mistakeIds = new();
+
             foreach (var function in functions)
             {
                 var possibleNotes = PossibleNotes.GeneratePossibleNotes(function);
@@ -144,19 +147,27 @@ namespace Algorithm.New.Algorithm.Generators
                 usedNotesIndexes.Add(0);
             }
 
-            var maxIterations = mappings.Values
-                .Sum(x => x
-                    .Sum(y => y.Count)
-            );
+            UInt128 maxIterations = 1;
+
+            foreach (var key in mappings.Keys)
+            {
+                var valueList = mappings[key];
+                var count = (UInt32) valueList.Count;
+
+                maxIterations *= count != 0 ?
+                    count :
+                    1;
+            }
 
             var currentIndex = 0;
-            var currentIteration = 0;
-            var functionsCount = functions.Count;            
+            UInt128 currentIteration = 0;
+            var functionsCount = functions.Count;
+            List<Mistake.Solution.Mistake> lastCheckResult = [];
 
             while (currentIndex < functionsCount)
             {
                 if (currentIteration >= maxIterations)
-                    return new Solution(problem);
+                    return new Solution(problem, stacks);
 
                 currentIteration++;
                 
@@ -166,7 +177,17 @@ namespace Algorithm.New.Algorithm.Generators
 
                 usedNotesIndexes[currentIndex]++;
 
-                var possibleNotes = mapping[usedNotesIndex];
+                List<(string, Component)> possibleNotes = [];
+
+                try
+                {
+                    possibleNotes = mapping[usedNotesIndex];
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return new Solution(problem, stacks);
+                }
+                
                 var possibleNoteNames = possibleNotes
                     .Select(x => x.Item1)
                     .ToList();
@@ -200,6 +221,15 @@ namespace Algorithm.New.Algorithm.Generators
 
                     var checkResult = StackPairChecker
                         .CheckRules([prevFunction, currentFunction], [prevStack, currentStack], Constants.Settings);
+
+                    // DEBUG ONLY
+                    lastCheckResult = checkResult;
+                    
+                    foreach (var mistake in checkResult)
+                    {
+
+                    }
+                    // END DEBUG ONLY
 
                     var mistakesCount = checkResult.Count != 0 ?
                         checkResult.Sum(x => x.Quantity) :
