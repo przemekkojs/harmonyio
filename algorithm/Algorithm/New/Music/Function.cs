@@ -417,39 +417,6 @@ namespace Algorithm.New.Music
             // zawsze mogą być tylko 4. Wszelkie mniej lub więcej trzeba wywalić.
             PossibleComponents
                 .RemoveAll(x => x.Count != Constants.NOTES_IN_FUNCTION);
-
-            List<List<Component>> toRemove = [];
-
-            foreach (var possible in PossibleComponents)
-            {                
-                var position = possible[0];
-                var root = possible[3];
-
-                // Wszystkie, gdzie pozycja się nie zgadza
-                if (Position != null && position != null)
-                {
-                    var equals = Position.Equals(position);
-
-                    if (!equals)
-                        toRemove.Add(possible);
-                }
-
-                // Wszystkie, gdzie oparcie się nie zgadza
-                if (Root != null && root != null)
-                {
-                    var equals = Root.Equals(root);
-
-                    if (!equals)
-                        toRemove.Add(possible);
-                }
-            }
-
-            if (toRemove.Count > 0)
-            {
-                PossibleComponents = PossibleComponents
-                    .Where(x => !toRemove.Contains(x))
-                    .ToList();
-            }            
         }
 
         public override bool Equals(object? obj)
