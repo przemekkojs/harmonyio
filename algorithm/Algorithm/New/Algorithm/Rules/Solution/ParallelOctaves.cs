@@ -54,7 +54,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 // z tym zrobić, ale bardzo nie kłuje w oczy, więc na razie zostawiam
                 // Do zobaczenia za 1000 PR-ów XDDDDD
                 // 8.11.2024: Na razie jestem na 4., spoko idzie
-                if (pair1Interval == 12 && pair2Interval == 12 && notesSame != 0)
+                if (pair1Interval % 12 == 0 && pair2Interval % 12 == 0&& notesSame != 0)
                     return false;
             }
 

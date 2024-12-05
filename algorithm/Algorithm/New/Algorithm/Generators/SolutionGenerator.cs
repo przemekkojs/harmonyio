@@ -166,7 +166,7 @@ namespace Algorithm.New.Algorithm.Generators
                     1;
             }
 
-            while (currentIndex < functionsCount && currentIteration >= maxIterations)
+            while (currentIndex < functionsCount && currentIteration < maxIterations)
             {
                 var currentFunction = functions[currentIndex];
                 var usedNotesIndex = usedNotesIndexes[currentIndex];
@@ -252,12 +252,15 @@ namespace Algorithm.New.Algorithm.Generators
                     functionsTmp.Add(currentFunction);
                     currentIndex++;
                 }
-                else if (usedNotesIndexes[currentIndex] >= mapping.Count)
+                else
                 {
-                    usedNotesIndexes[currentIndex] = 0;
-                    currentIndex--;                        
-                    stacks.RemoveAt(currentIndex);
-                    functionsTmp.RemoveAt(currentIndex);
+                    while (usedNotesIndexes[currentIndex] >= mapping.Count)
+                    {
+                        usedNotesIndexes[currentIndex] = 0;
+                        currentIndex--;
+                        stacks.RemoveAt(currentIndex);
+                        functionsTmp.RemoveAt(currentIndex);
+                    }
                 }
             }
 
