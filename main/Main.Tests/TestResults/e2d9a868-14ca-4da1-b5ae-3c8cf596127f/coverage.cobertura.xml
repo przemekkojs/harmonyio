@@ -12972,7 +12972,7 @@
                 <line number="46" hits="0" branch="False" />
               </lines>
             </method>
-            <method name="get_RemoveFromStudents" signature="()" line-rate="0" branch-rate="1" complexity="1">
+            <method name="get_RemoveFromMembers" signature="()" line-rate="0" branch-rate="1" complexity="1">
               <lines>
                 <line number="49" hits="0" branch="False" />
               </lines>
@@ -12992,7 +12992,7 @@
                 <line number="58" hits="0" branch="False" />
               </lines>
             </method>
-            <method name="HandleRemoveFromStudents" signature="(Main.Models.ApplicationUser,Main.Models.UsersGroup)" line-rate="0" branch-rate="0" complexity="6">
+            <method name="HandleRemoveFromMembers" signature="(Main.Models.ApplicationUser,Main.Models.UsersGroup)" line-rate="0" branch-rate="0" complexity="6">
               <lines>
                 <line number="193" hits="0" branch="False" />
                 <line number="195" hits="0" branch="True" condition-coverage="0% (0/4)">
@@ -13016,7 +13016,7 @@
                 <line number="209" hits="0" branch="False" />
               </lines>
             </method>
-            <method name="HandleRemoveFromTeachers" signature="(Main.Models.ApplicationUser,Main.Models.UsersGroup)" line-rate="0" branch-rate="0" complexity="4">
+            <method name="HandleRemoveFromAdmins" signature="(Main.Models.ApplicationUser,Main.Models.UsersGroup)" line-rate="0" branch-rate="0" complexity="4">
               <lines>
                 <line number="212" hits="0" branch="False" />
                 <line number="214" hits="0" branch="True" condition-coverage="0% (0/2)">
@@ -17489,12 +17489,12 @@
                 <line number="16" hits="598" branch="False" />
               </lines>
             </method>
-            <method name="get_StudentInGroups" signature="()" line-rate="1" branch-rate="1" complexity="1">
+            <method name="get_MemberInGroups" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="31" hits="302" branch="False" />
               </lines>
             </method>
-            <method name="get_TeacherInGroups" signature="()" line-rate="1" branch-rate="1" complexity="1">
+            <method name="get_AdminInGroups" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="32" hits="303" branch="False" />
               </lines>
@@ -17769,7 +17769,7 @@
                 <line number="8" hits="4" branch="False" />
               </lines>
             </method>
-            <method name="get_ForTeacher" signature="()" line-rate="1" branch-rate="1" complexity="1">
+            <method name="get_ForAdmin" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="9" hits="8" branch="False" />
               </lines>
@@ -18062,12 +18062,12 @@
                 <line number="13" hits="12" branch="False" />
               </lines>
             </method>
-            <method name="get_Students" signature="()" line-rate="1" branch-rate="1" complexity="1">
+            <method name="get_Members" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="15" hits="16" branch="False" />
               </lines>
             </method>
-            <method name="get_Teachers" signature="()" line-rate="1" branch-rate="1" complexity="1">
+            <method name="get_Admins" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="16" hits="17" branch="False" />
               </lines>

@@ -469,7 +469,7 @@ public class GroupsIndexModelTests
             var group = new UsersGroup { Id = 1, Name = "Test Group" };
             context.UsersGroups.Add(group);
 
-            var groupRequest = new GroupRequest { Id = 1, UserId = "userId", GroupId = 1, ForTeacher = true };
+            var groupRequest = new GroupRequest { Id = 1, UserId = "userId", GroupId = 1, ForAdmin = true };
             context.GroupRequests.Add(groupRequest);
 
             await context.SaveChangesAsync();
@@ -488,8 +488,8 @@ public class GroupsIndexModelTests
             Assert.IsType<RedirectToPageResult>(result);
 
             // user wasnt added to group
-            Assert.DoesNotContain(group, appUser.TeacherInGroups);
-            Assert.DoesNotContain(group, appUser.StudentInGroups);
+            Assert.DoesNotContain(group, appUser.AdminInGroups);
+            Assert.DoesNotContain(group, appUser.MemberInGroups);
 
             // request was deleted
             var declinedRequest = await context.GroupRequests.FirstOrDefaultAsync(gr => gr.Id == 1);
@@ -512,7 +512,7 @@ public class GroupsIndexModelTests
             var group = new UsersGroup { Id = 1, Name = "Test Group" };
             context.UsersGroups.Add(group);
 
-            var groupRequest = new GroupRequest { Id = 1, UserId = "userId", GroupId = 1, ForTeacher = false };
+            var groupRequest = new GroupRequest { Id = 1, UserId = "userId", GroupId = 1, ForAdmin = false };
             context.GroupRequests.Add(groupRequest);
 
             await context.SaveChangesAsync();
@@ -530,7 +530,7 @@ public class GroupsIndexModelTests
             // Assert
             Assert.IsType<RedirectToPageResult>(result);
 
-            Assert.Contains(group, appUser.StudentInGroups);
+            Assert.Contains(group, appUser.MemberInGroups);
             var acceptedRequest = await context.GroupRequests.FirstOrDefaultAsync(gr => gr.Id == 1);
             Assert.Null(acceptedRequest);
 

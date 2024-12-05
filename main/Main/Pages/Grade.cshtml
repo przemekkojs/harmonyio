@@ -47,13 +47,13 @@
                 @for (int i = 0; i < Model.Users.Count; i++)
                 {
                     <div onclick="selectUser(@i)"
-                        class="student-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
+                        class="member-row d-flex flex-row @(i != Model.Users.Count - 1 ? "mb-2" : "")">
                         <div
-                            class="student-div student-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
+                            class="member-div member-name flex-grow-1 rounded d-flex align-items-center p-2 me-2 overflow-hidden">
                             @Model.Users[i].FullName
                         </div>
                         <div id="user-grade-@i"
-                            class="student-div student-grade rounded d-flex align-items-center justify-content-center p-2">
+                            class="member-div member-grade rounded d-flex align-items-center justify-content-center p-2">
                             -
                         </div>
                     </div>
@@ -280,7 +280,7 @@
     const exerciseMaxes = @Html.Raw(JsonConvert.SerializeObject(Model.Exercises.Select(e => e.MaxPoints)));
     const maxesSum = @Model.Exercises.Select(e => e.MaxPoints).Sum();
 
-    const studentRows = Array.from(document.querySelectorAll('div.student-row'));
+    const memberRows = Array.from(document.querySelectorAll('div.member-row'));
     const currentUserText = document.getElementById("current-user-text");
     const pointsText = document.getElementById("points-text");
     const percentageText = document.getElementById("percentage-text");
@@ -305,7 +305,7 @@
     }
 
     window.loadUser = function (index, loadToGrandStaff = true) {
-        handleStudentsList(index);
+        handleMembersList(index);
         handleTotalPoints(index);
 
         currentUserText.innerText = usernames[index];
@@ -325,16 +325,16 @@
         percentageText.innerText = Math.round((totalPoints / maxesSum) * 100) + "%";
     }
 
-    window.handleStudentsList = function (index) {
-        const currentStudentRow = studentRows.filter(div => div.textContent.includes(usernames[index]))[0];
-        const otherStudentsRow = studentRows.filter(div => div != currentStudentRow);
+    window.handleMembersList = function (index) {
+        const currentMemberRow = memberRows.filter(div => div.textContent.includes(usernames[index]))[0];
+        const otherMembersRow = memberRows.filter(div => div != currentMemberRow);
 
-        currentStudentRow.classList.add("focused-student");
-        currentStudentRow.classList.remove('unfocused-student');
+        currentMemberRow.classList.add("focused-member");
+        currentMemberRow.classList.remove('unfocused-member');
 
-        otherStudentsRow.forEach(div => {
-            div.classList.add('unfocused-student');
-            div.classList.remove('focused-student');
+        otherMembersRow.forEach(div => {
+            div.classList.add('unfocused-member');
+            div.classList.remove('focused-member');
         });
     }
 

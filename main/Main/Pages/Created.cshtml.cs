@@ -70,7 +70,7 @@ public class CreatedModel : PageModel
                         .ThenInclude(e => e.ExerciseSolutions)
                             .ThenInclude(es => es.ExerciseResult)
                 .Include(u => u.CreatedQuizes)
-                .Include(u => u.TeacherInGroups)
+                .Include(u => u.AdminInGroups)
                 .Include(u => u.MasterInGroups)
                 .AsSplitQuery()
             );
@@ -108,7 +108,7 @@ public class CreatedModel : PageModel
         Closed = published.Where(q => q.State == QuizState.Closed).ToList();
 
 
-        Groups = user.TeacherInGroups
+        Groups = user.AdminInGroups
             .Concat(user.MasterInGroups)
             .DistinctBy(g => g.Id)
             .ToDictionary(
@@ -164,10 +164,10 @@ public class CreatedModel : PageModel
         var userGroups = await _repository.GetAsync<ApplicationUser>(
             u => u.Id == appUser.Id,
             u => u
-                .Include(u => u.TeacherInGroups)
-                    .ThenInclude(g => g.Students)
+                .Include(u => u.AdminInGroups)
+                    .ThenInclude(g => g.Members)
                 .Include(u => u.MasterInGroups)
-                    .ThenInclude(g => g.Students)
+                    .ThenInclude(g => g.Members)
         );
 
         if (userGroups == null)
@@ -175,13 +175,13 @@ public class CreatedModel : PageModel
             return RedirectToPage("Error");
         }
 
-        var curUserGroups = userGroups.TeacherInGroups.Concat(userGroups.MasterInGroups);
+        var curUserGroups = userGroups.AdminInGroups.Concat(userGroups.MasterInGroups);
 
         var validUserGroupIds = curUserGroups
             .Select(g => g.Id)
             .ToHashSet();
 
-        // check if user is teacher or master in all groups hes trying to assign
+        // check if user is admin or master in all groups hes trying to assign
         if (!groupIds.All(id => validUserGroupIds.Contains(id)))
         {
             return RedirectToPage("Error");
@@ -206,7 +206,7 @@ public class CreatedModel : PageModel
         quizToAssign.PublishedToGroup.AddRange(newGroups);
 
         var allUsersFromNewGroups = newGroups.SelectMany(
-            g => g.Students
+            g => g.Members
         );
 
         var existingParticipantIds = quizToAssign.Participants.Select(p => p.Id).ToHashSet();

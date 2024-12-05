@@ -6,7 +6,7 @@ namespace Main.Models
 	public class GroupRequest
 	{
 		public int Id { get; set; }
-		public bool ForTeacher { get; set; } = false;
+		public bool ForAdmin { get; set; } = false;
 
 		// FOREIGN KEYS
 		public string UserId { get; set; } = null!;

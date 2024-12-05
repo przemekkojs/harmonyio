@@ -3,11 +3,11 @@
 @{
     ViewData["Title"] = "Harmony.io - Grupy";
 
-    var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.TeacherInGroups).ToList();
-    var joinedGroups = Model.AppUser.StudentInGroups.ToList();
+    var ownedGroups = Model.AppUser.MasterInGroups.Concat(Model.AppUser.AdminInGroups).ToList();
+    var joinedGroups = Model.AppUser.MemberInGroups.ToList();
 
-    var studentRequests = Model.AppUser.GroupRequests.Where(r => !r.ForTeacher).ToList();
-    var teacherRequests = Model.AppUser.GroupRequests.Where(r => r.ForTeacher).ToList();
+    var memberRequests = Model.AppUser.GroupRequests.Where(r => !r.ForAdmin).ToList();
+    var adminRequests = Model.AppUser.GroupRequests.Where(r => r.ForAdmin).ToList();
 }
 
 <div class="h-100 w-100 d-flex flex-row pb-3">
@@ -53,11 +53,11 @@
         </div>
 
         <div id="ownedGroupsList" class="flex-grow-1 pb-3">
-            @if (teacherRequests.Count > 0)
+            @if (adminRequests.Count > 0)
             {
                 <h4 class="mt-3 fw-semibold">Zaproszenia do administrowania</h4>
                 <div class="grid-quizes">
-                    @foreach (var request in teacherRequests)
+                    @foreach (var request in adminRequests)
                     {
                         <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
                             <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
@@ -96,7 +96,7 @@
             }
 
             <div class="mt-3"></div>
-            @if (ownedGroups.Count > 0 && teacherRequests.Count > 0)
+            @if (ownedGroups.Count > 0 && adminRequests.Count > 0)
             {
                 <h4 class="fw-semibold">Grupy</h4>
             }
@@ -121,8 +121,8 @@
                                     <div class="d-flex flex-row">
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="text-truncate">
-                                            <span class="fw-bold">Uczniowie:</span>
-                                            @(group.Students.Count)
+                                            <span class="fw-bold">Członkowie:</span>
+                                            @(group.Members.Count)
                                         </span>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
                     }
                 </div>
             }
-            else if (teacherRequests.Count == 0)
+            else if (adminRequests.Count == 0)
             {
                 <div
                     class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
@@ -165,11 +165,11 @@
 
 
         <div id="joinedGroupsList" class="flex-grow-1 pb-3">
-            @if (studentRequests.Count > 0)
+            @if (memberRequests.Count > 0)
             {
                 <h4 class="mt-3 fw-semibold">Zaproszenia do grupy</h4>
                 <div class="grid-quizes">
-                    @foreach (var request in studentRequests)
+                    @foreach (var request in memberRequests)
                     {
                         <div class="border border-1 rounded p-3 flex-shrink-0 d-flex flex-row overflow-hidden h-100">
                             <div class="flex-grow-1 d-flex flex-column flex-basis-0 overflow-hidden">
@@ -208,7 +208,7 @@
             }
 
             <div class="mt-3"></div>
-            @if (joinedGroups.Count > 0 && studentRequests.Count > 0)
+            @if (joinedGroups.Count > 0 && memberRequests.Count > 0)
             {
                 <h4 class="fw-semibold">Grupy</h4>
             }
@@ -234,8 +234,8 @@
                                     <div class="d-flex flex-row">
                                         <i class="fas fa-user-group icon-sm me-2"></i>
                                         <span class="text-truncate">
-                                            <span class="fw-bold">Uczniowie:</span>
-                                            @(group.Students.Count)
+                                            <span class="fw-bold">Członkowie:</span>
+                                            @(group.Members.Count)
                                         </span>
                                     </div>
                                 </div>
@@ -249,7 +249,7 @@
                     }
                 </div>
             }
-            else if (studentRequests.Count == 0)
+            else if (memberRequests.Count == 0)
             {
                 <div
                     class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">

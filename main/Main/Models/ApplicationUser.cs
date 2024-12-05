@@ -28,8 +28,8 @@ public class ApplicationUser : IdentityUser
     public ICollection<ExerciseSolution> ExerciseSolutions = new List<ExerciseSolution>();
     public ICollection<QuizResult> QuizResults = new List<QuizResult>();
 
-    public ICollection<UsersGroup> StudentInGroups { get; set; } = new List<UsersGroup>();
-    public ICollection<UsersGroup> TeacherInGroups { get; set; } = new List<UsersGroup>();
+    public ICollection<UsersGroup> MemberInGroups { get; set; } = new List<UsersGroup>();
+    public ICollection<UsersGroup> AdminInGroups { get; set; } = new List<UsersGroup>();
     public ICollection<UsersGroup> MasterInGroups { get; set; } = new List<UsersGroup>();
 
     public ICollection<GroupRequest> GroupRequests { get; set; } = new List<GroupRequest>();

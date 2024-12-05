@@ -328,23 +328,23 @@ public class CreatedModelTests
                 Id = 1,
                 Name = "Group1",
                 MasterId = curUser.Id,
-                Students = new List<ApplicationUser> { users[1], users[2] }
+                Members = new List<ApplicationUser> { users[1], users[2] }
             };
             var group2 = new UsersGroup
             {
                 Id = 2,
                 Name = "Group2",
                 MasterId = users[1].Id,
-                Teachers = new List<ApplicationUser> { curUser },
-                Students = new List<ApplicationUser> { users[2], users[3] }
+                Admins = new List<ApplicationUser> { curUser },
+                Members = new List<ApplicationUser> { users[2], users[3] }
             };
             var group3 = new UsersGroup
             {
                 Id = 3,
                 Name = "Group3",
                 MasterId = users[1].Id,
-                Teachers = new List<ApplicationUser> { curUser },
-                Students = new List<ApplicationUser> { users[4] }
+                Admins = new List<ApplicationUser> { curUser },
+                Members = new List<ApplicationUser> { users[4] }
             };
             context.UsersGroups.AddRange(group1, group2, group3);
 
