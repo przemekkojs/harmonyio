@@ -39,7 +39,9 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 var fifths = components
                     .Where(x => x.Equals(Component.Fifth));
 
-                return fifths.Count() > 1;
+                var fifthsCount = fifths.Count();
+
+                return fifthsCount == 1;
             }
 
             return true;

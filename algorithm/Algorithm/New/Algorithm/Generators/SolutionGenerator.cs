@@ -127,7 +127,9 @@ namespace Algorithm.New.Algorithm.Generators
             Dictionary<Function, List<List<(string, Component)>>> mappings = [];
             List<int> usedNotesIndexes = [];
 
+            // DEBUG ONLY
             Dictionary<int, int> mistakeIds = new();
+            List<Mistake.Solution.Mistake> lastCheckResult = [];
 
             foreach (var function in functions)
             {
@@ -161,8 +163,7 @@ namespace Algorithm.New.Algorithm.Generators
 
             var currentIndex = 0;
             UInt128 currentIteration = 0;
-            var functionsCount = functions.Count;
-            List<Mistake.Solution.Mistake> lastCheckResult = [];
+            var functionsCount = functions.Count;            
 
             while (currentIndex < functionsCount)
             {
@@ -173,9 +174,7 @@ namespace Algorithm.New.Algorithm.Generators
                 
                 var currentFunction = functions[currentIndex];
                 var mapping = mappings[currentFunction];
-                var usedNotesIndex = usedNotesIndexes[currentIndex];
-
-                usedNotesIndexes[currentIndex]++;
+                var usedNotesIndex = usedNotesIndexes[currentIndex];                
 
                 List<(string, Component)> possibleNotes = [];
 
@@ -187,7 +186,9 @@ namespace Algorithm.New.Algorithm.Generators
                 {
                     return new Solution(problem, stacks);
                 }
-                
+
+                usedNotesIndexes[currentIndex]++;
+
                 var possibleNoteNames = possibleNotes
                     .Select(x => x.Item1)
                     .ToList();
@@ -227,8 +228,14 @@ namespace Algorithm.New.Algorithm.Generators
                     
                     foreach (var mistake in checkResult)
                     {
+                        var code = mistake.MistakeCode;
 
+                        if (!mistakeIds.ContainsKey(code))
+                            mistakeIds[code] = 0;
+
+                        mistakeIds[code]++;
                     }
+
                     // END DEBUG ONLY
 
                     var mistakesCount = checkResult.Count != 0 ?

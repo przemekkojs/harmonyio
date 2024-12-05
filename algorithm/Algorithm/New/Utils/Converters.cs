@@ -15,7 +15,7 @@ namespace Algorithm.New.Utils
             if (option1 || option2)
                 tonation = Tonation.GetMirroredVersion(tonation);
 
-            var functionIndex = Function.symbolIndexes[function.Symbol];
+            var functionIndex = Function.SymbolIndexes[function.Symbol];
             var componentIndexes = Function.FunctionComponentIndexes(functionIndex, tonation);
             var componentIndex = componentIndexes[component];
 
