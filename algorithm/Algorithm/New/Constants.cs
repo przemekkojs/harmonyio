@@ -49,7 +49,10 @@ namespace Algorithm.New
             new VoiceDistance(),
             new ValidPosition(),
             new ValidRoot(),
-            new AllComponentsSatisfied()
+            new AllComponentsSatisfied(),
+            new DominantSeventhResolution(),
+            new DoubledThird(),
+            new DoubledFifth()
         ]);
 
         // Ustawienia dla sprawdzania zadania

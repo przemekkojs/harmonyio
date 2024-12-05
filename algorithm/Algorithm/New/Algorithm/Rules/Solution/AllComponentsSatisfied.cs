@@ -6,9 +6,10 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     {
         public AllComponentsSatisfied() : base(
             id: 116,
-            name: "",
-            description: "",
+            name: "Wymagane składniki",
+            description: "W każdej funkcji wymagana jest minimum pryma i tercja",
             oneFunction: true) { }
+
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

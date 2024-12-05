@@ -6,8 +6,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
     {
         public ValidRoot() : base(
             id: 115,
-            name: "",
-            description: "",
+            name: "Poprawne oparcie",
+            description: "Czy oparcie rozwiązania jest zgodne z oparciem problemu",
             oneFunction: true) { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)

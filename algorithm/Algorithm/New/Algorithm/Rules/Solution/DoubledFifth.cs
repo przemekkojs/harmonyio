@@ -2,12 +2,12 @@
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class ValidPosition : Rule
+    public class DoubledFifth : Rule
     {
-        public ValidPosition() : base(
-            id: 114,
-            name: "Poprawna pozycja",
-            description: "Czy pozycja rozwiązania jest zgodna z pozycją problemu",
+        public DoubledFifth() : base(
+            id: 119,
+            name: "Dwojenie kwinty (funkcje poboczne)",
+            description: "W funkcjach pobocznych nie wolno dwoić kwinty",
             oneFunction: true) { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)

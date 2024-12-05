@@ -2,13 +2,13 @@
 
 namespace Algorithm.New.Algorithm.Rules.Solution
 {
-    public class ValidPosition : Rule
+    public class DominantSeventhResolution : Rule
     {
-        public ValidPosition() : base(
-            id: 114,
-            name: "Poprawna pozycja",
-            description: "Czy pozycja rozwiązania jest zgodna z pozycją problemu",
-            oneFunction: true) { }
+        public DominantSeventhResolution() : base(
+            id: 117,
+            name: "Rozwiązanie dominanty septymowej",
+            description: "Czy jest właściwe, w zależności od postaci",
+            oneFunction: false) { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
