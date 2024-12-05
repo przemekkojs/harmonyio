@@ -202,7 +202,7 @@ namespace Main.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ForTeacher")
+                    b.Property<bool>("ForAdmin")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("GroupId")

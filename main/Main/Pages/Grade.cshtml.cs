@@ -65,7 +65,7 @@ namespace Main.Pages
                             .ThenInclude(es => es.ExerciseResult!)
                                 .ThenInclude(er => er.MistakeResults)
                     .Include(q => q.PublishedToGroup)
-                        .ThenInclude(q => q.Teachers.Where(u => u.Id == appUser.Id))
+                        .ThenInclude(q => q.Admins.Where(u => u.Id == appUser.Id))
             );
 
             if (quiz == null)
@@ -171,7 +171,7 @@ namespace Main.Pages
                         .ThenInclude(e => e.ExerciseSolutions)
                             .ThenInclude(es => es.ExerciseResult)
                     .Include(q => q.PublishedToGroup)
-                        .ThenInclude(q => q.Teachers.Where(u => u.Id == appUser.Id))
+                        .ThenInclude(q => q.Admins.Where(u => u.Id == appUser.Id))
             );
 
             if (quiz == null)
@@ -278,7 +278,7 @@ namespace Main.Pages
         private static bool CanUserGradeQuiz(Quiz quiz, string userId)
         {
             var userIsCreator = quiz.CreatorId == userId;
-            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == userId || g.Teachers.Any(t => t.Id == userId));
+            var userIsMaster = quiz.PublishedToGroup.Any(g => g.MasterId == userId || g.Admins.Any(t => t.Id == userId));
 
             return userIsCreator || userIsMaster;
         }

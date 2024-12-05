@@ -110,8 +110,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
         // Relacja wiele-do-wielu między UserGroup a ApplicationUser (uczestnicy) [oba]
         modelBuilder.Entity<ApplicationUser>()
-            .HasMany(q => q.TeacherInGroups)
-            .WithMany(u => u.Teachers)
+            .HasMany(q => q.AdminInGroups)
+            .WithMany(u => u.Admins)
             .UsingEntity<Dictionary<string, object>>(
                 "GroupLeader",
                 j => j.HasOne<UsersGroup>().WithMany().HasForeignKey("GroupId").OnDelete(DeleteBehavior.Cascade),
@@ -119,8 +119,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             );
 
         modelBuilder.Entity<ApplicationUser>()
-            .HasMany(q => q.StudentInGroups)
-            .WithMany(u => u.Students)
+            .HasMany(q => q.MemberInGroups)
+            .WithMany(u => u.Members)
             .UsingEntity<Dictionary<string, object>>(
                 "UserGroup",
                 j => j.HasOne<UsersGroup>().WithMany().HasForeignKey("GroupId").OnDelete(DeleteBehavior.Cascade),

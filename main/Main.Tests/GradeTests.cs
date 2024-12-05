@@ -125,7 +125,7 @@ public class GradeModelTests
                     Id = 1,
                     Name = "G1",
                     MasterId = "other",
-                    Teachers = new List<ApplicationUser> {
+                    Admins = new List<ApplicationUser> {
                         new ApplicationUser { Id = "otheruser", FirstName = "John", LastName = "Doe" }
                     }
                 }
@@ -169,7 +169,7 @@ public class GradeModelTests
                     Id = 1,
                     Name = "G1",
                     MasterId = "other",
-                    Teachers = new List<ApplicationUser> {
+                    Admins = new List<ApplicationUser> {
                         new ApplicationUser { Id = "otheruser", FirstName = "John", LastName = "Doe" }
                     }
                 }

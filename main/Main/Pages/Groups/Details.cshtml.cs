@@ -46,7 +46,7 @@ namespace Main.Pages
         public string UserId { get; set; } = "";
 
         [BindProperty]
-        public bool RemoveFromStudents { get; set; }
+        public bool RemoveFromMembers { get; set; }
 
         [BindProperty]
         public int GroupId { get; set; }
@@ -69,8 +69,8 @@ namespace Main.Pages
             var group = await _repository.GetAsync<UsersGroup>(
                 q => q.Id == id,
                 query => query
-                    .Include(g => g.Teachers)
-                    .Include(g => g.Students)
+                    .Include(g => g.Admins)
+                    .Include(g => g.Members)
                     .Include(g => g.MasterUser)
                     .Include(g => g.Quizzes)
                         .ThenInclude(q => q.Exercises)
@@ -94,15 +94,15 @@ namespace Main.Pages
             }
             IsMaster = group.MasterId == appUser.Id;
 
-            IsAdmin = IsMaster || group.Teachers.Contains(appUser);
+            IsAdmin = IsMaster || group.Admins.Contains(appUser);
 
-            IsParticipant = group.Students.Contains(appUser);
+            IsParticipant = group.Members.Contains(appUser);
 
             Group = group;
 
             CurrentUserId = appUser.Id;
 
-            if (!IsAdmin && !group.Students.Contains(appUser))
+            if (!IsAdmin && !group.Members.Contains(appUser))
             {
                 return Forbid();
             }
@@ -159,8 +159,8 @@ namespace Main.Pages
             var group = await _repository.GetAsync<UsersGroup>(
                 q => q.Id == GroupId,
                 q => q
-                    .Include(g => g.Teachers)
-                    .Include(g => g.Students)
+                    .Include(g => g.Admins)
+                    .Include(g => g.Members)
             );
             if (group == null)
             {
@@ -168,13 +168,13 @@ namespace Main.Pages
             }
 
             var success = false;
-            if (RemoveFromStudents)
+            if (RemoveFromMembers)
             {
-                success = HandleRemoveFromStudents(appUser, group);
+                success = HandleRemoveFromMembers(appUser, group);
             }
             else
             {
-                success = HandleRemoveFromTeachers(appUser, group);
+                success = HandleRemoveFromAdmins(appUser, group);
             }
 
             if (success)
@@ -189,41 +189,41 @@ namespace Main.Pages
             }
         }
 
-        private bool HandleRemoveFromStudents(ApplicationUser appUser, UsersGroup group)
+        private bool HandleRemoveFromMembers(ApplicationUser appUser, UsersGroup group)
         {
-            // Allow only Master or Teacher to remove students
-            if (group.MasterId != appUser.Id && !group.Teachers.Any(t => t.Id == appUser.Id))
+            // Allow only Master or Admin to remove members
+            if (group.MasterId != appUser.Id && !group.Admins.Any(t => t.Id == appUser.Id))
             {
                 return false;
             }
 
-            // Find and remove the student
-            var student = group.Students.FirstOrDefault(u => u.Id == UserId);
-            if (student == null)
+            // Find and remove the member
+            var member = group.Members.FirstOrDefault(u => u.Id == UserId);
+            if (member == null)
             {
                 return false;
             }
 
-            group.Students.Remove(student);
+            group.Members.Remove(member);
             return true;
         }
 
-        private bool HandleRemoveFromTeachers(ApplicationUser appUser, UsersGroup group)
+        private bool HandleRemoveFromAdmins(ApplicationUser appUser, UsersGroup group)
         {
-            // Only Master can remove a teacher
+            // Only Master can remove a admin
             if (group.MasterId != appUser.Id)
             {
                 return false;
             }
 
-            // Find and remove the teacher
-            var teacher = group.Teachers.FirstOrDefault(u => u.Id == UserId);
-            if (teacher == null)
+            // Find and remove the admin
+            var admin = group.Admins.FirstOrDefault(u => u.Id == UserId);
+            if (admin == null)
             {
                 return false;
             }
 
-            group.Teachers.Remove(teacher);
+            group.Admins.Remove(admin);
             return true;
         }
 
@@ -238,14 +238,14 @@ namespace Main.Pages
             var group = await _repository.GetAsync<UsersGroup>(
                 q => q.Id == GroupId,
                 q => q
-                    .Include(g => g.Teachers)
-                    .Include(g => g.Students)
+                    .Include(g => g.Admins)
+                    .Include(g => g.Members)
             );
 
             if (group == null ||
                 (
                     group.MasterId != appUser.Id &&
-                    !group.Teachers.Any(t => t.Id == appUser.Id)
+                    !group.Admins.Any(t => t.Id == appUser.Id)
                 ))
             {
                 return RedirectToPage("/Error");
@@ -277,17 +277,17 @@ namespace Main.Pages
             // check if users are already added to group
             if (AsAdmins)
             {
-                wrongEmails.AddRange(group.Teachers.Where(foundUsers.Contains).Select(u => u.Email!));
+                wrongEmails.AddRange(group.Admins.Where(foundUsers.Contains).Select(u => u.Email!));
             }
             else
             {
-                wrongEmails.AddRange(group.Students.Where(foundUsers.Contains).Select(u => u.Email!));
+                wrongEmails.AddRange(group.Members.Where(foundUsers.Contains).Select(u => u.Email!));
             }
 
             // check if users have request sent 
             var requestSentEmails = (await _repository.GetAllAsync<GroupRequest>(
                 gr => gr
-                    .Where(gr => gr.GroupId == GroupId && gr.ForTeacher == AsAdmins)
+                    .Where(gr => gr.GroupId == GroupId && gr.ForAdmin == AsAdmins)
                     .Include(gr => gr.User)
                 ))
                 .Select(gr => gr.User.Email!)
@@ -305,7 +305,7 @@ namespace Main.Pages
                 _repository.Add(new GroupRequest()
                 {
                     Group = group,
-                    ForTeacher = AsAdmins,
+                    ForAdmin = AsAdmins,
                     User = user
                 });
             }

@@ -327,7 +327,7 @@ namespace Main.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ForTeacher = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ForAdmin = table.Column<bool>(type: "INTEGER", nullable: false),
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
                     GroupId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

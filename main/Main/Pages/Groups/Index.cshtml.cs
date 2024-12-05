@@ -43,16 +43,16 @@ namespace Main.Pages
             appUser = await _repository.GetAsync<ApplicationUser>(
                 au => au.Id == appUser.Id,
                 au => au
-                    .Include(u => u.StudentInGroups)
+                    .Include(u => u.MemberInGroups)
                         .ThenInclude(g => g.MasterUser)
-                    .Include(u => u.StudentInGroups)
-                        .ThenInclude(g => g.Students)
-                    .Include(u => u.TeacherInGroups)
+                    .Include(u => u.MemberInGroups)
+                        .ThenInclude(g => g.Members)
+                    .Include(u => u.AdminInGroups)
                         .ThenInclude(g => g.MasterUser)
-                    .Include(u => u.TeacherInGroups)
-                        .ThenInclude(g => g.Students)
+                    .Include(u => u.AdminInGroups)
+                        .ThenInclude(g => g.Members)
                     .Include(u => u.MasterInGroups)
-                        .ThenInclude(g => g.Students)
+                        .ThenInclude(g => g.Members)
                     .Include(u => u.GroupRequests)
                         .ThenInclude(r => r.Group)
                         .ThenInclude(g => g.MasterUser)
@@ -151,7 +151,7 @@ namespace Main.Pages
                 return Forbid();
             }
 
-            if (groupRequest.ForTeacher)
+            if (groupRequest.ForAdmin)
             {
                 TempData["showJoined"] = false;
             }
@@ -191,23 +191,23 @@ namespace Main.Pages
                 modifier: u => u
                     .Include(u => u.GroupRequests)
                         .ThenInclude(r => r.Group)
-                    .Include(u => u.StudentInGroups)
-                    .Include(u => u.TeacherInGroups));
+                    .Include(u => u.MemberInGroups)
+                    .Include(u => u.AdminInGroups));
 
             if (user == null)
             {
                 return RedirectToPage("/Error");
             }
 
-            if (groupRequest.ForTeacher)
+            if (groupRequest.ForAdmin)
             {
                 TempData["showJoined"] = false;
-                user.TeacherInGroups.Add(groupRequest.Group);
+                user.AdminInGroups.Add(groupRequest.Group);
             }
             else
             {
                 TempData["showJoined"] = true;
-                user.StudentInGroups.Add(groupRequest.Group);
+                user.MemberInGroups.Add(groupRequest.Group);
             }
 
             _repository.Update(user);

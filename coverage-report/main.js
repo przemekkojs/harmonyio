@@ -778,7 +778,7 @@ var riskHotspots = [
       { "value": 6, "exceeded": false },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "HandleRemoveFromStudents(Main.Models.ApplicationUser,Main.Models.UsersGroup)", "methodShortName": "HandleRemoveFromStudents(...)", "fileIndex": 0, "line": 193,
+    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "HandleRemoveFromMembers(Main.Models.ApplicationUser,Main.Models.UsersGroup)", "methodShortName": "HandleRemoveFromMembers(...)", "fileIndex": 0, "line": 193,
     "metrics": [
       { "value": 42, "exceeded": true },
       { "value": 6, "exceeded": false },
