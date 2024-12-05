@@ -21,21 +21,10 @@ namespace Algorithm.New.Utils
                 result.Add(toAdd);
             }
 
+            if (result.Count == 0)
+                throw new Exception("Something went wrong");
+
             return result;
-        }
-
-        public static bool Contains(List<string> toCheck, List<List<string>> possible)
-        {
-            foreach(var possibleNotes in possible)
-            {
-                for (int index = 0; index < possibleNotes.Count; index++)
-                {
-                    if (!toCheck[index].Equals(possibleNotes[index]))
-                        return false;
-                }
-            }
-
-            return true;
         }
     }
 }

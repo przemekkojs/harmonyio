@@ -1,4 +1,5 @@
-﻿using Algorithm.New.Music;
+﻿using Algorithm.New.Algorithm.Checkers;
+using Algorithm.New.Music;
 
 namespace Algorithm.New.Algorithm.Generators
 {
@@ -15,7 +16,7 @@ namespace Algorithm.New.Algorithm.Generators
         private const int PRIORITY_LOW = 35;
         private const int PRIORITY_LOWEST = 20;
 
-        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
+        private static readonly Random _random = new(DateTime.Now.Millisecond);
 
         private static readonly Dictionary<Symbol, List<(int, Symbol)>> NextSymbols = new()
         {
@@ -112,6 +113,114 @@ namespace Algorithm.New.Algorithm.Generators
             { Symbol.Svii, 50 },
         };
 
+        private static readonly Dictionary<Symbol, List<(int, Component)>> ComponentWeights = new()
+        {
+            {
+                Symbol.T,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOWEST, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Sii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Tiii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Diii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_HIGH, Component.Seventh),
+                    (PRIORITY_STANDARD, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.S,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOW, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.D,
+                [
+                    (PRIORITY_STANDARD, Component.Sixth),
+                    (PRIORITY_HIGHEST, Component.Seventh),
+                    (PRIORITY_HIGH, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Tvi,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOW, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Svi,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Dvii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Svii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOW, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            }
+        };
+
+        private static readonly List<(Component, int)> RootWeights = new()
+        {
+            ( Component.Root, PRIORITY_STANDARD ),
+            ( Component.Third, PRIORITY_LOW ),
+            ( Component.Fifth, PRIORITY_LOW )
+        };
+
+        private static readonly List<(Component, int)> PositionWeights = new()
+        {
+            ( Component.Root, PRIORITY_LOW ),
+            ( Component.Third, PRIORITY_LOW ),
+            ( Component.Fifth, PRIORITY_LOW )
+        };
+
+        /// <summary>
+        /// Z tej funkcji generującej najpewniej się będzie korzystać
+        /// </summary>
+        /// <param name="bars"></param>
+        /// <param name="metreValue"></param>
+        /// <param name="metreCount"></param>
+        /// <param name="sharpsCount"></param>
+        /// <param name="flatsCount"></param>
+        /// <param name="minor"></param>
+        /// <returns></returns>
         public static List<Function> Generate(int bars, int metreValue, int metreCount, int sharpsCount, int flatsCount, int minor)
         {
             var metre = Metre.GetMetre(metreCount, metreValue);
@@ -147,9 +256,32 @@ namespace Algorithm.New.Algorithm.Generators
                     1 : // Ostatni takt powinien zawierać zawsze 1 funkcję
                     _random.Next(1, maxFunctionsInBar);
 
+                // TODO: Trzeba dodać sprawdzanie, czy są spełniane zasady wsm
                 for (int functionIndex = 0; functionIndex < functionsInBar; functionIndex++)
                 {
-                    current = Next(current, metre, tonation, barIndex, functionIndex);
+                    var next = Next(current, metre, tonation, barIndex, functionIndex);
+
+                    if (current == null)
+                    {
+                        current = next;
+                        result.Add(current);
+                        continue;
+                    }
+
+                    var tmpProblem = new Problem([current, next], metre, tonation);
+                    var mistakes = ProblemChecker.CheckProblem(tmpProblem);
+                    var mistakesCount = mistakes.Count;
+
+                    // Dopóki są błędy w takim czymś, to nie można raczej tak zrobić
+                    while (mistakesCount != 0)
+                    {
+                        next = Next(current, metre, tonation, barIndex, functionIndex);
+                        tmpProblem = new Problem([current, next], metre, tonation);
+                        mistakes = ProblemChecker.CheckProblem(tmpProblem);
+                        mistakesCount = mistakes.Count;
+                    }
+
+                    current = next;
                     result.Add(current);
                 }
             }
@@ -160,6 +292,13 @@ namespace Algorithm.New.Algorithm.Generators
             return result;
         }
 
+        /// <summary>
+        /// Dodaje brakujące funkcje do zadania, w razie potrzeby
+        /// </summary>
+        /// <param name="lastFunction"></param>
+        /// <param name="metre"></param>
+        /// <param name="tonation"></param>
+        /// <param name="result"></param>
         private static void AddMissing(Function lastFunction, Metre metre, Tonation tonation, List<Function> result)
         {
             // Logika dodawania dobrego zakończenia zadania
@@ -215,15 +354,95 @@ namespace Algorithm.New.Algorithm.Generators
             }
         }
 
-        // Ta funkcja dodatkowo reaguje, jeżeli powstaje próba 
-        // UŻYWAĆ TYLKO W PĘTLI GENERUJĄCEJ KOLEJNE
+        /// <summary>
+        /// UŻYWAĆ TYLKO W PĘTLI GENERUJĄCEJ KOLEJNE
+        /// </summary>
+        /// <param name="prev"></param>
+        /// <param name="metre"></param>
+        /// <param name="tonation"></param>
+        /// <param name="barIndex"></param>
+        /// <param name="functionIndex"></param>
+        /// <returns></returns>
         private static Function Next(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
-            Function result;
+            var result = GetBestFittingFunction(prev, metre, tonation, barIndex, functionIndex);
 
+            AddAddedComponents(result);
+            AddRootAndPosition(result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Dodaje składniki dodane do funkcji
+        /// </summary>
+        /// <param name="function">Funkcja, do której składniki mają zostać dodane</param>
+        private static void AddAddedComponents(Function function)
+        {
+            var symbol = function.Symbol;
+            var randomValue = _random.Next(MAX_WEIGHT);
+
+            var toAddWeights = ComponentWeights[symbol];
+
+            var possibleToAdd = toAddWeights
+                .Where(x => x.Item1 > randomValue)
+                .Select(x => x.Item2);
+
+            foreach(var possible in possibleToAdd)
+            {
+                if (possible.Equals(Component.Sixth))
+                {
+                    function.Added.Add(possible);
+                    break;
+                }
+
+                function.Added.Add(possible);
+            }
+        }
+
+        /// <summary>
+        /// Dodaje oparcie i pozycję do funkcji
+        /// </summary>
+        /// <param name="function">Funkcja, do której mają być dodane oparcie i pozycja</param>
+        private static void AddRootAndPosition(Function function)
+        {
+            var rootRandomValue = _random.Next(MAX_WEIGHT);
+
+            var possibleRoots = RootWeights
+                .Where(x => x.Item2 <= rootRandomValue)
+                .Select(x => x.Item1)
+                .ToList();
+
+            if (possibleRoots.Count != 0)
+            {
+                var rootIndex = _random.Next(possibleRoots.Count);
+                var root = possibleRoots[rootIndex];
+                function.Root = root;
+            }
+
+            var positionRandomValue = _random.Next(MAX_WEIGHT);
+
+            var possiblePositions = PositionWeights
+                .Where(x => x.Item2 <= rootRandomValue)
+                .Select(x => x.Item1)
+                .ToList();
+
+            if (possiblePositions.Count != 0)
+            {
+                var positionIndex = _random.Next(possiblePositions.Count);
+                var position = possiblePositions[positionIndex];
+                function.Position = position;
+            }
+        }
+
+        // Ta funkcja, z wykorzystaniem najlepiej dopasowanego symbolu, dorabia resztę informacji,
+        // by kolejna funkcja dobrze działała.
+        // NIE UŻYWAĆ SAMEJ
+        private static Function GetBestFittingFunction(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
+        {
             if (prev == null)
             {
-                result = new Function(
+                return new Function(
                     index: new Music.Index()
                     {
                         Bar = 0,
@@ -233,34 +452,51 @@ namespace Algorithm.New.Algorithm.Generators
                     symbol: Symbol.T,
                     minor: tonation.Mode == Mode.Minor,
                     tonation: tonation
-                );                
+                );
             }
-            else
-                result = GetBestFittingFunction(prev, metre, tonation, barIndex, functionIndex);
 
-            // TODO: Dodać tworzenie symboli dodanych w razie potrzeby
-            // Na potrzeby bazowe można to pominąć - będą generowane zadania funkcyjne na poziomie I semestru
-            // 4 klasy SM II stopnia
-
-            return result;
-        }
-
-        // Ta funkcja, z wykorzystaniem najlepiej dopasowanego symbolu, dorabia resztę informacji,
-        // by kolejna funkcja dobrze działała.
-        // NIE UŻYWAĆ SAMEJ
-        private static Function GetBestFittingFunction(Function prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
-        {
             var newBar = barIndex;
             var newPosition = functionIndex;
             var newDuration = metre.Value;
 
             var prevSymbol = prev.Symbol;
+
+            var hasSixth = prev.Added
+                .Contains(Component.Sixth);
+
+            // Obsługa seksty
+            if (hasSixth)
+            {
+                var symbolIndex = Function.SymbolIndexes[prevSymbol];
+                var newIndex = symbolIndex - 3;
+
+                if (newIndex < 0)
+                    newIndex += 7;
+
+                var newSymbolIndex = Function.SymbolIndexes
+                    .Where(x => x.Value == newIndex)
+                    .FirstOrDefault()
+                    .Key;
+
+                return new Function(
+                    index: new Music.Index()
+                    {
+                        Bar = newBar,
+                        Position = newPosition,
+                        Duration = newDuration
+                    },
+                    symbol: newSymbolIndex,
+                    minor: tonation.Mode == Mode.Minor,
+                    tonation: tonation
+                );
+            }
+            
             var possibleSymbols = NextSymbols[prevSymbol];
             var bestSymbol = GetBestFittingSymbol(possibleSymbols);
 
             var minor = MinorWeights[bestSymbol] == MINOR_DEPENDANT ?
                 tonation.Mode == Mode.Minor :
-                _random.Next() <= MinorWeights[bestSymbol];            
+                _random.Next(MAX_WEIGHT) <= MinorWeights[bestSymbol];            
 
             return new Function(
                 index: new Music.Index()

@@ -46,11 +46,17 @@ namespace Algorithm.New
             new SixthUp(),
             new VoiceCrossing(),
             new VoiceCrossingOneFunction(),
-            new VoiceDistance()
+            new VoiceDistance(),
+            new ValidPosition(),
+            new ValidRoot(),
+            new AllComponentsSatisfied(),
+            new DominantSeventhResolution(),
+            new DoubledThird(),
+            new DoubledFifth()
         ]);
 
         // Ustawienia dla sprawdzania zadania
-        // TODO: Klasa
+        // TODO: Klasa - chyba nie ma jednak potrzeby
         public static readonly List<Algorithm.Rules.Problem.Rule> ProblemSettings =
         [
             new SubdominantAfterDominant(),
@@ -58,7 +64,10 @@ namespace Algorithm.New
             new AddedComponents(),
             new EmptyBar(),
             new DeletedEqualsPosition(),
-            new DeletedEqualsRoot()
+            new DeletedEqualsRoot(),
+            new FunctionAfterSeventh(),
+            new FunctionAfterSixth(),
+            new AddedSixthValidation()
         ];
 
         public static readonly Dictionary<(float, string), (string, int)> NoteMappings = new()

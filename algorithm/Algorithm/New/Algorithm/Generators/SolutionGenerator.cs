@@ -1,12 +1,7 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
-using System.Collections.Generic;
-using System.Security;
-using System.Security.AccessControl;
-using System.Transactions;
-using System.Windows.Markup;
-using static System.Net.Mime.MediaTypeNames;
+using System.Numerics;
 
 namespace Algorithm.New.Algorithm.Generators
 {
@@ -125,12 +120,23 @@ namespace Algorithm.New.Algorithm.Generators
         /// <param name="tolerance">Tolerancja dla błędów. Domyślnie = 0</param>
         /// <returns>Wygenerowane rozwiązanie</returns>
         public static Solution GenerateLinear(Problem problem, int tolerance = 0)
-        {
-            var functions = problem.Functions;
+        {            
             List<Stack> stacks = [];
             List<Function> functionsTmp = [];
-            Dictionary<Function, List<List<(string, Component)>>> mappings = [];
             List<int> usedNotesIndexes = [];
+            Dictionary<Function, List<List<(string, Component)>>> mappings = [];
+            
+            var functions = problem.Functions;
+            var currentIndex = 0;
+            var functionsCount = functions.Count;
+
+            UInt128 maxIterations = 1;
+            UInt128 currentIteration = 0;
+
+            // DEBUG ONLY
+            Dictionary<int, int> mistakeIds = [];
+            List<Mistake.Solution.Mistake> lastCheckResult = [];
+            // END DEBUG ONLY
 
             foreach (var function in functions)
             {
@@ -146,33 +152,49 @@ namespace Algorithm.New.Algorithm.Generators
                     notesSet.AddRange(combinations);
                 }
                 
+                notesSet = ValidatedResult(function, notesSet);
+
+                notesSet = notesSet
+                    .Distinct()
+                    .ToList();
+
                 mappings[function] = notesSet;
                 usedNotesIndexes.Add(0);
             }
 
-            var maxIterations = mappings.Values
-                .Sum(x => x
-                    .Sum(y => y.Count)
-            );
-
-            var currentIndex = 0;
-            var currentIteration = 0;
-            var functionsCount = functions.Count;            
-
-            while (currentIndex < functionsCount)
+            foreach (var key in mappings.Keys)
             {
-                if (currentIteration >= maxIterations)
-                    return new Solution(problem);
+                var valueList = mappings[key];
+                var count = (UInt32) valueList.Count;
+
+                maxIterations *= count != 0 ?
+                    count :
+                    1;
+            }
+
+            while (currentIndex < functionsCount && currentIteration < maxIterations)
+            {
+                var currentFunction = functions[currentIndex];
+                var usedNotesIndex = usedNotesIndexes[currentIndex];
+                var mapping = mappings[currentFunction];
+                var possibleNotes = new List<(string, Component)>();
+
+                #region debug
+                //TRY CATCH DEBUG ONLY
+                try
+                {
+                    possibleNotes = mapping[usedNotesIndex];
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    break;
+                }
+                // END DEBUG ONLY
+                #endregion
 
                 currentIteration++;
-                
-                var currentFunction = functions[currentIndex];
-                var mapping = mappings[currentFunction];
-                var usedNotesIndex = usedNotesIndexes[currentIndex];
-
                 usedNotesIndexes[currentIndex]++;
 
-                var possibleNotes = mapping[usedNotesIndex];
                 var possibleNoteNames = possibleNotes
                     .Select(x => x.Item1)
                     .ToList();
@@ -181,11 +203,17 @@ namespace Algorithm.New.Algorithm.Generators
                     .Select(x => x.Item2)
                     .ToList();
 
-                var currentStack = new Stack(currentFunction.Index, possibleNoteNames);
+                var currentStack =
+                    new Stack(currentFunction.Index, possibleNoteNames);
 
                 for (int i = 0; i < possibleComponents.Count; i++)
                 {
-                    currentStack.Notes[i].Component = possibleComponents[i];
+                    var note = currentStack.Notes[i];
+
+                    if (note == null)
+                        continue;
+
+                    note.Component = possibleComponents[i];
                 }
 
                 if (stacks.Count == 0)
@@ -193,29 +221,49 @@ namespace Algorithm.New.Algorithm.Generators
                     stacks.Add(currentStack);
                     functionsTmp.Add(currentFunction);
                     currentIndex++;
+
+                    continue;
+                }
+
+                var prevStack = stacks.Last();
+                var prevFunction = functionsTmp.Last();
+
+                var checkResult = StackPairChecker
+                    .CheckRules([prevFunction, currentFunction], [prevStack, currentStack], Constants.Settings);
+
+                var mistakesCount = checkResult.Count != 0 ?
+                    checkResult.Sum(x => x.Quantity) :
+                    0;
+
+                #region debug
+                // DEBUG ONLY
+                lastCheckResult = checkResult;
+                    
+                foreach (var mistake in checkResult)
+                {
+                    var code = mistake.MistakeCode;
+
+                    if (!mistakeIds.ContainsKey(code))
+                        mistakeIds[code] = 0;
+
+                    mistakeIds[code]++;
+                }
+
+                // END DEBUG ONLY
+                #endregion
+
+                if (mistakesCount <= tolerance)
+                {
+                    stacks.Add(currentStack);
+                    functionsTmp.Add(currentFunction);
+                    currentIndex++;
                 }
                 else
                 {
-                    var prevStack = stacks.Last();
-                    var prevFunction = functionsTmp.Last();
-
-                    var checkResult = StackPairChecker
-                        .CheckRules([prevFunction, currentFunction], [prevStack, currentStack], Constants.Settings);
-
-                    var mistakesCount = checkResult.Count != 0 ?
-                        checkResult.Sum(x => x.Quantity) :
-                        0;
-
-                    if (mistakesCount <= tolerance)
-                    {
-                        stacks.Add(currentStack);
-                        functionsTmp.Add(currentFunction);
-                        currentIndex++;
-                    }
-                    else if (usedNotesIndexes[currentIndex] >= mapping.Count)
+                    while (usedNotesIndexes[currentIndex] >= mapping.Count)
                     {
                         usedNotesIndexes[currentIndex] = 0;
-                        currentIndex--;                        
+                        currentIndex--;
                         stacks.RemoveAt(currentIndex);
                         functionsTmp.RemoveAt(currentIndex);
                     }
@@ -224,6 +272,47 @@ namespace Algorithm.New.Algorithm.Generators
 
             var result = new Solution(problem, stacks);
             Rhytmize(result);
+
+            return result;
+        }
+
+        private static List<List<(string, Component)>> ValidatedResult(Function function, List<List<(string, Component)>> result)
+        {
+            List<List<(string, Component)>> toRemove = [];
+
+            var functionPosition = function.Position;
+            var functionRoot = function.Root;
+
+            foreach (var possible in result)
+            {
+                var position = possible[0].Item2;
+                var root = possible[3].Item2;
+
+                // Wszystkie, gdzie pozycja się nie zgadza
+                if (functionPosition != null && position != null)
+                {
+                    var equals = functionPosition.Equals(position);
+
+                    if (!equals)
+                        toRemove.Add(possible);
+                }
+
+                // Wszystkie, gdzie oparcie się nie zgadza
+                if (functionRoot != null && root != null)
+                {
+                    var equals = functionRoot.Equals(root);
+
+                    if (!equals)
+                        toRemove.Add(possible);
+                }
+            }
+
+            if (toRemove.Count > 0)
+            {
+                return result
+                    .Where(x => !toRemove.Contains(x))
+                    .ToList();
+            }
 
             return result;
         }

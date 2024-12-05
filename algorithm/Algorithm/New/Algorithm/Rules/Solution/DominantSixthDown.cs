@@ -24,6 +24,11 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             if (function1.Symbol != Symbol.D)
                 return true;
 
+            // Chodzi o rozwiązanie chopinowskiego,
+            // więc jak nie ma chopinowskiego to nie ma co sprawdzać
+            if (!(function1.Added.Contains(Component.Sixth) && function1.Added.Contains(Component.Seventh)))
+                return true;
+
             var stack1 = stacks[0];
             var stack2 = stacks[1];            
 

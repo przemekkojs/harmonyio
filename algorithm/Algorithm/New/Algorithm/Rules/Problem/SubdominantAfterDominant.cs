@@ -20,10 +20,16 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             var symbol1 = function1.Symbol.ToString();
             var symbol2 = function2.Symbol.ToString();
 
+            if (!symbol1.Equals("D"))
+                return true;
+
+            if (function1.Added.Contains(Component.Sixth))
+                return true;
+
             var symbol1Type = symbol1[0];
             var symbol2Type = symbol2[0];
 
-            if (symbol1Type.Equals('D') && !function1.Minor)
+            if (!function1.Minor)
                 return symbol2Type.Equals('T') || symbol2Type.Equals('D');
             else
                 return true;

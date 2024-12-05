@@ -15,9 +15,11 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_4_FUNCTIONS);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
+            Assert.True(solution.Stacks.Count == 4);
+
             var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
 
-            Assert.True(solution.Stacks.Count == 4);
+            Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }
 
@@ -27,9 +29,11 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_8_FUNCTIONS);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
-
             Assert.True(solution.Stacks.Count == 8);
+
+            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            
+            Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }
 
@@ -39,9 +43,11 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_8_FUNCTIONS_2);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
-
             Assert.True(solution.Stacks.Count == 8);
+
+            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+                        
+            Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }
 
@@ -51,9 +57,11 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_16_FUNCTIONS);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
-
             Assert.True(solution.Stacks.Count == 16);
+
+            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            
+            Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }
 
@@ -170,8 +178,11 @@ namespace AlgorithmTests.New
 
             var problem = new Problem(functions, metre, tonation);
             var solution = SolutionGenerator.GenerateLinear(problem);
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
 
+            Assert.True(solution.Stacks.Count > 0);
+
+            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }

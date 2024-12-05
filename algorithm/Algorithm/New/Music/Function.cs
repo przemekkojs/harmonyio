@@ -109,20 +109,6 @@ namespace Algorithm.New.Music
         public InsertionType InsertionType { get; set; }                
         public Index Index { get; set; }
 
-        public static readonly Dictionary<Symbol, int> symbolIndexes = new()
-        {
-            { Symbol.T, 0 },
-            { Symbol.Sii, 1 },
-            { Symbol.Tiii, 2 },
-            { Symbol.Diii, 2 },
-            { Symbol.S, 3 },
-            { Symbol.D, 4 },
-            { Symbol.Tvi, 5 },
-            { Symbol.Svi, 5 },
-            { Symbol.Dvii, 6 },
-            { Symbol.Svii, 6 },
-        };
-
         public static Dictionary<Component, string> FunctionComponentIndexes(int startIndex, Tonation tonation)
         {
             int Offset(int offset) => (offset + startIndex) % Constants.NOTES_IN_TONATION;
@@ -140,6 +126,34 @@ namespace Algorithm.New.Music
                 { Component.Ninth, tonationNotes[Offset(1)] }
             };
         }
+
+        public static readonly Dictionary<Symbol, int> SymbolIndexes = new()
+        {
+            { Symbol.T, 0 },
+            { Symbol.Sii, 1 },
+            { Symbol.Tiii, 2 },
+            { Symbol.Diii, 2 },
+            { Symbol.S, 3 },
+            { Symbol.D, 4 },
+            { Symbol.Tvi, 5 },
+            { Symbol.Svi, 5 },
+            { Symbol.Dvii, 6 },
+            { Symbol.Svii, 6 }
+        };
+
+        public static readonly Dictionary<Symbol, bool> MainMapping = new()
+        {
+            { Symbol.T, true },
+            { Symbol.Sii, false },
+            { Symbol.Tiii, false },
+            { Symbol.Diii, false },
+            { Symbol.S, true },
+            { Symbol.D, true },
+            { Symbol.Tvi, false },
+            { Symbol.Svi, false },
+            { Symbol.Dvii, false },
+            { Symbol.Svii, false }
+        };
 
         /// <summary>WAŻNE! Ustawić Tonation osobno przy wykorzystaniu tego konstruktora</summary>
         public Function(ParsedFunction parsedFunction)
@@ -221,6 +235,8 @@ namespace Algorithm.New.Music
             Tonation = tonation;
             IsInsertion = isInsertion;
             InsertionType = insertionType;
+
+            IsMain = MainMapping[symbol];
 
             Added = added ?? [];
 
@@ -398,7 +414,9 @@ namespace Algorithm.New.Music
 
         private void ValidatePossibleComponents()
         {
-            PossibleComponents.RemoveAll(x => x.Count != Constants.NOTES_IN_FUNCTION);
+            // zawsze mogą być tylko 4. Wszelkie mniej lub więcej trzeba wywalić.
+            PossibleComponents
+                .RemoveAll(x => x.Count != Constants.NOTES_IN_FUNCTION);
         }
 
         public override bool Equals(object? obj)
