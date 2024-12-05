@@ -18,6 +18,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             if (!ValidateParametersCount(stacks))
                 return false;
 
+            // TODO: Implementacja, tego będzie dużo niestety, ale trzeba
+
             return true;
         }
     }

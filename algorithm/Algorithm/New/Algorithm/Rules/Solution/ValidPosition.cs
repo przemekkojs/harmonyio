@@ -18,7 +18,17 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             if (!ValidateParametersCount(stacks))
                 return false;
 
-            return true;
+            var function = functions[0];
+            var stack = stacks[0];
+
+            var functionPosition = function.Position;
+
+            if (functionPosition == null)
+                return true;
+
+            var stackPosition = stack.Soprano?.Component;
+
+            return (functionPosition.Equals(stackPosition));
         }
     }
 }

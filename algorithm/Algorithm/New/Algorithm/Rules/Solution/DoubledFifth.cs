@@ -18,6 +18,30 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             if (!ValidateParametersCount(stacks))
                 return false;
 
+            var function = functions[0];
+            var functionSymbol = function.Symbol;
+
+            List<Symbol> matchingSymbols =
+            [
+                Symbol.Sii, Symbol.Tiii, Symbol.Diii, Symbol.Tvi,
+                Symbol.Svi, Symbol.Dvii, Symbol.Svi
+            ];
+
+            var contains = matchingSymbols.Contains(functionSymbol);
+
+            if (contains)
+            {
+                var stack = stacks[0];
+                var components = stack.Notes
+                    .Where(x => x != null)
+                    .Select(x => x?.Component);
+
+                var fifths = components
+                    .Where(x => x.Equals(Component.Fifth));
+
+                return fifths.Count() > 1;
+            }
+
             return true;
         }
     }

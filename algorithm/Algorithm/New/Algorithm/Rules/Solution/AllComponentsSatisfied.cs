@@ -7,9 +7,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
         public AllComponentsSatisfied() : base(
             id: 116,
             name: "Wymagane składniki",
-            description: "W każdej funkcji wymagana jest minimum pryma i tercja",
+            description: "W każdej funkcji wymagana jest minimum pryma albo kwinta i tercja",
             oneFunction: true) { }
-
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
@@ -19,7 +18,30 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             if (!ValidateParametersCount(stacks))
                 return false;
 
-            return true;
+            var stack = stacks[0];
+            var stackNotes = stack.Notes;
+            var notNullNotes = stackNotes
+                .Where(x => x != null);
+
+            if (notNullNotes.Count() != 4)
+                return true;
+
+            var stackComponents = notNullNotes
+                .Select(x => x?.Component);
+            
+            var rootCount = stackComponents
+                .Where(x => x.Equals(Component.Root))
+                .Count();
+
+            var fifthCount = stackComponents
+                .Where(x => x.Equals(Component.Root))
+                .Count();
+
+            var thirdCount = stackComponents
+                .Where(x => x.Equals(Component.Third))
+                .Count();
+
+            return thirdCount == 0 || (fifthCount == 0 && rootCount == 0);
         }
     }
 }

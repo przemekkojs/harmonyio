@@ -12,7 +12,33 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
-            throw new NotImplementedException();
+            if (!ValidateEmptyStacks(stacks))
+                return false;
+
+            if (!ValidateParametersCount(stacks))
+                return false;
+
+            var function = functions[0];
+            var functionSymbol = function.Symbol;
+
+            List<Symbol> matchingSymbols = [Symbol.T, Symbol.S, Symbol.D];
+
+            var contains = matchingSymbols.Contains(functionSymbol);
+
+            if (contains)
+            {
+                var stack = stacks[0];
+                var components = stack.Notes
+                    .Where(x => x != null)
+                    .Select(x => x?.Component);
+
+                var fifths = components
+                    .Where(x => x.Equals(Component.Third));
+
+                return fifths.Count() > 1;
+            }
+
+            return true;
         }
     }
 }
