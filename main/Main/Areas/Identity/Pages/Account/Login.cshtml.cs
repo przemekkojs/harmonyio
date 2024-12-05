@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Main.Resources;
+using NuGet.Protocol;
 
 namespace Main.Areas.Identity.Pages.Account
 {
@@ -123,6 +124,13 @@ namespace Main.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
+
+                // Można tu dodać przekierowanie na ponowne potwierdzenie maila, ale chyba tak się nie robi
+                // if (result.IsNotAllowed)
+                // {
+
+                // }
+                
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");

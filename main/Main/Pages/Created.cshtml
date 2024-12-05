@@ -92,7 +92,8 @@
                                                 data-pin="@quiz.Code" data-url="@(callbackUrl)"
                                                 data-all-groups='@(Model.Groups.ToJson())'
                                                 data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
-                                                data-callback-name="assign">
+                                                data-callback-name="assign"
+                                                id="Quiz-@(quiz.Id)">
                                                 <i class="fas fa-share-alt icon-sm"></i>
                                             </a>
                                         </div>
@@ -163,7 +164,8 @@
                                             data-pin="@quiz.Code" data-url="@(callbackUrl)"
                                             data-all-groups='@(Model.Groups.ToJson())'
                                             data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
-                                            data-callback-name="assign">
+                                            data-callback-name="assign"
+                                            id="Quiz-@(quiz.Id)">
                                             <i class="fas fa-share-alt icon-sm"></i>
                                         </a>                                        
                                     </div>
@@ -234,7 +236,8 @@
                                         data-pin="@quiz.Code" data-url="@(callbackUrl)"
                                         data-all-groups='@(Model.Groups.ToJson())'
                                         data-added-groups='@(quiz.PublishedToGroup.Select(q => q.Id).ToJson())'
-                                        data-callback-name="assign">
+                                        data-callback-name="assign"
+                                        id="Quiz-@(quiz.Id)">
                                         <i class="fas fa-share-alt icon-sm"></i>
                                     </a>
                                 </div>
@@ -464,7 +467,7 @@
         document.getElementById("deleteFormForQuiz").submit();
     }
 
-    window.publish = function (quizId, openDateTime, closeDateTime, selfAssign) {
+    window.publish = async function (quizId, openDateTime, closeDateTime, selfAssign) {
         //TODO: Publish this quiz (open i close date są validowane w popupie, ale dobrze zrobić to jeszcze raz na backendzie)
 
         const form = document.getElementById("publishFormForQuiz");
@@ -472,11 +475,58 @@
         document.getElementById("publishFormOpenDateForQuiz").value = openDateTime;
         document.getElementById("publishFormCloseDateForQuiz").value = closeDateTime;
         document.getElementById("publishFormSelfAssign").value = selfAssign;
-        form.submit();
+        const formData = new FormData(form);
         
-        //TODO: Po opublikowaniu powinien od razu włączyć się assign popup
-        // (można go włączyć przyciskiem Udostępnij, ale dobrze jakby włączał się też automatycznie)
+
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                redirect: 'follow'
+            });
+
+            // Handle Forbidden (403) response
+            if (response.status === 403) {
+                window.location.href = '/Identity/Account/Login';
+                return null;
+            }
+
+            // Handle redirect responses
+            if (response.redirected) {
+                window.location.href = response.url;
+                return null;
+            }
+
+            // Handle JSON responses (for normal operation)
+            if (response.headers.get('content-type')?.includes('application/json')) {
+                const result = await response.json();
+
+                if (result.error) {
+                    return result.error;
+                }
+
+                if (result.success) {
+                    localStorage.setItem('openAssignPopup', 'true');
+                    localStorage.setItem('QuizId', quizId);
+                    location.reload();
+                }
+            }
+            return null;
+        }
+        catch (error) {
+            console.error('An error occurred:', error);
+            return null;
+        }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (localStorage.getItem('openAssignPopup') === 'true') {
+            const quizId = localStorage.getItem('QuizId');
+            document.getElementById(`Quiz-${quizId}`).click();
+            localStorage.removeItem('openAssignPopup');
+            localStorage.removeItem('QuizId');
+        }
+    });
 
     async function assign(quizId, assignedEmails, assignedGroups) {
         // no new email or groups so just return null and close modal

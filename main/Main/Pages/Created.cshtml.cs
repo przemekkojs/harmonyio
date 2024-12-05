@@ -97,6 +97,7 @@ public class CreatedModel : PageModel
         );
 
         ReadyToGrade = published
+            .Where(q => q.Exercises.Any(e => e.ExerciseSolutions.Any()))
             .Where(q =>
                 q.Exercises.Any(e => e.ExerciseSolutions.Any(es => es.ExerciseResult?.QuizResultId == null)) ||
                 q.QuizResults.Any(qr => qr.Grade == null) ||
@@ -258,18 +259,26 @@ public class CreatedModel : PageModel
         var appUser = await _userManager.GetUserAsync(User);
 
         if (appUser == null)
+        {
             return Forbid();
+        }
 
         var quizToPublish = await _repository.GetAsync<Quiz>(q => q.Id == QuizId);
 
         var noClosedDate = CloseDate == null;
         var noOpenDate = OpenDate == null;
         if (quizToPublish == null || quizToPublish.CreatorId != appUser.Id || quizToPublish.IsCreated || noClosedDate || noOpenDate)
-            return RedirectToPage("Error");
-
-        if (CloseDate <= OpenDate || CloseDate < DateTime.Now)
         {
             return RedirectToPage("Error");
+        }
+
+        if (CloseDate <= OpenDate)
+        {
+            return new JsonResult(new {error = "OpenAfterCloseDate"});
+        }
+        if (CloseDate < DateTime.Now)
+        {
+            return new JsonResult(new {error = "AfterCloseDate"});
         }
 
         quizToPublish.CloseDate = (DateTime)CloseDate!;
@@ -284,7 +293,7 @@ public class CreatedModel : PageModel
         _repository.Update(quizToPublish);
         await _repository.SaveChangesAsync();
 
-        return RedirectToPage();
+        return new JsonResult(new { success = true });
 
     }
 
