@@ -1,12 +1,6 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
-using System.Collections.Generic;
-using System.Security;
-using System.Security.AccessControl;
-using System.Transactions;
-using System.Windows.Markup;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Algorithm.New.Algorithm.Generators
 {
@@ -185,7 +179,12 @@ namespace Algorithm.New.Algorithm.Generators
 
                 for (int i = 0; i < possibleComponents.Count; i++)
                 {
-                    currentStack.Notes[i].Component = possibleComponents[i];
+                    var note = currentStack.Notes[i];
+
+                    if (note == null)
+                        continue;
+
+                    note.Component = possibleComponents[i];
                 }
 
                 if (stacks.Count == 0)

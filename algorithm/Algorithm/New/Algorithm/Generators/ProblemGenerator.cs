@@ -112,6 +112,90 @@ namespace Algorithm.New.Algorithm.Generators
             { Symbol.Svii, 50 },
         };
 
+        private static readonly Dictionary<Symbol, List<(int, Component)>> ComponentWeights = new()
+        {
+            {
+                Symbol.T,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOWEST, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Sii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Tiii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Diii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_HIGH, Component.Seventh),
+                    (PRIORITY_STANDARD, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.S,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOW, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.D,
+                [
+                    (PRIORITY_STANDARD, Component.Sixth),
+                    (PRIORITY_HIGHEST, Component.Seventh),
+                    (PRIORITY_HIGH, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Tvi,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOW, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Svi,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Dvii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_STANDARD, Component.Seventh),
+                    (PRIORITY_LOW, Component.Ninth)
+                ]
+            },
+            {
+                Symbol.Svii,
+                [
+                    (0, Component.Sixth),
+                    (PRIORITY_LOW, Component.Seventh),
+                    (PRIORITY_LOWEST, Component.Ninth)
+                ]
+            }
+        };
+
         public static List<Function> Generate(int bars, int metreValue, int metreCount, int sharpsCount, int flatsCount, int minor)
         {
             var metre = Metre.GetMetre(metreCount, metreValue);

@@ -141,6 +141,20 @@ namespace Algorithm.New.Music
             };
         }
 
+        public static readonly Dictionary<Symbol, int> SymbolIndexes = new()
+        {
+            { Symbol.T, 0 },
+            { Symbol.Sii, 1 },
+            { Symbol.Tiii, 2 },
+            { Symbol.Diii, 2 },
+            { Symbol.S, 3 },
+            { Symbol.D, 4 },
+            { Symbol.Tvi, 5 },
+            { Symbol.Svi, 5 },
+            { Symbol.Dvii, 6 },
+            { Symbol.Svii, 6 }
+        };
+
         /// <summary>WAŻNE! Ustawić Tonation osobno przy wykorzystaniu tego konstruktora</summary>
         public Function(ParsedFunction parsedFunction)
         {
