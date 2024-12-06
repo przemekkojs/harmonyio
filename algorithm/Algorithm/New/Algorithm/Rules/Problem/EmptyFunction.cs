@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class EmptyFunction : Rule
     {
         public EmptyFunction() : base(
+            id: 203,
             name: "Pusta funkcja",
             description: "W zadaniu nie może być pustych funkcji",
             oneFunction: true)

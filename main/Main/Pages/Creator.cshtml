@@ -64,8 +64,8 @@
         <input name="Questions" type="hidden" asp-for="Questions" />
     </div>
 </form>
-<partial name="~/Pages/Shared/ConfirmLeavePopup.cshtml" />
 
+<partial name="~/Pages/Shared/ConfirmLeavePopup.cshtml" />
 <partial name="~/Pages/Shared/HelpPopup.cshtml" />
 
 <script type="module">
@@ -82,18 +82,17 @@
     const exercises = @Html.Raw(
         Json.Serialize(
         Model.Questions?
-            .Select(q => q ?? "")
+            .Select(q => q ?? string.Empty)
             .ToList() ?? new List<string>()
         )
-        );
+    );
 
     window.submitForm = async function submitForm(event) {
         questionsValidationError.innerText = "";
         const tasksResult = confirmExercises(event);
 
         if (!tasksResult) {
-            // TODO: Ładniejszy popup
-            questionsValidationError.innerText = "Zadanie zawiera błędy.";
+            questionsValidationError.innerText = "Zadania zawierają błędy.";
             return;
         }
 
@@ -159,19 +158,30 @@
                     const result = await response.json();
 
                     if (result.success) {
-                        window.location.href = result.redirectUrl;
-                    } else {
                         if (result.redirect) {
                             window.location.href = result.redirectUrl;
-                        } else {
+                        }
+                        else {
+                            // TODO: Ładujemy popup
+                            const toDisplay = result.display;
+                            console.log(toDisplay);
+                        }
+                    }
+                    else {
+                        if (result.redirect) {
+                            window.location.href = result.redirectUrl;
+                        }
+                        else {
                             questionsValidationError.innerText = result.errorMessage;
                         }
                     }
-                } else {
+                }
+                else {
                     // Co jak dostaniemy HTML'a
                     questionsValidationError.innerText = "Nieznany błąd.";
                 }
-            } else {
+            }
+            else {
                 questionsValidationError.innerText = "Błąd serwera.";
             }
         }

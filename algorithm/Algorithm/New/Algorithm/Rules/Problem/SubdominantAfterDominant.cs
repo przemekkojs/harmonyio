@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class SubdominantAfterDominant : Rule
     {
         public SubdominantAfterDominant() : base(
+            id: 200,
             name: "Subdominanta po dominancie",
             description: "Następstwo dowolnej subdominanty nie jest dozwolone po dowolnej dominancie.",
             oneFunction: false) { }

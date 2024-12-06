@@ -8,7 +8,7 @@ namespace Algorithm.New.Algorithm.Mistake.Problem
         public int BarIndex { get; set; }
         public int FunctionIndex { get; set; }
 
-        public ProblemMistake(int barIndex, int functionIndex, string description="")
+        public ProblemMistake(int barIndex, int functionIndex, string description = "")
         {
             BarIndex = barIndex;
             FunctionIndex = functionIndex;

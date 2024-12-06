@@ -6,6 +6,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class AddedSixthValidation : Rule
     {
         public AddedSixthValidation() : base(
+            id: 208,
             name: "Seksta w funkcjach głównych",
             description: "Dodana seksta może wystąpić jedynie w funkcjach głównych.",
             oneFunction: true) { }

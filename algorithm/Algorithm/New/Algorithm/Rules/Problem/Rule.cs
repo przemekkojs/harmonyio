@@ -7,12 +7,14 @@ namespace Algorithm.New.Algorithm.Rules.Problem
         public string Name { get; set; }
         public string Description { get; set; }
         public bool OneFunction { get; set; }
+        public int Id { get; set; }
 
-        protected Rule(string name, string description, bool oneFunction = false)
+        protected Rule(int id, string name, string description, bool oneFunction = false)
         {
             Name = name;
             Description = description;
             OneFunction = oneFunction;
+            Id = id;
         }
 
         public abstract bool IsSatisfied(params Function[] functions);
