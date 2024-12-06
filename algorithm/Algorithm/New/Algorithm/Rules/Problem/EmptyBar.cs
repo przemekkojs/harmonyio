@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class EmptyBar : Rule
     {
         public EmptyBar() : base(
+            id: 204,
             name: "Pusty takt",
             description: "Nie można mieć pustych taktów w zadaniu",
             oneFunction: false) { }

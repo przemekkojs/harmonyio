@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class DeletedEqualsRoot : Rule
     {
         public DeletedEqualsRoot() : base(
+            id: 205,
             name: "Usunięty składnik równy pozycji",
             description: "",
             oneFunction: true) { }

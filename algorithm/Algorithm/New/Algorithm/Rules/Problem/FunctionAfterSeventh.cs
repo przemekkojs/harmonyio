@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class FunctionAfterSeventh : Rule
     {
         public FunctionAfterSeventh() : base(
+            id: 202,
             name: "Funkcja po septymie",
             description: "Funkcja po septymie musi być oddalona o kwintę w dół, sekundę w górę albo tercję małą w dół.",
             oneFunction: false) { }

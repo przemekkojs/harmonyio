@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class FunctionAfterSixth : Rule
     {
         public FunctionAfterSixth() : base(
+            id: 201,
             name: "Funkcja po sekście",
             description: "Funkcja po sekście musi być oddalona o kwintę w górę.",
             oneFunction: false) { }

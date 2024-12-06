@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class AddedVsPositionAndRoot : Rule
     {
         public AddedVsPositionAndRoot() : base(
+            id: 207,
             name: "Składniki dodane a pozycja i oparcie",
             description: "Pozycja i oparcie musi być zgodna ze składnikami dodanymi",
             oneFunction: true) { }

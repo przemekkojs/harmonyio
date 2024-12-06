@@ -5,6 +5,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
     public class AddedComponents : Rule
     {
         public AddedComponents() : base(
+            id: 209,
             name: "Poprawne składniki dodane",
             description: "Wszystkie ograniczenia narzucone na składniki dodane.",
             oneFunction: true) { }
