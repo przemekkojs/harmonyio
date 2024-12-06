@@ -290,7 +290,6 @@ namespace Main.Pages
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
                     // To usuwamy to czy nie?
-                    // Ten handler jest jeszcze jakkolwiek potrzebny?
                     Participants = [currentUser],
                 };
 
