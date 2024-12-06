@@ -22,8 +22,8 @@
                 </div>
 
                 <hr class="m-0 mb-3" />
-                <a class="btn btn-outline-primary btn-std-width mx-auto" 
-                    data-bs-toggle="modal" data-bs-target="#helpPopup" data-header="Tworzenie quizu"
+                <a class="btn btn-outline-primary btn-std-width mx-auto" data-bs-toggle="modal"
+                    data-bs-target="#helpPopup" data-header="Tworzenie quizu"
                     data-text="<p> Znajdujesz się aktualnie w ekranie kreatora quizu, gdzie możesz utworzyć nowy szkic. </p><p> Pierwszym krokiem tworzenia quizu jest nadanie mu nazwy. Możesz zrobić to w polu „Nazwa quizu”, znajdującym się w na samej górze lewego panelu strony. </p><p> Quiz musi oczywiście zawierać również jakieś zadania funkcyjne. Kliknij w kafelek „Dodaj zadanie” w prawym panelu strony, aby utworzyć nowe zadanie. Powstałe zadanie uzupełnić musisz za pomocą naszego kreatora. Wpisz maksymalną ilość punktów, którą chcesz za nie przyznawać, jego metrum oraz tonację. Opcjonalnie możesz również napisać coś w poleceniu zadania, chociaż nie jest to konieczne. Poniżej możesz dodawać kolejne takty za pomocą kafelka „Dodaj takt”. Wewnątrz każdego taktu możesz dodawać kolejne funkcje harmoniczne za pomocą plusa. Możesz również wylosować zadanie dla danej ilości taktów, korzystając z sekcji „Wylosuj zadanie”. </p><p> Po utworzeniu zadań zapisz quiz za pomocą przycisku „Zapisz”. Dopóki nie opublikujesz tego quizu, będziesz mógł zawsze wrócić i go edytować. </p>">
                     <i class="far fa-circle-question"></i>
                     Pomoc
@@ -36,10 +36,10 @@
                         onclick="submitForm(event)">Zapisz</button>
                 }
 
-                <button class="btn btn-danger btn-std-width mt-2 mx-auto" data-bs-toggle="modal"
+                <a href="#" class="btn btn-danger btn-std-width mt-2 mx-auto" data-bs-toggle="modal"
                     data-bs-target="#confirmLeaveModal" data-confirm-redirect="/Created">
                     Wyjdź
-                </button>
+                </a>
             </div>
 
             <div class="flex-grow-1 bg-white rounded shadow p-3 d-flex flex-column overflow-auto">

@@ -222,14 +222,15 @@ var assemblies = [
     "name": "Algorithm",
     "classes": [
       { "name": "Algorithm.New.Algorithm.Checkers.ProblemChecker", "rp": "Algorithm_ProblemChecker.html", "cl": 28, "ucl": 7, "cal": 35, "tl": 59, "cb": 10, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Checkers.SolutionChecker", "rp": "Algorithm_SolutionChecker.html", "cl": 75, "ucl": 17, "cal": 92, "tl": 144, "cb": 27, "tb": 36, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Checkers.StackPairChecker", "rp": "Algorithm_StackPairChecker.html", "cl": 32, "ucl": 8, "cal": 40, "tl": 57, "cb": 15, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Generators.ProblemGenerator", "rp": "Algorithm_ProblemGenerator.html", "cl": 200, "ucl": 24, "cal": 224, "tl": 301, "cb": 14, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Generators.SolutionGenerator", "rp": "Algorithm_SolutionGenerator.html", "cl": 84, "ucl": 49, "cal": 133, "tl": 312, "cb": 24, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Generators.StackNode", "rp": "Algorithm_StackNode.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 312, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Generators.StackTree", "rp": "Algorithm_StackTree.html", "cl": 0, "ucl": 61, "cal": 61, "tl": 312, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Checkers.SolutionChecker", "rp": "Algorithm_SolutionChecker.html", "cl": 125, "ucl": 16, "cal": 141, "tl": 207, "cb": 42, "tb": 52, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Checkers.StackPairChecker", "rp": "Algorithm_StackPairChecker.html", "cl": 47, "ucl": 1, "cal": 48, "tl": 70, "cb": 21, "tb": 26, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Generators.ProblemGenerator", "rp": "Algorithm_ProblemGenerator.html", "cl": 368, "ucl": 31, "cal": 399, "tl": 537, "cb": 28, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Generators.SolutionGenerator", "rp": "Algorithm_SolutionGenerator.html", "cl": 160, "ucl": 58, "cal": 218, "tl": 445, "cb": 53, "tb": 66, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Generators.StackNode", "rp": "Algorithm_StackNode.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 445, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Generators.StackTree", "rp": "Algorithm_StackTree.html", "cl": 0, "ucl": 61, "cal": 61, "tl": 445, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Mistake.Problem.ProblemMistake", "rp": "Algorithm_ProblemMistake.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 24, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Mistake.Solution.Mistake", "rp": "Algorithm_Mistake.html", "cl": 2, "ucl": 16, "cal": 18, "tl": 37, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Mistake.Solution.EmptyTaskMistake", "rp": "Algorithm_EmptyTaskMistake.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Mistake.Solution.Mistake", "rp": "Algorithm_Mistake.html", "cl": 6, "ucl": 14, "cal": 20, "tl": 41, "cb": 1, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Mistake.Solution.NoteMistake", "rp": "Algorithm_NoteMistake.html", "cl": 0, "ucl": 35, "cal": 35, "tl": 61, "cb": 0, "tb": 16, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Mistake.Solution.StackMistake", "rp": "Algorithm_StackMistake.html", "cl": 24, "ucl": 21, "cal": 45, "tl": 71, "cb": 3, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Parsers.NoteParser.JsonNote", "rp": "Algorithm_JsonNote.html", "cl": 15, "ucl": 0, "cal": 15, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -241,41 +242,63 @@ var assemblies = [
       { "name": "Algorithm.New.Algorithm.Parsers.SolutionParser.Parser", "rp": "Algorithm_Parser.3.html", "cl": 83, "ucl": 56, "cal": 139, "tl": 197, "cb": 29, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Parsers.SolutionParser.SolutionParseResult", "rp": "Algorithm_SolutionParseResult.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 18, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Problem", "rp": "Algorithm_Problem.html", "cl": 33, "ucl": 7, "cal": 40, "tl": 61, "cb": 12, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedComponents", "rp": "Algorithm_AddedComponents.html", "cl": 22, "ucl": 4, "cal": 26, "tl": 44, "cb": 9, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedSixthValidation", "rp": "Algorithm_AddedSixthValidation.html", "cl": 16, "ucl": 2, "cal": 18, "tl": 34, "cb": 4, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedVsPositionAndRoot", "rp": "Algorithm_AddedVsPositionAndRoot.html", "cl": 0, "ucl": 40, "cal": 40, "tl": 56, "cb": 0, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.DeletedEqualsPosition", "rp": "Algorithm_DeletedEqualsPosition.html", "cl": 12, "ucl": 4, "cal": 16, "tl": 31, "cb": 3, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.DeletedEqualsRoot", "rp": "Algorithm_DeletedEqualsRoot.html", "cl": 12, "ucl": 4, "cal": 16, "tl": 31, "cb": 3, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.EmptyBar", "rp": "Algorithm_EmptyBar.html", "cl": 12, "ucl": 2, "cal": 14, "tl": 28, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Problem.EmptyFunction", "rp": "Algorithm_EmptyFunction.html", "cl": 11, "ucl": 1, "cal": 12, "tl": 24, "cb": 1, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.FunctionAfterSeventh", "rp": "Algorithm_FunctionAfterSeventh.html", "cl": 14, "ucl": 10, "cal": 24, "tl": 42, "cb": 2, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.FunctionAfterSixth", "rp": "Algorithm_FunctionAfterSixth.html", "cl": 14, "ucl": 10, "cal": 24, "tl": 42, "cb": 2, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Problem.Rule", "rp": "Algorithm_Rule.html", "cl": 14, "ucl": 2, "cal": 16, "tl": 30, "cb": 6, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.SubdominantAfterDominant", "rp": "Algorithm_SubdominantAfterDominant.html", "cl": 16, "ucl": 1, "cal": 17, "tl": 32, "cb": 7, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Solution.DoubledFifthOnStrongBarPart", "rp": "Algorithm_DoubledFifthOnStrongBarPart.html", "cl": 16, "ucl": 2, "cal": 18, "tl": 36, "cb": 4, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.SubdominantAfterDominant", "rp": "Algorithm_SubdominantAfterDominant.html", "cl": 20, "ucl": 1, "cal": 21, "tl": 38, "cb": 9, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.AllComponentsSatisfied", "rp": "Algorithm_AllComponentsSatisfied.html", "cl": 26, "ucl": 3, "cal": 29, "tl": 47, "cb": 6, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.AugmentedInterval", "rp": "Algorithm_AugmentedInterval.html", "cl": 21, "ucl": 3, "cal": 24, "tl": 42, "cb": 7, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.DominantSeventhResolution", "rp": "Algorithm_DominantSeventhResolution.html", "cl": 10, "ucl": 2, "cal": 12, "tl": 26, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.DominantSixthDown", "rp": "Algorithm_DominantSixthDown.html", "cl": 14, "ucl": 24, "cal": 38, "tl": 65, "cb": 6, "tb": 26, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.DominantThirdUp", "rp": "Algorithm_DominantThirdUp.html", "cl": 32, "ucl": 4, "cal": 36, "tl": 60, "cb": 18, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.DoubledFifth", "rp": "Algorithm_DoubledFifth.html", "cl": 28, "ucl": 2, "cal": 30, "tl": 50, "cb": 5, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.DoubledFifthOnStrongBarPart", "rp": "Algorithm_DoubledFifthOnStrongBarPart.html", "cl": 20, "ucl": 3, "cal": 23, "tl": 42, "cb": 7, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.DoubledThird", "rp": "Algorithm_DoubledThird.html", "cl": 24, "ucl": 2, "cal": 26, "tl": 46, "cb": 5, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.NinthDown", "rp": "Algorithm_NinthDown.html", "cl": 22, "ucl": 4, "cal": 26, "tl": 44, "cb": 13, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.OneDirection", "rp": "Algorithm_OneDirection.html", "cl": 26, "ucl": 3, "cal": 29, "tl": 50, "cb": 11, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.ParallelFifths", "rp": "Algorithm_ParallelFifths.html", "cl": 37, "ucl": 3, "cal": 40, "tl": 60, "cb": 12, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.ParallelOctaves", "rp": "Algorithm_ParallelOctaves.html", "cl": 37, "ucl": 3, "cal": 40, "tl": 64, "cb": 12, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.Rule", "rp": "Algorithm_Rule.2.html", "cl": 24, "ucl": 3, "cal": 27, "tl": 47, "cb": 9, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.SemitonesCrossing", "rp": "Algorithm_SemitonesCrossing.html", "cl": 0, "ucl": 37, "cal": 37, "tl": 60, "cb": 0, "tb": 26, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.SeventhDown", "rp": "Algorithm_SeventhDown.html", "cl": 29, "ucl": 4, "cal": 33, "tl": 58, "cb": 16, "tb": 20, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.SixthUp", "rp": "Algorithm_SixthUp.html", "cl": 22, "ucl": 4, "cal": 26, "tl": 47, "cb": 13, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.ValidPosition", "rp": "Algorithm_ValidPosition.html", "cl": 16, "ucl": 2, "cal": 18, "tl": 34, "cb": 5, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.ValidRoot", "rp": "Algorithm_ValidRoot.html", "cl": 16, "ucl": 2, "cal": 18, "tl": 34, "cb": 5, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.VoiceCrossing", "rp": "Algorithm_VoiceCrossing.html", "cl": 27, "ucl": 3, "cal": 30, "tl": 50, "cb": 6, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.VoiceCrossingOneFunction", "rp": "Algorithm_VoiceCrossingOneFunction.html", "cl": 22, "ucl": 3, "cal": 25, "tl": 44, "cb": 6, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Solution.VoiceDistance", "rp": "Algorithm_VoiceDistance.html", "cl": 27, "ucl": 2, "cal": 29, "tl": 49, "cb": 7, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Settings", "rp": "Algorithm_Settings.html", "cl": 2, "ucl": 1, "cal": 3, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Solution", "rp": "Algorithm_Solution.html", "cl": 26, "ucl": 6, "cal": 32, "tl": 51, "cb": 9, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Constants", "rp": "Algorithm_Constants.html", "cl": 96, "ucl": 0, "cal": 96, "tl": 150, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Music.Component", "rp": "Algorithm_Component.html", "cl": 46, "ucl": 10, "cal": 56, "tl": 79, "cb": 17, "tb": 42, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Music.Function", "rp": "Algorithm_Function.html", "cl": 166, "ucl": 99, "cal": 265, "tl": 427, "cb": 35, "tb": 124, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Music.Index", "rp": "Algorithm_Index.html", "cl": 3, "ucl": 1, "cal": 4, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Solution", "rp": "Algorithm_Solution.html", "cl": 26, "ucl": 6, "cal": 32, "tl": 52, "cb": 9, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Constants", "rp": "Algorithm_Constants.html", "cl": 116, "ucl": 0, "cal": 116, "tl": 170, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Music.Component", "rp": "Algorithm_Component.html", "cl": 46, "ucl": 23, "cal": 69, "tl": 94, "cb": 17, "tb": 50, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Music.Function", "rp": "Algorithm_Function.html", "cl": 201, "ucl": 82, "cal": 283, "tl": 449, "cb": 46, "tb": 124, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Music.Index", "rp": "Algorithm_Index.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Music.Metre", "rp": "Algorithm_Metre.html", "cl": 28, "ucl": 3, "cal": 31, "tl": 55, "cb": 7, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Music.Note", "rp": "Algorithm_Note.html", "cl": 31, "ucl": 10, "cal": 41, "tl": 67, "cb": 5, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Music.ParsedFunction", "rp": "Algorithm_ParsedFunction.html", "cl": 30, "ucl": 38, "cal": 68, "tl": 427, "cb": 2, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Music.Stack", "rp": "Algorithm_Stack.html", "cl": 56, "ucl": 27, "cal": 83, "tl": 131, "cb": 21, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Music.Tonation", "rp": "Algorithm_Tonation.html", "cl": 67, "ucl": 15, "cal": 82, "tl": 111, "cb": 13, "tb": 30, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Music.Note", "rp": "Algorithm_Note.html", "cl": 32, "ucl": 10, "cal": 42, "tl": 71, "cb": 5, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Music.ParsedFunction", "rp": "Algorithm_ParsedFunction.html", "cl": 30, "ucl": 38, "cal": 68, "tl": 449, "cb": 2, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Music.Stack", "rp": "Algorithm_Stack.html", "cl": 57, "ucl": 26, "cal": 83, "tl": 129, "cb": 22, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Music.Tonation", "rp": "Algorithm_Tonation.html", "cl": 76, "ucl": 6, "cal": 82, "tl": 111, "cb": 17, "tb": 30, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Utils.Combinations", "rp": "Algorithm_Combinations.html", "cl": 18, "ucl": 0, "cal": 18, "tl": 31, "cb": 4, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Utils.Converters", "rp": "Algorithm_Converters.html", "cl": 11, "ucl": 1, "cal": 12, "tl": 25, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Utils.Interval", "rp": "Algorithm_Interval.html", "cl": 29, "ucl": 19, "cal": 48, "tl": 75, "cb": 2, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Utils.Converters", "rp": "Algorithm_Converters.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 25, "cb": 3, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Utils.Interval", "rp": "Algorithm_Interval.html", "cl": 85, "ucl": 22, "cal": 107, "tl": 189, "cb": 15, "tb": 28, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Utils.Permutations", "rp": "Algorithm_Permutations.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 34, "cb": 4, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Utils.PossibleNotes", "rp": "Algorithm_PossibleNotes.html", "cl": 14, "ucl": 11, "cal": 25, "tl": 41, "cb": 4, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Utils.PossibleNotes", "rp": "Algorithm_PossibleNotes.html", "cl": 15, "ucl": 1, "cal": 16, "tl": 30, "cb": 5, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Utils.Rhytm", "rp": "Algorithm_Rhytm.html", "cl": 57, "ucl": 5, "cal": 62, "tl": 88, "cb": 32, "tb": 42, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Utils.Scale", "rp": "Algorithm_Scale.html", "cl": 19, "ucl": 11, "cal": 30, "tl": 47, "cb": 5, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Utils.Scale", "rp": "Algorithm_Scale.html", "cl": 29, "ucl": 1, "cal": 30, "tl": 47, "cb": 11, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "Main",
     "classes": [
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages__ViewStart", "rp": "Main_Areas_Identity_Pages__ViewStart.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 4, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account__StatusMessage", "rp": "Main_Areas_Identity_Pages_Account__StatusMessage.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 10, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ConfirmEmail", "rp": "Main_Areas_Identity_Pages_Account_ConfirmEmail.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 8, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ConfirmEmail", "rp": "Main_Areas_Identity_Pages_Account_ConfirmEmail.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 17, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ConfirmEmailChange", "rp": "Main_Areas_Identity_Pages_Account_ConfirmEmailChange.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 8, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ExternalLogin", "rp": "Main_Areas_Identity_Pages_Account_ExternalLogin.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 43, "cb": 0, "tb": 30, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ForgotPassword", "rp": "Main_Areas_Identity_Pages_Account_ForgotPassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 24, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -291,18 +314,18 @@ var assemblies = [
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_Index", "rp": "Main_Areas_Identity_Pages_Account_Manage_Index.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 11, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_SetPassword", "rp": "Main_Areas_Identity_Pages_Account_Manage_SetPassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 36, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Register", "rp": "Main_Areas_Identity_Pages_Account_Register.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 122, "cb": 0, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_RegisterConfirmation", "rp": "Main_Areas_Identity_Pages_Account_RegisterConfirmation.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 34, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_RegisterConfirmation", "rp": "Main_Areas_Identity_Pages_Account_RegisterConfirmation.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 40, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResendEmailConfirmation", "rp": "Main_Areas_Identity_Pages_Account_ResendEmailConfirmation.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 26, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResetPassword", "rp": "Main_Areas_Identity_Pages_Account_ResetPassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 37, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResetPasswordConfirmation", "rp": "Main_Areas_Identity_Pages_Account_ResetPasswordConfirmation.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 10, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResetPassword", "rp": "Main_Areas_Identity_Pages_Account_ResetPassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 68, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResetPasswordConfirmation", "rp": "Main_Areas_Identity_Pages_Account_ResetPasswordConfirmation.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 19, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Error", "rp": "Main_Areas_Identity_Pages_Error.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.AccessDeniedModel", "rp": "Main_AccessDeniedModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 23, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.ConfirmEmailChangeModel", "rp": "Main_ConfirmEmailChangeModel.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 70, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.ConfirmEmailModel", "rp": "Main_ConfirmEmailModel.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 52, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ExternalLoginModel", "rp": "Main_ExternalLoginModel.html", "cl": 0, "ucl": 140, "cal": 140, "tl": 278, "cb": 0, "tb": 30, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Areas.Identity.Pages.Account.ExternalLoginModel", "rp": "Main_ExternalLoginModel.html", "cl": 0, "ucl": 137, "cal": 137, "tl": 272, "cb": 0, "tb": 28, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.ForgotPasswordConfirmation", "rp": "Main_ForgotPasswordConfirmation.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.ForgotPasswordModel", "rp": "Main_ForgotPasswordModel.html", "cl": 0, "ucl": 28, "cal": 28, "tl": 87, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.LoginModel", "rp": "Main_LoginModel.html", "cl": 0, "ucl": 43, "cal": 43, "tl": 137, "cb": 0, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Areas.Identity.Pages.Account.LoginModel", "rp": "Main_LoginModel.html", "cl": 0, "ucl": 43, "cal": 43, "tl": 145, "cb": 0, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.LoginWithRecoveryCodeModel", "rp": "Main_LoginWithRecoveryCodeModel.html", "cl": 0, "ucl": 44, "cal": 44, "tl": 113, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.LogoutModel", "rp": "Main_LogoutModel.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 43, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.Manage.ChangeAvatarModel", "rp": "Main_ChangeAvatarModel.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 52, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -310,11 +333,11 @@ var assemblies = [
       { "name": "Main.Areas.Identity.Pages.Account.Manage.ChangePasswordModel", "rp": "Main_ChangePasswordModel.html", "cl": 0, "ucl": 46, "cal": 46, "tl": 129, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.Manage.IndexModel", "rp": "Main_IndexModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 23, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.Manage.SetPasswordModel", "rp": "Main_SetPasswordModel.html", "cl": 0, "ucl": 42, "cal": 42, "tl": 116, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.RegisterConfirmationModel", "rp": "Main_RegisterConfirmationModel.html", "cl": 0, "ucl": 32, "cal": 32, "tl": 80, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Areas.Identity.Pages.Account.RegisterConfirmationModel", "rp": "Main_RegisterConfirmationModel.html", "cl": 0, "ucl": 54, "cal": 54, "tl": 113, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.RegisterModel", "rp": "Main_RegisterModel.html", "cl": 0, "ucl": 78, "cal": 78, "tl": 196, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.ResendEmailConfirmationModel", "rp": "Main_ResendEmailConfirmationModel.html", "cl": 0, "ucl": 33, "cal": 33, "tl": 91, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.Account.ResetPasswordConfirmationModel", "rp": "Main_ResetPasswordConfirmationModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ResetPasswordModel", "rp": "Main_ResetPasswordModel.html", "cl": 0, "ucl": 38, "cal": 38, "tl": 122, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Areas.Identity.Pages.Account.ResetPasswordModel", "rp": "Main_ResetPasswordModel.html", "cl": 0, "ucl": 39, "cal": 39, "tl": 122, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.Pages.ErrorModel", "rp": "Main_ErrorModel.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 41, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Areas.Identity.PolishIdentityErrorDescriber", "rp": "Main_PolishIdentityErrorDescriber.html", "cl": 0, "ucl": 22, "cal": 22, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Components.FunctionCreator", "rp": "Main_FunctionCreator.html", "cl": 0, "ucl": 16, "cal": 16, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -322,7 +345,7 @@ var assemblies = [
       { "name": "Main.Data.ApplicationRepository", "rp": "Main_ApplicationRepository.html", "cl": 39, "ucl": 46, "cal": 85, "tl": 141, "cb": 5, "tb": 16, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Enumerations.GradeExtensions", "rp": "Main_GradeExtensions.html", "cl": 6, "ucl": 14, "cal": 20, "tl": 47, "cb": 1, "tb": 15, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Enumerations.QuizStateExtensions", "rp": "Main_QuizStateExtensions.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 25, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.GradingAlgorithm.GradingAlgorithm", "rp": "Main_GradingAlgorithm.html", "cl": 0, "ucl": 103, "cal": 103, "tl": 156, "cb": 0, "tb": 40, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.GradingAlgorithm.GradingAlgorithm", "rp": "Main_GradingAlgorithm.html", "cl": 0, "ucl": 107, "cal": 107, "tl": 161, "cb": 0, "tb": 40, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.GradingAlgorithm.TestGradingAlgorithm", "rp": "Main_TestGradingAlgorithm.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 13, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Migrations.ApplicationDbContextModelSnapshot", "rp": "Main_ApplicationDbContextModelSnapshot.html", "cl": 0, "ucl": 765, "cal": 765, "tl": 829, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Migrations.Initial", "rp": "Main_Initial.html", "cl": 0, "ucl": 1353, "cal": 1353, "tl": 1500, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -331,49 +354,49 @@ var assemblies = [
       { "name": "Main.Models.ExerciseResult", "rp": "Main_ExerciseResult.html", "cl": 7, "ucl": 3, "cal": 10, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.ExerciseSolution", "rp": "Main_ExerciseSolution.html", "cl": 6, "ucl": 1, "cal": 7, "tl": 24, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.GroupRequest", "rp": "Main_GroupRequest.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.MistakeResult", "rp": "Main_MistakeResult.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Models.MistakeResult", "rp": "Main_MistakeResult.html", "cl": 3, "ucl": 3, "cal": 6, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.Quiz", "rp": "Main_Quiz.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 35, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.QuizRequest", "rp": "Main_QuizRequest.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.QuizResult", "rp": "Main_QuizResult.html", "cl": 7, "ucl": 1, "cal": 8, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Models.UsersGroup", "rp": "Main_UsersGroup.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.AssignedModel", "rp": "Main_AssignedModel.html", "cl": 71, "ucl": 1, "cal": 72, "tl": 111, "cb": 24, "tb": 24, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.BrowseModel", "rp": "Main_BrowseModel.html", "cl": 70, "ucl": 32, "cal": 102, "tl": 171, "cb": 27, "tb": 36, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.CreatedModel", "rp": "Main_CreatedModel.html", "cl": 157, "ucl": 45, "cal": 202, "tl": 300, "cb": 52, "tb": 62, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.CreatorModel", "rp": "Main_CreatorModel.html", "cl": 0, "ucl": 195, "cal": 195, "tl": 324, "cb": 0, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.AssignedModel", "rp": "Main_AssignedModel.html", "cl": 72, "ucl": 1, "cal": 73, "tl": 113, "cb": 22, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.BrowseModel", "rp": "Main_BrowseModel.html", "cl": 89, "ucl": 20, "cal": 109, "tl": 178, "cb": 31, "tb": 38, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.CreatedModel", "rp": "Main_CreatedModel.html", "cl": 162, "ucl": 51, "cal": 213, "tl": 317, "cb": 52, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.CreatorModel", "rp": "Main_CreatorModel.html", "cl": 0, "ucl": 190, "cal": 190, "tl": 319, "cb": 0, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.ErrorModel", "rp": "Main_ErrorModel.2.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 24, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.ExerciseResultData", "rp": "Main_ExerciseResultData.html", "cl": 4, "ucl": 1, "cal": 5, "tl": 171, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.GenerateData", "rp": "Main_GenerateData.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 324, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.GradeModel", "rp": "Main_GradeModel.html", "cl": 225, "ucl": 3, "cal": 228, "tl": 323, "cb": 59, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.ExerciseResultData", "rp": "Main_ExerciseResultData.html", "cl": 4, "ucl": 1, "cal": 5, "tl": 178, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.GenerateData", "rp": "Main_GenerateData.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 319, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.GradeModel", "rp": "Main_GradeModel.html", "cl": 229, "ucl": 3, "cal": 232, "tl": 328, "cb": 59, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.GroupDetailsModel", "rp": "Main_GroupDetailsModel.html", "cl": 0, "ucl": 202, "cal": 202, "tl": 329, "cb": 0, "tb": 68, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Groups.Pages_Groups_Details", "rp": "Main_Pages_Groups_Details.html", "cl": 0, "ucl": 84, "cal": 84, "tl": 630, "cb": 0, "tb": 106, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Groups.Pages_Groups_Index", "rp": "Main_Pages_Groups_Index.html", "cl": 0, "ucl": 44, "cal": 44, "tl": 340, "cb": 0, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Groups.Pages_Groups_Details", "rp": "Main_Pages_Groups_Details.html", "cl": 0, "ucl": 84, "cal": 84, "tl": 636, "cb": 0, "tb": 106, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Groups.Pages_Groups_Index", "rp": "Main_Pages_Groups_Index.html", "cl": 0, "ucl": 44, "cal": 44, "tl": 337, "cb": 0, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.GroupsIndexModel", "rp": "Main_GroupsIndexModel.html", "cl": 112, "ucl": 24, "cal": 136, "tl": 220, "cb": 32, "tb": 36, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.IndexModel", "rp": "Main_IndexModel.2.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.JoinModel", "rp": "Main_JoinModel.html", "cl": 34, "ucl": 3, "cal": 37, "tl": 66, "cb": 8, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.Pages__ViewStart", "rp": "Main_Pages__ViewStart.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 3, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Assigned", "rp": "Main_Pages_Assigned.html", "cl": 0, "ucl": 73, "cal": 73, "tl": 536, "cb": 0, "tb": 68, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Browse", "rp": "Main_Pages_Browse.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 323, "cb": 0, "tb": 32, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Created", "rp": "Main_Pages_Created.html", "cl": 0, "ucl": 60, "cal": 60, "tl": 558, "cb": 0, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Creator", "rp": "Main_Pages_Creator.html", "cl": 0, "ucl": 8, "cal": 8, "tl": 247, "cb": 0, "tb": 30, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Grade", "rp": "Main_Pages_Grade.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 445, "cb": 0, "tb": 72, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Pages_Assigned", "rp": "Main_Pages_Assigned.html", "cl": 0, "ucl": 59, "cal": 59, "tl": 479, "cb": 0, "tb": 62, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Pages_Browse", "rp": "Main_Pages_Browse.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 340, "cb": 0, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Pages_Created", "rp": "Main_Pages_Created.html", "cl": 0, "ucl": 63, "cal": 63, "tl": 610, "cb": 0, "tb": 66, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Pages_Creator", "rp": "Main_Pages_Creator.html", "cl": 0, "ucl": 8, "cal": 8, "tl": 254, "cb": 0, "tb": 32, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Pages_Grade", "rp": "Main_Pages_Grade.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 509, "cb": 0, "tb": 74, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.Pages_Index", "rp": "Main_Pages_Index.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 65, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.Pages_Join", "rp": "Main_Pages_Join.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 109, "cb": 0, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Solve", "rp": "Main_Pages_Solve.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 210, "cb": 0, "tb": 40, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.PlayExerciseData", "rp": "Main_PlayExerciseData.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 171, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.QuizData", "rp": "Main_QuizData.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 324, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Shared.Pages_Shared__Layout", "rp": "Main_Pages_Shared__Layout.html", "cl": 0, "ucl": 17, "cal": 17, "tl": 109, "cb": 0, "tb": 50, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Pages_Solve", "rp": "Main_Pages_Solve.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 240, "cb": 0, "tb": 42, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.PlayExerciseData", "rp": "Main_PlayExerciseData.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 178, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.QuizData", "rp": "Main_QuizData.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 319, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Shared.Pages_Shared__Layout", "rp": "Main_Pages_Shared__Layout.html", "cl": 0, "ucl": 21, "cal": 21, "tl": 117, "cb": 0, "tb": 58, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.Shared.Pages_Shared__LoginPartial", "rp": "Main_Pages_Shared__LoginPartial.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 45, "cb": 0, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Shared.Pages_Shared_PublishPopup", "rp": "Main_Pages_Shared_PublishPopup.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 174, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.SolveModel", "rp": "Main_SolveModel.html", "cl": 126, "ucl": 37, "cal": 163, "tl": 239, "cb": 49, "tb": 62, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.Shared.Pages_Shared_PublishPopup", "rp": "Main_Pages_Shared_PublishPopup.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 190, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.SolveModel", "rp": "Main_SolveModel.html", "cl": 129, "ucl": 53, "cal": 182, "tl": 264, "cb": 50, "tb": 68, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Services.AuthMessageSenderOptions", "rp": "Main_AuthMessageSenderOptions.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Services.EmailSender", "rp": "Main_EmailSender.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 50, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Utils.Utils", "rp": "Main_Utils.html", "cl": 4, "ucl": 58, "cal": 62, "tl": 93, "cb": 1, "tb": 32, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Utils.Utils", "rp": "Main_Utils.html", "cl": 16, "ucl": 61, "cal": 77, "tl": 113, "cb": 6, "tb": 40, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Program", "rp": "Main_Program.html", "cl": 0, "ucl": 46, "cal": 46, "tl": 76, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "MidiPlayback",
     "classes": [
-      { "name": "MidiPlayback.FileCreator", "rp": "MidiPlayback_FileCreator.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 52, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "MidiPlayback.FileCreator", "rp": "MidiPlayback_FileCreator.html", "cl": 0, "ucl": 98, "cal": 98, "tl": 139, "cb": 0, "tb": 172, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
@@ -388,22 +411,22 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
+    "assembly": "MidiPlayback", "class": "MidiPlayback.FileCreator", "reportPath": "MidiPlayback_FileCreator.html", "methodName": "NoteToMidiNote(Algorithm.New.Music.Note)", "methodShortName": "NoteToMidiNote(...)", "fileIndex": 0, "line": 61,
+    "metrics": [
+      { "value": 26406, "exceeded": true },
+      { "value": 162, "exceeded": true },
+    ]},
+  {
     "assembly": "Main", "class": "Main.Pages.Groups.Pages_Groups_Details", "reportPath": "Main_Pages_Groups_Details.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 5,
     "metrics": [
       { "value": 11342, "exceeded": true },
       { "value": 106, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Pages_Assigned", "reportPath": "Main_Pages_Assigned.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
-    "metrics": [
-      { "value": 4692, "exceeded": true },
-      { "value": 68, "exceeded": true },
-    ]},
-  {
     "assembly": "Main", "class": "Main.Pages.Pages_Created", "reportPath": "Main_Pages_Created.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
     "metrics": [
-      { "value": 4160, "exceeded": true },
-      { "value": 64, "exceeded": true },
+      { "value": 4422, "exceeded": true },
+      { "value": 66, "exceeded": true },
     ]},
   {
     "assembly": "Main", "class": "Main.Pages.Groups.Pages_Groups_Index", "reportPath": "Main_Pages_Groups_Index.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
@@ -412,40 +435,52 @@ var riskHotspots = [
       { "value": 62, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Pages_Grade", "reportPath": "Main_Pages_Grade.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 18,
+    "assembly": "Main", "class": "Main.Pages.Pages_Assigned", "reportPath": "Main_Pages_Assigned.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
     "metrics": [
-      { "value": 1190, "exceeded": true },
-      { "value": 34, "exceeded": true },
+      { "value": 3906, "exceeded": true },
+      { "value": 62, "exceeded": true },
     ]},
   {
     "assembly": "Main", "class": "Main.Pages.Pages_Solve", "reportPath": "Main_Pages_Solve.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 5,
     "metrics": [
+      { "value": 1332, "exceeded": true },
+      { "value": 36, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.Pages_Browse", "reportPath": "Main_Pages_Browse.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
+    "metrics": [
       { "value": 1190, "exceeded": true },
       { "value": 34, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Pages_Browse", "reportPath": "Main_Pages_Browse.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
+    "assembly": "Main", "class": "Main.Pages.Pages_Grade", "reportPath": "Main_Pages_Grade.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
+    "metrics": [
+      { "value": 1190, "exceeded": true },
+      { "value": 34, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__Layout", "reportPath": "Main_Pages_Shared__Layout.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 56,
+    "metrics": [
+      { "value": 1190, "exceeded": true },
+      { "value": 34, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.Pages_Grade", "reportPath": "Main_Pages_Grade.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 18,
     "metrics": [
       { "value": 1056, "exceeded": true },
       { "value": 32, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Pages_Grade", "reportPath": "Main_Pages_Grade.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
-    "metrics": [
-      { "value": 930, "exceeded": true },
-      { "value": 30, "exceeded": true },
-    ]},
-  {
     "assembly": "Main", "class": "Main.Utils.Utils", "reportPath": "Main_Utils.html", "methodName": "MistakesToHTML(System.Collections.Generic.ICollection`1<Main.Models.MistakeResult>)", "methodShortName": "MistakesToHTML(...)", "fileIndex": 0, "line": 9,
     "metrics": [
-      { "value": 870, "exceeded": true },
-      { "value": 32, "exceeded": true },
+      { "value": 836, "exceeded": true },
+      { "value": 40, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__Layout", "reportPath": "Main_Pages_Shared__Layout.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 51,
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Solution.SemitonesCrossing", "reportPath": "Algorithm_SemitonesCrossing.html", "methodName": "IsSatisfied(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>)", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 15,
     "metrics": [
-      { "value": 812, "exceeded": true },
-      { "value": 28, "exceeded": true },
+      { "value": 702, "exceeded": true },
+      { "value": 26, "exceeded": true },
     ]},
   {
     "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ExternalLogin", "reportPath": "Main_Areas_Identity_Pages_Account_ExternalLogin.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 23,
@@ -454,7 +489,13 @@ var riskHotspots = [
       { "value": 26, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__Layout", "reportPath": "Main_Pages_Shared__Layout.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 5,
+    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__Layout", "reportPath": "Main_Pages_Shared__Layout.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 8,
+    "metrics": [
+      { "value": 600, "exceeded": true },
+      { "value": 24, "exceeded": true },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Problem.AddedVsPositionAndRoot", "reportPath": "Algorithm_AddedVsPositionAndRoot.html", "methodName": "IsSatisfied(Algorithm.New.Music.Function[])", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 13,
     "metrics": [
       { "value": 506, "exceeded": true },
       { "value": 22, "exceeded": true },
@@ -466,25 +507,19 @@ var riskHotspots = [
       { "value": 20, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Pages_Creator", "reportPath": "Main_Pages_Creator.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 22,
-    "metrics": [
-      { "value": 420, "exceeded": true },
-      { "value": 20, "exceeded": true },
-    ]},
-  {
-    "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": "DeductAdded(System.Collections.Generic.List`1<Algorithm.New.Music.Component>,System.Collections.Generic.List`1<Algorithm.New.Music.Component>)", "methodShortName": "DeductAdded(...)", "fileIndex": 0, "line": 293,
-    "metrics": [
-      { "value": 345, "exceeded": true },
-      { "value": 20, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnPostSubmit()", "methodShortName": "OnPostSubmit()", "fileIndex": 0, "line": 242,
+    "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnPostSubmit()", "methodShortName": "OnPostSubmit()", "fileIndex": 0, "line": 243,
     "metrics": [
       { "value": 342, "exceeded": true },
       { "value": 18, "exceeded": true },
     ]},
   {
-    "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": ".ctor(Algorithm.New.Music.ParsedFunction)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 145,
+    "assembly": "Main", "class": "Main.Pages.Pages_Creator", "reportPath": "Main_Pages_Creator.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 33,
+    "metrics": [
+      { "value": 342, "exceeded": true },
+      { "value": 18, "exceeded": true },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": ".ctor(Algorithm.New.Music.ParsedFunction)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 159,
     "metrics": [
       { "value": 340, "exceeded": true },
       { "value": 58, "exceeded": true },
@@ -494,6 +529,12 @@ var riskHotspots = [
     "metrics": [
       { "value": 308, "exceeded": true },
       { "value": 38, "exceeded": true },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Solution.DominantSixthDown", "reportPath": "Algorithm_DominantSixthDown.html", "methodName": "IsSatisfied(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>)", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 15,
+    "metrics": [
+      { "value": 286, "exceeded": true },
+      { "value": 26, "exceeded": true },
     ]},
   {
     "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage__Layout", "reportPath": "Main_Areas_Identity_Pages_Account_Manage__Layout.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
@@ -520,12 +561,6 @@ var riskHotspots = [
       { "value": 16, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ExternalLoginModel", "reportPath": "Main_ExternalLoginModel.html", "methodName": "OnPostConfirmationAsync()", "methodShortName": "OnPostConfirmationAsync()", "fileIndex": 0, "line": 198,
-    "metrics": [
-      { "value": 210, "exceeded": true },
-      { "value": 14, "exceeded": false },
-    ]},
-  {
     "assembly": "Main", "class": "Main.GradingAlgorithm.GradingAlgorithm", "reportPath": "Main_GradingAlgorithm.html", "methodName": "GenerateOpinion(System.Collections.Generic.List`1<Algorithm.New.Algorithm.Mistake.Solution.Mistake>)", "methodShortName": "GenerateOpinion(...)", "fileIndex": 0, "line": 126,
     "metrics": [
       { "value": 210, "exceeded": true },
@@ -548,6 +583,18 @@ var riskHotspots = [
     "metrics": [
       { "value": 210, "exceeded": true },
       { "value": 14, "exceeded": false },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": "DeductAdded(System.Collections.Generic.List`1<Algorithm.New.Music.Component>,System.Collections.Generic.List`1<Algorithm.New.Music.Component>)", "methodShortName": "DeductAdded(...)", "fileIndex": 0, "line": 309,
+    "metrics": [
+      { "value": 189, "exceeded": true },
+      { "value": 20, "exceeded": true },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Generators.SolutionGenerator", "reportPath": "Algorithm_SolutionGenerator.html", "methodName": "GenerateRecursive(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,Algorithm.New.Algorithm.Generators.StackNode,Algorithm.New.Algorithm.Generators.StackTree,System.Int32,System.Int32,System.Int32)", "methodShortName": "GenerateRecursive(...)", "fileIndex": 0, "line": 391,
+    "metrics": [
+      { "value": 156, "exceeded": true },
+      { "value": 12, "exceeded": false },
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Parsers.NoteParser.Parser", "reportPath": "Algorithm_Parser.html", "methodName": "ParseNoteToJsonNote(Algorithm.New.Music.Note,System.String,System.Int32,System.Int32,System.Int32)", "methodShortName": "ParseNoteToJsonNote(...)", "fileIndex": 0, "line": 35,
@@ -580,10 +627,22 @@ var riskHotspots = [
       { "value": 12, "exceeded": false },
     ]},
   {
-    "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": "DeductRootAndPosition(System.Collections.Generic.List`1<Algorithm.New.Music.Component>)", "methodShortName": "DeductRootAndPosition(...)", "fileIndex": 0, "line": 244,
+    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ExternalLoginModel", "reportPath": "Main_ExternalLoginModel.html", "methodName": "OnPostConfirmationAsync()", "methodShortName": "OnPostConfirmationAsync()", "fileIndex": 0, "line": 198,
     "metrics": [
-      { "value": 130, "exceeded": true },
-      { "value": 20, "exceeded": true },
+      { "value": 156, "exceeded": true },
+      { "value": 12, "exceeded": false },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.Pages_Creator", "reportPath": "Main_Pages_Creator.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
+    "metrics": [
+      { "value": 156, "exceeded": true },
+      { "value": 12, "exceeded": false },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.SolveModel", "reportPath": "Main_SolveModel.html", "methodName": "GenerateMistakeResults(System.Collections.Generic.Dictionary`2<System.ValueTuple`2<System.Int32,System.ValueTuple`3<System.Int32,System.Int32,System.Int32>>,System.Collections.Generic.List`1<System.Int32>>)", "methodShortName": "GenerateMistakeResults(...)", "fileIndex": 0, "line": 189,
+    "metrics": [
+      { "value": 152, "exceeded": true },
+      { "value": 16, "exceeded": true },
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Music.ParsedFunction", "reportPath": "Algorithm_ParsedFunction.html", "methodName": "CreateFromFunction(Algorithm.New.Music.Function)", "methodShortName": "CreateFromFunction(...)", "fileIndex": 0, "line": 58,
@@ -598,7 +657,7 @@ var riskHotspots = [
       { "value": 10, "exceeded": false },
     ]},
   {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.LoginModel", "reportPath": "Main_LoginModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 102,
+    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.LoginModel", "reportPath": "Main_LoginModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 103,
     "metrics": [
       { "value": 110, "exceeded": true },
       { "value": 10, "exceeded": false },
@@ -616,7 +675,7 @@ var riskHotspots = [
       { "value": 10, "exceeded": false },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 67,
+    "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 65,
     "metrics": [
       { "value": 110, "exceeded": true },
       { "value": 10, "exceeded": false },
@@ -640,25 +699,19 @@ var riskHotspots = [
       { "value": 15, "exceeded": false },
     ]},
   {
-    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Generators.SolutionGenerator", "reportPath": "Algorithm_SolutionGenerator.html", "methodName": "GenerateRecursive(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,Algorithm.New.Algorithm.Generators.StackNode,Algorithm.New.Algorithm.Generators.StackTree,System.Int32,System.Int32,System.Int32)", "methodShortName": "GenerateRecursive(...)", "fileIndex": 0, "line": 274,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
     "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Mistake.Solution.StackMistake", "reportPath": "Algorithm_StackMistake.html", "methodName": ".ctor(System.Collections.Generic.List`1<System.Int32>,System.Collections.Generic.List`1<System.Int32>,Algorithm.New.Algorithm.Rules.Solution.Rule)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 12,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
     ]},
   {
-    "assembly": "Algorithm", "class": "Algorithm.New.Music.Tonation", "reportPath": "Algorithm_Tonation.html", "methodName": "GetMirroredVersion(Algorithm.New.Music.Tonation)", "methodShortName": "GetMirroredVersion(...)", "fileIndex": 0, "line": 50,
+    "assembly": "Algorithm", "class": "Algorithm.New.Music.Component", "reportPath": "Algorithm_Component.html", "methodName": "ToString()", "methodShortName": "ToString()", "fileIndex": 0, "line": 80,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
     ]},
   {
-    "assembly": "Algorithm", "class": "Algorithm.New.Utils.Interval", "reportPath": "Algorithm_Interval.html", "methodName": "SetCloser(Algorithm.New.Music.Note,Algorithm.New.Music.Note)", "methodShortName": "SetCloser(...)", "fileIndex": 0, "line": 42,
+    "assembly": "Algorithm", "class": "Algorithm.New.Utils.Interval", "reportPath": "Algorithm_Interval.html", "methodName": "SetCloser(Algorithm.New.Music.Note,Algorithm.New.Music.Note)", "methodShortName": "SetCloser(...)", "fileIndex": 0, "line": 112,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
@@ -694,13 +747,13 @@ var riskHotspots = [
       { "value": 8, "exceeded": false },
     ]},
   {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.RegisterConfirmationModel", "reportPath": "Main_RegisterConfirmationModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 49,
+    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.RegisterConfirmationModel", "reportPath": "Main_RegisterConfirmationModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 51,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
     ]},
   {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ResetPasswordModel", "reportPath": "Main_ResetPasswordModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 96,
+    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ResetPasswordModel", "reportPath": "Main_ResetPasswordModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 95,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
@@ -718,25 +771,13 @@ var riskHotspots = [
       { "value": 8, "exceeded": false },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.Pages_Creator", "reportPath": "Main_Pages_Creator.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
+    "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": "DeductRootAndPosition(System.Collections.Generic.List`1<Algorithm.New.Music.Component>)", "methodShortName": "DeductRootAndPosition(...)", "fileIndex": 0, "line": 260,
     "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
+      { "value": 67, "exceeded": true },
+      { "value": 20, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.SolveModel", "reportPath": "Main_SolveModel.html", "methodName": "GenerateMistakeResults(System.Collections.Generic.Dictionary`2<System.ValueTuple`2<System.Int32,System.ValueTuple`3<System.Int32,System.Int32,System.Int32>>,System.Collections.Generic.List`1<System.Int32>>)", "methodShortName": "GenerateMistakeResults(...)", "fileIndex": 0, "line": 189,
-    "metrics": [
-      { "value": 60, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Generators.StackTree", "reportPath": "Algorithm_StackTree.html", "methodName": "EvaluateRecursive(Algorithm.New.Algorithm.Generators.StackNode,System.Int32,System.Int32)", "methodShortName": "EvaluateRecursive(...)", "fileIndex": 0, "line": 64,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Mistake.Solution.Mistake", "reportPath": "Algorithm_Mistake.html", "methodName": "MistakeCodeToDescription(System.Int32)", "methodShortName": "MistakeCodeToDescription(...)", "fileIndex": 0, "line": 22,
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Generators.StackTree", "reportPath": "Algorithm_StackTree.html", "methodName": "EvaluateRecursive(Algorithm.New.Algorithm.Generators.StackNode,System.Int32,System.Int32)", "methodShortName": "EvaluateRecursive(...)", "fileIndex": 0, "line": 59,
     "metrics": [
       { "value": 42, "exceeded": true },
       { "value": 6, "exceeded": false },
@@ -749,12 +790,6 @@ var riskHotspots = [
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Mistake.Solution.NoteMistake", "reportPath": "Algorithm_NoteMistake.html", "methodName": ".ctor(Algorithm.New.Music.Note,Algorithm.New.Music.Stack)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 29,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Algorithm", "class": "Algorithm.New.Utils.PossibleNotes", "reportPath": "Algorithm_PossibleNotes.html", "methodName": "Contains(System.Collections.Generic.List`1<System.String>,System.Collections.Generic.List`1<System.Collections.Generic.List`1<System.String>>)", "methodShortName": "Contains(...)", "fileIndex": 0, "line": 28,
     "metrics": [
       { "value": 42, "exceeded": true },
       { "value": 6, "exceeded": false },
@@ -796,7 +831,19 @@ var riskHotspots = [
       { "value": 32, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.CreatedModel", "reportPath": "Main_CreatedModel.html", "methodName": "OnPostAssign()", "methodShortName": "OnPostAssign()", "fileIndex": 0, "line": 119,
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Generators.SolutionGenerator", "reportPath": "Algorithm_SolutionGenerator.html", "methodName": "GenerateLinear(Algorithm.New.Algorithm.Problem,System.Int32)", "methodShortName": "GenerateLinear(...)", "fileIndex": 0, "line": 123,
+    "metrics": [
+      { "value": 28, "exceeded": false },
+      { "value": 28, "exceeded": true },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Checkers.StackPairChecker", "reportPath": "Algorithm_StackPairChecker.html", "methodName": "CheckRules(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>,Algorithm.New.Algorithm.Settings)", "methodShortName": "CheckRules(...)", "fileIndex": 0, "line": 10,
+    "metrics": [
+      { "value": 26, "exceeded": false },
+      { "value": 26, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.CreatedModel", "reportPath": "Main_CreatedModel.html", "methodName": "OnPostAssign()", "methodShortName": "OnPostAssign()", "fileIndex": 0, "line": 123,
     "metrics": [
       { "value": 26, "exceeded": false },
       { "value": 26, "exceeded": true },
@@ -808,15 +855,33 @@ var riskHotspots = [
       { "value": 24, "exceeded": true },
     ]},
   {
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Solution.DominantThirdUp", "reportPath": "Algorithm_DominantThirdUp.html", "methodName": "IsSatisfied(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>)", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 15,
+    "metrics": [
+      { "value": 23, "exceeded": false },
+      { "value": 22, "exceeded": true },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Solution.NinthDown", "reportPath": "Algorithm_NinthDown.html", "methodName": "IsSatisfied(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>)", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 15,
+    "metrics": [
+      { "value": 25, "exceeded": false },
+      { "value": 22, "exceeded": true },
+    ]},
+  {
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Solution.SixthUp", "reportPath": "Algorithm_SixthUp.html", "methodName": "IsSatisfied(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>)", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 16,
+    "metrics": [
+      { "value": 25, "exceeded": false },
+      { "value": 22, "exceeded": true },
+    ]},
+  {
     "assembly": "Main", "class": "Main.Pages.SolveModel", "reportPath": "Main_SolveModel.html", "methodName": "OnPost()", "methodShortName": "OnPost()", "fileIndex": 0, "line": 95,
     "metrics": [
       { "value": 22, "exceeded": false },
       { "value": 22, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.AssignedModel", "reportPath": "Main_AssignedModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 36,
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Solution.SeventhDown", "reportPath": "Algorithm_SeventhDown.html", "methodName": "IsSatisfied(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>)", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 16,
     "metrics": [
-      { "value": 20, "exceeded": false },
+      { "value": 21, "exceeded": false },
       { "value": 20, "exceeded": true },
     ]},
   {
@@ -824,12 +889,6 @@ var riskHotspots = [
     "metrics": [
       { "value": 22, "exceeded": false },
       { "value": 20, "exceeded": true },
-    ]},
-  {
-    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Checkers.StackPairChecker", "reportPath": "Algorithm_StackPairChecker.html", "methodName": "CheckRules(Algorithm.New.Music.Stack,Algorithm.New.Music.Stack,Algorithm.New.Algorithm.Settings)", "methodShortName": "CheckRules(...)", "fileIndex": 0, "line": 9,
-    "metrics": [
-      { "value": 21, "exceeded": false },
-      { "value": 18, "exceeded": true },
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Utils.Rhytm", "reportPath": "Algorithm_Rhytm.html", "methodName": "GetRhytmicScheme(System.Int32,System.Int32,System.Int32)", "methodShortName": "GetRhytmicScheme(...)", "fileIndex": 0, "line": 6,
@@ -844,9 +903,21 @@ var riskHotspots = [
       { "value": 18, "exceeded": true },
     ]},
   {
+    "assembly": "Main", "class": "Main.Pages.AssignedModel", "reportPath": "Main_AssignedModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 36,
+    "metrics": [
+      { "value": 18, "exceeded": false },
+      { "value": 18, "exceeded": true },
+    ]},
+  {
     "assembly": "Main", "class": "Main.Pages.BrowseModel", "reportPath": "Main_BrowseModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 70,
     "metrics": [
       { "value": 18, "exceeded": false },
+      { "value": 18, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.CreatedModel", "reportPath": "Main_CreatedModel.html", "methodName": "OnPostPublish()", "methodShortName": "OnPostPublish()", "fileIndex": 0, "line": 258,
+    "metrics": [
+      { "value": 20, "exceeded": false },
       { "value": 18, "exceeded": true },
     ]},
   {
@@ -856,7 +927,7 @@ var riskHotspots = [
       { "value": 18, "exceeded": true },
     ]},
   {
-    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Generators.SolutionGenerator", "reportPath": "Algorithm_SolutionGenerator.html", "methodName": "GenerateLinear(Algorithm.New.Algorithm.Problem,System.Int32)", "methodShortName": "GenerateLinear(...)", "fileIndex": 0, "line": 122,
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Generators.SolutionGenerator", "reportPath": "Algorithm_SolutionGenerator.html", "methodName": "ValidatedResult(Algorithm.New.Music.Function,System.Collections.Generic.List`1<System.Collections.Generic.List`1<System.ValueTuple`2<System.String,Algorithm.New.Music.Component>>>)", "methodShortName": "ValidatedResult(...)", "fileIndex": 0, "line": 280,
     "metrics": [
       { "value": 16, "exceeded": false },
       { "value": 16, "exceeded": true },
@@ -868,7 +939,7 @@ var riskHotspots = [
       { "value": 16, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "Main.Pages.CreatedModel", "reportPath": "Main_CreatedModel.html", "methodName": "OnPostPublish()", "methodShortName": "OnPostPublish()", "fileIndex": 0, "line": 254,
+    "assembly": "Algorithm", "class": "Algorithm.New.Utils.Interval", "reportPath": "Algorithm_Interval.html", "methodName": "IntervalBetween(Algorithm.New.Music.Note,Algorithm.New.Music.Note)", "methodShortName": "IntervalBetween(...)", "fileIndex": 0, "line": 146,
     "metrics": [
       { "value": 16, "exceeded": false },
       { "value": 16, "exceeded": true },

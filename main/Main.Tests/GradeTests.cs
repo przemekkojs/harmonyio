@@ -319,8 +319,8 @@ public class GradeModelTests
             Assert.Equal(10, newSolutions.Where(s => s.ExerciseId == 1).Select(s => s.ExerciseResult!.MaxPoints).First());
             Assert.Equal(11, newSolutions.Where(s => s.ExerciseId == 2).Select(s => s.ExerciseResult!.MaxPoints).First());
 
-            Assert.Empty(newSolutions[0].ExerciseResult!.MistakeResults);
-            Assert.Empty(newSolutions[1].ExerciseResult!.MistakeResults);
+            Assert.NotEmpty(newSolutions[0].ExerciseResult!.MistakeResults);
+            Assert.NotEmpty(newSolutions[1].ExerciseResult!.MistakeResults);
         }
     }
 
@@ -440,7 +440,7 @@ public class GradeModelTests
 
             Assert.Equal(1, pageModel.QuizId);
             Assert.Equal("Quiz name", pageModel.QuizName);
-            Assert.False(pageModel.ShareAlgorithmOpinion);
+            Assert.True(pageModel.ShareAlgorithmOpinion);
 
             Assert.Equal("q1", pageModel.Exercises[0].Question);
             Assert.Equal("q2", pageModel.Exercises[1].Question);
@@ -495,10 +495,10 @@ public class GradeModelTests
             Assert.Equal(2, pageModel.Opinions.Count);
             Assert.Equal(2, pageModel.Opinions[0].Count);
             Assert.Equal(2, pageModel.Opinions[1].Count);
-            Assert.Empty(pageModel.Opinions[0][0]);
-            Assert.Empty(pageModel.Opinions[0][1]);
-            Assert.Empty(pageModel.Opinions[1][0]);
-            Assert.Empty(pageModel.Opinions[1][1]);
+            Assert.Equal("", pageModel.Opinions[0][0]);
+            Assert.Equal("", pageModel.Opinions[0][1]);
+            Assert.Equal("Puste rozwiązanie", pageModel.Opinions[1][0]);
+            Assert.Equal("Puste rozwiązanie", pageModel.Opinions[1][1]);
         }
     }
 

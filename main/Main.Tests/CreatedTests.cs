@@ -594,8 +594,16 @@ public class CreatedModelTests
         var result = await model.OnPostPublish();
 
         // Assert
-        var redirectResult = Assert.IsType<RedirectToPageResult>(result);
-        Assert.Equal("Error", redirectResult.PageName);
+        var jsonResult = Assert.IsType<JsonResult>(result);
+        Assert.NotNull(jsonResult.Value);
+
+        var resultData = jsonResult.Value;
+
+        var errorProperty = resultData.GetType().GetProperty("error");
+        Assert.NotNull(errorProperty);
+
+        var actualErrorProperty = (string)errorProperty.GetValue(resultData);
+        Assert.Equal("OpenAfterCloseDate", actualErrorProperty);
     }
 
     [Fact]
@@ -628,11 +636,21 @@ public class CreatedModelTests
         var result = await model.OnPostPublish();
 
         // Assert
-        var redirectResult = Assert.IsType<RedirectToPageResult>(result);
+
+        // Assert
+        var jsonResult = Assert.IsType<JsonResult>(result);
+        Assert.NotNull(jsonResult.Value);
+
+        var resultData = jsonResult.Value;
+
+        var successProperty = resultData.GetType().GetProperty("success");
+        Assert.NotNull(successProperty);
+
+        var actualSuccessProperty = (bool)successProperty.GetValue(resultData);
+        Assert.True(actualSuccessProperty);
 
         _repositoryMock.Verify(r => r.Update(It.IsAny<Quiz>()), Times.Once);
         Assert.True(returnedQuiz.IsCreated);
-        Assert.Null(redirectResult.PageName);
     }
 
 
