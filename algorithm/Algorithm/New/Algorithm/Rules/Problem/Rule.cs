@@ -9,7 +9,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
         public bool OneFunction { get; set; }
         public int Id { get; set; }
 
-        protected Rule(string name, string description, bool oneFunction = false, int id)
+        protected Rule(int id, string name, string description, bool oneFunction = false)
         {
             Name = name;
             Description = description;

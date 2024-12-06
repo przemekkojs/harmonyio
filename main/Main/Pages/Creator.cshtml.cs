@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
+using Algorithm.New.Algorithm.Mistake.Problem;
 using Algorithm.New.Algorithm.Parsers.ProblemParser;
 using Algorithm.New.Music;
 using Main.Data;
@@ -88,24 +89,30 @@ namespace Main.Pages
             return Page();
         }
 
+        private static List<ProblemMistake> GetProblemMistakes(string question)
+        {
+            var parsed = Parser.ParseJsonToProblem(question);
+
+            if (parsed != null)
+            {
+                if (parsed.Functions.Count == 0)
+                    return [];
+
+                var mistakes = ProblemChecker.CheckProblem(parsed);
+                return mistakes;
+            }
+            else
+                throw new ArgumentException("Invalid question");          
+        }
+
         private static bool CheckProblem(string question)
         {
             try
             {
-                var parsed = Parser.ParseJsonToProblem(question);
+                var mistakes = GetProblemMistakes(question);
+                var mistakesCount = mistakes.Count;
 
-                if (parsed != null)
-                {
-                    if (parsed.Functions.Count == 0)
-                        return false;
-
-                    // TODO: Tutaj trzeba zrobić tak jak przy sprawdzaniu rozwiązania
-                    // czyli kody błędów itd
-                    var mistakes = ProblemChecker.CheckProblem(parsed);
-                    return mistakes.Count == 0;
-                }
-                else
-                    return false;
+                return mistakesCount == 0;
             }
             catch (Exception ex) when (ex is ArgumentNullException || ex is InvalidOperationException)
             {
@@ -174,7 +181,7 @@ namespace Main.Pages
             var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };
             var loginResult = new { success = false, redirect = true, redirectUrl = Url.Page("Login") };
             var errorResult = new { success = false, redirect = true, redirectUrl = Url.Page("Error") };
-            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera b��dne zadania." };
+            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera błędne zadania." };
 
             if (currentUser == null)
                 return new JsonResult(loginResult);
