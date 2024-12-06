@@ -34,6 +34,12 @@
                 {
                     <button type="button" asp-page-handler="Save" class="btn btn-primary btn-std-width mx-auto mt-2"
                         onclick="submitForm(event)">Zapisz</button>
+
+                    <a href="#"
+                        data-bs-target="#creatorErrorsPopup"
+                        data-bs-toggle="modal"
+                        data-confirm-redirect="/Created"
+                        id="creator-errors"></a>
                 }
 
                 <a href="#" class="btn btn-danger btn-std-width mt-2 mx-auto" data-bs-toggle="modal"
@@ -67,6 +73,7 @@
 
 <partial name="~/Pages/Shared/ConfirmLeavePopup.cshtml" />
 <partial name="~/Pages/Shared/HelpPopup.cshtml" />
+<partial name="~/Pages/Shared/CreatorErrorsPopup.cshtml" />
 
 <script type="module">
     import { TaskContainer } from "./js/creator-scripts/taskContainer.js";
@@ -164,7 +171,9 @@
                         else {
                             // TODO: Ładujemy popup
                             const toDisplay = result.display;
-                            console.log(toDisplay);
+                            const creatorErrors = document.getElementById("creator-errors");
+                            creatorErrors.setAttribute('data-html', toDisplay);
+                            creatorErrors.click();
                         }
                     }
                     else {

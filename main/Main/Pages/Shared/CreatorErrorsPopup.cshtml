@@ -1,0 +1,51 @@
+﻿<style>
+    #errors-div {
+        max-height: 350px;
+        overflow-y: auto;
+    }
+</style>
+
+<div class="modal fade" id="creatorErrorsPopup" tabindex="-1" aria-labelledby="creatorErrorsModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="creatorErrorsModalLabel">Potwierdź akcję</h5>
+            </div>
+
+            <div class="modal-body">
+                Zadanie zostało zapisane, ale występują w nim następujące błędy:
+
+                <div id="errors-div" class="modal-body">
+                </div>
+
+                Czy kontynuować?
+            </div>
+
+            <div class="modal-footer justify-content-center align-items-center">
+                <button type="button" class="btn btn-danger btn-sm-width" data-bs-dismiss="modal">Nie</button>
+                <a id="confirmLeaveButton" class="btn btn-primary btn-sm-width">Tak</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const confirmLeaveModalElement = document.getElementById('creatorErrorsPopup');
+        const confirmLeaveBtn = document.getElementById('confirmLeaveButton');
+
+        confirmLeaveModalElement.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const targetPage = button.getAttribute('data-confirm-redirect');
+            const errorsDiv = document.getElementById('errors-div');
+            const errors = button.getAttribute('data-html');
+
+            errorsDiv.innerHTML = errors;
+
+            confirmLeaveBtn.onclick = function () {
+                window.location.href = targetPage;
+            };
+        });
+    });
+</script>

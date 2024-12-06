@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
 
 namespace Main.Pages
@@ -149,12 +150,29 @@ namespace Main.Pages
 
         private string MistakesToHTML()
         {
+            var result = "";
+            var taskId = 1;
+
             foreach (string question in Questions)
             {
-                // TU ROBIMY LOGIKĘ
+                var mistakes = GetProblemMistakes(question);
+                var mistakeCount = 1;
+
+                result += $"<details open><summary>{taskId}</summary><p>";
+
+                foreach (var mistake in mistakes)
+                {
+                    var desc = mistake.Description;
+                    result += $"{mistakeCount}. {desc}<br/>";
+                    mistakeCount++;
+                }
+
+                result += "</p></details>";
+
+                taskId++;
             }
 
-            return "Tu powinny być błędy jako HTML";
+            return result;
         }
 
         public JsonResult OnPostGenerateTask([FromBody] GenerateData data)
