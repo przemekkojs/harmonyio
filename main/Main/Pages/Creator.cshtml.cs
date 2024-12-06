@@ -45,6 +45,7 @@ namespace Main.Pages
 
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
+
         [BindProperty]
         public int? EditedQuizId { get; set; } = null;
 
@@ -146,6 +147,16 @@ namespace Main.Pages
             return true;
         }
 
+        private string MistakesToHTML()
+        {
+            foreach (string question in Questions)
+            {
+                // TU ROBIMY LOGIKĘ
+            }
+
+            return "Tu powinny być błędy jako HTML";
+        }
+
         public JsonResult OnPostGenerateTask([FromBody] GenerateData data)
         {
             var mV = Convert.ToInt32(data.MetreValue);
@@ -178,7 +189,7 @@ namespace Main.Pages
 
             var currentUser = await _userManager.GetUserAsync(User);
 
-            var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };
+            var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };            
             var loginResult = new { success = false, redirect = true, redirectUrl = Url.Page("Login") };
             var errorResult = new { success = false, redirect = true, redirectUrl = Url.Page("Error") };
             var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera błędne zadania." };
@@ -241,22 +252,30 @@ namespace Main.Pages
                 });
             }
 
-            await _repository.SaveChangesAsync();
+            await _repository.SaveChangesAsync();            
 
-            return new JsonResult(successResult);
+            if (quiz.IsValid)
+                return new JsonResult(successResult);
+            else
+            {
+                var mistakesHTML = MistakesToHTML();
+                var warningResult = new { success = true, display = mistakesHTML };
+                return new JsonResult(warningResult);
+            }                
         }
 
         public async Task<IActionResult> OnPostSubmit()
         {
             if (Questions!.Count == 0)
                 ModelState.AddModelError(nameof(Questions), "Wymagane jest przynajmniej jedno zadanie.");
-            else if (Questions.Any(q => q == "" || q == null))
+            else if (Questions.Any(q => q == null || q.Equals(string.Empty)))
                 ModelState.AddModelError(nameof(Questions), "Nie można dodaż pustych zadań.");
 
             if (!ModelState.IsValid)
                 return Page();
 
             var currentUser = await _userManager.GetUserAsync(User);
+
             if (currentUser == null)
                 return RedirectToPage("Error");
 
@@ -270,6 +289,8 @@ namespace Main.Pages
                     Code = await _repository.GenerateUniqueCodeAsync(),
 
                     //TODO: TESTING PURPOSES ONLY, REMOVE THIS
+                    // To usuwamy to czy nie?
+                    // Ten handler jest jeszcze jakkolwiek potrzebny?
                     Participants = [currentUser],
                 };
 
