@@ -277,7 +277,7 @@ namespace Algorithm.New.Algorithm.Generators
                         var mistakes = ProblemChecker.CheckProblem(tmpProblem);
                         mistakesCount = mistakes.Count;
                     } while (mistakesCount != 0);
-                    
+
                     current = next;
                     result.Add(current);
                 }
@@ -425,7 +425,7 @@ namespace Algorithm.New.Algorithm.Generators
                     function.Root = root;
                 }
             }
-            
+
             if (canAddPosition)
             {
                 var positionRandomValue = _random.Next(MAX_WEIGHT);
@@ -441,7 +441,7 @@ namespace Algorithm.New.Algorithm.Generators
                     var position = possiblePositions[positionIndex];
                     function.Position = position;
                 }
-            }            
+            }
         }
 
         private static Function GetBestFittingAfterSeventh(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
@@ -472,7 +472,7 @@ namespace Algorithm.New.Algorithm.Generators
                 randomValue = _random.Next(100);
                 matchingCount = matching.Count;
             } while (matchingCount < 1);
-            
+
 
             var randomIndex = _random.Next(matchingCount);
             var selected = matching[randomIndex].Item2;
@@ -598,7 +598,7 @@ namespace Algorithm.New.Algorithm.Generators
             if (hasNinth)
                 return GetBestFittingAfterNinth(prev, metre, tonation, barIndex, functionIndex);
             else if (hasSeventh)
-                return GetBestFittingAfterSeventh(prev, metre, tonation, barIndex, functionIndex);            
+                return GetBestFittingAfterSeventh(prev, metre, tonation, barIndex, functionIndex);
             else if (hasSixth)
                 return GetFittingAfterSixth(prev, metre, tonation, barIndex, functionIndex);
 

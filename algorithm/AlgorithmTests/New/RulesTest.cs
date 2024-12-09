@@ -304,8 +304,8 @@ namespace AlgorithmTests.New
                 (S7, D),
                 (S7, Sii),
             ];
-        
-            foreach(var pair in pairs)
+
+            foreach (var pair in pairs)
             {
                 var function1 = pair.Item1;
                 var function2 = pair.Item2;

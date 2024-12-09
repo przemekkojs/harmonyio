@@ -59,7 +59,7 @@ namespace Algorithm.New
         // TODO: Klasa - chyba nie ma jednak potrzeby
         public static readonly List<Algorithm.Rules.Problem.Rule> ProblemSettings =
         [
-                   
+
             new AddedComponents(),
             new AddedSixthValidation(),
             new AddedVsPositionAndRoot(),

@@ -276,8 +276,8 @@ namespace Algorithm.New.Music
                                 throw new ArgumentException("Invalid function symbol.");
                             }
                             else
-                            {                                
-                                doubled.Add(Component.Third);                                
+                            {
+                                doubled.Add(Component.Third);
                             }
                         }
                     }
