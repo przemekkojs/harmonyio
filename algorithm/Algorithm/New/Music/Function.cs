@@ -78,8 +78,6 @@ namespace Algorithm.New.Music
 
             foreach (var added in function.Added)
             {
-                // TODO: Co z '<' w np. 7< czy 6<...
-
                 var toAdd = added != null ?
                     Component.ComponentTypeToString[added.Type] :
                     string.Empty;
@@ -191,7 +189,6 @@ namespace Algorithm.New.Music
 
             foreach (var addedString in parsedFunction.Added)
             {
-                // TODO: Co z '<', '>', ...
                 var toAdd = Component.GetByString(addedString);
 
                 if (toAdd != null)
@@ -220,7 +217,6 @@ namespace Algorithm.New.Music
             DeductPossibleComponents();
         }
 
-        // TODO: Params....
         public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
             bool isInsertion = false, InsertionType insertionType = InsertionType.None,
             Component? root = null, Component? position = null, Component? removed = null,

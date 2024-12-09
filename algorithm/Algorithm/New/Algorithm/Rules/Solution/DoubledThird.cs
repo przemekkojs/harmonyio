@@ -34,6 +34,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                     .Select(x => x?.Component);
 
                 var thirds = components
+                    .Where(x => x != null)
                     .Where(x => x.Equals(Component.Third));
 
                 var thirdsCount = thirds.Count();
