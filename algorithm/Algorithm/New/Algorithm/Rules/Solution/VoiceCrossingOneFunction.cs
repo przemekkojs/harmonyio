@@ -24,7 +24,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
             bool sopranoAlto = NoteCheckResult(stack.Soprano, stack.Alto);
             bool altoTenore = NoteCheckResult(stack.Alto, stack.Tenore);
-            bool tenoreBass = NoteCheckResult(stack.Tenore, stack.Bass);            
+            bool tenoreBass = NoteCheckResult(stack.Tenore, stack.Bass);
 
             return sopranoAlto && altoTenore && tenoreBass;
         }

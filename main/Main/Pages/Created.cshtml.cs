@@ -274,11 +274,11 @@ public class CreatedModel : PageModel
 
         if (CloseDate <= OpenDate)
         {
-            return new JsonResult(new {error = "OpenAfterCloseDate"});
+            return new JsonResult(new { error = "OpenAfterCloseDate" });
         }
         if (CloseDate < DateTime.Now)
         {
-            return new JsonResult(new {error = "AfterCloseDate"});
+            return new JsonResult(new { error = "AfterCloseDate" });
         }
 
         quizToPublish.CloseDate = (DateTime)CloseDate!;

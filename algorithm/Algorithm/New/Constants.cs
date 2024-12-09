@@ -1,6 +1,6 @@
-﻿using Algorithm.New.Algorithm.Rules.Solution;
-using Algorithm.New.Algorithm;
+﻿using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Rules.Problem;
+using Algorithm.New.Algorithm.Rules.Solution;
 
 namespace Algorithm.New
 {
@@ -41,7 +41,7 @@ namespace Algorithm.New
             new NinthDown(),
             new OneDirection(),
             new ParallelFifths(),
-            new ParallelOctaves(),            
+            new ParallelOctaves(),
             new SeventhDown(),
             new SixthUp(),
             new VoiceCrossing(),

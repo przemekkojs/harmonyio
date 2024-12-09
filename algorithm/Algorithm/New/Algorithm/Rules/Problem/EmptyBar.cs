@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             id: 204,
             name: "Pusty takt",
             description: "Nie można mieć pustych taktów w zadaniu",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         public override bool IsSatisfied(params Function[] functions)
         {

@@ -5,7 +5,7 @@ using Algorithm.New.Music;
 namespace Algorithm.New.Algorithm.Checkers
 {
     public static class ProblemChecker
-    {        
+    {
         public static List<ProblemMistake> CheckProblem(Problem problem)
         {
             var result = new List<ProblemMistake>();

@@ -15,17 +15,17 @@ namespace Algorithm.New.Music
         public List<Note?> Notes { get; private set; }
 
         public Stack(Index index, Note? soprano, Note? alto, Note? tenore, Note? bass)
-        { 
+        {
             Soprano = soprano;
             Alto = alto;
             Tenore = tenore;
             Bass = bass;
             Index = index;
 
-            Notes = [Soprano, Alto, Tenore, Bass];        
+            Notes = [Soprano, Alto, Tenore, Bass];
         }
 
-        public Stack (Index index, string soprano, string alto, string tenore, string bass)
+        public Stack(Index index, string soprano, string alto, string tenore, string bass)
         {
             if (soprano != string.Empty)
                 Soprano = new Note(soprano, 4);
@@ -55,12 +55,13 @@ namespace Algorithm.New.Music
         }
 
         [JsonConstructor]
-        public Stack(int bar, int beat, int duration, string soprano, string alto, string tenore, string bass) : 
-            this(new Index() { Bar = bar, Position = beat, Duration = duration }, soprano, alto, tenore, bass) { }
+        public Stack(int bar, int beat, int duration, string soprano, string alto, string tenore, string bass) :
+            this(new Index() { Bar = bar, Position = beat, Duration = duration }, soprano, alto, tenore, bass)
+        { }
 
         public Stack(Index index, List<string> noteNames) : this(index, noteNames[0], noteNames[1], noteNames[2], noteNames[3]) { }
         public Stack(Index index, List<Note?> notes) : this(index, notes[0], notes[1], notes[2], notes[3]) { }
-        public Stack (Index index, List<Component> components, Function function)
+        public Stack(Index index, List<Component> components, Function function)
         {
             Soprano = new Note(Converters.ComponentToNote(components[0], function), 4);
             Alto = new Note(Converters.ComponentToNote(components[1], function), 4);

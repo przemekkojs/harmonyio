@@ -28,29 +28,29 @@ namespace AlgorithmTests.New
             var metre = Metre.Meter2_4;
 
             var stack1 = new Stack(new Algorithm.New.Music.Index()
-                {
-                    Bar = 0,
-                    Position = 0,
-                    Duration = 4
-                },
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
                 ["C", "F", "Ab", "C"]
             );
 
             var stack2 = new Stack(new Algorithm.New.Music.Index()
-                {
-                    Bar = 0,
-                    Position = 1,
-                    Duration = 4
-                },
+            {
+                Bar = 0,
+                Position = 1,
+                Duration = 4
+            },
                 ["D", "G", "B", "F"]
             );
 
             var function1 = new Function(new Algorithm.New.Music.Index()
-                {
-                    Bar = 0,
-                    Position = 0,
-                    Duration = 4
-                },
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
                 Symbol.S,
                 true,
                 tonation

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging;
-using NuGet.Protocol;
 
 namespace Main.Pages
 {
@@ -292,7 +290,7 @@ namespace Main.Pages
                 ))
                 .Select(gr => gr.User.Email!)
                 .Where(emails.Contains);
-            
+
             wrongEmails.AddRange(requestSentEmails);
 
             if (wrongEmails.Count() != 0)

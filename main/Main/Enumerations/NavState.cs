@@ -1,5 +1,7 @@
-namespace Main.Enumerations {
-    public enum NavState {
+namespace Main.Enumerations
+{
+    public enum NavState
+    {
         Home,
         Assigned,
         Created,

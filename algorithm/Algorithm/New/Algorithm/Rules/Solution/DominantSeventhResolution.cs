@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 117,
             name: "Rozwiązanie dominanty septymowej",
             description: "Czy jest właściwe, w zależności od postaci",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 100,
             name: "Dwojenie kwinty na mocnej części taktu",
             description: "Czy w ramach jednej funkcji, przypadającej na mocnej części taktu, podwojona została kwinta, przy oparciu na kwincie?",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         // TODO: Jakoś trzeba wsm przekazać metrum... XD
         // Wsm przekazywanie który składnik jest kwintą też się cholibka przyda

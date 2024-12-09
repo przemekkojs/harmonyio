@@ -1,7 +1,6 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
-using System.Numerics;
 
 namespace Algorithm.New.Algorithm.Generators
 {
@@ -120,12 +119,12 @@ namespace Algorithm.New.Algorithm.Generators
         /// <param name="tolerance">Tolerancja dla błędów. Domyślnie = 0</param>
         /// <returns>Wygenerowane rozwiązanie</returns>
         public static Solution GenerateLinear(Problem problem, int tolerance = 0)
-        {            
+        {
             List<Stack> stacks = [];
             List<Function> functionsTmp = [];
             List<int> usedNotesIndexes = [];
             Dictionary<Function, List<List<(string, Component)>>> mappings = [];
-            
+
             var functions = problem.Functions;
             var currentIndex = 0;
             var functionsCount = functions.Count;
@@ -151,7 +150,7 @@ namespace Algorithm.New.Algorithm.Generators
 
                     notesSet.AddRange(combinations);
                 }
-                
+
                 notesSet = ValidatedResult(function, notesSet);
 
                 notesSet = notesSet
@@ -165,7 +164,7 @@ namespace Algorithm.New.Algorithm.Generators
             foreach (var key in mappings.Keys)
             {
                 var valueList = mappings[key];
-                var count = (UInt32) valueList.Count;
+                var count = (UInt32)valueList.Count;
 
                 maxIterations *= count != 0 ?
                     count :
@@ -238,7 +237,7 @@ namespace Algorithm.New.Algorithm.Generators
                 #region debug
                 // DEBUG ONLY
                 lastCheckResult = checkResult;
-                    
+
                 foreach (var mistake in checkResult)
                 {
                     var code = mistake.MistakeCode;
@@ -352,7 +351,7 @@ namespace Algorithm.New.Algorithm.Generators
                     stack.Index.Duration = duration;
                 }
             }
-        }   
+        }
 
         /// <summary>
         /// Z tej funkcji NIE NALEŻY korzystać, chyba że do celów badawczych. Generuje ona wszystkie możliwe rozwiązania,

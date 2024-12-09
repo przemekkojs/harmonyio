@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Main.Areas.Identity{
+namespace Main.Areas.Identity
+{
     public class PolishIdentityErrorDescriber : IdentityErrorDescriber
     {
         public override IdentityError ConcurrencyFailure() => new() { Code = nameof(ConcurrencyFailure), Description = "Błąd współbieżności, obiekt został zmodyfikowany." };

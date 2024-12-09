@@ -24,7 +24,7 @@
                 return false;
         }
 
-        public Tonation (string name, Mode mode, int flatsCount, int sharpsCount)
+        public Tonation(string name, Mode mode, int flatsCount, int sharpsCount)
         {
             SharpsCount = sharpsCount;
             FlatsCount = flatsCount;

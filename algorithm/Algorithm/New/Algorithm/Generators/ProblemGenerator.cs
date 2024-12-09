@@ -388,7 +388,7 @@ namespace Algorithm.New.Algorithm.Generators
                 .Where(x => x.Item1 > randomValue)
                 .Select(x => x.Item2);
 
-            foreach(var possible in possibleToAdd)
+            foreach (var possible in possibleToAdd)
             {
                 if (possible.Equals(Component.Sixth))
                 {
@@ -490,13 +490,13 @@ namespace Algorithm.New.Algorithm.Generators
                     tonation: tonation
                 );
             }
-            
+
             var possibleSymbols = NextSymbols[prevSymbol];
             var bestSymbol = GetBestFittingSymbol(possibleSymbols);
 
             var minor = MinorWeights[bestSymbol] == MINOR_DEPENDANT ?
                 tonation.Mode == Mode.Minor :
-                _random.Next(MAX_WEIGHT) <= MinorWeights[bestSymbol];            
+                _random.Next(MAX_WEIGHT) <= MinorWeights[bestSymbol];
 
             return new Function(
                 index: new Music.Index()

@@ -6,9 +6,9 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
     public class NoteMistake : Mistake
     {
         public int BarIndex { get; set; }
-        public int VerticalIndex { get; set; }        
+        public int VerticalIndex { get; set; }
 
-        public override int Quantity => 1;        
+        public override int Quantity => 1;
 
         [JsonConstructor]
         public NoteMistake(int barIndex, int verticalIndex, int code)

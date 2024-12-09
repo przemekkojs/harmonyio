@@ -1,28 +1,29 @@
-using System.ComponentModel.DataAnnotations;
 using Main.Data;
 using Main.Models;
 using Main.Resources;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace Main.Areas.Identity.Pages.Account.Manage
 {
-    public class ChangeNameModel : PageModel {
+    public class ChangeNameModel : PageModel
+    {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
 
         [Required(ErrorMessage = ErrorMessages.Required)]
         [Display(Name = "Imię")]
         [BindProperty]
-        public string Name {get; set;} = null!;
+        public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = ErrorMessages.Required)]
         [Display(Name = "Nazwisko")]
         [BindProperty]
-        public string Surname {get; set;} = null!;
+        public string Surname { get; set; } = null!;
 
-        public ApplicationUser CurrentUser {get; set;} = null!;
+        public ApplicationUser CurrentUser { get; set; } = null!;
 
         public ChangeNameModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {

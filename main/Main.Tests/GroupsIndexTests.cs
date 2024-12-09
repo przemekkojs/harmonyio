@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-using System.Security.Claims;
 using Main.Data;
 using Main.Models;
 using Main.Pages;
@@ -12,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace Main.Tests;
 

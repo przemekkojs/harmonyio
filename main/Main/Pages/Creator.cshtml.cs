@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Mistake.Problem;
@@ -11,8 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Main.Pages
 {
@@ -42,7 +41,7 @@ namespace Main.Pages
         [BindProperty]
         [Display(Name = "Nazwa quizu")]
         [Required(ErrorMessage = "Nazwa quizu jest wymagana")]
-        public string QuizName { get; set; } = null!;        
+        public string QuizName { get; set; } = null!;
 
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
@@ -104,7 +103,7 @@ namespace Main.Pages
                 return mistakes;
             }
             else
-                throw new ArgumentException("Invalid question");          
+                throw new ArgumentException("Invalid question");
         }
 
         private static bool CheckProblem(string question)
@@ -219,7 +218,7 @@ namespace Main.Pages
         public async Task<IActionResult> OnPostSave()
         {
             // Fixes-2: Kurna, który ma utf-16 włączone? XD
-            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i si� �aduje jako zerowy element listy,
+            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i się ładuje jako zerowy element listy,
             // wi�c te linijki jakby rozpakowuj� t� lit�.
             // Je�eli na froncie nie ma b��d�w, to to zawsze si� wykona poprawnie.
             Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0])!;
@@ -227,7 +226,7 @@ namespace Main.Pages
 
             var currentUser = await _userManager.GetUserAsync(User);
 
-            var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };            
+            var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };
             var loginResult = new { success = false, redirect = true, redirectUrl = Url.Page("Login") };
             var errorResult = new { success = false, redirect = true, redirectUrl = Url.Page("Error") };
             var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera puste zadania." };
@@ -290,7 +289,7 @@ namespace Main.Pages
                 });
             }
 
-            await _repository.SaveChangesAsync();            
+            await _repository.SaveChangesAsync();
 
             if (quiz.IsValid)
                 return new JsonResult(successResult);
@@ -299,7 +298,7 @@ namespace Main.Pages
                 var mistakesHTML = MistakesToHTML();
                 var warningResult = new { success = true, display = mistakesHTML };
                 return new JsonResult(warningResult);
-            }                
+            }
         }
 
         public async Task<IActionResult> OnPostSubmit()

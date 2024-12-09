@@ -1,12 +1,11 @@
-﻿using System;
-namespace Main.Enumerations
+﻿namespace Main.Enumerations
 {
-	public enum QuizState
-	{
-		NotStarted,
-		Open,
-		Closed,
-	} 
+    public enum QuizState
+    {
+        NotStarted,
+        Open,
+        Closed,
+    }
 
     public static class QuizStateExtensions
     {

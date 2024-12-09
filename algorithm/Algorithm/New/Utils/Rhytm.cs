@@ -1,7 +1,7 @@
 ﻿namespace Algorithm.New.Utils
 {
     public static class Rhytm
-    {        
+    {
         public static List<int> GetRhytmicScheme(int functionsInBar, int metreCount, int metreValue)
         {
             List<int> result = [];
