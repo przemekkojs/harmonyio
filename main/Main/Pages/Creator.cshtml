@@ -33,7 +33,7 @@
                 @if (!Model.BrowseOnly)
                 {
                     <button type="button" asp-page-handler="Save" class="btn btn-primary btn-std-width mx-auto mt-2"
-                        onclick="submitForm(event)">Zapisz</button>
+                        onclick="submitForm(event, false)">Zapisz</button>
 
                     <a href="#"
                         data-bs-target="#creatorErrorsPopup"
@@ -94,9 +94,9 @@
         )
     );
 
-    window.submitForm = async function submitForm(event) {
+    window.submitForm = async function submitForm(event, force) {
         questionsValidationError.innerText = "";
-        const tasksResult = confirmExercises(event);
+        const tasksResult = confirmExercises();
 
         if (!tasksResult) {
             questionsValidationError.innerText = "Zadania zawierają błędy.";
@@ -116,7 +116,8 @@
             questions.push(toAppend);
         });
 
-        event.preventDefault();
+        if (event != null)
+            event.preventDefault();
 
         const form = document.getElementById('pageForm');
         const maxes = [];
@@ -151,6 +152,7 @@
         formData.append("Questions", JSON.stringify(questions));
         formData.append("EditedQuizId", editedQuizId);
         formData.append("Maxes", JSON.stringify(maxes));
+        formData.append("Force", force);
 
         try {
             const response = await fetch(form.action, {
@@ -173,6 +175,7 @@
                             const toDisplay = result.display;
                             const creatorErrors = document.getElementById("creator-errors");
                             creatorErrors.setAttribute('data-html', toDisplay);
+                            creatorErrors.setAttribute('data-save-callback', "saveWithErrors");
                             creatorErrors.click();
                         }
                     }
@@ -199,6 +202,11 @@
         }
     }
 
+    window.saveWithErrors = async function saveWithErrors(){
+        submitForm(null, true);
+        window.location.href = "/Created";
+    }
+
     function addExisting() {
         taskContainer.load(exercises);
         questionsValidationError.innerText = '';
@@ -208,7 +216,7 @@
         taskContainer.addTask();
     }
 
-    window.confirmExercises = function (event) {
+    window.confirmExercises = function () {
         questionsValidationError.innerText = '';
         answer.length = 0;
         const tasks = taskContainer.tasks;
