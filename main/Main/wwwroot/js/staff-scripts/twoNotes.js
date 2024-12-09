@@ -162,7 +162,6 @@ class TwoNotes {
     }
 
     // notes have same direction, if base value is 1, allow adding but change direction
-    // TODO fix bug, this adds instantly two whole notes, need to check for that
     if (
       !this.note1.hasOppositeDirection(note) &&
       this.note1.getBaseValue() !== 1
