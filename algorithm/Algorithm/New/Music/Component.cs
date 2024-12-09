@@ -43,7 +43,10 @@
 
         public static Component? GetByString(string value)
         {
-            return value switch
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            return value[0].ToString() switch
             {
                 "1" => Root,
                 "2" => Second,

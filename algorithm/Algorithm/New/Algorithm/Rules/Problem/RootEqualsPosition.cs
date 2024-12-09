@@ -1,9 +1,4 @@
 ﻿using Algorithm.New.Music;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithm.New.Algorithm.Rules.Problem
 {
