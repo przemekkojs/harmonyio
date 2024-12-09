@@ -59,15 +59,18 @@ namespace Algorithm.New
         // TODO: Klasa - chyba nie ma jednak potrzeby
         public static readonly List<Algorithm.Rules.Problem.Rule> ProblemSettings =
         [
-            new SubdominantAfterDominant(),
-            new EmptyFunction(),
+                   
             new AddedComponents(),
-            new EmptyBar(),
+            new AddedSixthValidation(),
+            new AddedVsPositionAndRoot(),
             new DeletedEqualsPosition(),
             new DeletedEqualsRoot(),
+            new EmptyBar(),
+            new EmptyFunction(),
             new FunctionAfterSeventh(),
             new FunctionAfterSixth(),
-            new AddedSixthValidation()
+            new RootEqualsPosition(),
+            new SubdominantAfterDominant()
         ];
 
         public static readonly Dictionary<(float, string), (string, int)> NoteMappings = new()

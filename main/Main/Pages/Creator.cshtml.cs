@@ -177,11 +177,16 @@ namespace Main.Pages
                 var mistakes = GetProblemMistakes(question);
                 var mistakeCount = 1;
 
-                result += $"<details open><summary>{taskId}</summary><p>";
+                result += $"<details open><summary>Zadanie {taskId}</summary><p>";
 
                 foreach (var mistake in mistakes)
                 {
-                    var desc = mistake.Description;
+                    var mistakeExists = mistake.Rule != null;
+
+                    var desc = mistakeExists ?
+                        $"<span title=\"{mistake.Rule?.Description}\" style=\"cursor: pointer;\"><i>{mistake.Rule?.Name}</i></span> w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>" :
+                        $"Błąd w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>";
+
                     result += $"{mistakeCount}. {desc}<br/>";
                     mistakeCount++;
                 }

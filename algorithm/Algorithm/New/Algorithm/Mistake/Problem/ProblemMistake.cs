@@ -7,6 +7,7 @@ namespace Algorithm.New.Algorithm.Mistake.Problem
         public string Description { get; set; }
         public int BarIndex { get; set; }
         public int FunctionIndex { get; set; }
+        public Rule? Rule { get; private set; } = null;
 
         public ProblemMistake(int barIndex, int functionIndex, string description = "")
         {
@@ -17,8 +18,9 @@ namespace Algorithm.New.Algorithm.Mistake.Problem
 
         public void GenerateDescription(Rule rule)
         {
+            Rule = rule;
             var ruleName = rule.Name;
-            Description = $"Niespełniona zasada {ruleName} w takcie {BarIndex}, funkcji {FunctionIndex}.";
+            Description = $"Niespełniona zasada {ruleName} w takcie {BarIndex + 1}, funkcji {FunctionIndex + 1}.";
         }
     }
 }
