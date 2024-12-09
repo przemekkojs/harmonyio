@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Algorithm.New.Utils
+﻿namespace Algorithm.New.Utils
 {
     public static class Permutations
     {
@@ -15,7 +9,7 @@ namespace Algorithm.New.Utils
             return result;
         }
 
-        private static void CreatePermutationsRecursive<T>(List<T> set, List<T> current, List<List<T>> result, int n, int startIndex=0)
+        private static void CreatePermutationsRecursive<T>(List<T> set, List<T> current, List<List<T>> result, int n, int startIndex = 0)
         {
             if (current.Count == n)
             {

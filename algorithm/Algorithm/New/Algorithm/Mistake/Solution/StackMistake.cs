@@ -1,6 +1,5 @@
 ﻿using Algorithm.New.Algorithm.Rules.Solution;
 using Algorithm.New.Music;
-using System.Text.Json.Serialization;
 
 namespace Algorithm.New.Algorithm.Mistake.Solution
 {
@@ -14,7 +13,7 @@ namespace Algorithm.New.Algorithm.Mistake.Solution
             List<int> tmpBars = [];
             List<int> tmpFunctions = [];
 
-            foreach(var barIndex in barIndexes)
+            foreach (var barIndex in barIndexes)
             {
                 if (barIndex < 0)
                     tmpBars.Add(0);

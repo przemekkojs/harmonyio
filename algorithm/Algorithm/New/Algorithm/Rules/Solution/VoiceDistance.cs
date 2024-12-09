@@ -9,7 +9,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 113,
             name: "Odległość między głosami",
             description: "Odległość między głosami nie powinna przekraczać oktawy, z wyjątkiem tenoru i basu - 2 oktawy.",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

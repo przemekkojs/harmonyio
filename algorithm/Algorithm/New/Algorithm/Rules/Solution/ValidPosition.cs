@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 114,
             name: "Poprawna pozycja",
             description: "Czy pozycja rozwiązania jest zgodna z pozycją problemu",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

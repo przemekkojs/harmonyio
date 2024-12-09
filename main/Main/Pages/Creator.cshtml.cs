@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Mistake.Problem;
@@ -11,8 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Main.Pages
 {
@@ -42,7 +41,7 @@ namespace Main.Pages
         [BindProperty]
         [Display(Name = "Nazwa quizu")]
         [Required(ErrorMessage = "Nazwa quizu jest wymagana")]
-        public string QuizName { get; set; } = null!;        
+        public string QuizName { get; set; } = null!;
 
         [BindProperty]
         public List<string> Questions { get; set; } = null!;
@@ -104,7 +103,7 @@ namespace Main.Pages
                 return mistakes;
             }
             else
-                throw new ArgumentException("Invalid question");          
+                throw new ArgumentException("Invalid question");
         }
 
         private static bool CheckProblem(string question)
@@ -126,10 +125,30 @@ namespace Main.Pages
         {
             foreach (string question in Questions)
             {
-                var questionEmpty = string.IsNullOrWhiteSpace(question);                
+                var questionEmpty = string.IsNullOrWhiteSpace(question);
 
                 if (questionEmpty)
                     return false;
+
+                // Tu może polecieć JsonException i ArgumentException, jak jakieś inne to coś nie tak, ale lepiej tak się zabezpieczyć
+                // teoretycznie nie powinien, co potwierdzają testy, no ale znając życie, przegapiłem jakiś case...
+                try
+                {
+                    var questionParsed = Parser.ParseJsonToProblem(question);
+                    var functions = questionParsed.Functions;
+
+                    if (functions == null)
+                        return false;
+
+                    var functionsEmpty = functions.Count == 0;
+
+                    if (functionsEmpty)
+                        return false;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -150,7 +169,7 @@ namespace Main.Pages
 
         private string MistakesToHTML()
         {
-            var result = "";
+            var result = string.Empty;
             var taskId = 1;
 
             foreach (string question in Questions)
@@ -158,11 +177,16 @@ namespace Main.Pages
                 var mistakes = GetProblemMistakes(question);
                 var mistakeCount = 1;
 
-                result += $"<details open><summary>{taskId}</summary><p>";
+                result += $"<details open><summary>Zadanie {taskId}</summary><p>";
 
                 foreach (var mistake in mistakes)
                 {
-                    var desc = mistake.Description;
+                    var mistakeExists = mistake.Rule != null;
+
+                    var desc = mistakeExists ?
+                        $"<span title=\"{mistake.Rule?.Description}\" style=\"cursor: pointer;\"><i>{mistake.Rule?.Name}</i></span> w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>" :
+                        $"Błąd w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>";
+
                     result += $"{mistakeCount}. {desc}<br/>";
                     mistakeCount++;
                 }
@@ -199,7 +223,7 @@ namespace Main.Pages
         public async Task<IActionResult> OnPostSave()
         {
             // Fixes-2: Kurna, który ma utf-16 włączone? XD
-            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i si� �aduje jako zerowy element listy,
+            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i się ładuje jako zerowy element listy,
             // wi�c te linijki jakby rozpakowuj� t� lit�.
             // Je�eli na froncie nie ma b��d�w, to to zawsze si� wykona poprawnie.
             Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0])!;
@@ -207,10 +231,10 @@ namespace Main.Pages
 
             var currentUser = await _userManager.GetUserAsync(User);
 
-            var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };            
+            var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };
             var loginResult = new { success = false, redirect = true, redirectUrl = Url.Page("Login") };
             var errorResult = new { success = false, redirect = true, redirectUrl = Url.Page("Error") };
-            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera błędne zadania." };
+            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera puste zadania." };
 
             if (currentUser == null)
                 return new JsonResult(loginResult);
@@ -270,7 +294,7 @@ namespace Main.Pages
                 });
             }
 
-            await _repository.SaveChangesAsync();            
+            await _repository.SaveChangesAsync();
 
             if (quiz.IsValid)
                 return new JsonResult(successResult);
@@ -279,7 +303,7 @@ namespace Main.Pages
                 var mistakesHTML = MistakesToHTML();
                 var warningResult = new { success = true, display = mistakesHTML };
                 return new JsonResult(warningResult);
-            }                
+            }
         }
 
         public async Task<IActionResult> OnPostSubmit()
@@ -305,10 +329,6 @@ namespace Main.Pages
                     CreatorId = currentUser.Id,
                     IsCreated = true,
                     Code = await _repository.GenerateUniqueCodeAsync(),
-
-                    //TODO: TESTING PURPOSES ONLY, REMOVE THIS
-                    // To usuwamy to czy nie?
-                    Participants = [currentUser],
                 };
 
                 _repository.Add(quiz);

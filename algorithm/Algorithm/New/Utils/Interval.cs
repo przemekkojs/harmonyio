@@ -71,7 +71,7 @@ namespace Algorithm.New.Utils
             {  8, [(7, IntervalName.AugmentedFifth), (8, IntervalName.MinorSixth), (9, IntervalName.MinorSixth), (10, IntervalName.DoubleDiminishedSeventh)] },
             {  9, [(7, IntervalName.DoubleAugmentedFifth), (8, IntervalName.MajorSixth), (9, IntervalName.MajorSixth), (10, IntervalName.DiminishedSeventh)] },
             { 10, [(8, IntervalName.AugmentedSixth), (9, IntervalName.AugmentedSixth), (10, IntervalName.MinorSeventh), (11, IntervalName.MinorSeventh)] },
-            { 11, [(9, IntervalName.DoubleAugmentedSixth), (10, IntervalName.MajorSeventh), (11, IntervalName.MajorSeventh)] }            
+            { 11, [(9, IntervalName.DoubleAugmentedSixth), (10, IntervalName.MajorSeventh), (11, IntervalName.MajorSeventh)] }
         };
 
         private static readonly Dictionary<int, IntervalName> _basicIntervals = new()
@@ -159,13 +159,13 @@ namespace Algorithm.New.Utils
             var octave2 = note2.Octave;
 
             var tmp1 = new Note(whiteName1, octave1);
-            var tmp2 = new Note(whiteName2, octave2);            
+            var tmp2 = new Note(whiteName2, octave2);
 
             var semitonesReal = SemitonesBetween(note1, note2) % OCTAVE_SEMITONES;
-            var semitonesWhite = SemitonesBetween(tmp1, tmp2) % OCTAVE_SEMITONES;            
+            var semitonesWhite = SemitonesBetween(tmp1, tmp2) % OCTAVE_SEMITONES;
 
             var possibleReal = _intervalNames[semitonesReal];
-            
+
             // To się nie powinno nigdy wydarzyć, ale na potrzeby testowej implementacji można zostawić
             if (possibleReal.Count == 0)
                 return IntervalName.WRONG;

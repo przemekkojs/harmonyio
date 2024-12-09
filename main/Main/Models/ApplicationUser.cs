@@ -1,7 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Identity;
 
 namespace Main.Models;
 
@@ -12,7 +11,7 @@ public class ApplicationUser : IdentityUser
 
     [MaxLength(32), Display(Name = "Last Name")]
     public required string LastName { get; set; }
-    
+
     public int AvatarColorId { get; set; } = 0;
 
     public ApplicationUser()
@@ -33,7 +32,7 @@ public class ApplicationUser : IdentityUser
     public ICollection<UsersGroup> MasterInGroups { get; set; } = new List<UsersGroup>();
 
     public ICollection<GroupRequest> GroupRequests { get; set; } = new List<GroupRequest>();
-    
+
     public ICollection<QuizRequest> QuizRequests { get; set; } = new List<QuizRequest>();
 
     //NOT MAPPED
@@ -46,9 +45,9 @@ public class ApplicationUser : IdentityUser
     //STATICS
 
     [NotMapped]
-    public static readonly string[] PossibleAvatarColors = [ 
-        "#517dd5", 
-        "#235696", 
+    public static readonly string[] PossibleAvatarColors = [
+        "#517dd5",
+        "#235696",
         "#4396a5",
         "#3c877b",
         "#1e4c41",

@@ -1,5 +1,4 @@
-﻿using System;
-namespace Main.GradingAlgorithm
+﻿namespace Main.GradingAlgorithm
 {
     public class TestGradingAlgorithm : IGradingAlgorithm
     {

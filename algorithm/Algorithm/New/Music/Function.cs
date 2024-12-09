@@ -5,7 +5,7 @@ namespace Algorithm.New.Music
 {
     public enum Symbol { T, Sii, Tiii, Diii, S, D, Tvi, Svi, Dvii, Svii, None }
     public enum InsertionType { Forward, Backward, None }
-    
+
     public class ParsedFunction
     {
         public bool Minor { get; private set; }
@@ -106,7 +106,7 @@ namespace Algorithm.New.Music
         public List<List<Component>> PossibleComponents { get; set; }
         public Tonation Tonation { get; set; }
         public bool IsInsertion { get; set; }
-        public InsertionType InsertionType { get; set; }                
+        public InsertionType InsertionType { get; set; }
         public Index Index { get; set; }
 
         public static Dictionary<Component, string> FunctionComponentIndexes(int startIndex, Tonation tonation)
@@ -277,13 +277,11 @@ namespace Algorithm.New.Music
                         {
                             if (IsMain)
                             {
-                                doubled.Add(Component.Root);
-                                doubled.Add(Component.Third);
-                                doubled.Add(Component.Fifth);
+                                throw new ArgumentException("Invalid function symbol.");
                             }
                             else
-                            {
-                                throw new ArgumentException("Invalid function symbol.");
+                            {                                
+                                doubled.Add(Component.Third);                                
                             }
                         }
                     }
@@ -350,8 +348,8 @@ namespace Algorithm.New.Music
                 else if (Added.Contains(Component.Sixth))
                 {
                     added.Add(Component.Sixth);
-                    added.Add(Component.Seventh);
                     doubled.Remove(Component.Fifth);
+                    doubled.Remove(Component.Root);
                 }
                 else
                 {

@@ -34,8 +34,8 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                 Tonation.FlatsNotes[0..tonation.FlatsCount];
 
             var accidental = tonation.SharpsCount > 0 ?
-                "#" : 
-                tonation.FlatsCount > 0 ? 
+                "#" :
+                tonation.FlatsCount > 0 ?
                     "b" :
                     "";
 
@@ -98,7 +98,7 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                 );
 
                 stacks.Add(toAdd);
-            }            
+            }
 
             return new SolutionParseResult(tonation, metre, stacks);
         }
@@ -109,7 +109,7 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
             if (notes == null)
                 return null;
 
-            foreach(var note in notes)
+            foreach (var note in notes)
             {
                 if (note == null)
                     continue;
@@ -162,7 +162,7 @@ namespace Algorithm.New.Algorithm.Parsers.SolutionParser
                         1 => Constants.ALTO,
                         2 => Constants.TENORE,
                         _ => Constants.BASS
-                    };                   
+                    };
 
                     var toAdd = NoteParser.Parser
                         .ParseNoteToJsonNote(note, voice, rhytmicValue, bar, vertical);

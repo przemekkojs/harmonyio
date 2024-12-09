@@ -9,7 +9,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 107,
             name: "Ruch o interwał zwiększony",
             description: "Ruch o interwał zwiększony w dowolnym głosie nie jest dozwolony",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

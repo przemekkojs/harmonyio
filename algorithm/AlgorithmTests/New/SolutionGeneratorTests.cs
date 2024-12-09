@@ -32,7 +32,7 @@ namespace AlgorithmTests.New
             Assert.True(solution.Stacks.Count == 8);
 
             var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
-            
+
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }
@@ -46,7 +46,7 @@ namespace AlgorithmTests.New
             Assert.True(solution.Stacks.Count == 8);
 
             var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
-                        
+
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }
@@ -60,7 +60,7 @@ namespace AlgorithmTests.New
             Assert.True(solution.Stacks.Count == 16);
 
             var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
-            
+
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }
@@ -182,7 +182,7 @@ namespace AlgorithmTests.New
             Assert.True(solution.Stacks.Count > 0);
 
             var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
-            
+
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
         }

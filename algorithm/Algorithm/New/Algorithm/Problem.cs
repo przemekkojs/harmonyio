@@ -4,7 +4,7 @@ namespace Algorithm.New.Algorithm
 {
     public class Problem
     {
-        public List<Function> Functions {  get; private set; }
+        public List<Function> Functions { get; private set; }
         public Metre Metre { get; private set; }
         public Tonation Tonation { get; private set; }
 

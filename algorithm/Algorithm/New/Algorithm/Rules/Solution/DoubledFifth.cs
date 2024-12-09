@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 119,
             name: "Dwojenie kwinty (funkcje poboczne)",
             description: "W funkcjach pobocznych nie wolno dwoić kwinty",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

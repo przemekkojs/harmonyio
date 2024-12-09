@@ -1,5 +1,4 @@
 ﻿using Algorithm.New.Music;
-using System.Linq;
 
 namespace Algorithm.New.Algorithm.Rules.Problem
 {
@@ -9,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             id: 208,
             name: "Seksta w funkcjach głównych",
             description: "Dodana seksta może wystąpić jedynie w funkcjach głównych.",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(params Function[] functions)
         {

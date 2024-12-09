@@ -9,7 +9,7 @@ namespace AlgorithmTests.New
         public void NotesNullTest()
         {
             Note? note1 = null;
-            Note note2 = new ("C", 4);
+            Note note2 = new("C", 4);
 
             Assert.Equal(IntervalName.WRONG, Interval.IntervalBetween(note1, note2));
             Assert.Equal(IntervalName.WRONG, Interval.IntervalBetween(note1, note1));
@@ -58,7 +58,7 @@ namespace AlgorithmTests.New
         }
 
         [Fact]
-        public void DifferentNotesTest ()
+        public void DifferentNotesTest()
         {
             Note C4 = new("C", 4);
             Note Cs4 = new("C#", 4);

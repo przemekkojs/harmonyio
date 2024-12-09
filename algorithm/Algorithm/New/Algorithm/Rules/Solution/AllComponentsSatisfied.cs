@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 116,
             name: "Wymagane składniki",
             description: "W każdej funkcji wymagana jest minimum pryma albo kwinta i tercja",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
@@ -28,7 +29,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
             var stackComponents = notNullNotes
                 .Select(x => x?.Component);
-            
+
             var rootCount = stackComponents
                 .Where(x => x.Equals(Component.Root))
                 .Count();

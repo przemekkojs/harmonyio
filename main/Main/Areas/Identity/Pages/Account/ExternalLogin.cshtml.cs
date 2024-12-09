@@ -2,24 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
 using Main.Models;
+using Main.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using NuGet.Protocol;
-using Main.Resources;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace Main.Areas.Identity.Pages.Account
 {
@@ -83,7 +74,7 @@ namespace Main.Areas.Identity.Pages.Account
             [Required(ErrorMessage = ErrorMessages.Required)]
             [Display(Name = "Imię")]
             public string FirstName { get; set; }
-            
+
             [Required(ErrorMessage = ErrorMessages.Required)]
             [Display(Name = "Nazwisko")]
             public string LastName { get; set; }
@@ -94,10 +85,10 @@ namespace Main.Areas.Identity.Pages.Account
             /// </summary>
             [Required(ErrorMessage = ErrorMessages.Required)]
             [EmailAddress(ErrorMessage = ErrorMessages.EmailAddress)]
-            [Display(Name = "Email")]            
+            [Display(Name = "Email")]
             public string Email { get; set; }
         }
-        
+
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
@@ -224,7 +215,7 @@ namespace Main.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                        
+
 
                         // Did find a simpler way to confirm email
                         // this don't work -> await _emailStore.SetEmailConfirmedAsync(user, true, CancellationToken.None);

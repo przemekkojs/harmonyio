@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 108,
             name: "Rozwiązanie seksty dominanty w dół",
             description: "Seksta w dominancie powinna być rozwiązywana w dół",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         // Korzysta z komponentów funkcji
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
@@ -30,7 +31,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 return true;
 
             var stack1 = stacks[0];
-            var stack2 = stacks[1];            
+            var stack2 = stacks[1];
 
             var notes1 = stack1.Notes;
             var notes2 = stack2.Notes;

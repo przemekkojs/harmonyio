@@ -1,7 +1,4 @@
-﻿using Algorithm.New.Algorithm;
-using System.ComponentModel.DataAnnotations;
-
-namespace Algorithm.New.Music
+﻿namespace Algorithm.New.Music
 {
     public enum ComponentType { Root, Second, Third, Fourth, Fifth, Sixth, Seventh, Ninth }
     public enum Alteration { Up, Down, None }
@@ -26,7 +23,7 @@ namespace Algorithm.New.Music
         public bool Suspension { get; private set; }
         public bool Dissonant { get; private set; }
 
-        public Component (ComponentType type, bool obligatory=false, Alteration alteration=Alteration.None, bool suspension=false, bool dissonant=false)
+        public Component(ComponentType type, bool obligatory = false, Alteration alteration = Alteration.None, bool suspension = false, bool dissonant = false)
         {
             Type = type;
             Obligatory = obligatory;

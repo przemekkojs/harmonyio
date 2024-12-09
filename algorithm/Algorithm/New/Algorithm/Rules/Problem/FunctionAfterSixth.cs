@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             id: 201,
             name: "Funkcja po sekście",
             description: "Funkcja po sekście musi być oddalona o kwintę w górę.",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         public override bool IsSatisfied(params Function[] functions)
         {
@@ -21,7 +22,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             var containsSixth = function1.PossibleComponents
                 .SelectMany(x => x)
                 .Contains(Component.Sixth);
-            
+
             if (containsSixth)
             {
                 var index1 = Function.SymbolIndexes[function1.Symbol];

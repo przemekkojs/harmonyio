@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-using System.Security.Claims;
 using Main.Data;
 using Main.Enumerations;
 using Main.Models;
@@ -8,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
+using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace Main.Tests;
 

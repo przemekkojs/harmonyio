@@ -42,7 +42,7 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 return
                     Interval.IsLower(note2, note1) ||
                     Interval.Determinant(note1) == Interval.Determinant(note2);
-            }                
+            }
             else
                 return true;
         }

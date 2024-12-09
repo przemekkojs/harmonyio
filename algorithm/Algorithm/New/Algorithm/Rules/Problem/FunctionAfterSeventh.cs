@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             id: 202,
             name: "Funkcja po septymie",
             description: "Funkcja po septymie musi być oddalona o kwintę w dół, sekundę w górę albo tercję małą w dół.",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         public override bool IsSatisfied(params Function[] functions)
         {
@@ -30,8 +31,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
                 if (index1 < index2)
                     index1 += 7;
 
-                var diff = index2 - index1;
-                var possibleIndexes = new List<int>() { -3, 1, -2 };
+                var diff = index1 - index2;
+                var possibleIndexes = new List<int>() { 4, 6, 2 }; // 6 = 7 - 1
                 var possibleContains = possibleIndexes.Contains(diff);
 
                 return possibleContains;

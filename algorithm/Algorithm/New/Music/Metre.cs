@@ -32,7 +32,7 @@ namespace Algorithm.New.Music
 
         private void Validate()
         {
-            if (Count < 0 ||  Value < 0)
+            if (Count < 0 || Value < 0)
                 throw new ArgumentException("Invalid metre declatarion");
         }
 

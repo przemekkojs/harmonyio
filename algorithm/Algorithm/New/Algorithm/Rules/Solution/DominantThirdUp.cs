@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 106,
             name: "Rozwiązanie tercji dominanty",
             description: "Tercja dominanty powinna się rozwiązywać w górę",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         // Korzysta z komponentów funkcji
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)

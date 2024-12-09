@@ -4,7 +4,7 @@ namespace Algorithm.New.Utils
 {
     public static class Scale
     {
-        public static List<string> Notes (Tonation tonation)
+        public static List<string> Notes(Tonation tonation)
         {
             List<string> result = [];
 

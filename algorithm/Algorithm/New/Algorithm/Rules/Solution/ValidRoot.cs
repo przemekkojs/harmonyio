@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 115,
             name: "Poprawne oparcie",
             description: "Czy oparcie rozwiązania jest zgodne z oparciem problemu",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

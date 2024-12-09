@@ -17,7 +17,7 @@ namespace Algorithm.New.Algorithm.Checkers
             var stack1 = stacks[0];
             var stack2 = stacks.Count > 1 ? stacks[1] : null;
 
-            var function1 = functions.Count == 1 ? 
+            var function1 = functions.Count == 1 ?
                 functions[0] :
                 functions.FirstOrDefault(x => x != null);
 
@@ -37,7 +37,7 @@ namespace Algorithm.New.Algorithm.Checkers
                             result.Add(toAdd);
                         }
                     }
-                    
+
                     if (stack2 != null)
                     {
                         var satisfied2 = rule.IsSatisfied(functions: [function2!], stacks: [stack2]);
@@ -47,7 +47,7 @@ namespace Algorithm.New.Algorithm.Checkers
                             var toAdd = new StackMistake([stack2], rule);
                             result.Add(toAdd);
                         }
-                    }                    
+                    }
                 }
                 else
                 {

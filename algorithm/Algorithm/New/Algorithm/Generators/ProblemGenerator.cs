@@ -268,19 +268,17 @@ namespace Algorithm.New.Algorithm.Generators
                         continue;
                     }
 
-                    var tmpProblem = new Problem([current, next], metre, tonation);
-                    var mistakes = ProblemChecker.CheckProblem(tmpProblem);
-                    var mistakesCount = mistakes.Count;
-
                     // Dopóki są błędy w takim czymś, to nie można raczej tak zrobić
-                    while (mistakesCount != 0)
+                    var mistakesCount = 0;
+
+                    do
                     {
                         next = Next(current, metre, tonation, barIndex, functionIndex);
-                        tmpProblem = new Problem([current, next], metre, tonation);
-                        mistakes = ProblemChecker.CheckProblem(tmpProblem);
+                        var tmpProblem = new Problem([current, next], metre, tonation);
+                        var mistakes = ProblemChecker.CheckProblem(tmpProblem);
                         mistakesCount = mistakes.Count;
-                    }
-
+                    } while (mistakesCount != 0);
+                    
                     current = next;
                     result.Add(current);
                 }
@@ -365,6 +363,9 @@ namespace Algorithm.New.Algorithm.Generators
         /// <returns></returns>
         private static Function Next(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
+            // TODO:
+            // Naprawić, żeby dobre funkcje się generowały
+
             var result = GetBestFittingFunction(prev, metre, tonation, barIndex, functionIndex);
 
             AddAddedComponents(result);
@@ -388,7 +389,7 @@ namespace Algorithm.New.Algorithm.Generators
                 .Where(x => x.Item1 > randomValue)
                 .Select(x => x.Item2);
 
-            foreach(var possible in possibleToAdd)
+            foreach (var possible in possibleToAdd)
             {
                 if (possible.Equals(Component.Sixth))
                 {
@@ -406,33 +407,42 @@ namespace Algorithm.New.Algorithm.Generators
         /// <param name="function">Funkcja, do której mają być dodane oparcie i pozycja</param>
         private static void AddRootAndPosition(Function function)
         {
-            var rootRandomValue = _random.Next(MAX_WEIGHT);
+            var canAddRoot = function.Added.Count < 2;
+            var canAddPosition = function.Added.Count < 1;
 
-            var possibleRoots = RootWeights
-                .Where(x => x.Item2 <= rootRandomValue)
-                .Select(x => x.Item1)
-                .ToList();
-
-            if (possibleRoots.Count != 0)
+            if (canAddRoot)
             {
-                var rootIndex = _random.Next(possibleRoots.Count);
-                var root = possibleRoots[rootIndex];
-                function.Root = root;
+                var rootRandomValue = _random.Next(MAX_WEIGHT);
+
+                var possibleRoots = RootWeights
+                    .Where(x => x.Item2 <= rootRandomValue)
+                    .Select(x => x.Item1)
+                    .ToList();
+
+                if (possibleRoots.Count != 0)
+                {
+                    var rootIndex = _random.Next(possibleRoots.Count);
+                    var root = possibleRoots[rootIndex];
+                    function.Root = root;
+                }
             }
-
-            var positionRandomValue = _random.Next(MAX_WEIGHT);
-
-            var possiblePositions = PositionWeights
-                .Where(x => x.Item2 <= rootRandomValue)
-                .Select(x => x.Item1)
-                .ToList();
-
-            if (possiblePositions.Count != 0)
+            
+            if (canAddPosition)
             {
-                var positionIndex = _random.Next(possiblePositions.Count);
-                var position = possiblePositions[positionIndex];
-                function.Position = position;
-            }
+                var positionRandomValue = _random.Next(MAX_WEIGHT);
+
+                var possiblePositions = PositionWeights
+                    .Where(x => x.Item2 <= positionRandomValue)
+                    .Select(x => x.Item1)
+                    .ToList();
+
+                if (possiblePositions.Count != 0)
+                {
+                    var positionIndex = _random.Next(possiblePositions.Count);
+                    var position = possiblePositions[positionIndex];
+                    function.Position = position;
+                }
+            }            
         }
 
         // Ta funkcja, z wykorzystaniem najlepiej dopasowanego symbolu, dorabia resztę informacji,
@@ -490,13 +500,13 @@ namespace Algorithm.New.Algorithm.Generators
                     tonation: tonation
                 );
             }
-            
+
             var possibleSymbols = NextSymbols[prevSymbol];
             var bestSymbol = GetBestFittingSymbol(possibleSymbols);
 
             var minor = MinorWeights[bestSymbol] == MINOR_DEPENDANT ?
                 tonation.Mode == Mode.Minor :
-                _random.Next(MAX_WEIGHT) <= MinorWeights[bestSymbol];            
+                _random.Next(MAX_WEIGHT) <= MinorWeights[bestSymbol];
 
             return new Function(
                 index: new Music.Index()
