@@ -363,6 +363,9 @@ namespace Algorithm.New.Algorithm.Generators
         /// <returns></returns>
         private static Function Next(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
+            // TODO:
+            // Naprawić, żeby dobre funkcje się generowały
+
             var result = GetBestFittingFunction(prev, metre, tonation, barIndex, functionIndex);
 
             AddAddedComponents(result);
