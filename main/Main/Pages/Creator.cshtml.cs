@@ -126,10 +126,30 @@ namespace Main.Pages
         {
             foreach (string question in Questions)
             {
-                var questionEmpty = string.IsNullOrWhiteSpace(question);                
+                var questionEmpty = string.IsNullOrWhiteSpace(question);
 
                 if (questionEmpty)
                     return false;
+
+                // Tu może polecieć JsonException i ArgumentException, jak jakieś inne to coś nie tak, ale lepiej tak się zabezpieczyć
+                // teoretycznie nie powinien, co potwierdzają testy, no ale znając życie, przegapiłem jakiś case...
+                try
+                {
+                    var questionParsed = Parser.ParseJsonToProblem(question);
+                    var functions = questionParsed.Functions;
+
+                    if (functions == null)
+                        return false;
+
+                    var functionsEmpty = functions.Count == 0;
+
+                    if (functionsEmpty)
+                        return false;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -150,7 +170,7 @@ namespace Main.Pages
 
         private string MistakesToHTML()
         {
-            var result = "";
+            var result = string.Empty;
             var taskId = 1;
 
             foreach (string question in Questions)
@@ -210,7 +230,7 @@ namespace Main.Pages
             var successResult = new { success = true, redirect = true, redirectUrl = Url.Page("Created") };            
             var loginResult = new { success = false, redirect = true, redirectUrl = Url.Page("Login") };
             var errorResult = new { success = false, redirect = true, redirectUrl = Url.Page("Error") };
-            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera błędne zadania." };
+            var invalidQuestionsResult = new { success = false, redirect = false, errorMessage = "Quiz zawiera puste zadania." };
 
             if (currentUser == null)
                 return new JsonResult(loginResult);
@@ -305,10 +325,6 @@ namespace Main.Pages
                     CreatorId = currentUser.Id,
                     IsCreated = true,
                     Code = await _repository.GenerateUniqueCodeAsync(),
-
-                    //TODO: TESTING PURPOSES ONLY, REMOVE THIS
-                    // To usuwamy to czy nie?
-                    Participants = [currentUser],
                 };
 
                 _repository.Add(quiz);
