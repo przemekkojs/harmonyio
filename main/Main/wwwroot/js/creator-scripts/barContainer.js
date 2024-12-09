@@ -38,7 +38,7 @@ export class BarContainer {
         this.container.className = "components-place";
         this.container.id = `components-place-${this.taskIndex}`;
 
-        this.addBarButton = document.createElement('input');
+        this.addBarButton = document.createElement('input'); 
         this.addBarButton.type = 'button';
         this.addBarButton.id = `add-bar-${this.taskIndex}`;
         this.addBarButton.className = "add-bar-button components-place";

@@ -26,8 +26,10 @@ przypadku niepowodzenia
             <div id="addUsersTipPanel"
                 class="d-none d-sm-flex bg-pattern-sm text-white d-flex flex-column text-center align-items-center justify-content-center p-3">
                 <span class="fw-bold fs-4 mb-1">Dodawanie</span>
-                <p>Możesz dodać do swojej grupy członków podając ich adresy email. Otrzymają oni wtedy
+                <p id="addParticipantsInfo">Możesz dodać do swojej grupy członków podając ich adresy email. Otrzymają oni wtedy
                     zaproszenia do grupy, a po zaakceptowaniu staną się jej częścią!</p>
+                <p id="addAdminsInfo">Możesz dodać do swojej grupy administratorów podając ich adresy email. Otrzymają oni wtedy
+                    zaproszenia do grupy, a po zaakceptowaniu będą mieli dostęp do tworzenia i oceniania quizów grupy.</p>
             </div>
 
             <div class="flex-grow-1 d-flex flex-column">
@@ -109,6 +111,8 @@ przypadku niepowodzenia
         addingAdmins = assignModalButton.getAttribute('data-adding-admins') === "true";
         addUsersPopup.querySelector('#addUsersTitle').innerText = addingAdmins ? "Dodaj adminów grupy" : "Dodaj uczestników grupy";
         addUsersPopup.querySelector('#newUsersTitle').innerText = addingAdmins ? "Nowi admini" : "Nowi uczestnicy";
+        document.getElementById("addParticipantsInfo").style.display = addingAdmins ? 'none' : 'block';
+        document.getElementById("addAdminsInfo").style.display = addingAdmins ? 'block' : 'none';
 
         clearEmailsList();
     });
