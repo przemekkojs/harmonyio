@@ -31,8 +31,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
                 if (index1 < index2)
                     index1 += 7;
 
-                var diff = index2 - index1;
-                var possibleIndexes = new List<int>() { -3, 4, 1, -6, -2, 5 };
+                var diff = index1 - index2;
+                var possibleIndexes = new List<int>() { 4, 6, 2 }; // 6 = 7 - 1
                 var possibleContains = possibleIndexes.Contains(diff);
 
                 return possibleContains;

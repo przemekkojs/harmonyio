@@ -51,8 +51,8 @@ namespace Algorithm.New
             new ValidRoot(),
             new AllComponentsSatisfied(),
             new DominantSeventhResolution(),
-            new DoubledThird(),
-            new DoubledFifth()
+            new Algorithm.Rules.Solution.DoubledThird(),
+            new Algorithm.Rules.Solution.DoubledFifth()
         ]);
 
         // Ustawienia dla sprawdzania zadania
@@ -65,6 +65,8 @@ namespace Algorithm.New
             new AddedVsPositionAndRoot(),
             new DeletedEqualsPosition(),
             new DeletedEqualsRoot(),
+            new Algorithm.Rules.Problem.DoubledThird(),
+            new Algorithm.Rules.Problem.DoubledFifth(),
             new EmptyBar(),
             new EmptyFunction(),
             new FunctionAfterSeventh(),

@@ -31,9 +31,19 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             if (position != null && root != null)
             {
                 var addedCount = added.Count;
+                var rootInAdded = added.Contains(root);
+                var positionInAdded = added.Contains(position);
 
-                if (addedCount > 1 && removed != null)
-                    return false;
+                if (addedCount == 1)
+                {
+                    if (rootInAdded || positionInAdded)
+                        return true;
+
+                    if (position.Equals(root))
+                        return false;
+                }
+                else if (addedCount == 2)
+                    return (positionInAdded && rootInAdded);
             }
 
             return true;

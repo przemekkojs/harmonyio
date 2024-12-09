@@ -121,15 +121,13 @@ namespace AlgorithmTests.New
             for (int index = 0; index < 10000; index++)
             {
                 var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
-                .Generate(barsCount, metre, tonation);
+                    .Generate(barsCount, metre, tonation);
 
                 var problem = new Problem(generation, metre, tonation);
                 var mistakes = ProblemChecker.CheckProblem(problem);
+                var mistakesCount = mistakes.Count;
 
-                if (mistakes.Count != 0)
-                    Assert.Fail();
-
-                Assert.True(mistakes.Count == 0, "This should be true");
+                Assert.True(mistakesCount == 0, $"{mistakesCount} mistakes in iteration {index}");
             }
         }
     }

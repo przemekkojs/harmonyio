@@ -277,13 +277,11 @@ namespace Algorithm.New.Music
                         {
                             if (IsMain)
                             {
-                                doubled.Add(Component.Root);
-                                doubled.Add(Component.Third);
-                                doubled.Add(Component.Fifth);
+                                throw new ArgumentException("Invalid function symbol.");
                             }
                             else
-                            {
-                                throw new ArgumentException("Invalid function symbol.");
+                            {                                
+                                doubled.Add(Component.Third);                                
                             }
                         }
                     }
@@ -350,8 +348,8 @@ namespace Algorithm.New.Music
                 else if (Added.Contains(Component.Sixth))
                 {
                     added.Add(Component.Sixth);
-                    added.Add(Component.Seventh);
                     doubled.Remove(Component.Fifth);
+                    doubled.Remove(Component.Root);
                 }
                 else
                 {
