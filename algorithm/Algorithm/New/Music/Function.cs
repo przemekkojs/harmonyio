@@ -249,6 +249,12 @@ namespace Algorithm.New.Music
             if (Added.Count > 2)
                 throw new ArgumentException("Cannot have more than 2 added components at once");
 
+            if (Removed != null)
+            {
+                if (!(Removed.Equals(Component.Root) || Removed.Equals(Component.Fifth)))
+                    throw new ArgumentException("Cannot remove other components that root or fifth.");
+            }
+
             if (Added.Contains(Component.Seventh) && Added.Contains(Component.Sixth))
             {
                 if (Minor)
@@ -300,11 +306,35 @@ namespace Algorithm.New.Music
                 if (Root.Equals(Position))
                 {
                     var componentToDouble = Root;
-                    toDouble = [componentToDouble];
-                }
-                else
-                {
 
+                    if (IsMain)
+                    {
+                        if (componentToDouble.Equals(Component.Third))
+                            throw new ArgumentException("Cannot have doubled thirds in main functions");
+                    }
+                    else
+                    {
+                        if (componentToDouble.Equals(Component.Fifth))
+                            throw new ArgumentException("Cannot have doubled fifths in not-main functions");
+                    }
+
+                    if (Added.Count == 1)
+                    {
+                        if (Added.Contains(componentToDouble))
+                        {
+                            if (Removed == null)
+                                throw new ArgumentException("Cannot have position and root equal, while having added components without any removed one.");
+                        }
+                        else
+                        {
+                            if (Removed == null)
+                                throw new ArgumentException("Cannot have position and root equal, while having added components without any removed one.");
+                        }
+                    }
+                    else if (Added.Count == 2)
+                        throw new ArgumentException("Cannot have same root and position when there are 2 added components");
+                    
+                    toDouble = [componentToDouble];
                 }
             }
 
