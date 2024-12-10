@@ -32,7 +32,7 @@ public class CreatedModel : PageModel
     public string? Emails { get; set; } = "";
 
     [BindProperty]
-    public string? GroupsIds { get; set; } = "";
+    public string? GroupsIds { get; set; } = ""; 
 
     public List<Quiz> Sketches { get; set; } = [];
     public List<Quiz> ReadyToGrade { get; set; } = [];
@@ -103,9 +103,9 @@ public class CreatedModel : PageModel
                 q.QuizResults.Any(qr => qr.Grade == null) ||
                 (q.State == QuizState.Closed && QuizIdsToUsersCompleted[q.Id].Item1 != QuizIdsToUsersCompleted[q.Id].Item2)
             ).ToList();
-        Opened = published.Where(q => q.State == QuizState.Open).ToList();
+        Opened = published.Where(q => q.State == QuizState.Open).Except(ReadyToGrade).ToList();
         NotOpened = published.Where(q => q.State == QuizState.NotStarted).ToList();
-        Closed = published.Where(q => q.State == QuizState.Closed).ToList();
+        Closed = published.Where(q => q.State == QuizState.Closed).Except(ReadyToGrade).ToList();
 
 
         Groups = user.AdminInGroups
