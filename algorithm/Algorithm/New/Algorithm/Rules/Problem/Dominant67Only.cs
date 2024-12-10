@@ -25,7 +25,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             if (added.Count != 2)
                 return true;
 
-            if (!(added.Contains(Component.Sixth) && added.Contains(Component.Seventh))
+            if (!(added.Contains(Component.Sixth) && added.Contains(Component.Seventh)))
                 return true;
 
             if (symbol != Symbol.D)
