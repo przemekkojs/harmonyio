@@ -22,11 +22,14 @@ namespace Main.Utils
                 {
                     var code = codes[0];
 
-                    if (code == 999)
+                    switch(code)
                     {
-                        var desc = Mistake.MistakeCodeToDescription(code);
-                        return desc;
-                    }
+                        case Mistake.NO_SOLUTION_CODE:
+                        case Mistake.GRADING_MISTAKE_CODE:
+                            return Mistake.MistakeCodeToDescription(code);
+                        default:
+                            break;
+                    };
                 }
             }
 
@@ -64,7 +67,7 @@ namespace Main.Utils
                 .ToList();
 
             int lastBar = 0;
-            var result = "";
+            var result = string.Empty;
 
             foreach (var key in sortedKeys)
             {
@@ -85,18 +88,18 @@ namespace Main.Utils
                     if (lastBar > 0)
                         result += $"</details>";
 
-                    result += $"<details><summary>Takt {bar}</summary>";
+                    result += $"<details><summary>Takt <b>{bar}</b></summary>";
                 }
 
                 lastBar = bar;
 
                 if (function1 == function2)
-                    result += $"<details><summary>Funkcja na miarę {function1}</summary>";
+                    result += $"<details><summary>Funkcja na miarę <b>{function1}</b></summary>";
                 else
                 {
                     result += (bar == bar2 ?
-                        $"<details><summary>Funkcje na miary {function1}, {function2}</summary>" :
-                        $"<details><summary>Funkcje na miary {function1}, {function2} w takcie {bar2})</summary>");
+                        $"<details><summary>Funkcje na miary <b>{function1}</b>, <b>{function2}</b></summary>" :
+                        $"<details><summary>Funkcje na miary <b>{function1}</b>, <b>{function2}</b> w takcie <b>{bar2}</b>)</summary>");
                 }
 
                 foreach (var o in tmp[key])

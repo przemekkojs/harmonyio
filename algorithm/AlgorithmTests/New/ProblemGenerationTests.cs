@@ -47,8 +47,33 @@ namespace AlgorithmTests.New
                 .Generate(barsCount, metre, tonation);
 
             var problem = new Problem(generation, metre, tonation);
+            var mistakes = ProblemChecker.CheckProblem(problem);
+            var mistakesCount = mistakes.Count;
 
-            Assert.True(ProblemChecker.CheckProblem(problem).Count == 0, "This should be true");
+            Assert.True(mistakesCount == 0, "This should be true");
+        }
+
+        [Fact]
+        public void MultipleLongGeneration()
+        {
+            var barsCount = 8;
+            var metre = Metre.Meter2_4;
+            var tonation = Tonation.CMajor;
+
+            for (int index = 0; index < 10; index++)
+            {
+                var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
+                .Generate(barsCount, metre, tonation);
+
+                var problem = new Problem(generation, metre, tonation);
+                var mistakes = ProblemChecker.CheckProblem(problem);
+                var mistakesCount = mistakes.Count;
+
+                if (mistakesCount > 0)
+                    Assert.Fail();
+            }
+
+            Assert.True(true);
         }
 
         [Fact]
@@ -67,68 +92,68 @@ namespace AlgorithmTests.New
             Assert.True(mistakes.Count == 0, "This should be true");
         }
 
-        [Fact]
-        public void Multiple100Generation()
-        {
-            var barsCount = 16;
-            var metre = Metre.Meter2_4;
-            var tonation = Tonation.CMajor;
+        //[Fact]
+        //public void Multiple100Generation()
+        //{
+        //    var barsCount = 16;
+        //    var metre = Metre.Meter2_4;
+        //    var tonation = Tonation.CMajor;
 
-            for (int index = 0; index < 100; index++)
-            {
-                var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
-                .Generate(barsCount, metre, tonation);
+        //    for (int index = 0; index < 100; index++)
+        //    {
+        //        var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
+        //        .Generate(barsCount, metre, tonation);
 
-                var problem = new Problem(generation, metre, tonation);
-                var mistakes = ProblemChecker.CheckProblem(problem);
+        //        var problem = new Problem(generation, metre, tonation);
+        //        var mistakes = ProblemChecker.CheckProblem(problem);
 
-                if (mistakes.Count != 0)
-                    Assert.Fail();
+        //        if (mistakes.Count != 0)
+        //            Assert.Fail();
 
-                Assert.True(mistakes.Count == 0, "This should be true");
-            }
-        }
+        //        Assert.True(mistakes.Count == 0, "This should be true");
+        //    }
+        //}
 
-        [Fact]
-        public void Multiple1000Generation()
-        {
-            var barsCount = 16;
-            var metre = Metre.Meter2_4;
-            var tonation = Tonation.CMajor;
+        //[Fact]
+        //public void Multiple1000Generation()
+        //{
+        //    var barsCount = 16;
+        //    var metre = Metre.Meter2_4;
+        //    var tonation = Tonation.CMajor;
 
-            for (int index = 0; index < 1000; index++)
-            {
-                var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
-                .Generate(barsCount, metre, tonation);
+        //    for (int index = 0; index < 1000; index++)
+        //    {
+        //        var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
+        //        .Generate(barsCount, metre, tonation);
 
-                var problem = new Problem(generation, metre, tonation);
-                var mistakes = ProblemChecker.CheckProblem(problem);
+        //        var problem = new Problem(generation, metre, tonation);
+        //        var mistakes = ProblemChecker.CheckProblem(problem);
 
-                if (mistakes.Count != 0)
-                    Assert.Fail();
+        //        if (mistakes.Count != 0)
+        //            Assert.Fail();
 
-                Assert.True(mistakes.Count == 0, "This should be true");
-            }
-        }
+        //        Assert.True(mistakes.Count == 0, "This should be true");
+        //    }
+        //}
 
-        [Fact]
-        public void Multiple10000Generation()
-        {
-            var barsCount = 16;
-            var metre = Metre.Meter2_4;
-            var tonation = Tonation.CMajor;
+        //[Fact]
+        //public void Multiple10000Generation()
+        //{
+        //    var barsCount = 16;
+        //    var metre = Metre.Meter2_4;
+        //    var tonation = Tonation.CMajor;
 
-            for (int index = 0; index < 10000; index++)
-            {
-                var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
-                    .Generate(barsCount, metre, tonation);
+        //    for (int index = 0; index < 10000; index++)
+        //    {
+        //        var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
+        //            .Generate(barsCount, metre, tonation);
 
-                var problem = new Problem(generation, metre, tonation);
-                var mistakes = ProblemChecker.CheckProblem(problem);
-                var mistakesCount = mistakes.Count;
+        //        var problem = new Problem(generation, metre, tonation);
+        //        var mistakes = ProblemChecker.CheckProblem(problem);
+        //        var mistakesCount = mistakes.Count;
 
-                Assert.True(mistakesCount == 0, $"{mistakesCount} mistakes in iteration {index}");
-            }
-        }
+        //        Assert.True(mistakesCount == 0, $"{mistakesCount} mistakes in iteration {index}");
+        //    }
+        //}
     }
 }

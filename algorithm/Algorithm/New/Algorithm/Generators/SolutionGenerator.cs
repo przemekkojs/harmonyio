@@ -118,7 +118,7 @@ namespace Algorithm.New.Algorithm.Generators
         /// <param name="problem">Problem, na bazie którego będzie generowane rozwiązanie</param>
         /// <param name="tolerance">Tolerancja dla błędów. Domyślnie = 0</param>
         /// <returns>Wygenerowane rozwiązanie</returns>
-        public static Solution GenerateLinear(Problem problem, int tolerance = 0)
+        public static (Solution, int) GenerateLinear(Problem problem, int tolerance = 0)
         {
             List<Stack> stacks = [];
             List<Function> functionsTmp = [];
@@ -131,11 +131,6 @@ namespace Algorithm.New.Algorithm.Generators
 
             UInt128 maxIterations = 1;
             UInt128 currentIteration = 0;
-
-            // DEBUG ONLY
-            Dictionary<int, int> mistakeIds = [];
-            List<Mistake.Solution.Mistake> lastCheckResult = [];
-            // END DEBUG ONLY
 
             foreach (var function in functions)
             {
@@ -178,18 +173,14 @@ namespace Algorithm.New.Algorithm.Generators
                 var mapping = mappings[currentFunction];
                 var possibleNotes = new List<(string, Component)>();
 
-                #region debug
-                //TRY CATCH DEBUG ONLY
                 try
                 {
                     possibleNotes = mapping[usedNotesIndex];
                 }
-                catch (ArgumentOutOfRangeException)
+                catch (Exception)
                 {
                     break;
                 }
-                // END DEBUG ONLY
-                #endregion
 
                 currentIteration++;
                 usedNotesIndexes[currentIndex]++;
@@ -234,23 +225,6 @@ namespace Algorithm.New.Algorithm.Generators
                     checkResult.Sum(x => x.Quantity) :
                     0;
 
-                #region debug
-                // DEBUG ONLY
-                lastCheckResult = checkResult;
-
-                foreach (var mistake in checkResult)
-                {
-                    var code = mistake.MistakeCode;
-
-                    if (!mistakeIds.ContainsKey(code))
-                        mistakeIds[code] = 0;
-
-                    mistakeIds[code]++;
-                }
-
-                // END DEBUG ONLY
-                #endregion
-
                 if (mistakesCount <= tolerance)
                 {
                     stacks.Add(currentStack);
@@ -263,8 +237,18 @@ namespace Algorithm.New.Algorithm.Generators
                     {
                         usedNotesIndexes[currentIndex] = 0;
                         currentIndex--;
-                        stacks.RemoveAt(currentIndex);
-                        functionsTmp.RemoveAt(currentIndex);
+
+                        if (currentIndex >= 0)
+                        {
+                            stacks.RemoveAt(currentIndex);
+                            functionsTmp.RemoveAt(currentIndex);
+                        }
+                        else
+                        {
+                            currentIndex = 0;
+                            tolerance++;
+                            // return new Solution(problem, []);
+                        }                            
                     }
                 }
             }
@@ -272,7 +256,7 @@ namespace Algorithm.New.Algorithm.Generators
             var result = new Solution(problem, stacks);
             Rhytmize(result);
 
-            return result;
+            return (result, tolerance);
         }
 
         private static List<List<(string, Component)>> ValidatedResult(Function function, List<List<(string, Component)>> result)

@@ -23,7 +23,7 @@ namespace MidiPlayback
             {
                 var chordInfo = CreateChord(stack);
                 var chord = chordInfo.Item1;
-                var duration = chordInfo.Item2;
+                var duration = stack.Index.Duration * SIXTEENTH_NOTE_DURATION;
 
                 AddChord(trackChunk, chord, duration, currentTime);
                 currentTime = SPACE_BETWEEN_CHORDS; // Możliwe, że zwykłe = trzeba dać...
@@ -53,6 +53,14 @@ namespace MidiPlayback
                 var midiNote = NoteToMidiNote(note);
                 result.Add(midiNote);
             }
+
+            if (result.Count > 0)
+            {
+                while (result.Count < 4)
+                {
+                    result.Add(result[0]);
+                }
+            }            
 
             return (result, duration * SIXTEENTH_NOTE_DURATION);
         }

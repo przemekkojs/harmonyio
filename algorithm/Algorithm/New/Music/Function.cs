@@ -78,8 +78,6 @@ namespace Algorithm.New.Music
 
             foreach (var added in function.Added)
             {
-                // TODO: Co z '<' w np. 7< czy 6<...
-
                 var toAdd = added != null ?
                     Component.ComponentTypeToString[added.Type] :
                     string.Empty;
@@ -191,7 +189,6 @@ namespace Algorithm.New.Music
 
             foreach (var addedString in parsedFunction.Added)
             {
-                // TODO: Co z '<', '>', ...
                 var toAdd = Component.GetByString(addedString);
 
                 if (toAdd != null)
@@ -220,7 +217,6 @@ namespace Algorithm.New.Music
             DeductPossibleComponents();
         }
 
-        // TODO: Params....
         public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
             bool isInsertion = false, InsertionType insertionType = InsertionType.None,
             Component? root = null, Component? position = null, Component? removed = null,
@@ -247,167 +243,180 @@ namespace Algorithm.New.Music
 
         public void DeductPossibleComponents()
         {
-            List<Component> doubled = [];
-            List<Component> added = [];
+            if (!IsMain && Added.Contains(Component.Sixth))
+                throw new ArgumentException("Cannot add sixth to non-main function.");
 
-            DeductRootAndPosition(doubled);
-            DeductAdded(added, doubled);
-            CreatePossibleComponents(added, doubled);
-            ValidatePossibleComponents();
-        }
+            if (Added.Count > 2)
+                throw new ArgumentException("Cannot have more than 2 added components at once");
 
-        private void DeductRootAndPosition(List<Component> doubled)
-        {
-            if (Root != null)
+            if (Removed != null)
             {
-                if (Root.Equals(Component.Root) || Root.Equals(Component.Fifth))
-                {
-                    doubled.Add(Component.Root);
-                    doubled.Add(Component.Fifth);
-                }
-                else if (Root.Equals(Component.Third))
-                {
-                    if (Position != null)
-                    {
-                        if (Position.Equals(Component.Root))
-                            doubled.Add(Component.Root);
-                        else if (Position.Equals(Component.Fifth))
-                            doubled.Add(Component.Fifth);
-                        else if (Position.Equals(Component.Third))
-                        {
-                            if (IsMain)
-                            {
-                                throw new ArgumentException("Invalid function symbol.");
-                            }
-                            else
-                            {                                
-                                doubled.Add(Component.Third);                                
-                            }
-                        }
-                    }
-                }
+                if (!(Removed.Equals(Component.Root) || Removed.Equals(Component.Fifth)))
+                    throw new ArgumentException("Cannot remove other components that root or fifth.");
             }
-            else
+
+            if (Added.Contains(Component.Seventh) && Added.Contains(Component.Sixth))
             {
-                if (IsMain)
-                {
-                    doubled.Add(Component.Root);
-                    doubled.Add(Component.Fifth);
-                }
-                else
-                {
-                    doubled.Add(Component.Root);
-                    doubled.Add(Component.Third);
-                    doubled.Add(Component.Fifth);
-                }
+                if (Minor)
+                    throw new ArgumentException("Cannot create 7 add6 minor function.");
+
+                if (Symbol != Symbol.D)
+                    throw new ArgumentException("Cannot create 7 add6 function other than Dominant.");
+
+                PossibleComponents = [[Component.Root, Component.Third, Component.Sixth, Component.Seventh]];
             }
-        }
 
-        private void DeductAdded(List<Component> added, List<Component> doubled)
-        {
-            if (Added.Count != 0)
+            if (Added.Contains(Component.Ninth))
+                Added.Add(Component.Seventh);
+
+            // Bazowo zawsze będzie 1, 3, 5
+            var template = new List<Component>()
             {
-                if (Added.Contains(Component.Seventh))
-                {
-                    if (Removed != null)
-                    {
-                        if (Removed.Equals(Component.Root))
-                        {
-                            doubled.Remove(Component.Root);
-                            doubled.Remove(Component.Fifth);
-                        }
-                        else if (Removed.Equals(Component.Fifth))
-                        {
-                            doubled.Remove(Component.Fifth);
-                        }
+                Component.Root,
+                Component.Third,
+                Component.Fifth
+            };            
 
-                        doubled.Add(Component.Seventh);
+            // Bazowo w głównych podwajamy (1 albo 5), w pobocznych (1 albo 3)
+            List<Component> toDouble = IsMain?
+                [Component.Root, Component.Fifth] :
+                [Component.Root, Component.Third];
+
+            if (Root != null && Position != null)
+            {
+                if (Root.Equals(Component.Ninth))
+                    throw new ArgumentException("Cannot have fifth as root");
+
+                // Nie można usunąć tego, co jest w pozycji / oparciu
+                if (Root.Equals(Removed) || Position.Equals(Removed))
+                    throw new ArgumentException("Cannot create function like that");
+
+                if (Root.Equals(Component.Sixth) || Root.Equals(Component.Seventh))
+                {
+                    if (!Added.Contains(Root))
+                        throw new ArgumentException("Cannot have non-added component as root");
+                }
+
+                if (Position.Equals(Component.Sixth) || Position.Equals(Component.Seventh) || Position.Equals(Component.Ninth))
+                {
+                    if (!Added.Contains(Position))
+                        throw new ArgumentException("Cannot have non-added component as position");
+                }
+
+                if (Root.Equals(Position))
+                {
+                    var componentToDouble = Root;
+
+                    if (IsMain)
+                    {
+                        if (componentToDouble.Equals(Component.Third))
+                            throw new ArgumentException("Cannot have doubled thirds in main functions");
                     }
                     else
                     {
-                        added.Add(Component.Seventh);
+                        if (componentToDouble.Equals(Component.Fifth))
+                            throw new ArgumentException("Cannot have doubled fifths in not-main functions");
                     }
-                }
-                else if (Added.Contains(Component.Ninth))
-                {
-                    if (Removed != null)
+
+                    if (Added.Count == 1)
                     {
-                        if (Removed.Equals(Component.Root))
+                        if (Added.Contains(componentToDouble))
                         {
-                            doubled.Remove(Component.Root);
+                            if (Removed == null)
+                                throw new ArgumentException("Cannot have position and root equal, while having added components without any removed one.");
                         }
-                        else if (Removed.Equals(Component.Fifth))
+                        else
                         {
-                            doubled.Remove(Component.Fifth);
+                            if (Removed == null)
+                                throw new ArgumentException("Cannot have position and root equal, while having added components without any removed one.");
                         }
-
-                        added.Add(Component.Seventh);
-                        added.Add(Component.Ninth);
                     }
-                }
-                else if (Added.Contains(Component.Sixth))
-                {
-                    added.Add(Component.Sixth);
-                    doubled.Remove(Component.Fifth);
-                    doubled.Remove(Component.Root);
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid symbol.");
+                    else if (Added.Count == 2)
+                        throw new ArgumentException("Cannot have same root and position when there are 2 added components");
+                    
+                    toDouble = [componentToDouble];
                 }
             }
-        }
 
-        private void CreatePossibleComponents(List<Component> added, List<Component> doubled)
-        {
-            List<Component> innerListTemplate = [];
-            innerListTemplate.Add(Component.Third);
+            if (Added.Contains(Component.Seventh))
+                toDouble.Remove(Component.Third);
 
-            foreach (var possibleAdded in added)
+            // Dodajemy od razu wszystkie składniki dodane
+            foreach (var added in Added)
             {
-                innerListTemplate.Add(possibleAdded);
-                PossibleComponents.Add(innerListTemplate);
+                template.Add(added);
+
+                if (added.Equals(Component.Seventh))
+                    toDouble.Add(added);
             }
 
-            int missing = Constants.NOTES_IN_FUNCTION - innerListTemplate.Count;
-
-            if (missing <= doubled.Count)
+            // Sprawdzamy, czy czegoś nie możemy usunąć
+            if (Removed != null)
             {
-                var perms = Permutations.CreatePermutations(doubled, missing);
-
-                foreach (var perm in perms)
+                if (Added.Count == 0)
                 {
-                    var copy = new List<Component>(innerListTemplate);
-                    copy.AddRange(perm);
-                    PossibleComponents.Add(copy);
+                    PossibleComponents = IsMain ?
+                    [
+                        [
+                            Component.Root,
+                            Component.Root,
+                            Component.Root,
+                            Component.Third
+                        ]
+                    ] :
+                    [
+                        [
+                            Component.Root,
+                            Component.Root,
+                            Component.Root,
+                            Component.Third
+                        ],
+                        [
+                            Component.Root,
+                            Component.Root,
+                            Component.Third,
+                            Component.Third
+                        ]
+                    ];
+                    return;
+                }
+
+                if (Removed.Equals(Component.Root))
+                {
+                    template.Remove(Component.Root);
+                    toDouble.Remove(Component.Root);
+                }
+                else // tutaj tylko kwinta będzie możliwa
+                {
+                    template.Remove(Component.Fifth);
+                    toDouble.Remove(Component.Fifth);
+                }
+            }            
+            
+            if (Added.Count == 2)
+            {
+                if (Removed == null)
+                    template.Remove(Component.Fifth);
+
+                toDouble.Clear();
+            }
+
+            var actual = new List<List<Component>>();
+
+            if (template.Count != Constants.NOTES_IN_FUNCTION)
+            {
+                foreach (var doubled in toDouble)
+                {
+                    var copy = new List<Component>(template) { doubled };
+                    actual.Add(copy);
                 }
             }
             else
-            {
-                var perms = Permutations.CreatePermutations(doubled, doubled.Count);
+                actual.Add(template);
 
-                foreach (var perm in perms)
-                {
-                    var copy = new List<Component>(innerListTemplate);
-                    copy.AddRange(perm);
-                    PossibleComponents.Add(copy);
-                }
+            PossibleComponents = actual;
 
-                // Only one will always remain, so another set of permutations can be added
-                List<List<Component>> substitution = [];
-
-                foreach (var componentList in PossibleComponents)
-                {
-                    foreach (var possibleDoubled in doubled)
-                    {
-                        var copy = new List<Component>(componentList) { possibleDoubled };
-                        substitution.Add(copy);
-                    }
-                }
-
-                PossibleComponents.Clear();
-                PossibleComponents.AddRange(substitution);
-            }
+            ValidatePossibleComponents();
         }
 
         private void ValidatePossibleComponents()
@@ -415,6 +424,14 @@ namespace Algorithm.New.Music
             // zawsze mogą być tylko 4. Wszelkie mniej lub więcej trzeba wywalić.
             PossibleComponents
                 .RemoveAll(x => x.Count != Constants.NOTES_IN_FUNCTION);
+
+            PossibleComponents = Drop(PossibleComponents);
+        }
+
+        private static List<List<Component>> Drop(List<List<Component>> list)
+        {
+            var set = new HashSet<List<Component>>(list, new ListComparer<Component>());
+            return [.. set];
         }
 
         public override bool Equals(object? obj)
@@ -443,5 +460,32 @@ namespace Algorithm.New.Music
 
         private static string ComponentListToString(List<Component> components) => "[" + string.Join(", ", components.ConvertAll(item => $"{item}")) + "]";
         public override string ToString() => $"{(Minor ? "m" : "")}{Symbol}^{Position}/{Root}+{ComponentListToString(Added)}+";
+    }
+
+    // Custom equality comparer for lists
+    internal class ListComparer<T> : IEqualityComparer<List<T>>
+    {
+        public bool Equals(List<T>? x, List<T>? y)
+        {
+            if (x == null || y == null)
+                return false;
+
+            if (x.Count != y.Count)
+                return false;
+
+            return x.SequenceEqual(y);
+        }
+
+        public int GetHashCode(List<T>? obj)
+        {
+            if (obj == null)
+                return 0;
+
+            // Combine the hash codes of the elements for a unique hash code
+            unchecked
+            {
+                return obj.Aggregate(17, (hash, item) => hash * 31 + item!.GetHashCode());
+            }
+        }
     }
 }

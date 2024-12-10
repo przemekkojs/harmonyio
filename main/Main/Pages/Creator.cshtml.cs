@@ -172,30 +172,37 @@ namespace Main.Pages
         private string MistakesToHTML()
         {
             var result = string.Empty;
-            var taskId = 1;
+            var taskId = 0;
 
             foreach (string question in Questions)
             {
+                taskId++;
                 var mistakes = GetProblemMistakes(question);
-                var mistakeCount = 1;
+
+                if (mistakes.Count == 0)
+                    continue;
+
+                var mistakeIndex = 1;
 
                 result += $"<details open><summary>Zadanie {taskId}</summary><p>";
 
                 foreach (var mistake in mistakes)
                 {
                     var mistakeExists = mistake.Rule != null;
+                    var emptyBarRuleTriggered = mistake.Rule?.Id == 204;
 
-                    var desc = mistakeExists ?
-                        $"<span title=\"{mistake.Rule?.Description}\" style=\"cursor: pointer;\"><i>{mistake.Rule?.Name}</i></span> w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>" :
-                        $"Błąd w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>";
+                    var desc =
+                        emptyBarRuleTriggered ?
+                            "<span style=\"cursor: pointer;\"><i>Pusty takt</i></span>" :
+                            mistakeExists ?
+                            $"<span title=\"{mistake.Rule?.Description}\" style=\"cursor: pointer;\"><i>{mistake.Rule?.Name}</i></span> w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>" :
+                            $"Błąd w takcie <b>{mistake.BarIndex + 1}</b>, funkcja <b>{mistake.FunctionIndex + 1}</b>";
 
-                    result += $"{mistakeCount}. {desc}<br/>";
-                    mistakeCount++;
+                    result += $"{mistakeIndex}. {desc}<br/>";
+                    mistakeIndex++;
                 }
 
                 result += "</p></details>";
-
-                taskId++;
             }
 
             return result;
@@ -216,10 +223,17 @@ namespace Main.Pages
                 tonationList.First(x => x.Mode == Mode.Major) :
                 tonationList.First(x => x.Mode == Mode.Minor);
 
-            var problem = new Problem(generatedFunctions, metre, tonation);
-            var parsedProblem = Parser.ParseProblemFunctionsToString(problem);
+            try
+            {
+                var problem = new Problem(generatedFunctions, metre, tonation);
+                var parsedProblem = Parser.ParseProblemFunctionsToString(problem);
 
-            return new JsonResult(parsedProblem);
+                return new JsonResult(parsedProblem);
+            }
+            catch (Exception)
+            {
+                return new JsonResult("");
+            }
         }
 
         public async Task<IActionResult> OnPostSave()

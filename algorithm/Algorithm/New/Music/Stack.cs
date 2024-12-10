@@ -27,22 +27,22 @@ namespace Algorithm.New.Music
 
         public Stack(Index index, string soprano, string alto, string tenore, string bass)
         {
-            if (soprano != string.Empty)
+            if (soprano != null && soprano != string.Empty)
                 Soprano = new Note(soprano, 4);
             else
                 Soprano = null;
 
-            if (alto != string.Empty)
+            if (alto != null && alto != string.Empty)
                 Alto = new Note(alto, 4);
             else
                 Alto = null;
 
-            if (tenore != string.Empty)
+            if (tenore != null && tenore != string.Empty)
                 Tenore = new Note(tenore, 3);
             else
                 Tenore = null;
 
-            if (bass != string.Empty)
+            if (bass != null && bass != string.Empty)
                 Bass = new Note(bass, 3);
             else
                 Bass = null;

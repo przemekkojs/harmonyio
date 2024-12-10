@@ -32,7 +32,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
                     index2 -= 7;
 
                 var diff = index2 - index1;
-                var possibleIndexes = new List<int>() { 4 };
+                var possibleIndexes = new List<int>() { 4, -3 };
                 var possibleContains = possibleIndexes.Contains(diff);
 
                 return possibleContains;

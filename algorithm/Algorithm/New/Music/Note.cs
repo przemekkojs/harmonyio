@@ -42,12 +42,19 @@
 
         private void DeductAccidental()
         {
-            var accidentalString = Name[1..];
+            if (Name == null)
+                Accidental = string.Empty;
+            else if (Name.Length < 2)
+                Accidental = string.Empty;
+            else
+            {
+                var accidentalString = Name[1..];
 
-            if (!PossibleAccidentals.Contains(accidentalString))
-                throw new ArgumentException("Invalid note parameters");
+                if (!PossibleAccidentals.Contains(accidentalString))
+                    throw new ArgumentException("Invalid note parameters");
 
-            Accidental = accidentalString;
+                Accidental = accidentalString;
+            }            
         }
 
         public override bool Equals(object? obj)

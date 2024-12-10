@@ -4,7 +4,7 @@
     {
         public override int Quantity => 1;
 
-        public EmptyTaskMistake(int code = 999)
+        public EmptyTaskMistake(int code = Mistake.NO_SOLUTION_CODE)
         {
             MistakeCode = code;
             GenerateDescription();

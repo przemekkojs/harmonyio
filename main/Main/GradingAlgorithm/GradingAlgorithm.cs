@@ -3,6 +3,7 @@ using Algorithm.New.Algorithm;
 using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Algorithm.Mistake.Solution;
 using Algorithm.New.Music;
+using System.Reflection;
 
 namespace Main.GradingAlgorithm
 {
@@ -16,52 +17,62 @@ namespace Main.GradingAlgorithm
             if (questionEmpty || answerEmpty)
                 return (0, maxPoints, []);
 
-            var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
-                .ParseJsonToSolutionParseResult(answer);
-
-            var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser
-                .ParseJsonToProblem(question);
-
-            var solution = new Solution(problem, solutionParseResult.Stacks);
-            var settings = Constants.Settings;
-
-            PopulateEmptyStacks(problem, solution);
-
-            var checkResult = SolutionChecker
-                .CheckSolution(solution, settings);
-
-            var maxMistakesCount = GetMaxMistakesCount(problem, settings);
-            var opinion = GenerateOpinion(checkResult);
-            var mistakesCount = checkResult?.Sum(x => x.Quantity) * 2 ?? 0;
-
-            var algorithmPoints = maxMistakesCount - mistakesCount > 0 ?
-                maxMistakesCount - mistakesCount :
-                0;
-
-            var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
-            var points = Convert.ToInt32(pointsPercent * maxPoints / 100);
-
-            var emptyCount = 0;
-            var stacksCount = solutionParseResult.Stacks.Count;
-
-            foreach (var stack in solutionParseResult.Stacks)
+            try
             {
-                var innerCount = 0;
+                var solutionParseResult = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
+                    .ParseJsonToSolutionParseResult(answer);
 
-                foreach (var note in stack.Notes)
+                var problem = Algorithm.New.Algorithm.Parsers.ProblemParser.Parser
+                    .ParseJsonToProblem(question);
+
+                var solution = new Solution(problem, solutionParseResult.Stacks);
+                var settings = Constants.Settings;
+
+                PopulateEmptyStacks(problem, solution);
+
+                var checkResult = SolutionChecker
+                    .CheckSolution(solution, settings);
+
+                var maxMistakesCount = GetMaxMistakesCount(problem, settings);
+                var opinion = GenerateOpinion(checkResult);
+                var mistakesCount = checkResult?.Sum(x => x.Quantity) * 2 ?? 0;
+                var realPoints = maxMistakesCount - mistakesCount;
+
+                var algorithmPoints = Math.Max(realPoints, 0);
+                var pointsPercent = DivAsPercentage(algorithmPoints, maxMistakesCount);
+                var points = Convert.ToInt32(pointsPercent * maxPoints / 100);
+
+                var emptyCount = 0;
+                var stacksCount = solutionParseResult.Stacks.Count;
+
+                foreach (var stack in solutionParseResult.Stacks)
                 {
-                    if (note == null)
-                        innerCount++;
+                    var innerCount = 0;
+
+                    foreach (var note in stack.Notes)
+                    {
+                        if (note == null)
+                            innerCount++;
+                    }
+
+                    if (innerCount == 4)
+                        emptyCount++;
                 }
 
-                if (innerCount == 4)
-                    emptyCount++;
+                if (emptyCount == stacksCount)
+                    return (0, maxPoints, opinion);
+
+                return (points, maxPoints, opinion);
             }
+            catch (Exception)
+            {
+                var gradingMistake = new Dictionary<(int, (int, int, int)), List<int>>()
+                {
+                    { (0, (0, 0, 0)), [1000] }
+                };
 
-            if (emptyCount == stacksCount)
-                return (0, maxPoints, opinion);
-
-            return (points, maxPoints, opinion);
+                return (0, maxPoints, gradingMistake);
+            }
         }
 
         private static float DivAsPercentage(int numerator, int denominator)
