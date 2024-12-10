@@ -659,7 +659,7 @@ namespace AlgorithmTests.New
         }
 
         [Fact]
-        public void TiiiSameRootAndPositionFifthGood()
+        public void TiiiSameRootAndPositionThirdGood()
         {
             var testSet = new List<List<Component>>()
             {
@@ -673,6 +673,79 @@ namespace AlgorithmTests.New
                 index: new Index(),
                 position: Component.Third,
                 root: Component.Third
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void TDifferentRootAndPositionGood()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Root, Component.Third, Component.Fifth },
+                new () { Component.Root, Component.Fifth, Component.Third, Component.Fifth }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                position: Component.Root,
+                root: Component.Fifth
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void TiiiDifferentRootAndPositionGood()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Root, Component.Third, Component.Fifth },
+                new () { Component.Root, Component.Third, Component.Third, Component.Fifth }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                position: Component.Root,
+                root: Component.Fifth
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void TSameRootAndPositionSeventhGood()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Third, Component.Seventh, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Seventh],
+                position: Component.Seventh,
+                root: Component.Seventh,
+                removed: Component.Fifth
             );
 
             var functionPossibleComponents = function.PossibleComponents;

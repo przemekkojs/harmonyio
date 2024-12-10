@@ -424,6 +424,14 @@ namespace Algorithm.New.Music
             // zawsze mogą być tylko 4. Wszelkie mniej lub więcej trzeba wywalić.
             PossibleComponents
                 .RemoveAll(x => x.Count != Constants.NOTES_IN_FUNCTION);
+
+            PossibleComponents = Drop(PossibleComponents);
+        }
+
+        private static List<List<Component>> Drop(List<List<Component>> list)
+        {
+            var set = new HashSet<List<Component>>(list, new ListComparer<Component>());
+            return [.. set];
         }
 
         public override bool Equals(object? obj)
@@ -452,5 +460,32 @@ namespace Algorithm.New.Music
 
         private static string ComponentListToString(List<Component> components) => "[" + string.Join(", ", components.ConvertAll(item => $"{item}")) + "]";
         public override string ToString() => $"{(Minor ? "m" : "")}{Symbol}^{Position}/{Root}+{ComponentListToString(Added)}+";
+    }
+
+    // Custom equality comparer for lists
+    internal class ListComparer<T> : IEqualityComparer<List<T>>
+    {
+        public bool Equals(List<T>? x, List<T>? y)
+        {
+            if (x == null || y == null)
+                return false;
+
+            if (x.Count != y.Count)
+                return false;
+
+            return x.SequenceEqual(y);
+        }
+
+        public int GetHashCode(List<T>? obj)
+        {
+            if (obj == null)
+                return 0;
+
+            // Combine the hash codes of the elements for a unique hash code
+            unchecked
+            {
+                return obj.Aggregate(17, (hash, item) => hash * 31 + item!.GetHashCode());
+            }
+        }
     }
 }
