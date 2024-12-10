@@ -55,8 +55,6 @@ namespace Algorithm.New
             new Algorithm.Rules.Solution.DoubledFifth()
         ]);
 
-        // Ustawienia dla sprawdzania zadania
-        // TODO: Klasa - chyba nie ma jednak potrzeby
         public static readonly List<Algorithm.Rules.Problem.Rule> ProblemSettings =
         [
 
@@ -72,7 +70,8 @@ namespace Algorithm.New
             new FunctionAfterSeventh(),
             new FunctionAfterSixth(),
             new RootEqualsPosition(),
-            new SubdominantAfterDominant()
+            new SubdominantAfterDominant(),
+            new Dominant67Only()
         ];
 
         public static readonly Dictionary<(float, string), (string, int)> NoteMappings = new()
