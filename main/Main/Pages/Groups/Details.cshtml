@@ -227,52 +227,62 @@
             <div class="w-50 h-100 rounded bg-white shadow-sm border border-1 d-flex flex-column me-3"
                 style="min-width: 200px">
                 <div class="bg-light rounded-top d-flex flex-row fw-bold fs-5 p-2">
-                    <span class="mx-auto">Aktywne</span>
+                    <span class="mx-auto">Aktywne</span> 
                 </div>
 
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @{
-                        var first = true;
-                    }
-                    @foreach (var quiz in Model.ActiveQuizzes)
+                    @if (Model.ActiveQuizzes.Count() > 0)
                     {
-                        <div
-                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "" : "mt-2")">
-                            <div class="flex-grow-1 d-flex flex-column">
-                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
+                        var isFirst = true;
+                        
+                        @foreach (var quiz in Model.ActiveQuizzes)
+                        {
+                            <div
+                                class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(isFirst ? "" : "mt-2")">
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">Zamknięcie:</span>
-                                        @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
-                                    </span>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="far fa-clock icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Zamknięcie:</span>
+                                            @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="fas fa-music icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Zadania:</span>
+                                        <span>@(quiz.Exercises.Count)</span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Twórca:</span>
+                                        <span>@(quiz.Creator.FullName)</span>
+                                    </div>
                                 </div>
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="fas fa-music icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Zadania:</span>
-                                    <span>@(quiz.Exercises.Count)</span>
-                                </div>
-                                <div class="d-flex flex-row align-items-center">
-                                    <i class="fas fa-user icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Twórca:</span>
-                                    <span>@(quiz.Creator.FullName)</span>
-                                </div>
+
+                                @if (Model.IsParticipant && !Model.UserGradedQuizIds.Contains(quiz.Id))
+                                {
+                                    <div class="d-flex flex-column h-100">
+                                        <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">
+                                            @(Model.UserSolvedQuizIds.Contains(quiz.Id)
+                                                ? "Edytuj" : "Rozwiąż")
+                                        </a>
+                                    </div>
+                                }
                             </div>
-
-                            @if (Model.IsParticipant && !Model.UserGradedQuizIds.Contains(quiz.Id))
-                            {
-                                <div class="d-flex flex-column h-100">
-                                    <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">
-                                        @(Model.UserSolvedQuizIds.Contains(quiz.Id)
-                                            ? "Edytuj" : "Rozwiąż")
-                                    </a>
-                                </div>
-                            }
+                            isFirst = false;
+                        }
+                    } else 
+                    {
+                        <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                            <i class="fas fa-pencil mb-4 icon-giant"></i>
+                            <div class="text-center fw-semibold" style="max-width: 400px;">
+                                W tej grupie nie ma aktualnie żadnych aktywnych quizów.
+                            </div>
                         </div>
-                        first = false;
                     }
                 </div>
             </div>
@@ -286,36 +296,46 @@
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @{
-                        first = true;
-                    }
-                    @foreach (var quiz in Model.FutureQuizzes)
+                    @if (Model.FutureQuizzes.Count() > 0)
                     {
-                        <div
-                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "" : "mt-2")">
-                            <div class="flex-grow-1 d-flex flex-column">
-                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
+                        var isFirst = true;
+                        
+                        @foreach (var quiz in Model.FutureQuizzes)
+                        {
+                            <div
+                                class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(isFirst ? "" : "mt-2")">
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">Otwarcie:</span>
-                                        @quiz.OpenDate.ToString("dd.MM.yyyy, HH:mm")
-                                    </span>
-                                </div>
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="fas fa-music icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Zadania:</span>
-                                    <span>@(quiz.Exercises.Count())</span>
-                                </div>
-                                <div class="d-flex flex-row align-items-center">
-                                    <i class="fas fa-user icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Twórca:</span>
-                                    <span>@(quiz.Creator.FullName)</span>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="far fa-clock icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">Otwarcie:</span>
+                                            @quiz.OpenDate.ToString("dd.MM.yyyy, HH:mm")
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="fas fa-music icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Zadania:</span>
+                                        <span>@(quiz.Exercises.Count())</span>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Twórca:</span>
+                                        <span>@(quiz.Creator.FullName)</span>
+                                    </div>
                                 </div>
                             </div>
+                            isFirst = false;
+                        }
+                    } else 
+                    {
+                        <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                            <i class="fas fa-calendar-days mb-4 icon-giant"></i>
+                            <div class="text-center fw-semibold" style="max-width: 400px;">
+                                W tej grupie nie ma aktualnie żadnych zaplanowanych quizów.
+                            </div>
                         </div>
-                        first = false;
                     }
                 </div>
             </div>
@@ -331,66 +351,76 @@
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @{
-                        first = true;
-                    }
-                    @foreach (var quiz in Model.ToGradeQuizzes)
+                    @if (Model.ToGradeQuizzes.Count() > 0)
                     {
-                        <div
-                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "" : "mt-2")">
-                            <div class="flex-grow-1 d-flex flex-column">
-                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
+                        var isFirst = true;
+                        
+                        @foreach (var quiz in Model.ToGradeQuizzes)
+                        {
+                            <div
+                                class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(isFirst ? "" : "mt-2")">
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">@(quiz.State == QuizState.Open ? "Zamknięcie:" :
-                                        "Zamknięto:")</span>
-                                        @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
-                                    </span>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="far fa-clock icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">@(quiz.State == QuizState.Open ? "Zamknięcie:" :
+                                            "Zamknięto:")</span>
+                                            @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
+                                        </span>
+                                    </div>
+                                    @if (Model.IsAdmin)
+                                    {
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-user-group icon-sm me-2"></i>
+                                            <span class="fw-bold me-1">Wypełniono:</span>
+                                            @quiz.Exercises.First().ExerciseSolutions.Count / @quiz.Participants.Count
+                                        </div>
+                                    }
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Twórca:</span>
+                                        <span>@(quiz.Creator.FullName)</span>
+                                    </div>
                                 </div>
+
                                 @if (Model.IsAdmin)
                                 {
-                                    <div class="d-flex flex-row align-items-center mb-2">
-                                        <i class="fas fa-user-group icon-sm me-2"></i>
-                                        <span class="fw-bold me-1">Wypełniono:</span>
-                                        @quiz.Exercises.First().ExerciseSolutions.Count / @quiz.Participants.Count
-                                    </div>
-                                }
-                                <div class="d-flex flex-row align-items-center">
-                                    <i class="fas fa-user icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Twórca:</span>
-                                    <span>@(quiz.Creator.FullName)</span>
-                                </div>
-                            </div>
-
-                            @if (Model.IsAdmin)
-                            {
-                                <div class="d-flex flex-column h-100">
-                                    <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
-                                        class="btn btn-primary ms-auto mt-auto">Oceń</a>
-                                </div>
-                            }
-                            else
-                            { // dont change structure of this if, it must be like this
-                                @if (quiz.State == QuizState.Open)
-                                {
                                     <div class="d-flex flex-column h-100">
-                                        <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">
-                                            Edytuj
-                                        </a>
+                                        <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
+                                            class="btn btn-primary ms-auto mt-auto">Oceń</a>
                                     </div>
                                 }
                                 else
-                                {
-                                    <div class="d-flex flex-column h-100">
-                                        <a asp-page="/Browse" asp-route-id="@(quiz.Id)"
-                                            class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
-                                    </div>
+                                { // dont change structure of this if, it must be like this
+                                    @if (quiz.State == QuizState.Open)
+                                    {
+                                        <div class="d-flex flex-column h-100">
+                                            <a asp-page="/Solve" asp-route-code="@(quiz.Code)" class="btn btn-primary ms-auto mt-auto">
+                                                Edytuj
+                                            </a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex flex-column h-100">
+                                            <a asp-page="/Browse" asp-route-id="@(quiz.Id)"
+                                                class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
+                                        </div>
+                                    }
                                 }
-                            }
+                            </div>
+                            isFirst = false;
+                        }
+                    } else 
+                    {
+                        <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                            <i class="fas fa-pen-to-square mb-4 icon-giant"></i>
+                            <div class="text-center fw-semibold" style="max-width: 400px;">
+                                W tej grupie żadne quizy nie oczekują na ocenę.
+                            </div>
                         </div>
-                        first = false;
                     }
                 </div>
             </div>
@@ -404,58 +434,68 @@
                 <hr class="m-0 border border-1" />
 
                 <div class="flex-grow-1 d-flex flex-column p-2 overflow-auto">
-                    @{
-                        first = true;
-                    }
-                    @foreach (var quiz in Model.GradedQuizzes)
+                    @if (Model.GradedQuizzes.Count() > 0)
                     {
-                        <div
-                            class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(first ? "" : "mt-2")">
-                            <div class="flex-grow-1 d-flex flex-column">
-                                <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
+                        var isFirst = true;
+                        
+                        @foreach (var quiz in Model.GradedQuizzes)
+                        {
+                            <div
+                                class="border border-1 rounded p-0 flex-shrink-0 d-flex flex-row overflow-hidden p-3 @(isFirst ? "" : "mt-2")">
+                                <div class="flex-grow-1 d-flex flex-column">
+                                    <div class="fw-bold fs-5 mb-3">@(quiz.Name)</div>
 
-                                <div class="d-flex flex-row align-items-center mb-2">
-                                    <i class="far fa-clock icon-sm me-2"></i>
-                                    <span class="text-truncate">
-                                        <span class="fw-bold">@(quiz.State == QuizState.Open ? "Zamknięcie:" :
-                                        "Zamknięto:")</span>
-                                        @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
-                                    </span>
+                                    <div class="d-flex flex-row align-items-center mb-2">
+                                        <i class="far fa-clock icon-sm me-2"></i>
+                                        <span class="text-truncate">
+                                            <span class="fw-bold">@(quiz.State == QuizState.Open ? "Zamknięcie:" :
+                                            "Zamknięto:")</span>
+                                            @quiz.CloseDate.ToString("dd.MM.yyyy, HH:mm")
+                                        </span>
+                                    </div>
+                                    @if (Model.IsAdmin)
+                                    {
+                                        <div class="d-flex flex-row align-items-center mb-2">
+                                            <i class="fas fa-user-group icon-sm me-2"></i>
+                                            <span class="fw-bold me-1">Wypełniono:</span>
+                                            @quiz.Exercises.First().ExerciseSolutions.Count / @quiz.Participants.Count
+                                        </div>
+                                    }
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="fas fa-user icon-sm me-2"></i>
+                                        <span class="fw-bold me-1">Twórca:</span>
+                                        <span>@(quiz.Creator.FullName)</span>
+                                    </div>
                                 </div>
+
                                 @if (Model.IsAdmin)
                                 {
-                                    <div class="d-flex flex-row align-items-center mb-2">
-                                        <i class="fas fa-user-group icon-sm me-2"></i>
-                                        <span class="fw-bold me-1">Wypełniono:</span>
-                                        @quiz.Exercises.First().ExerciseSolutions.Count / @quiz.Participants.Count
+                                    <div class="d-flex flex-column h-100">
+                                        <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
+                                            class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
                                     </div>
                                 }
-                                <div class="d-flex flex-row align-items-center">
-                                    <i class="fas fa-user icon-sm me-2"></i>
-                                    <span class="fw-bold me-1">Twórca:</span>
-                                    <span>@(quiz.Creator.FullName)</span>
-                                </div>
+                                else
+                                {
+                                    <div class="d-flex flex-column h-100">
+                                        <div class="fw-bold ms-auto fs-5">Ocena: @(((Grade)(quiz.QuizResults.First(qr => qr.UserId
+                                    ==
+                                    Model.CurrentUserId).Grade)!).AsString())</div>
+                                        <a asp-page="/Browse" asp-route-id="@(quiz.Id)"
+                                            class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
+                                    </div>
+                                }
                             </div>
-
-                            @if (Model.IsAdmin)
-                            {
-                                <div class="d-flex flex-column h-100">
-                                    <a asp-page="/Grade" asp-route-id="@(quiz.Id)"
-                                        class="btn btn-primary ms-auto mt-auto">Edytuj oceny</a>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="d-flex flex-column h-100">
-                                    <div class="fw-bold ms-auto fs-5">Ocena: @(((Grade)(quiz.QuizResults.First(qr => qr.UserId
-                                ==
-                                Model.CurrentUserId).Grade)!).AsString())</div>
-                                    <a asp-page="/Browse" asp-route-id="@(quiz.Id)"
-                                        class="btn btn-primary ms-auto mt-auto">Przeglądaj</a>
-                                </div>
-                            }
+                            isFirst = false;
+                        }
+                    } else 
+                    {
+                        <div class="w-100 h-100 d-flex flex-column border border rounded align-items-center justify-content-center p-3">
+                            <i class="fas fa-pen-to-square  mb-4 icon-giant"></i>
+                            <div class="text-center fw-semibold" style="max-width: 400px;">
+                                W tej grupie nie ma jeszcze żadnych ocenionych quizów.
+                            </div>
                         </div>
-                        first = false;
                     }
                 </div>
             </div>

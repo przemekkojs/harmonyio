@@ -54,6 +54,8 @@ namespace Main.Pages
 
         [BindProperty]
         public string? Code { get; set; }
+        [BindProperty]
+        public bool Force {get; set;}
 
         public bool BrowseOnly { get; set; } = false;
 
@@ -249,8 +251,6 @@ namespace Main.Pages
                     CreatorId = currentUser.Id,
                     Code = await _repository.GenerateUniqueCodeAsync()
                 };
-
-                _repository.Add(quiz);
             }
             else
             {
@@ -263,12 +263,6 @@ namespace Main.Pages
                     return new JsonResult(errorResult);
 
                 quiz.Name = QuizName;
-                _repository.Update(quiz);
-
-                foreach (var exercise in quiz.Exercises)
-                {
-                    _repository.Delete(exercise);
-                }
             }
 
             if (!ValidateEmptyExercises())
@@ -276,28 +270,44 @@ namespace Main.Pages
 
             quiz.IsValid = ValidateExcersises();
 
-            if (EditedQuizId == null)
-                await _repository.SaveChangesAsync();
-
-            var quizId = quiz.Id;
-
-            for (int index = 0; index < Questions.Count; index++)
+            if (quiz.IsValid || Force)
             {
-                var question = Questions[index];
-                var points = Convert.ToInt32(Maxes[index]);
-
-                _repository.Add(new Exercise
+                if (EditedQuizId == null)
                 {
-                    Question = question,
-                    QuizId = quizId,
-                    MaxPoints = points
-                });
+                    _repository.Add(quiz);
+                    await _repository.SaveChangesAsync();
+
+                    var quizId = quiz.Id;
+                    for (int index = 0; index < Questions.Count; index++)
+                    {
+                        var question = Questions[index];
+                        var points = Convert.ToInt32(Maxes[index]);
+
+                        _repository.Add(new Exercise
+                        {
+                            Question = question,
+                            QuizId = quizId,
+                            MaxPoints = points
+                        });
+                    }
+                    await _repository.SaveChangesAsync();            
+                } 
+                else 
+                {
+                    _repository.Update(quiz);
+                    foreach (var exercise in quiz.Exercises)
+                    {
+                        _repository.Delete(exercise);
+                    }
+                    await _repository.SaveChangesAsync();
+                }
             }
 
-            await _repository.SaveChangesAsync();
+//          await _repository.SaveChangesAsync();
 
             if (quiz.IsValid)
                 return new JsonResult(successResult);
+            }
             else
             {
                 var mistakesHTML = MistakesToHTML();
