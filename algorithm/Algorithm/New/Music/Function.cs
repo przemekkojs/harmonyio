@@ -273,6 +273,9 @@ namespace Algorithm.New.Music
                 [Component.Root, Component.Fifth] :
                 [Component.Root, Component.Third];
 
+            if (Added.Contains(Component.Seventh))
+                toDouble.Remove(Component.Third);
+
             // Dodajemy od razu wszystkie składniki dodane
             foreach (var added in Added)
             {
@@ -316,10 +319,12 @@ namespace Algorithm.New.Music
                 if (Removed.Equals(Component.Root))
                 {
                     template.Remove(Component.Root);
+                    toDouble.Remove(Component.Root);
                 }
                 else // tutaj tylko kwinta będzie możliwa
                 {
                     template.Remove(Component.Fifth);
+                    toDouble.Remove(Component.Fifth);
                 }
             }            
             

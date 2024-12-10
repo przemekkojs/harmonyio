@@ -49,8 +49,8 @@ namespace AlgorithmTests.New
             var testTrue = TestSetsEqual(test1, test2);
             var testFalse = TestSetsEqual(test1, test3);
 
-            Assert.True(testTrue);
-            Assert.False(testFalse);
+            Assert.True(testTrue, "This must pass for all other tests to work");
+            Assert.False(testFalse, "This must pass for all other tests to work");
         }
 
         [Fact]
@@ -478,6 +478,54 @@ namespace AlgorithmTests.New
                 tonation: tonation,
                 index: new Index(),
                 added: [Component.Ninth],
+                removed: Component.Fifth
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void T7No5Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Root, Component.Third, Component.Seventh },
+                new () { Component.Root, Component.Seventh, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Seventh],
+                removed: Component.Fifth
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void Tiii7No5Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Root, Component.Third, Component.Seventh },
+                new () { Component.Root, Component.Seventh, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Seventh],
                 removed: Component.Fifth
             );
 
