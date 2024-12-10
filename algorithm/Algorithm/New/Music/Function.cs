@@ -214,7 +214,7 @@ namespace Algorithm.New.Music
             IsInsertion = false;
             Tonation = Tonation.CMajor;
 
-            DeductPossibleComponents2();
+            DeductPossibleComponents();
         }
 
         public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
@@ -238,10 +238,10 @@ namespace Algorithm.New.Music
 
             PossibleComponents = [];
 
-            DeductPossibleComponents2();
+            DeductPossibleComponents();
         }
 
-        private void DeductPossibleComponents2()
+        public void DeductPossibleComponents()
         {
             if (!IsMain && Added.Contains(Component.Sixth))
                 throw new ArgumentException("Cannot add sixth to non-main function.");

@@ -32,7 +32,7 @@ namespace Main.Pages
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
 
-        public List<string> AlgorithmSolutions { get; private set; } = [];
+        public List<(string, int)> AlgorithmSolutions { get; private set; } = [];
         public string Opinion { get; private set; } = "Brak opinii";
         public string GradeString { get; set; } = string.Empty;
         public Quiz Quiz { get; set; } = null!;
@@ -57,7 +57,7 @@ namespace Main.Pages
                 Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
                     .ParseJsonToSolutionParseResult(task) :
                 Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
-                    .ParseJsonToSolutionParseResult(AlgorithmSolutions[solutionIndex]);
+                    .ParseJsonToSolutionParseResult(AlgorithmSolutions[solutionIndex].Item1);
 
             var stacks = solutionParseResult.Stacks;
             var result = FileCreator.Create(stacks);
@@ -161,14 +161,14 @@ namespace Main.Pages
 
                     var solution = SolutionGenerator.GenerateLinear(problem);
                     var result = Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
-                        .ParseSolutionToJson(solution);
+                        .ParseSolutionToJson(solution.Item1);
 
-                    AlgorithmSolutions.Add(result);
+                    AlgorithmSolutions.Add((result, solution.Item2));
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     var result = string.Empty;
-                    AlgorithmSolutions.Add(result);
+                    AlgorithmSolutions.Add((result, -1));
                     continue;
                 }
             }

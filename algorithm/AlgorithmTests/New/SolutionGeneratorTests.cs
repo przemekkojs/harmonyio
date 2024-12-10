@@ -15,9 +15,10 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_4_FUNCTIONS);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            Assert.True(solution.Stacks.Count == 4);
+            Assert.True(solution.Item1.Stacks.Count == 4);
+            Assert.True(solution.Item2 == 0);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            var mistakes = SolutionChecker.CheckSolution(solution.Item1, Constants.Settings);
 
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
@@ -29,9 +30,10 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_8_FUNCTIONS);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            Assert.True(solution.Stacks.Count == 8);
+            Assert.True(solution.Item1.Stacks.Count == 8);
+            Assert.True(solution.Item2 == 0);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            var mistakes = SolutionChecker.CheckSolution(solution.Item1, Constants.Settings);
 
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
@@ -43,9 +45,10 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_8_FUNCTIONS_2);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            Assert.True(solution.Stacks.Count == 8);
+            Assert.True(solution.Item1.Stacks.Count == 8);
+            Assert.True(solution.Item2 == 0);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            var mistakes = SolutionChecker.CheckSolution(solution.Item1, Constants.Settings);
 
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
@@ -57,9 +60,10 @@ namespace AlgorithmTests.New
             var problem = Parser.ParseJsonToProblem(Constants.PROBLEM_STRING_16_FUNCTIONS);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            Assert.True(solution.Stacks.Count == 16);
+            Assert.True(solution.Item1.Stacks.Count == 16);
+            Assert.True(solution.Item2 == 0);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            var mistakes = SolutionChecker.CheckSolution(solution.Item1, Constants.Settings);
 
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);
@@ -179,9 +183,10 @@ namespace AlgorithmTests.New
             var problem = new Problem(functions, metre, tonation);
             var solution = SolutionGenerator.GenerateLinear(problem);
 
-            Assert.True(solution.Stacks.Count > 0);
+            Assert.True(solution.Item1.Stacks.Count > 0);
+            Assert.True(solution.Item2 == 0);
 
-            var mistakes = SolutionChecker.CheckSolution(solution, Constants.Settings);
+            var mistakes = SolutionChecker.CheckSolution(solution.Item1, Constants.Settings);
 
             Assert.True(mistakes != null);
             Assert.True(mistakes.Count == 0);

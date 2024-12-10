@@ -17,6 +17,10 @@ namespace Algorithm.New.Algorithm.Rules.Problem
                 return false;
 
             var function = functions[0];
+
+            if (function == null)
+                return true;
+
             var added = function.Added;
             var addedCount = added.Count;
 
@@ -29,7 +33,6 @@ namespace Algorithm.New.Algorithm.Rules.Problem
                 return false;
 
             var containsSixth = added.Contains(Component.Sixth);
-            var containsSeventh = added.Contains(Component.Seventh);
             var containsNinth = added.Contains(Component.Ninth);
 
             if (containsSixth)

@@ -231,7 +231,9 @@ namespace Algorithm.New.Algorithm.Generators
                 tonationList.Where(x => x.Mode == Mode.Minor).First() :
                 tonationList.Where(x => x.Mode == Mode.Major).First();
 
-            return Generate(bars, metre, tonation);
+            var generated = Generate(bars, metre, tonation);
+
+            return generated;
         }
 
         // W tej funkcji powinna się też znaleźć obsługa wtrąceń, kiedy już dodatkowe funkcjonalności będą
@@ -249,6 +251,8 @@ namespace Algorithm.New.Algorithm.Generators
             Function? current = null;
 
             var maxFunctionsInBar = metre.Count + 1;
+            var maxIterationsCount = bars * 4 * 48;
+            var currentIteration = 0;
 
             for (int barIndex = 0; barIndex < bars; barIndex++)
             {
@@ -268,14 +272,19 @@ namespace Algorithm.New.Algorithm.Generators
                     }
 
                     // Dopóki są błędy w takim czymś, to nie można raczej tak zrobić
-                    var mistakesCount = 0;
+                    int mistakesCount;
 
                     do
                     {
+                        currentIteration++;
                         next = Next(current, metre, tonation, barIndex, functionIndex);
                         var tmpProblem = new Problem([current, next], metre, tonation);
                         var mistakes = ProblemChecker.CheckProblem(tmpProblem);
                         mistakesCount = mistakes.Count;
+
+                        if (currentIteration >= maxIterationsCount)
+                            return [];
+
                     } while (mistakesCount != 0);
 
                     current = next;
@@ -301,16 +310,28 @@ namespace Algorithm.New.Algorithm.Generators
             // Logika dodawania dobrego zakończenia zadania
             if (lastFunction.Symbol != Symbol.T)
             {
+                // Dla pewności, że nic się nie popsuje
+                if (lastFunction.Added.Count > 0)
+                {
+                    lastFunction.Added = [];
+                    lastFunction.Position = null;
+                    lastFunction.Root = null;
+                    lastFunction.Removed = null;
+
+                    lastFunction.DeductPossibleComponents();
+                }                    
+
                 var lastBar = lastFunction.Index.Bar;
+                var lastSymbol = lastFunction.Symbol;
 
                 // Jeżeli nie ma dominanty, to trzeba z tym coś zrobić
-                if (!lastFunction.Symbol.ToString()[0].Equals("D"))
+                if (lastSymbol != Symbol.D)
                 {
                     var dominant = new Function(
                         new Music.Index()
                         {
                             Bar = lastBar,
-                            Position = 0,
+                            Position = lastFunction.Index.Position + 1,
                             Duration = 1
                         },
                         Symbol.D,
@@ -322,11 +343,11 @@ namespace Algorithm.New.Algorithm.Generators
                         new Music.Index()
                         {
                             Bar = lastBar,
-                            Position = 0,
-                            Duration = metre.Value
+                            Position = lastFunction.Index.Position + 2,
+                            Duration = 1
                         },
                         Symbol.T,
-                        false,
+                        tonation.Mode == Mode.Minor,
                         tonation
                     );
 
@@ -338,16 +359,21 @@ namespace Algorithm.New.Algorithm.Generators
                         new Music.Index()
                         {
                             Bar = lastBar,
-                            Position = metre.Value,
-                            Duration = metre.Value
+                            Position = lastFunction.Index.Position + 1,
+                            Duration = 1
                         },
                         Symbol.T,
-                        false,
+                        tonation.Mode == Mode.Minor,
                         tonation
                     );
 
                     result.Add(tonic);
                 }
+            }
+            else
+            {
+                lastFunction.Minor = tonation.Mode == Mode.Minor;
+                lastFunction.Added = [];
             }
         }
 
@@ -362,13 +388,24 @@ namespace Algorithm.New.Algorithm.Generators
         /// <returns></returns>
         private static Function Next(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
-            // TODO:
-            // Naprawić, żeby dobre funkcje się generowały
-
             var result = GetBestFittingFunction(prev, metre, tonation, barIndex, functionIndex);
 
             AddAddedComponents(result);
             AddRootAndPosition(result);
+
+            try
+            {
+                result.DeductPossibleComponents();
+            }
+            catch (Exception) // Trochę na chama, ale działa XD
+            {
+                result.Added = [];
+                result.Position = null;
+                result.Root = null;
+                result.Removed = null;
+
+                result.DeductPossibleComponents();
+            }
 
             return result;
         }
@@ -386,7 +423,9 @@ namespace Algorithm.New.Algorithm.Generators
 
             var possibleToAdd = toAddWeights
                 .Where(x => x.Item1 > randomValue)
-                .Select(x => x.Item2);
+                .Select(x => x.Item2)
+                .Distinct()
+                .ToList();
 
             foreach (var possible in possibleToAdd)
             {

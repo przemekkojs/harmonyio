@@ -221,10 +221,17 @@ namespace Main.Pages
                 tonationList.First(x => x.Mode == Mode.Major) :
                 tonationList.First(x => x.Mode == Mode.Minor);
 
-            var problem = new Problem(generatedFunctions, metre, tonation);
-            var parsedProblem = Parser.ParseProblemFunctionsToString(problem);
+            try
+            {
+                var problem = new Problem(generatedFunctions, metre, tonation);
+                var parsedProblem = Parser.ParseProblemFunctionsToString(problem);
 
-            return new JsonResult(parsedProblem);
+                return new JsonResult(parsedProblem);
+            }
+            catch (Exception)
+            {
+                return new JsonResult("");
+            }
         }
 
         public async Task<IActionResult> OnPostSave()

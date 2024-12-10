@@ -47,8 +47,33 @@ namespace AlgorithmTests.New
                 .Generate(barsCount, metre, tonation);
 
             var problem = new Problem(generation, metre, tonation);
+            var mistakes = ProblemChecker.CheckProblem(problem);
+            var mistakesCount = mistakes.Count;
 
-            Assert.True(ProblemChecker.CheckProblem(problem).Count == 0, "This should be true");
+            Assert.True(mistakesCount == 0, "This should be true");
+        }
+
+        [Fact]
+        public void MultipleLongGeneration()
+        {
+            var barsCount = 8;
+            var metre = Metre.Meter2_4;
+            var tonation = Tonation.CMajor;
+
+            for (int index = 0; index < 10; index++)
+            {
+                var generation = Algorithm.New.Algorithm.Generators.ProblemGenerator
+                .Generate(barsCount, metre, tonation);
+
+                var problem = new Problem(generation, metre, tonation);
+                var mistakes = ProblemChecker.CheckProblem(problem);
+                var mistakesCount = mistakes.Count;
+
+                if (mistakesCount > 0)
+                    Assert.Fail();
+            }
+
+            Assert.True(true);
         }
 
         [Fact]
