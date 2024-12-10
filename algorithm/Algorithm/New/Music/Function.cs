@@ -261,35 +261,18 @@ namespace Algorithm.New.Music
                 Component.Fifth
             };
 
-            List<Component> toDouble = IsMain?
-                [Component.Root, Component.Fifth] :
-                [Component.Root, Component.Third];
-
             foreach (var added in Added)
             {
                 possibleComponents.Add(added);
-
-                if (added.Equals(Component.Seventh))
-                    toDouble.Add(added);
             }
 
             if (Removed != null)
             {
                 if (Removed.Equals(Component.Root))
                 {
-                    possibleComponents.Remove(Component.Root);
+
                 }
-                else // tutaj tylko kwinta będzie możliwa
-                {
-                    possibleComponents.Remove(Component.Fifth);
-                }
-            }
-
-            // Jak mamy > 4 składniki, to najpierw wywalamy kwintę
-            if (possibleComponents.Count > Constants.NOTES_IN_FUNCTION)
-                possibleComponents.Remove(Component.Fifth);
-
-
+            }            
         }
 
         private void DeductRootAndPosition(List<Component> doubled)
