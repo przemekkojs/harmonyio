@@ -10,6 +10,57 @@ namespace AlgorithmTests.New
     public class RulesTest
     {
         [Fact]
+        public void AllComponentsSatisfiedTest()
+        {
+            var settings = new Settings([new AllComponentsSatisfied()]);
+            var tonation = Tonation.CMajor;
+            var metre = Metre.Meter2_4;
+
+            var stack1 = new Stack(new Algorithm.New.Music.Index()
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
+                ["C", "F", null, null]
+            );
+
+            var stack2 = new Stack(new Algorithm.New.Music.Index()
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
+                ["C", "C", "C", "C"]
+            );
+
+            var function = new Function(new Algorithm.New.Music.Index()
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
+                Symbol.S,
+            true,
+            tonation
+            );
+
+            var problem = new Problem([function], metre, tonation);
+            var solution1 = new Solution(problem, [stack1]);
+            var mistakes1 = SolutionChecker.CheckSolution(solution1, settings);
+
+            Assert.True(mistakes1 != null);
+            Assert.True(mistakes1.Count == 2); // 2, bo 2 nut brakuje
+
+            var solution2 = new Solution(problem, [stack2]);
+            var mistakes2 = SolutionChecker.CheckSolution(solution2, settings);
+
+            Assert.True(mistakes2 != null);
+            Assert.True(mistakes2.Count == 1);
+            Assert.True(mistakes2[0].MistakeCode == settings.ActiveRules[0].Id);
+        }
+
+        [Fact]
         public void UniqueIdsTest()
         {
             var ids = Constants.Settings.ActiveRules
