@@ -4,15 +4,18 @@
     ViewData["Title"] = "Harmony.io - Dołącz do quizu";
 }
 
+
 <div class="d-flex flex-column justify-content-center align-items-center mx-auto p-4" style="min-height: 100%;">
     <div class="bg-white shadow rounded d-flex flex-column py-3" style="max-width: 500px; width: 100%;">
 
-        @if (Model.Quiz.State != Enumerations.QuizState.Closed){
+        @if (Model.Quiz.State != Enumerations.QuizState.Closed)
+        {
             <h2 class="text-center fw-bold px-3">Dołączono do quizu!</h2>
 
             <i class="fas fa-user-graduate my-4 w-100 text-center icon-giant"></i>
 
-            <p class="px-3">Udało ci się pomyślnie dołączyć do quizu <span class="fw-bold">"@Model.Quiz.Name"</span>! Został on dodany do twoich przypisanych quizów.</p>
+            <p class="px-3">Udało ci się pomyślnie dołączyć do quizu <span class="fw-bold">"@Model.Quiz.Name"</span>! Został
+                on dodany do twoich przypisanych quizów.</p>
 
             <div class="d-flex flex-column gap-2 my-3 px-3 mx-auto" style="max-width: 100%;">
                 <div class="d-flex flex-row w-100">
@@ -39,19 +42,22 @@
                 </div>
             </div>
 
-            <hr/>
+            <hr />
 
             <div class="d-flex flex-row justify-content-center align-items-center px-3 modal-footer gap-2">
                 <a asp-page="Assigned" class="btn btn-secondary btn-std-width">Powrót</a>
-                <a asp-page="Solve" asp-route-code="@Model.Quiz.Code" class="btn btn-primary btn-std-width @(Model.Quiz.State == Enumerations.QuizState.Open ? "" : "d-none")">Rozwiąż</a>
+                <a asp-page="Solve" asp-route-code="@Model.Quiz.Code"
+                    class="btn btn-primary btn-std-width @(Model.Quiz.State == Enumerations.QuizState.Open ? "" : "d-none")">Rozwiąż</a>
             </div>
-        } else 
+        }
+        else
         {
             <h2 class="text-center fw-bold px-3">Termin quizu minął!</h2>
             <i class="fas fa-hourglass-half my-4 w-100 text-center icon-giant"></i>
-            <p class="px-3 m-0">Niestety, nie udało się dołączyć do quizu <span class="fw-bold">"@Model.Quiz.Name"</span>, gdyż czas na jego wykonanie już minął.</p>
-            
-            <hr/>
+            <p class="px-3 m-0">Niestety, nie udało się dołączyć do quizu <span class="fw-bold">"@Model.Quiz.Name"</span>,
+                gdyż czas na jego wykonanie już minął.</p>
+
+            <hr />
 
             <a asp-page="Index" class="btn btn-secondary btn-std-width mx-auto">Powrót</a>
         }
@@ -67,7 +73,7 @@
 
     const timer = document.getElementById('timer');
 
-    if (isOpen){
+    if (isOpen) {
         document.getElementById('opens-in').classList.add('d-none');
         document.getElementById('closes-in').classList.remove('d-none');
     } else {

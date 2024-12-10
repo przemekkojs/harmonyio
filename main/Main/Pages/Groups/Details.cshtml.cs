@@ -259,17 +259,6 @@ namespace Main.Pages
                 .Select(e => e.Trim())
                 .ToHashSet();
 
-            // var foundUsers = await _repository.GetAllAsync<ApplicationUser>(
-            //     u => u.Where(u => u.Email != null && emails.Contains(u.Email))
-            // );
-
-            // HashSet<string> wrongEmails = new HashSet<string>();
-
-            // var usersByEmail = foundUsers.ToDictionary(u => u.Email!, u => u);
-            // var notFoundMails = emails.Except(usersByEmail.Keys.Select(e => e));
-
-            // wrongEmails.AddRange(notFoundMails);
-
             var (wrongEmails, foundUsers) = await _repository.GetAllUsersByEmailAsync(emails);
 
             // check if users are already added to group
@@ -293,7 +282,7 @@ namespace Main.Pages
 
             wrongEmails.AddRange(requestSentEmails);
 
-            if (wrongEmails.Count() != 0)
+            if (wrongEmails.Count != 0)
             {
                 return new JsonResult(new { wrongEmails = wrongEmails.ToList() });
             }

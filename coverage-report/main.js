@@ -242,17 +242,17 @@ var assemblies = [
       { "name": "Algorithm.New.Algorithm.Parsers.SolutionParser.Parser", "rp": "Algorithm_Parser.3.html", "cl": 83, "ucl": 56, "cal": 139, "tl": 197, "cb": 29, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Parsers.SolutionParser.SolutionParseResult", "rp": "Algorithm_SolutionParseResult.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 18, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Problem", "rp": "Algorithm_Problem.html", "cl": 33, "ucl": 7, "cal": 40, "tl": 61, "cb": 12, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedComponents", "rp": "Algorithm_AddedComponents.html", "cl": 22, "ucl": 4, "cal": 26, "tl": 44, "cb": 9, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedSixthValidation", "rp": "Algorithm_AddedSixthValidation.html", "cl": 16, "ucl": 2, "cal": 18, "tl": 34, "cb": 4, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedVsPositionAndRoot", "rp": "Algorithm_AddedVsPositionAndRoot.html", "cl": 0, "ucl": 40, "cal": 40, "tl": 56, "cb": 0, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.DeletedEqualsPosition", "rp": "Algorithm_DeletedEqualsPosition.html", "cl": 12, "ucl": 4, "cal": 16, "tl": 31, "cb": 3, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.DeletedEqualsRoot", "rp": "Algorithm_DeletedEqualsRoot.html", "cl": 12, "ucl": 4, "cal": 16, "tl": 31, "cb": 3, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.EmptyBar", "rp": "Algorithm_EmptyBar.html", "cl": 12, "ucl": 2, "cal": 14, "tl": 28, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.EmptyFunction", "rp": "Algorithm_EmptyFunction.html", "cl": 11, "ucl": 1, "cal": 12, "tl": 24, "cb": 1, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.FunctionAfterSeventh", "rp": "Algorithm_FunctionAfterSeventh.html", "cl": 14, "ucl": 10, "cal": 24, "tl": 42, "cb": 2, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.FunctionAfterSixth", "rp": "Algorithm_FunctionAfterSixth.html", "cl": 14, "ucl": 10, "cal": 24, "tl": 42, "cb": 2, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.Rule", "rp": "Algorithm_Rule.html", "cl": 14, "ucl": 2, "cal": 16, "tl": 30, "cb": 6, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Algorithm.New.Algorithm.Rules.Problem.SubdominantAfterDominant", "rp": "Algorithm_SubdominantAfterDominant.html", "cl": 20, "ucl": 1, "cal": 21, "tl": 38, "cb": 9, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedComponents", "rp": "Algorithm_AddedComponents.html", "cl": 23, "ucl": 4, "cal": 27, "tl": 45, "cb": 9, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedSixthValidation", "rp": "Algorithm_AddedSixthValidation.html", "cl": 17, "ucl": 2, "cal": 19, "tl": 35, "cb": 4, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.AddedVsPositionAndRoot", "rp": "Algorithm_AddedVsPositionAndRoot.html", "cl": 0, "ucl": 41, "cal": 41, "tl": 57, "cb": 0, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.DeletedEqualsPosition", "rp": "Algorithm_DeletedEqualsPosition.html", "cl": 13, "ucl": 4, "cal": 17, "tl": 32, "cb": 3, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.DeletedEqualsRoot", "rp": "Algorithm_DeletedEqualsRoot.html", "cl": 13, "ucl": 4, "cal": 17, "tl": 32, "cb": 3, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.EmptyBar", "rp": "Algorithm_EmptyBar.html", "cl": 13, "ucl": 2, "cal": 15, "tl": 29, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.EmptyFunction", "rp": "Algorithm_EmptyFunction.html", "cl": 12, "ucl": 1, "cal": 13, "tl": 25, "cb": 1, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.FunctionAfterSeventh", "rp": "Algorithm_FunctionAfterSeventh.html", "cl": 15, "ucl": 10, "cal": 25, "tl": 43, "cb": 2, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.FunctionAfterSixth", "rp": "Algorithm_FunctionAfterSixth.html", "cl": 15, "ucl": 10, "cal": 25, "tl": 43, "cb": 2, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.Rule", "rp": "Algorithm_Rule.html", "cl": 16, "ucl": 2, "cal": 18, "tl": 32, "cb": 6, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Algorithm.New.Algorithm.Rules.Problem.SubdominantAfterDominant", "rp": "Algorithm_SubdominantAfterDominant.html", "cl": 21, "ucl": 1, "cal": 22, "tl": 39, "cb": 9, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.AllComponentsSatisfied", "rp": "Algorithm_AllComponentsSatisfied.html", "cl": 26, "ucl": 3, "cal": 29, "tl": 47, "cb": 6, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.AugmentedInterval", "rp": "Algorithm_AugmentedInterval.html", "cl": 21, "ucl": 3, "cal": 24, "tl": 42, "cb": 7, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Algorithm.New.Algorithm.Rules.Solution.DominantSeventhResolution", "rp": "Algorithm_DominantSeventhResolution.html", "cl": 10, "ucl": 2, "cal": 12, "tl": 26, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -296,107 +296,14 @@ var assemblies = [
   {
     "name": "Main",
     "classes": [
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages__ViewStart", "rp": "Main_Areas_Identity_Pages__ViewStart.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 4, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account__StatusMessage", "rp": "Main_Areas_Identity_Pages_Account__StatusMessage.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 10, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ConfirmEmail", "rp": "Main_Areas_Identity_Pages_Account_ConfirmEmail.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 17, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ConfirmEmailChange", "rp": "Main_Areas_Identity_Pages_Account_ConfirmEmailChange.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 8, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ExternalLogin", "rp": "Main_Areas_Identity_Pages_Account_ExternalLogin.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 43, "cb": 0, "tb": 30, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ForgotPassword", "rp": "Main_Areas_Identity_Pages_Account_ForgotPassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 24, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ForgotPasswordConfirmation", "rp": "Main_Areas_Identity_Pages_Account_ForgotPasswordConfirmation.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 17, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Login", "rp": "Main_Areas_Identity_Pages_Account_Login.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 107, "cb": 0, "tb": 20, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_LoginWithRecoveryCode", "rp": "Main_Areas_Identity_Pages_Account_LoginWithRecoveryCode.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 29, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Logout", "rp": "Main_Areas_Identity_Pages_Account_Logout.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 21, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage__Layout", "rp": "Main_Areas_Identity_Pages_Account_Manage__Layout.html", "cl": 0, "ucl": 12, "cal": 12, "tl": 41, "cb": 0, "tb": 16, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage__StatusMessage", "rp": "Main_Areas_Identity_Pages_Account_Manage__StatusMessage.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 10, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_ChangeAvatar", "rp": "Main_Areas_Identity_Pages_Account_Manage_ChangeAvatar.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 38, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_ChangeName", "rp": "Main_Areas_Identity_Pages_Account_Manage_ChangeName.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 26, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_ChangePassword", "rp": "Main_Areas_Identity_Pages_Account_Manage_ChangePassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 38, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_Index", "rp": "Main_Areas_Identity_Pages_Account_Manage_Index.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 11, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_SetPassword", "rp": "Main_Areas_Identity_Pages_Account_Manage_SetPassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 36, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Register", "rp": "Main_Areas_Identity_Pages_Account_Register.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 122, "cb": 0, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_RegisterConfirmation", "rp": "Main_Areas_Identity_Pages_Account_RegisterConfirmation.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 40, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResendEmailConfirmation", "rp": "Main_Areas_Identity_Pages_Account_ResendEmailConfirmation.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 26, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResetPassword", "rp": "Main_Areas_Identity_Pages_Account_ResetPassword.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 68, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ResetPasswordConfirmation", "rp": "Main_Areas_Identity_Pages_Account_ResetPasswordConfirmation.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 19, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Error", "rp": "Main_Areas_Identity_Pages_Error.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.AccessDeniedModel", "rp": "Main_AccessDeniedModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 23, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ConfirmEmailChangeModel", "rp": "Main_ConfirmEmailChangeModel.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 70, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ConfirmEmailModel", "rp": "Main_ConfirmEmailModel.html", "cl": 0, "ucl": 18, "cal": 18, "tl": 52, "cb": 0, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ExternalLoginModel", "rp": "Main_ExternalLoginModel.html", "cl": 0, "ucl": 137, "cal": 137, "tl": 272, "cb": 0, "tb": 28, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ForgotPasswordConfirmation", "rp": "Main_ForgotPasswordConfirmation.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ForgotPasswordModel", "rp": "Main_ForgotPasswordModel.html", "cl": 0, "ucl": 28, "cal": 28, "tl": 87, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.LoginModel", "rp": "Main_LoginModel.html", "cl": 0, "ucl": 43, "cal": 43, "tl": 145, "cb": 0, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.LoginWithRecoveryCodeModel", "rp": "Main_LoginWithRecoveryCodeModel.html", "cl": 0, "ucl": 44, "cal": 44, "tl": 113, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.LogoutModel", "rp": "Main_LogoutModel.html", "cl": 0, "ucl": 14, "cal": 14, "tl": 43, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.Manage.ChangeAvatarModel", "rp": "Main_ChangeAvatarModel.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 52, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.Manage.ChangeNameModel", "rp": "Main_ChangeNameModel.html", "cl": 0, "ucl": 27, "cal": 27, "tl": 63, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.Manage.ChangePasswordModel", "rp": "Main_ChangePasswordModel.html", "cl": 0, "ucl": 46, "cal": 46, "tl": 129, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.Manage.IndexModel", "rp": "Main_IndexModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 23, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.Manage.SetPasswordModel", "rp": "Main_SetPasswordModel.html", "cl": 0, "ucl": 42, "cal": 42, "tl": 116, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.RegisterConfirmationModel", "rp": "Main_RegisterConfirmationModel.html", "cl": 0, "ucl": 54, "cal": 54, "tl": 113, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.RegisterModel", "rp": "Main_RegisterModel.html", "cl": 0, "ucl": 78, "cal": 78, "tl": 196, "cb": 0, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ResendEmailConfirmationModel", "rp": "Main_ResendEmailConfirmationModel.html", "cl": 0, "ucl": 33, "cal": 33, "tl": 91, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ResetPasswordConfirmationModel", "rp": "Main_ResetPasswordConfirmationModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.Account.ResetPasswordModel", "rp": "Main_ResetPasswordModel.html", "cl": 0, "ucl": 39, "cal": 39, "tl": 122, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.Pages.ErrorModel", "rp": "Main_ErrorModel.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 41, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Areas.Identity.PolishIdentityErrorDescriber", "rp": "Main_PolishIdentityErrorDescriber.html", "cl": 0, "ucl": 22, "cal": 22, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Components.FunctionCreator", "rp": "Main_FunctionCreator.html", "cl": 0, "ucl": 16, "cal": 16, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Data.ApplicationDbContext", "rp": "Main_ApplicationDbContext.html", "cl": 117, "ucl": 0, "cal": 117, "tl": 166, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Data.ApplicationRepository", "rp": "Main_ApplicationRepository.html", "cl": 39, "ucl": 46, "cal": 85, "tl": 141, "cb": 5, "tb": 16, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Enumerations.GradeExtensions", "rp": "Main_GradeExtensions.html", "cl": 6, "ucl": 14, "cal": 20, "tl": 47, "cb": 1, "tb": 15, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Enumerations.QuizStateExtensions", "rp": "Main_QuizStateExtensions.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 25, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.GradingAlgorithm.GradingAlgorithm", "rp": "Main_GradingAlgorithm.html", "cl": 0, "ucl": 107, "cal": 107, "tl": 161, "cb": 0, "tb": 40, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.GradingAlgorithm.TestGradingAlgorithm", "rp": "Main_TestGradingAlgorithm.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 13, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Migrations.ApplicationDbContextModelSnapshot", "rp": "Main_ApplicationDbContextModelSnapshot.html", "cl": 0, "ucl": 765, "cal": 765, "tl": 829, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Migrations.Initial", "rp": "Main_Initial.html", "cl": 0, "ucl": 1353, "cal": 1353, "tl": 1500, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.ApplicationUser", "rp": "Main_ApplicationUser.html", "cl": 38, "ucl": 2, "cal": 40, "tl": 70, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.Exercise", "rp": "Main_Exercise.html", "cl": 5, "ucl": 1, "cal": 6, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.ExerciseResult", "rp": "Main_ExerciseResult.html", "cl": 7, "ucl": 3, "cal": 10, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.ExerciseSolution", "rp": "Main_ExerciseSolution.html", "cl": 6, "ucl": 1, "cal": 7, "tl": 24, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.GroupRequest", "rp": "Main_GroupRequest.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.MistakeResult", "rp": "Main_MistakeResult.html", "cl": 3, "ucl": 3, "cal": 6, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.Quiz", "rp": "Main_Quiz.html", "cl": 17, "ucl": 0, "cal": 17, "tl": 35, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.QuizRequest", "rp": "Main_QuizRequest.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.QuizResult", "rp": "Main_QuizResult.html", "cl": 7, "ucl": 1, "cal": 8, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Models.UsersGroup", "rp": "Main_UsersGroup.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.AssignedModel", "rp": "Main_AssignedModel.html", "cl": 72, "ucl": 1, "cal": 73, "tl": 113, "cb": 22, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.BrowseModel", "rp": "Main_BrowseModel.html", "cl": 89, "ucl": 20, "cal": 109, "tl": 178, "cb": 31, "tb": 38, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.CreatedModel", "rp": "Main_CreatedModel.html", "cl": 162, "ucl": 51, "cal": 213, "tl": 317, "cb": 52, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.CreatorModel", "rp": "Main_CreatorModel.html", "cl": 0, "ucl": 190, "cal": 190, "tl": 319, "cb": 0, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.ErrorModel", "rp": "Main_ErrorModel.2.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 24, "cb": 0, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.ExerciseResultData", "rp": "Main_ExerciseResultData.html", "cl": 4, "ucl": 1, "cal": 5, "tl": 178, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.GenerateData", "rp": "Main_GenerateData.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 319, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.GradeModel", "rp": "Main_GradeModel.html", "cl": 229, "ucl": 3, "cal": 232, "tl": 328, "cb": 59, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.GroupDetailsModel", "rp": "Main_GroupDetailsModel.html", "cl": 0, "ucl": 202, "cal": 202, "tl": 329, "cb": 0, "tb": 68, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Groups.Pages_Groups_Details", "rp": "Main_Pages_Groups_Details.html", "cl": 0, "ucl": 84, "cal": 84, "tl": 636, "cb": 0, "tb": 106, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Groups.Pages_Groups_Index", "rp": "Main_Pages_Groups_Index.html", "cl": 0, "ucl": 44, "cal": 44, "tl": 337, "cb": 0, "tb": 56, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Main.Pages.GroupDetailsModel", "rp": "Main_GroupDetailsModel.html", "cl": 188, "ucl": 14, "cal": 202, "tl": 318, "cb": 63, "tb": 68, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.GroupsIndexModel", "rp": "Main_GroupsIndexModel.html", "cl": 112, "ucl": 24, "cal": 136, "tl": 220, "cb": 32, "tb": 36, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.IndexModel", "rp": "Main_IndexModel.2.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.JoinModel", "rp": "Main_JoinModel.html", "cl": 34, "ucl": 3, "cal": 37, "tl": 66, "cb": 8, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages__ViewStart", "rp": "Main_Pages__ViewStart.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 3, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Assigned", "rp": "Main_Pages_Assigned.html", "cl": 0, "ucl": 59, "cal": 59, "tl": 479, "cb": 0, "tb": 62, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Browse", "rp": "Main_Pages_Browse.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 340, "cb": 0, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Created", "rp": "Main_Pages_Created.html", "cl": 0, "ucl": 63, "cal": 63, "tl": 610, "cb": 0, "tb": 66, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Creator", "rp": "Main_Pages_Creator.html", "cl": 0, "ucl": 8, "cal": 8, "tl": 254, "cb": 0, "tb": 32, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Grade", "rp": "Main_Pages_Grade.html", "cl": 0, "ucl": 24, "cal": 24, "tl": 509, "cb": 0, "tb": 74, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Index", "rp": "Main_Pages_Index.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 65, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Join", "rp": "Main_Pages_Join.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 109, "cb": 0, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Pages_Solve", "rp": "Main_Pages_Solve.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 240, "cb": 0, "tb": 42, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.PlayExerciseData", "rp": "Main_PlayExerciseData.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 178, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.QuizData", "rp": "Main_QuizData.html", "cl": 0, "ucl": 3, "cal": 3, "tl": 319, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Shared.Pages_Shared__Layout", "rp": "Main_Pages_Shared__Layout.html", "cl": 0, "ucl": 21, "cal": 21, "tl": 117, "cb": 0, "tb": 58, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Shared.Pages_Shared__LoginPartial", "rp": "Main_Pages_Shared__LoginPartial.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 45, "cb": 0, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Pages.Shared.Pages_Shared_PublishPopup", "rp": "Main_Pages_Shared_PublishPopup.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 190, "cb": 0, "tb": 10, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Main.Pages.SolveModel", "rp": "Main_SolveModel.html", "cl": 129, "ucl": 53, "cal": 182, "tl": 264, "cb": 50, "tb": 68, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Services.AuthMessageSenderOptions", "rp": "Main_AuthMessageSenderOptions.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Services.EmailSender", "rp": "Main_EmailSender.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 50, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Main.Utils.Utils", "rp": "Main_Utils.html", "cl": 16, "ucl": 61, "cal": 77, "tl": 113, "cb": 6, "tb": 40, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Program", "rp": "Main_Program.html", "cl": 0, "ucl": 46, "cal": 46, "tl": 76, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-    ]},
-  {
-    "name": "MidiPlayback",
-    "classes": [
-      { "name": "MidiPlayback.FileCreator", "rp": "MidiPlayback_FileCreator.html", "cl": 0, "ucl": 98, "cal": 98, "tl": 139, "cb": 0, "tb": 172, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
@@ -411,112 +318,16 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
-    "assembly": "MidiPlayback", "class": "MidiPlayback.FileCreator", "reportPath": "MidiPlayback_FileCreator.html", "methodName": "NoteToMidiNote(Algorithm.New.Music.Note)", "methodShortName": "NoteToMidiNote(...)", "fileIndex": 0, "line": 61,
-    "metrics": [
-      { "value": 26406, "exceeded": true },
-      { "value": 162, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Groups.Pages_Groups_Details", "reportPath": "Main_Pages_Groups_Details.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 5,
-    "metrics": [
-      { "value": 11342, "exceeded": true },
-      { "value": 106, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Created", "reportPath": "Main_Pages_Created.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
-    "metrics": [
-      { "value": 4422, "exceeded": true },
-      { "value": 66, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Groups.Pages_Groups_Index", "reportPath": "Main_Pages_Groups_Index.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
-    "metrics": [
-      { "value": 3906, "exceeded": true },
-      { "value": 62, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Assigned", "reportPath": "Main_Pages_Assigned.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
-    "metrics": [
-      { "value": 3906, "exceeded": true },
-      { "value": 62, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Solve", "reportPath": "Main_Pages_Solve.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 5,
-    "metrics": [
-      { "value": 1332, "exceeded": true },
-      { "value": 36, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Browse", "reportPath": "Main_Pages_Browse.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
-    "metrics": [
-      { "value": 1190, "exceeded": true },
-      { "value": 34, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Grade", "reportPath": "Main_Pages_Grade.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 6,
-    "metrics": [
-      { "value": 1190, "exceeded": true },
-      { "value": 34, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__Layout", "reportPath": "Main_Pages_Shared__Layout.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 56,
-    "metrics": [
-      { "value": 1190, "exceeded": true },
-      { "value": 34, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Grade", "reportPath": "Main_Pages_Grade.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 18,
-    "metrics": [
-      { "value": 1056, "exceeded": true },
-      { "value": 32, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Utils.Utils", "reportPath": "Main_Utils.html", "methodName": "MistakesToHTML(System.Collections.Generic.ICollection`1<Main.Models.MistakeResult>)", "methodShortName": "MistakesToHTML(...)", "fileIndex": 0, "line": 9,
-    "metrics": [
-      { "value": 836, "exceeded": true },
-      { "value": 40, "exceeded": true },
-    ]},
-  {
     "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Solution.SemitonesCrossing", "reportPath": "Algorithm_SemitonesCrossing.html", "methodName": "IsSatisfied(System.Collections.Generic.List`1<Algorithm.New.Music.Function>,System.Collections.Generic.List`1<Algorithm.New.Music.Stack>)", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 15,
     "metrics": [
       { "value": 702, "exceeded": true },
       { "value": 26, "exceeded": true },
     ]},
   {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_ExternalLogin", "reportPath": "Main_Areas_Identity_Pages_Account_ExternalLogin.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 23,
-    "metrics": [
-      { "value": 702, "exceeded": true },
-      { "value": 26, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__Layout", "reportPath": "Main_Pages_Shared__Layout.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 8,
-    "metrics": [
-      { "value": 600, "exceeded": true },
-      { "value": 24, "exceeded": true },
-    ]},
-  {
-    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Problem.AddedVsPositionAndRoot", "reportPath": "Algorithm_AddedVsPositionAndRoot.html", "methodName": "IsSatisfied(Algorithm.New.Music.Function[])", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 13,
+    "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Rules.Problem.AddedVsPositionAndRoot", "reportPath": "Algorithm_AddedVsPositionAndRoot.html", "methodName": "IsSatisfied(Algorithm.New.Music.Function[])", "methodShortName": "IsSatisfied(...)", "fileIndex": 0, "line": 14,
     "metrics": [
       { "value": 506, "exceeded": true },
       { "value": 22, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ExternalLoginModel", "reportPath": "Main_ExternalLoginModel.html", "methodName": "OnGetCallbackAsync()", "methodShortName": "OnGetCallbackAsync()", "fileIndex": 0, "line": 112,
-    "metrics": [
-      { "value": 420, "exceeded": true },
-      { "value": 20, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnPostSubmit()", "methodShortName": "OnPostSubmit()", "fileIndex": 0, "line": 243,
-    "metrics": [
-      { "value": 342, "exceeded": true },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Creator", "reportPath": "Main_Pages_Creator.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 33,
-    "metrics": [
-      { "value": 342, "exceeded": true },
-      { "value": 18, "exceeded": true },
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": ".ctor(Algorithm.New.Music.ParsedFunction)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 159,
@@ -535,54 +346,6 @@ var riskHotspots = [
     "metrics": [
       { "value": 286, "exceeded": true },
       { "value": 26, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage__Layout", "reportPath": "Main_Areas_Identity_Pages_Account_Manage__Layout.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
-    "metrics": [
-      { "value": 272, "exceeded": true },
-      { "value": 16, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.GradingAlgorithm.GradingAlgorithm", "reportPath": "Main_GradingAlgorithm.html", "methodName": "Grade(System.String,System.String,System.Int32)", "methodShortName": "Grade(...)", "fileIndex": 0, "line": 12,
-    "metrics": [
-      { "value": 272, "exceeded": true },
-      { "value": 16, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "OnGet()", "methodShortName": "OnGet()", "fileIndex": 0, "line": 61,
-    "metrics": [
-      { "value": 272, "exceeded": true },
-      { "value": 16, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "OnPostAddUsers()", "methodShortName": "OnPostAddUsers()", "fileIndex": 0, "line": 231,
-    "metrics": [
-      { "value": 272, "exceeded": true },
-      { "value": 16, "exceeded": true },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.GradingAlgorithm.GradingAlgorithm", "reportPath": "Main_GradingAlgorithm.html", "methodName": "GenerateOpinion(System.Collections.Generic.List`1<Algorithm.New.Algorithm.Mistake.Solution.Mistake>)", "methodShortName": "GenerateOpinion(...)", "fileIndex": 0, "line": 126,
-    "metrics": [
-      { "value": 210, "exceeded": true },
-      { "value": 14, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnPostSave()", "methodShortName": "OnPostSave()", "fileIndex": 0, "line": 164,
-    "metrics": [
-      { "value": 210, "exceeded": true },
-      { "value": 14, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Join", "reportPath": "Main_Pages_Join.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
-    "metrics": [
-      { "value": 210, "exceeded": true },
-      { "value": 14, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared__LoginPartial", "reportPath": "Main_Pages_Shared__LoginPartial.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 7,
-    "metrics": [
-      { "value": 210, "exceeded": true },
-      { "value": 14, "exceeded": false },
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Music.Function", "reportPath": "Algorithm_Function.html", "methodName": "DeductAdded(System.Collections.Generic.List`1<Algorithm.New.Music.Component>,System.Collections.Generic.List`1<Algorithm.New.Music.Component>)", "methodShortName": "DeductAdded(...)", "fileIndex": 0, "line": 309,
@@ -609,36 +372,6 @@ var riskHotspots = [
       { "value": 12, "exceeded": false },
     ]},
   {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Login", "reportPath": "Main_Areas_Identity_Pages_Account_Login.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 41,
-    "metrics": [
-      { "value": 156, "exceeded": true },
-      { "value": 12, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Register", "reportPath": "Main_Areas_Identity_Pages_Account_Register.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 52,
-    "metrics": [
-      { "value": 156, "exceeded": true },
-      { "value": 12, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ConfirmEmailChangeModel", "reportPath": "Main_ConfirmEmailChangeModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 36,
-    "metrics": [
-      { "value": 156, "exceeded": true },
-      { "value": 12, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ExternalLoginModel", "reportPath": "Main_ExternalLoginModel.html", "methodName": "OnPostConfirmationAsync()", "methodShortName": "OnPostConfirmationAsync()", "fileIndex": 0, "line": 198,
-    "metrics": [
-      { "value": 156, "exceeded": true },
-      { "value": 12, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Creator", "reportPath": "Main_Pages_Creator.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
-    "metrics": [
-      { "value": 156, "exceeded": true },
-      { "value": 12, "exceeded": false },
-    ]},
-  {
     "assembly": "Main", "class": "Main.Pages.SolveModel", "reportPath": "Main_SolveModel.html", "methodName": "GenerateMistakeResults(System.Collections.Generic.Dictionary`2<System.ValueTuple`2<System.Int32,System.ValueTuple`3<System.Int32,System.Int32,System.Int32>>,System.Collections.Generic.List`1<System.Int32>>)", "methodShortName": "GenerateMistakeResults(...)", "fileIndex": 0, "line": 189,
     "metrics": [
       { "value": 152, "exceeded": true },
@@ -649,54 +382,6 @@ var riskHotspots = [
     "metrics": [
       { "value": 110, "exceeded": true },
       { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Register", "reportPath": "Main_Areas_Identity_Pages_Account_Register.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.LoginModel", "reportPath": "Main_LoginModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 103,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.LoginWithRecoveryCodeModel", "reportPath": "Main_LoginWithRecoveryCodeModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 77,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.RegisterModel", "reportPath": "Main_RegisterModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 121,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.CreatorModel", "reportPath": "Main_CreatorModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 65,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Index", "reportPath": "Main_Pages_Index.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 27,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Shared.Pages_Shared_PublishPopup", "reportPath": "Main_Pages_Shared_PublishPopup.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 25,
-    "metrics": [
-      { "value": 110, "exceeded": true },
-      { "value": 10, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Enumerations.GradeExtensions", "reportPath": "Main_GradeExtensions.html", "methodName": "AsString(Main.Enumerations.Grade)", "methodShortName": "AsString(...)", "fileIndex": 0, "line": 25,
-    "metrics": [
-      { "value": 92, "exceeded": true },
-      { "value": 15, "exceeded": false },
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Mistake.Solution.StackMistake", "reportPath": "Algorithm_StackMistake.html", "methodName": ".ctor(System.Collections.Generic.List`1<System.Int32>,System.Collections.Generic.List`1<System.Int32>,Algorithm.New.Algorithm.Rules.Solution.Rule)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 12,
@@ -712,60 +397,6 @@ var riskHotspots = [
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Utils.Interval", "reportPath": "Algorithm_Interval.html", "methodName": "SetCloser(Algorithm.New.Music.Note,Algorithm.New.Music.Note)", "methodShortName": "SetCloser(...)", "fileIndex": 0, "line": 112,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Login", "reportPath": "Main_Areas_Identity_Pages_Account_Login.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 5,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Logout", "reportPath": "Main_Areas_Identity_Pages_Account_Logout.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ConfirmEmailModel", "reportPath": "Main_ConfirmEmailModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 34,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.Manage.ChangePasswordModel", "reportPath": "Main_ChangePasswordModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 100,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.Manage.SetPasswordModel", "reportPath": "Main_SetPasswordModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 88,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.RegisterConfirmationModel", "reportPath": "Main_RegisterConfirmationModel.html", "methodName": "OnGetAsync()", "methodShortName": "OnGetAsync()", "fileIndex": 0, "line": 51,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ResetPasswordModel", "reportPath": "Main_ResetPasswordModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 95,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.GradingAlgorithm.GradingAlgorithm", "reportPath": "Main_GradingAlgorithm.html", "methodName": "PopulateEmptyStacks(Algorithm.New.Algorithm.Problem,Algorithm.New.Algorithm.Solution)", "methodShortName": "PopulateEmptyStacks(...)", "fileIndex": 0, "line": 96,
-    "metrics": [
-      { "value": 72, "exceeded": true },
-      { "value": 8, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "OnPostDeleteUser()", "methodShortName": "OnPostDeleteUser()", "fileIndex": 0, "line": 152,
     "metrics": [
       { "value": 72, "exceeded": true },
       { "value": 8, "exceeded": false },
@@ -790,36 +421,6 @@ var riskHotspots = [
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Algorithm.Mistake.Solution.NoteMistake", "reportPath": "Algorithm_NoteMistake.html", "methodName": ".ctor(Algorithm.New.Music.Note,Algorithm.New.Music.Stack)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 29,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "AspNetCoreGeneratedDocument.Areas_Identity_Pages_Account_Manage_Index", "reportPath": "Main_Areas_Identity_Pages_Account_Manage_Index.html", "methodName": "ExecuteAsync()", "methodShortName": "ExecuteAsync()", "fileIndex": 0, "line": 4,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Areas.Identity.Pages.Account.ForgotPasswordModel", "reportPath": "Main_ForgotPasswordModel.html", "methodName": "OnPostAsync()", "methodShortName": "OnPostAsync()", "fileIndex": 0, "line": 56,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.ErrorModel", "reportPath": "Main_ErrorModel.2.html", "methodName": "OnGet(System.String)", "methodShortName": "OnGet(...)", "fileIndex": 0, "line": 18,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "HandleRemoveFromMembers(Main.Models.ApplicationUser,Main.Models.UsersGroup)", "methodShortName": "HandleRemoveFromMembers(...)", "fileIndex": 0, "line": 193,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "Main", "class": "Main.Pages.Pages_Solve", "reportPath": "Main_Pages_Solve.html", "methodName": "<ExecuteAsync()", "methodShortName": "<ExecuteAsync()", "fileIndex": 0, "line": 16,
     "metrics": [
       { "value": 42, "exceeded": true },
       { "value": 6, "exceeded": false },
@@ -940,6 +541,18 @@ var riskHotspots = [
     ]},
   {
     "assembly": "Algorithm", "class": "Algorithm.New.Utils.Interval", "reportPath": "Algorithm_Interval.html", "methodName": "IntervalBetween(Algorithm.New.Music.Note,Algorithm.New.Music.Note)", "methodShortName": "IntervalBetween(...)", "fileIndex": 0, "line": 146,
+    "metrics": [
+      { "value": 16, "exceeded": false },
+      { "value": 16, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "OnGet()", "methodShortName": "OnGet()", "fileIndex": 0, "line": 61,
+    "metrics": [
+      { "value": 16, "exceeded": false },
+      { "value": 16, "exceeded": true },
+    ]},
+  {
+    "assembly": "Main", "class": "Main.Pages.GroupDetailsModel", "reportPath": "Main_GroupDetailsModel.html", "methodName": "OnPostAddUsers()", "methodShortName": "OnPostAddUsers()", "fileIndex": 0, "line": 231,
     "metrics": [
       { "value": 16, "exceeded": false },
       { "value": 16, "exceeded": true },
