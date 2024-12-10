@@ -306,6 +306,7 @@ namespace Main.Pages
 //          await _repository.SaveChangesAsync();
 
             if (quiz.IsValid)
+            {
                 return new JsonResult(successResult);
             }
             else
