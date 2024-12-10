@@ -203,7 +203,7 @@
     import { playTask } from "../js/midi-player-scripts/midiPlayer.js";
 
     const results = @Json.Serialize(Model.ExerciseResults);
-    const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions));
+    const algorithmSolutions = @Html.Raw(JsonConvert.SerializeObject(Model.AlgorithmSolutions.Select(x => x.Item1)));
 
     let midiPlay = document.getElementById('play-file');
     let midiStop = document.getElementById('stop-file');
