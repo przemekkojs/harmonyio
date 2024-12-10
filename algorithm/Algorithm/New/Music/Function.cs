@@ -278,13 +278,33 @@ namespace Algorithm.New.Music
 
             if (Root != null && Position != null)
             {
+                if (Root.Equals(Component.Ninth))
+                    throw new ArgumentException("Cannot have fifth as root");
+
+                // Nie można usunąć tego, co jest w pozycji / oparciu
                 if (Root.Equals(Removed) || Position.Equals(Removed))
                     throw new ArgumentException("Cannot create function like that");
+
+                if (Root.Equals(Component.Sixth) || Root.Equals(Component.Seventh))
+                {
+                    if (!Added.Contains(Root))
+                        throw new ArgumentException("Cannot have non-added component as root");
+                }
+
+                if (Position.Equals(Component.Sixth) || Position.Equals(Component.Seventh) || Position.Equals(Component.Ninth))
+                {
+                    if (!Added.Contains(Position))
+                        throw new ArgumentException("Cannot have non-added component as position");
+                }
 
                 if (Root.Equals(Position))
                 {
                     var componentToDouble = Root;
                     toDouble = [componentToDouble];
+                }
+                else
+                {
+
                 }
             }
 
