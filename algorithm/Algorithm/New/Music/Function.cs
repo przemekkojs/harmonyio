@@ -214,7 +214,7 @@ namespace Algorithm.New.Music
             IsInsertion = false;
             Tonation = Tonation.CMajor;
 
-            DeductPossibleComponents();
+            DeductPossibleComponents2();
         }
 
         public Function(Index index, Symbol symbol, bool minor, Tonation tonation,
@@ -238,7 +238,7 @@ namespace Algorithm.New.Music
 
             PossibleComponents = [];
 
-            DeductPossibleComponents();
+            DeductPossibleComponents2();
         }
 
         private void DeductPossibleComponents()
@@ -254,7 +254,25 @@ namespace Algorithm.New.Music
 
         private void DeductPossibleComponents2()
         {
+            var possibleComponents = new List<Component>()
+            {
+                Component.Root,
+                Component.Third,
+                Component.Fifth
+            };
 
+            foreach (var added in Added)
+            {
+                possibleComponents.Add(added);
+            }
+
+            if (Removed != null)
+            {
+                if (Removed.Equals(Component.Root))
+                {
+
+                }
+            }            
         }
 
         private void DeductRootAndPosition(List<Component> doubled)
