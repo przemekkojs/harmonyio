@@ -280,12 +280,24 @@ namespace Algorithm.New.Music
                 Component.Root,
                 Component.Third,
                 Component.Fifth
-            };
+            };            
 
             // Bazowo w głównych podwajamy (1 albo 5), w pobocznych (1 albo 3)
             List<Component> toDouble = IsMain?
                 [Component.Root, Component.Fifth] :
                 [Component.Root, Component.Third];
+
+            if (Root != null && Position != null)
+            {
+                if (Root.Equals(Removed) || Position.Equals(Removed))
+                    throw new ArgumentException("Cannot create function like that");
+
+                if (Root.Equals(Position))
+                {
+                    var componentToDouble = Root;
+                    toDouble = [componentToDouble];
+                }
+            }
 
             if (Added.Contains(Component.Seventh))
                 toDouble.Remove(Component.Third);
