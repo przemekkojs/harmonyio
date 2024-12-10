@@ -272,5 +272,219 @@ namespace AlgorithmTests.New
 
             Assert.True(setsEqual);
         }
+
+        [Fact]
+        public void T7Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Seventh, Component.Third, Component.Fifth }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Seventh]
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void Tiii7Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Seventh, Component.Third, Component.Fifth }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Seventh]
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void T6Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Sixth, Component.Third, Component.Fifth }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Sixth]
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void Tiii6Ttest()
+        {
+            Assert.Throws<ArgumentException>(() => new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Sixth]
+            ));
+        }
+
+        [Fact]
+        public void T9Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Ninth, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Ninth]
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void Tiii9Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Ninth, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Ninth]
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void T9No1Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Fifth, Component.Ninth, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Ninth],
+                removed: Component.Root
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void T9No5Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Ninth, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Ninth],
+                removed: Component.Fifth
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void Tiii9No1Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Fifth, Component.Ninth, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Ninth],
+                removed: Component.Root
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void Tiii9No5Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Ninth, Component.Third, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.Tiii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Ninth],
+                removed: Component.Fifth
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
     }
 }

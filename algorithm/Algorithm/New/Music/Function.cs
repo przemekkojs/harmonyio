@@ -254,25 +254,99 @@ namespace Algorithm.New.Music
 
         private void DeductPossibleComponents2()
         {
-            var possibleComponents = new List<Component>()
+            if (!IsMain && Added.Contains(Component.Sixth))
+                throw new ArgumentException("Cannot add sixth to non-main function.");
+
+            if (Added.Contains(Component.Ninth))
+                Added.Add(Component.Seventh);
+
+            // Bazowo zawsze będzie 1, 3, 5
+            var template = new List<Component>()
             {
                 Component.Root,
                 Component.Third,
                 Component.Fifth
             };
 
+            // Bazowo w głównych podwajamy (1 albo 5), w pobocznych (1 albo 3)
+            List<Component> toDouble = IsMain?
+                [Component.Root, Component.Fifth] :
+                [Component.Root, Component.Third];
+
+            // Dodajemy od razu wszystkie składniki dodane
             foreach (var added in Added)
             {
-                possibleComponents.Add(added);
+                template.Add(added);
+
+                if (added.Equals(Component.Seventh))
+                    toDouble.Add(added);
             }
 
+            // Sprawdzamy, czy czegoś nie możemy usunąć
             if (Removed != null)
             {
+                if (Added.Count == 0)
+                {
+                    PossibleComponents = IsMain ?
+                    [
+                        [
+                            Component.Root,
+                            Component.Root,
+                            Component.Root,
+                            Component.Third
+                        ]
+                    ] :
+                    [
+                        [
+                            Component.Root,
+                            Component.Root,
+                            Component.Root,
+                            Component.Third
+                        ],
+                        [
+                            Component.Root,
+                            Component.Root,
+                            Component.Third,
+                            Component.Third
+                        ]
+                    ];
+                    return;
+                }
+
                 if (Removed.Equals(Component.Root))
                 {
-
+                    template.Remove(Component.Root);
+                }
+                else // tutaj tylko kwinta będzie możliwa
+                {
+                    template.Remove(Component.Fifth);
                 }
             }            
+            
+            if (Added.Count == 2)
+            {
+                if (Removed == null)
+                    template.Remove(Component.Fifth);
+
+                toDouble.Clear();
+            }
+
+            var actual = new List<List<Component>>();
+
+            if (template.Count != Constants.NOTES_IN_FUNCTION)
+            {
+                foreach (var doubled in toDouble)
+                {
+                    var copy = new List<Component>(template) { doubled };
+                    actual.Add(copy);
+                }
+            }
+            else
+                actual.Add(template);
+
+            PossibleComponents = actual;
+
+            ValidatePossibleComponents();
         }
 
         private void DeductRootAndPosition(List<Component> doubled)
