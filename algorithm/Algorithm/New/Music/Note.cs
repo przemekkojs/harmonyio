@@ -12,7 +12,7 @@
 
         private static readonly List<string> PossibleAccidentals = ["#", "b", "x", "bb", "bq", ""];
 
-        public Note (string name, int octave)
+        public Note(string name, int octave)
         {
             this.name = name;
             Octave = octave;
@@ -26,7 +26,7 @@
             DeductAccidental();
         }
 
-        public Note (string name, int octave, string accidental)
+        public Note(string name, int octave, string accidental)
         {
             if (!PossibleAccidentals.Contains(accidental))
                 throw new ArgumentException("Invalid accidental");

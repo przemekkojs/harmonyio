@@ -35,8 +35,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                 if (note1 == null || note2 == null)
                     continue;
 
-                currentUp = 
-                    Interval.IsLower(note1, note2) || 
+                currentUp =
+                    Interval.IsLower(note1, note2) ||
                     Interval.Determinant(note1) == Interval.Determinant(note2); // Small fix
 
                 if (currentUp != lastUp)

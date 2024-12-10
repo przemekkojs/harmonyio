@@ -7,7 +7,7 @@
         public EmptyTaskMistake(int code = 999)
         {
             MistakeCode = code;
-            GenerateDescription();            
+            GenerateDescription();
         }
 
         public override void GenerateDescription() =>

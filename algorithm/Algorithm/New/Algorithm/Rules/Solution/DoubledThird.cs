@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 118,
             name: "Dwojenie tercji (funkcje główne)",
             description: "W funkcjach głównych nie wolno dwoić tercji",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {

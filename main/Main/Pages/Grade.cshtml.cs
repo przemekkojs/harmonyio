@@ -1,11 +1,11 @@
 using Main.Data;
+using Main.Enumerations;
 using Main.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Main.Enumerations;
-using Microsoft.AspNetCore.Authorization;
 using NuGet.Packaging;
 
 namespace Main.Pages

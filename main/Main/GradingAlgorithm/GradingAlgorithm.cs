@@ -74,7 +74,7 @@ namespace Main.GradingAlgorithm
         }
 
         private static int GetMaxMistakesCount(Problem problem, Settings settings)
-        {            
+        {
             var functionsCount = problem.Functions.Count;
             var maxMistakesCount = functionsCount * 4;
 
@@ -130,7 +130,7 @@ namespace Main.GradingAlgorithm
                 {
                     { (0, (0, 0, 0)), [999] }
                 };
-            }                
+            }
 
             // Takty, funkcje w taktach, ID błędu
             var tmp = new Dictionary<(int, (int, int, int)), List<int>>();

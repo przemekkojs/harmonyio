@@ -1,11 +1,11 @@
+using Main.Areas.Identity;
+using Main.Data;
+using Main.GradingAlgorithm;
+using Main.Models;
+using Main.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Main.Data;
-using Main.Models;
-using Main.GradingAlgorithm;
-using Main.Services;
-using Main.Areas.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 

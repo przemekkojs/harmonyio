@@ -9,7 +9,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 111,
             name: "Rozwiązanie seksty w górę",
             description: "W funkcjach innych niż dominanty, seksty powinne być rozwiązywane w górę.",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         // Korzysta z komponentów funkcji
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)

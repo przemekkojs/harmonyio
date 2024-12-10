@@ -6,13 +6,13 @@
         public const string MISSING_VOICE = "Brakujący głos.";
         public const string EMPTY_SOLUTION = "Puste rozwiązanie";
 
-        public int MistakeCode { get; set; }        
+        public int MistakeCode { get; set; }
         public abstract int Quantity { get; }
 
         public (List<int>, List<int>, int) Description = ([], [], -1);
 
         public static readonly Dictionary<int, string> VoiceCodes = new()
-        {            
+        {
             { 0, "S" },
             { 1, "A" },
             { 2, "T" },

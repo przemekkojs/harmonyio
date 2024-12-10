@@ -5,7 +5,7 @@ using Algorithm.New.Music;
 namespace Algorithm.New.Algorithm.Checkers
 {
     public static class ProblemChecker
-    {        
+    {
         public static List<ProblemMistake> CheckProblem(Problem problem)
         {
             var result = new List<ProblemMistake>();
@@ -13,13 +13,18 @@ namespace Algorithm.New.Algorithm.Checkers
 
             foreach (var rule in Constants.ProblemSettings)
             {
-                if (rule.OneFunction)
-                    CheckSingleFunctionRules(rule, problemFunctions, result);
-                else
-                    CheckConsecutiveFunctionRules(rule, problemFunctions, result);
+                Check(rule, problemFunctions, result);
             }
 
             return result;
+        }
+
+        private static void Check(Rule rule, List<Function> functions, List<ProblemMistake> result)
+        {
+            if (rule.OneFunction)
+                CheckSingleFunctionRules(rule, functions, result);
+            else
+                CheckConsecutiveFunctionRules(rule, functions, result);
         }
 
         private static void CheckSingleFunctionRules(Rule rule, List<Function> functions, List<ProblemMistake> result)

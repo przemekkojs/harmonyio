@@ -9,7 +9,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 110,
             name: "Rozwiązanie septymy w dół",
             description: "Septyma powinna być rozwiązywana w dół.",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         // Korzysta z komponentów funkcji
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)

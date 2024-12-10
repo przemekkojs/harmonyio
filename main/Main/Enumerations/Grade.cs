@@ -1,23 +1,22 @@
-﻿using System;
-namespace Main.Enumerations
+﻿namespace Main.Enumerations
 {
-	public enum Grade
-	{
-		One,
-		TwoMinus,
-		Two,
-		TwoPlus,
-		ThreeMinus,
-		Three,
-		ThreePlus,
-		FourMinus,
-		Four,
-		FourPlus,
-		FiveMinus,
-		Five,
-		FivePlus,
-		Six,
-	}
+    public enum Grade
+    {
+        One,
+        TwoMinus,
+        Two,
+        TwoPlus,
+        ThreeMinus,
+        Three,
+        ThreePlus,
+        FourMinus,
+        Four,
+        FourPlus,
+        FiveMinus,
+        Five,
+        FivePlus,
+        Six,
+    }
 
     public static class GradeExtensions
     {

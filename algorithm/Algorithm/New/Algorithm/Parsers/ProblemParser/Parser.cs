@@ -1,5 +1,4 @@
-﻿using Algorithm.New.Algorithm.Parsers.SolutionParser;
-using Algorithm.New.Music;
+﻿using Algorithm.New.Music;
 using Newtonsoft.Json;
 
 namespace Algorithm.New.Algorithm.Parsers.ProblemParser
@@ -23,10 +22,10 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
             var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
 
             var tonation = (minor ?
-                tonationList.FirstOrDefault(x => x.Mode == Mode.Minor) : 
-                tonationList.FirstOrDefault(x => x.Mode == Mode.Major)) ?? 
+                tonationList.FirstOrDefault(x => x.Mode == Mode.Minor) :
+                tonationList.FirstOrDefault(x => x.Mode == Mode.Major)) ??
                 throw new ArgumentException("Invalid tonation");
-            
+
             var metre = Metre.GetMetre(metreCount, metreValue);
 
             List<Function> realFuntions = [];
@@ -50,7 +49,7 @@ namespace Algorithm.New.Algorithm.Parsers.ProblemParser
         {
             List<ParsedFunction> resultList = [];
 
-            foreach(var function in problem.Functions)
+            foreach (var function in problem.Functions)
             {
                 var toAppend = ParsedFunction.CreateFromFunction(function);
                 resultList.Add(toAppend);

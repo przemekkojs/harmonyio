@@ -45,7 +45,7 @@ namespace MidiPlayback
             var stackNotes = stack.Notes;
             var duration = stack.Index.Duration;
 
-            foreach(var note in stackNotes)
+            foreach (var note in stackNotes)
             {
                 if (note == null)
                     continue;

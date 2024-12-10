@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             id: 207,
             name: "Składniki dodane a pozycja i oparcie",
             description: "Pozycja i oparcie musi być zgodna ze składnikami dodanymi",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(params Function[] functions)
         {
@@ -41,7 +42,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
 
             if (position != null)
             {
-                foreach(var positionToCheck in positionsToCheck)
+                foreach (var positionToCheck in positionsToCheck)
                 {
                     if (position.Equals(positionToCheck))
                     {

@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Main.Areas.Identity.Pages.Account.Manage
 {
     [Authorize]
-    public class ChangeAvatarModel : PageModel {
+    public class ChangeAvatarModel : PageModel
+    {
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationRepository _repository;
 
-        public ApplicationUser CurrentUser {get; set;} = null!;
+        public ApplicationUser CurrentUser { get; set; } = null!;
 
         public ChangeAvatarModel(ApplicationRepository repository, UserManager<ApplicationUser> userManager)
         {

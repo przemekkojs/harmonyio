@@ -8,7 +8,8 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             id: 209,
             name: "Poprawne składniki dodane",
             description: "Wszystkie ograniczenia narzucone na składniki dodane.",
-            oneFunction: true) { }
+            oneFunction: true)
+        { }
 
         public override bool IsSatisfied(params Function[] functions)
         {
@@ -35,7 +36,7 @@ namespace Algorithm.New.Algorithm.Rules.Problem
             {
                 if (addedCount > 2)
                     return false;
-                else if (containsNinth)                    
+                else if (containsNinth)
                     return false;
             }
 

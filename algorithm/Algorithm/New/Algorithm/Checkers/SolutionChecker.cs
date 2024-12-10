@@ -100,7 +100,7 @@ namespace Algorithm.New.Algorithm.Checkers
             {
                 var nullCount = 0;
 
-                foreach(var note in stack.Notes)
+                foreach (var note in stack.Notes)
                 {
                     if (note == null)
                         nullCount++;
@@ -123,7 +123,7 @@ namespace Algorithm.New.Algorithm.Checkers
 
         private static List<NoteMistake> CheckNoteMistakes(Solution solution)
         {
-            List<NoteMistake> result = [];            
+            List<NoteMistake> result = [];
 
             for (int index = 0; index < solution.Stacks.Count; index++)
             {
@@ -142,7 +142,7 @@ namespace Algorithm.New.Algorithm.Checkers
                 int noteIndex = 0;
 
                 foreach (var note in stackNotes)
-                {                    
+                {
                     var noteName = note?.Name;
                     noteName ??= string.Empty;
 
@@ -153,7 +153,7 @@ namespace Algorithm.New.Algorithm.Checkers
                     {
                         var toAppend = new NoteMistake(note, stack);
                         result.Add(toAppend);
-                    }                    
+                    }
 
                     noteIndex++;
                 }
@@ -164,17 +164,17 @@ namespace Algorithm.New.Algorithm.Checkers
 
         private static List<StackMistake> CheckStackMistakes(Solution solution, Settings settings)
         {
-            List<StackMistake> result = [];            
+            List<StackMistake> result = [];
 
             foreach (var rule in settings.ActiveRules)
-            { 
+            {
                 if (rule.OneFunction)
                 {
                     for (int index = 0; index < solution.Stacks.Count; index++)
                     {
                         var stack = solution.Stacks[index];
                         var function = solution.Problem.Functions[index];
-                        
+
                         if (!rule.IsSatisfied(functions: [function], stacks: [stack]))
                         {
                             var toAdd = new StackMistake([stack], rule);
@@ -199,7 +199,7 @@ namespace Algorithm.New.Algorithm.Checkers
                         }
                     }
                 }
-            }    
+            }
 
             return result;
         }

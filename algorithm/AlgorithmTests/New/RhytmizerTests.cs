@@ -8,7 +8,7 @@ namespace AlgorithmTests.New
         public void Test2_4()
         {
             var metreCount = 2;
-            var metreValue = 4;            
+            var metreValue = 4;
 
             var test1 = Rhytm.GetRhytmicScheme(functionsInBar: 1, metreCount, metreValue);
             var test2 = Rhytm.GetRhytmicScheme(functionsInBar: 2, metreCount, metreValue);

@@ -12,7 +12,7 @@ namespace Main.Utils
 
             if (mistakes.Count == 0)
                 return string.Empty;
-            
+
             if (mistakes.Count == 1)
             {
                 var mistake = mistakes.First();
@@ -21,13 +21,13 @@ namespace Main.Utils
                 if (codes.Count == 1)
                 {
                     var code = codes[0];
-                    
+
                     if (code == 999)
                     {
                         var desc = Mistake.MistakeCodeToDescription(code);
                         return desc;
                     }
-                }                
+                }
             }
 
             var tmp = new Dictionary<(int, (int, int, int)), List<string>>();

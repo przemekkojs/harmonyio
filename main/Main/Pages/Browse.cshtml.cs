@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MidiPlayback;
-using System.Text;
 
 namespace Main.Pages
 {
@@ -58,7 +57,7 @@ namespace Main.Pages
                 Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
                     .ParseJsonToSolutionParseResult(task) :
                 Algorithm.New.Algorithm.Parsers.SolutionParser.Parser
-                    .ParseJsonToSolutionParseResult(AlgorithmSolutions[solutionIndex]);            
+                    .ParseJsonToSolutionParseResult(AlgorithmSolutions[solutionIndex]);
 
             var stacks = solutionParseResult.Stacks;
             var result = FileCreator.Create(stacks);
@@ -111,7 +110,7 @@ namespace Main.Pages
             Questions = quiz.Exercises.Select(e => e.Question).ToList();
             Answers = quiz.Exercises
                 .Select(e => e.ExerciseSolutions.FirstOrDefault(es => es.UserId == appUser.Id)?.Answer ?? string.Empty)
-                .ToList();            
+                .ToList();
 
             var showOpinion = quiz.ShowAlgorithmOpinion;
 
@@ -145,7 +144,7 @@ namespace Main.Pages
                         MaxPoints = x.MaxPoints,
                         Comment = x.ExerciseResult.Comment,
                         Opinion = showOpinion ? Utils.Utils.MistakesToHTML(x.ExerciseResult.MistakeResults) : string.Empty
-                    })                
+                    })
                 .ToList();
 
             return Page();

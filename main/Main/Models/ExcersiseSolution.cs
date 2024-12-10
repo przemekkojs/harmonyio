@@ -1,24 +1,23 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Main.Models
 {
-	public class ExerciseSolution
-	{
-		public int Id { get; set; }
-		public string Answer { get; set; } = "";
+    public class ExerciseSolution
+    {
+        public int Id { get; set; }
+        public string Answer { get; set; } = "";
 
-		//FOREIGN KEYS
-		public int ExerciseId { get; set; }
-		[JsonIgnore]
-		public Exercise Exercise { get; set; } = null!;
+        //FOREIGN KEYS
+        public int ExerciseId { get; set; }
+        [JsonIgnore]
+        public Exercise Exercise { get; set; } = null!;
 
-		public string UserId { get; set; } = null!;
-		[JsonIgnore]
-		public ApplicationUser User { get; set; } = null!;
+        public string UserId { get; set; } = null!;
+        [JsonIgnore]
+        public ApplicationUser User { get; set; } = null!;
 
-		[JsonIgnore]    //looping dependency, json converter goes crazy without it
-		public ExerciseResult? ExerciseResult { get; set; }
-	}
+        [JsonIgnore]    //looping dependency, json converter goes crazy without it
+        public ExerciseResult? ExerciseResult { get; set; }
+    }
 }
 

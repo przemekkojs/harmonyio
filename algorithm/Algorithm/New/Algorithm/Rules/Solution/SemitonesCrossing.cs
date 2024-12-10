@@ -9,7 +9,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
             id: 112,
             name: "Skośne brzmienie półtonów",
             description: "Ruch o półton nie powinien występować między dwoma różnymi głosami.",
-            oneFunction: false) { }
+            oneFunction: false)
+        { }
 
         public override bool IsSatisfied(List<Function> functions, List<Stack> stacks)
         {
