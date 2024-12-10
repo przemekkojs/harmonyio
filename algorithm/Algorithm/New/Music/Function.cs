@@ -257,6 +257,20 @@ namespace Algorithm.New.Music
             if (!IsMain && Added.Contains(Component.Sixth))
                 throw new ArgumentException("Cannot add sixth to non-main function.");
 
+            if (Added.Count > 2)
+                throw new ArgumentException("Cannot have more than 2 added components at once");
+
+            if (Added.Contains(Component.Seventh) && Added.Contains(Component.Sixth))
+            {
+                if (Minor)
+                    throw new ArgumentException("Cannot create 7 add6 minor function.");
+
+                if (Symbol != Symbol.D)
+                    throw new ArgumentException("Cannot create 7 add6 function other than Dominant.");
+
+                PossibleComponents = [[Component.Root, Component.Third, Component.Sixth, Component.Seventh]];
+            }
+
             if (Added.Contains(Component.Ninth))
                 Added.Add(Component.Seventh);
 

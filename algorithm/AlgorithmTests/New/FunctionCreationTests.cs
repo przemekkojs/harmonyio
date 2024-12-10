@@ -534,5 +534,59 @@ namespace AlgorithmTests.New
 
             Assert.True(setsEqual);
         }
+
+        [Fact]
+        public void D7add6Ttest()
+        {
+            var testSet = new List<List<Component>>()
+            {
+                new () { Component.Root, Component.Third, Component.Sixth, Component.Seventh }
+            };
+
+            var function = new Function(
+                minor: false,
+                symbol: Symbol.D,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Sixth, Component.Seventh],
+                removed: Component.Fifth
+            );
+
+            var functionPossibleComponents = function.PossibleComponents;
+            var setsEqual = TestSetsEqual(testSet, functionPossibleComponents);
+
+            Assert.True(setsEqual);
+        }
+
+        [Fact]
+        public void Other67Throws()
+        {
+            Assert.Throws<ArgumentException>(() => new Function(
+                minor: false,
+                symbol: Symbol.Dvii,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Sixth, Component.Seventh],
+                removed: Component.Fifth
+            ));
+
+            Assert.Throws<ArgumentException>(() => new Function(
+                minor: true,
+                symbol: Symbol.D,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Sixth, Component.Seventh],
+                removed: Component.Fifth
+            ));
+
+            Assert.Throws<ArgumentException>(() => new Function(
+                minor: false,
+                symbol: Symbol.T,
+                tonation: tonation,
+                index: new Index(),
+                added: [Component.Sixth, Component.Seventh],
+                removed: Component.Fifth
+            ));
+        }
     }
 }
