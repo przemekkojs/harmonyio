@@ -241,7 +241,7 @@ namespace Algorithm.New.Music
             DeductPossibleComponents();
         }
 
-        public void DeductPossibleComponents()
+        private void DeductPossibleComponents()
         {
             List<Component> doubled = [];
             List<Component> added = [];
@@ -250,6 +250,11 @@ namespace Algorithm.New.Music
             DeductAdded(added, doubled);
             CreatePossibleComponents(added, doubled);
             ValidatePossibleComponents();
+        }
+
+        private void DeductPossibleComponents2()
+        {
+
         }
 
         private void DeductRootAndPosition(List<Component> doubled)
@@ -272,13 +277,9 @@ namespace Algorithm.New.Music
                         else if (Position.Equals(Component.Third))
                         {
                             if (IsMain)
-                            {
                                 throw new ArgumentException("Invalid function symbol.");
-                            }
                             else
-                            {
                                 doubled.Add(Component.Third);
-                            }
                         }
                     }
                 }
@@ -294,64 +295,50 @@ namespace Algorithm.New.Music
                 {
                     doubled.Add(Component.Root);
                     doubled.Add(Component.Third);
-                    doubled.Add(Component.Fifth);
                 }
             }
         }
 
         private void DeductAdded(List<Component> added, List<Component> doubled)
         {
-            if (Added.Count != 0)
+            if (Added.Count == 0)
+                return;
+
+            if (Added.Contains(Component.Seventh))
             {
-                if (Added.Contains(Component.Seventh))
+                if (Removed != null)
                 {
-                    if (Removed != null)
-                    {
-                        if (Removed.Equals(Component.Root))
-                        {
-                            doubled.Remove(Component.Root);
-                            doubled.Remove(Component.Fifth);
-                        }
-                        else if (Removed.Equals(Component.Fifth))
-                        {
-                            doubled.Remove(Component.Fifth);
-                        }
+                    if (Removed.Equals(Component.Root))
+                        doubled.Remove(Component.Root);
+                    else if (Removed.Equals(Component.Fifth))
+                        doubled.Remove(Component.Fifth);
 
-                        doubled.Add(Component.Seventh);
-                    }
-                    else
-                    {
-                        added.Add(Component.Seventh);
-                    }
-                }
-                else if (Added.Contains(Component.Ninth))
-                {
-                    if (Removed != null)
-                    {
-                        if (Removed.Equals(Component.Root))
-                        {
-                            doubled.Remove(Component.Root);
-                        }
-                        else if (Removed.Equals(Component.Fifth))
-                        {
-                            doubled.Remove(Component.Fifth);
-                        }
-
-                        added.Add(Component.Seventh);
-                        added.Add(Component.Ninth);
-                    }
-                }
-                else if (Added.Contains(Component.Sixth))
-                {
-                    added.Add(Component.Sixth);
-                    doubled.Remove(Component.Fifth);
-                    doubled.Remove(Component.Root);
+                    doubled.Add(Component.Seventh);
                 }
                 else
+                    added.Add(Component.Seventh);
+            }
+            else if (Added.Contains(Component.Ninth))
+            {
+                if (Removed != null)
                 {
-                    throw new ArgumentException("Invalid symbol.");
+                    if (Removed.Equals(Component.Root))
+                        doubled.Remove(Component.Root);
+                    else if (Removed.Equals(Component.Fifth))
+                        doubled.Remove(Component.Fifth);
+
+                    added.Add(Component.Seventh);
+                    added.Add(Component.Ninth);
                 }
             }
+            else if (Added.Contains(Component.Sixth))
+            {
+                added.Add(Component.Sixth);
+                doubled.Remove(Component.Fifth);
+                doubled.Remove(Component.Root);
+            }
+            else
+                throw new ArgumentException("Invalid symbol.");
         }
 
         private void CreatePossibleComponents(List<Component> added, List<Component> doubled)
