@@ -170,90 +170,129 @@ class FunctionCreator {
 
         // Popup składników dodanych
         this.addedPopup = document.createElement('div');
-        this.addedPopup.className = "added-popup popup-base";
+        this.addedPopup.className = "added-popup popup-base d-flex flex-column";       
+
+        this.addedPopupBody = document.createElement('div');
 
         // Popup składników dodanych - tytuł
-        const addedPopupTitle = document.createElement('span');
-        addedPopupTitle.innerText = "Dodaj składnik dysonujący";
-        addedPopupTitle.className = "popup-title";
+        this.addedPopupTitleDiv = document.createElement('div');
+        this.addedPopupTitleDiv.className = "fw-bold bg-secondary text-white w-100 mb-auto p-2 text-center text-nowrap";
+        this.addedPopupTitleDiv.innerText = "Dodaj składnik";
 
         // Popup składników dodanych - składniki
         this.addAddedFormComponents = document.createElement('div');
-        
+        this.addAddedFormComponents.className = "form-check-inline m-2";
+
         this.addSixth = document.createElement('input');
+        this.addSixth.className = 'form-check-input';
         this.addSixth.name = "component";
         this.addSixth.type = "radio";
         this.addSixth.value = "sixth";
+        this.addSixth.id = `add-sixth-${this.id}`;
         
         this.addSeventh = document.createElement('input');
         this.addSeventh.name = "component";
+        this.addSeventh.className = 'form-check-input ms-2';
         this.addSeventh.type = "radio";
-        this.addSeventh.value = "seventh";      
+        this.addSeventh.value = "seventh";   
+        this.addSeventh.id = `add-seventh-${this.id}`;
+        this.addSeventh.checked = true;
         
         this.addNinth = document.createElement('input');
         this.addNinth.name = "component";
+        this.addNinth.className = 'form-check-input ms-2';
         this.addNinth.type = "radio";
-        this.addNinth.value = "ninth";        
+        this.addNinth.value = "ninth";  
+        this.addNinth.id = `add-ninth-${this.id}`;
 
         this.addSixthLabel = document.createElement('label');        
-        this.addSixthLabel.innerText = "6";        
+        this.addSixthLabel.innerText = "6";    
+        this.addSixthLabel.className = 'form-check-label me-1';
+        this.addSixthLabel.for = `add-sixth-${this.id}`;
 
         this.addSeventhLabel = document.createElement('label');
-        this.addSeventhLabel.innerText = "7";        
+        this.addSeventhLabel.innerText = "7";
+        this.addSeventhLabel.className = 'form-check-label me-1';
+        this.addSeventhLabel.for = `add-seventh-${this.id}`;
 
         this.addNinthLabel = document.createElement('label');
-        this.addNinthLabel.innerText = "9";        
+        this.addNinthLabel.innerText = "9"; 
+        this.addNinthLabel.className = 'form-check-label me-1';
+        this.addNinthLabel.for = `add-ninth-${this.id}`;
 
         [this.addSixth, this.addSixthLabel, this.addSeventh, this.addSeventhLabel, this.addNinth, this.addNinthLabel].forEach(e => {
             this.addAddedFormComponents.appendChild(e);
         });
 
         // Popup składników dodanych - opcje
-        this.addAddedFormOptions = document.createElement('div');        
+        this.addAddedFormOptions = document.createElement('div');  
+        this.addAddedFormOptions.className = "form-check-inline m-2";
                 
         this.addedMinor = document.createElement('input');
+        this.addedMinor.className = 'form-check-input ms-2';
         this.addedMinor.type = "radio";
         this.addedMinor.name = 'type';
-        this.addedMinor.value = 'major';        
+        this.addedMinor.value = 'major';    
+        this.addedMinor.id = `added-minor-${this.id}`;
                 
         this.addedNeutral = document.createElement('input');
+        this.addedNeutral.className = 'form-check-input ms-2';
         this.addedNeutral.type = "radio";
         this.addedNeutral.name = 'type';
-        this.addedNeutral.value = 'neutral';        
+        this.addedNeutral.value = 'neutral'; 
+        this.addedNeutral.checked = true;
+        this.addedNeutral.id = `added-neutral-${this.id}`;
         
         this.addedMajor = document.createElement('input');
+        this.addedMajor.className = 'form-check-input';
         this.addedMajor.type = "radio";
         this.addedMajor.name = 'type';
-        this.addedMajor.value = 'minor';        
+        this.addedMajor.value = 'minor';
+        this.addedMajor.id = `added-major-${this.id}`;
 
         this.addedMinorLabel = document.createElement('label');
-        this.addedMinorLabel.innerHTML = "&lt;";        
+        this.addedMinorLabel.className = 'form-check-label me-1';
+        this.addedMinorLabel.innerHTML = "&lt;";
+        this.addedMinorLabel.for = `added-minor-${this.id}`;
 
         this.addedNeutralLabel = document.createElement('label');
-        this.addedNeutralLabel.innerText = "-";        
+        this.addedNeutralLabel.className = 'form-check-label me-1';
+        this.addedNeutralLabel.innerText = "-";
+        this.addedNeutralLabel.for = `added-neutral-${this.id}`;
 
         this.addedMajorLabel = document.createElement('label');
-        this.addedMajorLabel.innerHTML = "&gt;";        
+        this.addedMajorLabel.className = 'form-check-label me-1';
+        this.addedMajorLabel.innerHTML = "&gt;";   
+        this.addedMajorLabel.for = `added-major-${this.id}`;
 
         [this.addedMajor, this.addedMajorLabel, this.addedNeutral, this.addedNeutralLabel, this.addedMinor, this.addedMinorLabel].forEach(e => {
             this.addAddedFormOptions.appendChild(e);
         });
 
+        this.addAddedPopupButtons = document.createElement('div');
+        this.addAddedPopupButtons.className = 'p-1';
+
         // Popup składników dodanych - przycisk potwierdź
         this.confirmAddAdded = document.createElement('input');
         this.confirmAddAdded.type = 'button';
         this.confirmAddAdded.name = 'confirm-button';        
-        this.confirmAddAdded.className = `confirm-button`;
+        this.confirmAddAdded.className = `btn btn-primary`;
         this.confirmAddAdded.value = "Dodaj";
 
         // Popup składników dodanych - przycisk anuluj
         this.cancelAddAdded = document.createElement('input');
         this.cancelAddAdded.type = 'button';
         this.cancelAddAdded.name = 'confirm-button';        
-        this.cancelAddAdded.className = `cancel-button`;
+        this.cancelAddAdded.className = `btn btn-danger ms-1`;
         this.cancelAddAdded.value = "Anuluj";
 
-        [addedPopupTitle, this.addAddedFormComponents, this.addAddedFormOptions, this.confirmAddAdded, this.cancelAddAdded].forEach(e => {
+        this.addAddedPopupButtons.appendChild(this.confirmAddAdded);
+        this.addAddedPopupButtons.appendChild(this.cancelAddAdded);
+
+        this.addedPopupBody.appendChild(this.addAddedFormComponents);
+        this.addedPopupBody.appendChild(this.addAddedFormOptions);
+
+        [this.addedPopupTitleDiv, this.addedPopupBody, this.addAddedFormOptions, this.addAddedPopupButtons].forEach(e => {
             this.addedPopup.appendChild(e);
         });        
         
@@ -436,6 +475,10 @@ class FunctionCreator {
         // Ustawienie ID'ków wszystkiego co trzeba
         this.setId(this.taskIndex, this.barIndex, this.functionIndex);
 
+        this.addedPopup.style.display = "none";
+        this.suspensionPopup.style.display = "none";
+        this.alterationPopup.style.display = "none";
+
         this.avaiableAlterations = ['up', 'down'];
         this.alterationsList = [];
         this.addedList = [];
@@ -450,6 +493,10 @@ class FunctionCreator {
 
         this.populateDropdowns();
         this.addOnClickEvents();
+
+        this.addedPopup.setAttribute('style', 'display: none !important;');
+        this.suspensionPopup.setAttribute('style', 'display: none !important;');
+        this.alterationPopup.setAttribute('style', 'display: none !important;');
     }
 
     setId(taskIndex, barIndex, functionIndex) {
@@ -487,7 +534,7 @@ class FunctionCreator {
 
         this.confirmAddAlteration.id = `confirm-add-alteration-${this.id}`;
         this.cancelAddAlteration.id = `cancel-add-alteration-${this.id}`;
-        this.addedPopup.id = `added-popup-${this.id}`;
+        this.id = `added-popup-${this.id}`;
         this.addAddedFormComponents.id = `add-added-form-${this.id}-components`;
 
         this.addAddedFormOptions.id = `add-added-form-${this.id}-options`;
@@ -578,10 +625,9 @@ class FunctionCreator {
             container.removeChild(element);
         });
 
-        const none = "none";
-        this.addedPopup.style.display = none;
-        this.suspensionPopup.style.display = none;
-        this.alterationPopup.style.display = none;
+        this.addedPopup.setAttribute('style', 'display: none !important;');
+        this.suspensionPopup.setAttribute('style', 'display: none !important;');
+        this.alterationPopup.setAttribute('style', 'display: none !important;');
     }
 
     // Ta funkcja tworzy i wysyła obiekt, który potem jest zapisywany do bazy
@@ -600,7 +646,7 @@ class FunctionCreator {
         const added = this.addedList != null ? this.addedList : [];
 
         // To jest zapisywane
-        let functionResult = new ParsedFunction(
+        const functionResult = new ParsedFunction(
             this.barIndex, this.functionIndex,
             minor, symbol, position, root, removed,
             alterations, added
@@ -647,15 +693,14 @@ class FunctionCreator {
     }
 
     addAddedOnClickEvents() {
-        const components = this.addedPopup
-            .querySelectorAll('div')[0]
-            .querySelectorAll('input[type="radio"]');
-
-        const options = this.addedPopup
-            .querySelectorAll('div')[1]
-            .querySelectorAll('input[type="radio"]');
+        const components = [this.addSixth, this.addSeventh, this.addNinth];
+        const options = [this.addedMajor, this.addedMinor, this.addedNeutral];
 
         const confirmButton = this.confirmAddAdded;
+
+        const cancelButton = this.cancelAddAdded;
+
+        cancelButton.addEventListener('click', () => this.togglePopupOff(this.addedPopup));
 
         confirmButton.addEventListener('click', () => {
             let checkedComponent = "";
@@ -746,27 +791,18 @@ class FunctionCreator {
     }
 
     togglePopupOn(popup, event) {
-        if (popup.style.display === "block") {
-            popup.style.display = "none";
-        }
-        else {
-            popup.style.display = "block";
-        }
+        console.log('on', popup);
 
-        const button = event.currentTarget;
-        const rect = button.getBoundingClientRect();
-
-        popup.style.left = (rect.left - (popup.style.width / 2)) + "px";
-        popup.style.top = (rect.top + button.offsetHeight) + "px";
-
-        const cancelButton = popup.querySelectorAll('input[type="button"]')[1];
-        cancelButton.addEventListener('click', () => { this.togglePopupOff(popup); });
+        popup.style.display = "block";
+        this.disableItems(this.allComponents);
     }
 
     togglePopupOff(popup) {
-        popup.style.display = "none";
+        console.log('off', popup);
+
+        popup.setAttribute('style', 'display: none !important;');
         this.enableItems(this.allComponents);
-    }    
+    }
 
     disableItems(items) {
         items.forEach(item => {

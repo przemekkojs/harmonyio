@@ -160,12 +160,12 @@
 }
 
 .popup-base {
+    border: 1px solid black;
     border-radius: 5px;
-    padding: 5px;
     text-align: center;
     position: absolute;
     z-index: 1000;
-    background-color: #dddddd;
+    background-color: #ffffff;
 }
 
 .popup-title {
