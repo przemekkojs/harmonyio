@@ -159,7 +159,7 @@ namespace Algorithm.New.Algorithm.Generators
             foreach (var key in mappings.Keys)
             {
                 var valueList = mappings[key];
-                var count = (UInt32)valueList.Count;
+                uint count = (UInt32)valueList.Count;
 
                 maxIterations *= count != 0 ?
                     count :
@@ -177,9 +177,27 @@ namespace Algorithm.New.Algorithm.Generators
                 {
                     possibleNotes = mapping[usedNotesIndex];
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    break;
+                    currentIndex--;
+                    tolerance++;
+
+                    if (currentIndex >= 0)
+                    {
+                        usedNotesIndexes[currentIndex + 1] = 0;
+                        stacks.RemoveAt(currentIndex);
+                        functionsTmp.RemoveAt(currentIndex);
+                    }
+                    else
+                    {
+                        currentIndex = 0;
+                        usedNotesIndexes[currentIndex] = 0;
+                    }
+
+                    currentFunction = functions[currentIndex];
+                    usedNotesIndex = usedNotesIndexes[currentIndex];
+                    mapping = mappings[currentFunction];
+                    possibleNotes = mapping[usedNotesIndex];
                 }
 
                 currentIteration++;
@@ -235,20 +253,20 @@ namespace Algorithm.New.Algorithm.Generators
                 {
                     while (usedNotesIndexes[currentIndex] >= mapping.Count)
                     {
-                        usedNotesIndexes[currentIndex] = 0;
                         currentIndex--;
 
                         if (currentIndex >= 0)
                         {
+                            usedNotesIndexes[currentIndex + 1] = 0;
                             stacks.RemoveAt(currentIndex);
                             functionsTmp.RemoveAt(currentIndex);
                         }
                         else
-                        {
+                        {                            
                             currentIndex = 0;
+                            usedNotesIndexes[currentIndex] = 0;
                             tolerance++;
-                            // return new Solution(problem, []);
-                        }                            
+                        }
                     }
                 }
             }

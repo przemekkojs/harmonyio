@@ -57,9 +57,10 @@ class Task {
         maxPointsSection.className = 'h-100 d-flex flex-column';
         maxPointsSection.style.maxWidth = '150px';
         
-        const maxPointsLabel = document.createElement('div');
-        maxPointsLabel.className = 'fw-bold text-nowrap';
-        maxPointsLabel.textContent = 'Max punkty';
+        this.maxPointsLabel = document.createElement('div');
+        this.maxPointsLabel.className = 'fw-bold text-nowrap';
+        this.maxPointsLabel.textContent = 'Max punktów';
+        this.maxPointsLabel.style = "cursor: help";        
         
         this.maxPointsInput = document.createElement('input');
         this.maxPointsInput.type = 'number';
@@ -76,7 +77,7 @@ class Task {
             return
         });
         
-        maxPointsSection.appendChild(maxPointsLabel);
+        maxPointsSection.appendChild(this.maxPointsLabel);
         maxPointsSection.appendChild(this.maxPointsInput);
 
         inputRow.appendChild(maxPointsSection);
@@ -90,6 +91,8 @@ class Task {
         const metreLabel = document.createElement('div');
         metreLabel.className = 'fw-bold text-nowrap';
         metreLabel.textContent = 'Metrum';
+        metreLabel.title = "Sekcja wyboru metrum."
+        metreLabel.style = "cursor: help";
         
         this.metreSelect = document.createElement('select');
         this.metreSelect.value = '2/4';
@@ -115,6 +118,8 @@ class Task {
         const keyLabel = document.createElement('div');
         keyLabel.className = 'fw-bold text-nowrap';
         keyLabel.textContent = 'Tonacja';
+        keyLabel.title = "Sekcja wyboru tonacji. Tonacje działają do 4 znaków chromatycznych.";
+        keyLabel.style = "cursor: help;";
         keySignature.appendChild(keyLabel);
 
         const keyInputs = document.createElement('div');
@@ -123,6 +128,7 @@ class Task {
         this.tonationNameSelect = document.createElement('select');
         this.tonationNameSelect.value = 'C';
         this.tonationNameSelect.className = 'form-control points-input border-secondary bg-white';
+        this.tonationNameSelect.title = "Wybierz nazwę tonacji";
         this.tonationNameSelect.innerHTML = `
             <option value="C">C</option>
             <option value="Ces">Ces</option>
@@ -147,10 +153,11 @@ class Task {
             <option value="As">As</option>
 
             <option value="H">H</option>
-            <option value="H">B</option>`;
+            <option value="B">B</option>`;
 
         this.tonationModeSelect = document.createElement('select');
         this.tonationModeSelect.value = 'dur';
+        this.tonationModeSelect.title = 'Wybierz tryb tonacji';
         this.tonationModeSelect.className = 'form-control points-input border-secondary bg-white';
         this.tonationModeSelect.innerHTML = `
             <option value="dur">Dur</option>
@@ -206,9 +213,7 @@ class Task {
 
         this.randomTaskErrors = document.createElement('span');
         this.randomTaskErrors.className = 'text-danger';
-        this.randomTaskErrors.innerText = "";
-
-        
+        this.randomTaskErrors.innerText = "";       
 
         // Przycisk kostki
         this.randomTaskButton = document.createElement('button');
@@ -263,7 +268,9 @@ class Task {
 
         this.taskIndex = taskIndex;
 
-        this.randomTaskButton.id = `random-task-${this.taskIndex}`;
+        this.maxPointsLabel.title = `Maksymalna liczba punktów za zadanie ${this.taskIndex}.`;
+
+        this.randomTaskButton.id = `random-task-${this.taskIndex + 1}`;
 
         this.metreSelect.id = `metre-select-task-${taskIndex}`;
         this.taskNumber.innerText = `${taskIndex + 1}`;
@@ -459,8 +466,6 @@ class Task {
         .then(data => {
             const taskResult = JSON.parse(data);    
             this.randomTaskButton.disabled = false;
-
-            console.log(taskResult);
 
             if (taskResult.length === 0) {
                 this.randomTaskErrors.innerText = "Coś poszło nie tak...";
