@@ -225,6 +225,9 @@ namespace Algorithm.New.Algorithm.Generators
         {
             try
             {
+                if (sharpsCount > 4 || flatsCount > 4 || sharpsCount < 0 || flatsCount < 0)
+                    return [];
+
                 var metre = Metre.GetMetre(metreCount, metreValue);
                 var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
                 var isMinor = minor != 1;

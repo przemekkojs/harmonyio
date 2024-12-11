@@ -464,26 +464,32 @@ class Task {
         })
         .then(response => response.json())
         .then(data => {
-            const taskResult = JSON.parse(data);    
-            this.randomTaskButton.disabled = false;
+            try {
+                this.randomTaskButton.disabled = false;
+                const taskResult = JSON.parse(data);
 
-            if (taskResult.length === 0) {
-                this.randomTaskErrors.innerText = "Coś poszło nie tak...";
+                if (taskResult.length === 0) {
+                    this.randomTaskErrors.innerText = "Coś poszło nie tak...";
+                    return;
+                }
+
+                const exercise = {
+                    question: questionText,
+                    sharpsCount: Number(sharpsCount),
+                    flatsCount: Number(flatsCount),
+                    minor: Number(minor),
+                    metreValue: Number(metreValue),
+                    metreCount: Number(metreCount),
+                    maxPoints: Number(maxPoints),
+                    task: taskResult
+                };
+
+                this.load(exercise);
+            }
+            catch (error) {
+                this.randomTaskButton.disabled = false;
                 return;
             }
-
-            const exercise = {
-                question: questionText,
-                sharpsCount: Number(sharpsCount),
-                flatsCount: Number(flatsCount),
-                minor: Number(minor),
-                metreValue: Number(metreValue),
-                metreCount: Number(metreCount),
-                maxPoints: Number(maxPoints),
-                task: taskResult
-            };
-
-            this.load(exercise);
         })
         .catch(error => console.error('Error:', error));
     }
