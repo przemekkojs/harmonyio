@@ -212,19 +212,19 @@ namespace Main.Pages
         {
             var mV = Convert.ToInt32(data.MetreValue);
             var mC = Convert.ToInt32(data.MetreCount);
-
-            var generatedFunctions = Algorithm.New.Algorithm.Generators.ProblemGenerator
-                .Generate(data.Bars, mV, mC, data.SharpsCount, data.FlatsCount, data.Minor);
-
-            var metre = Metre.GetMetre(mC, mV);
-            var tonationList = Tonation.GetTonation(data.SharpsCount, data.FlatsCount);
-
-            var tonation = data.Minor == 1 ?
-                tonationList.First(x => x.Mode == Mode.Major) :
-                tonationList.First(x => x.Mode == Mode.Minor);
-
+            
             try
             {
+                var generatedFunctions = Algorithm.New.Algorithm.Generators.ProblemGenerator
+                    .Generate(data.Bars, mV, mC, data.SharpsCount, data.FlatsCount, data.Minor);
+
+                var metre = Metre.GetMetre(mC, mV);
+                var tonationList = Tonation.GetTonation(data.SharpsCount, data.FlatsCount);
+
+                var tonation = data.Minor == 1 ?
+                    tonationList.First(x => x.Mode == Mode.Major) :
+                    tonationList.First(x => x.Mode == Mode.Minor);
+
                 var problem = new Problem(generatedFunctions, metre, tonation);
                 var parsedProblem = Parser.ParseProblemFunctionsToString(problem);
 

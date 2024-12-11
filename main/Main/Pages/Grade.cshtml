@@ -172,6 +172,9 @@
                     </div>
                 </div>
 
+                <div id="excersise-tonation">
+                    @*SET VIA JS*@
+                </div>
 
                 <div id="music-staff-div" class="flex-grow-1 d-flex flex-row bg-white rounded mt-3">
                     <div id="p5_loading">Ładowanie rozwiązania</div>
@@ -267,6 +270,7 @@
 
 <script type="module">
     import { playTask } from "../js/midi-player-scripts/midiPlayer.js";
+    import { parseAccidentalsCountToTonationInfo } from "./js/utils.js";
 
     const usernames = @Html.Raw(JsonConvert.SerializeObject(Model.Users.Select(u => u.FullName)));
 
@@ -396,6 +400,21 @@
                 questionElement.innerText = 'Brak polecenia dla tego zadania';
             else
                 questionElement.innerText = questions[currentQuestionIndex].question;
+            
+            const excersiseTonation = document.getElementById("excersise-tonation");
+            const question = questions[currentQuestionIndex];
+            const sharpsCount = question.sharpsCount;
+            const flatsCount = question.flatsCount;
+            const minor = question.minor;
+
+            const obj = [sharpsCount, flatsCount, minor];
+
+            const tonationInfo = parseAccidentalsCountToTonationInfo(obj);
+            const tonation = `${tonationInfo[0]}-${tonationInfo[1]}`;
+
+            excersiseTonation.innerHTML = `
+                <p><span class="fw-semibold">Tonacja: </span> ${tonation}</p>
+            `;
 
             const points = userPoints[currentUserIndex][currentQuestionIndex];
             const maxPoints = exerciseMaxes[currentQuestionIndex];

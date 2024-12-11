@@ -223,17 +223,27 @@ namespace Algorithm.New.Algorithm.Generators
         /// <returns></returns>
         public static List<Function> Generate(int bars, int metreValue, int metreCount, int sharpsCount, int flatsCount, int minor)
         {
-            var metre = Metre.GetMetre(metreCount, metreValue);
-            var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
-            var isMinor = minor != 1;
+            try
+            {
+                if (sharpsCount > 4 || flatsCount > 4 || sharpsCount < 0 || flatsCount < 0)
+                    return [];
 
-            var tonation = isMinor ?
-                tonationList.Where(x => x.Mode == Mode.Minor).First() :
-                tonationList.Where(x => x.Mode == Mode.Major).First();
+                var metre = Metre.GetMetre(metreCount, metreValue);
+                var tonationList = Tonation.GetTonation(sharpsCount, flatsCount);
+                var isMinor = minor != 1;
 
-            var generated = Generate(bars, metre, tonation);
+                var tonation = isMinor ?
+                    tonationList.Where(x => x.Mode == Mode.Minor).First() :
+                    tonationList.Where(x => x.Mode == Mode.Major).First();
 
-            return generated;
+                var generated = Generate(bars, metre, tonation);
+
+                return generated;
+            }
+            catch (Exception ex)
+            {
+                return [];
+            }
         }
 
         // W tej funkcji powinna się też znaleźć obsługa wtrąceń, kiedy już dodatkowe funkcjonalności będą

@@ -36,10 +36,10 @@
 
         private void Validate()
         {
-            if (SharpsCount < 0 || SharpsCount > 7)
+            if (SharpsCount < 0 || SharpsCount > 10)
                 throw new ArgumentException("Invalid sharps count.");
 
-            if (FlatsCount < 0 || FlatsCount > 7)
+            if (FlatsCount < 0 || FlatsCount > 10)
                 throw new ArgumentException("Invalid flats count.");
 
             if (SharpsCount != 0 && FlatsCount != 0)
@@ -49,7 +49,16 @@
         public static Tonation GetMirroredVersion(Tonation tonation)
         {
             var flatsCount = tonation.FlatsCount != 0 ? tonation.FlatsCount : -tonation.SharpsCount;
-            var newAccidentalsCount = flatsCount + 3;
+            var newAccidentalsCount = tonation.Mode == Mode.Major ?
+                flatsCount + 3 :
+                flatsCount - 3;
+
+            if (newAccidentalsCount > 7 || newAccidentalsCount < -7)
+            {
+                // TODO:
+                // A co jak mamy np. Ces dur i chcemy zrobić ces moll?
+                var x = 0;
+            }
 
             var newFlatsCount = newAccidentalsCount >= 0 ? newAccidentalsCount : 0;
             var newSharpsCount = newAccidentalsCount <= 0 ? -newAccidentalsCount : 0;
@@ -69,7 +78,11 @@
                 EFlatMinor, EMajor, EMinor, FMajor, FMinor, FSharpMajor,
                 FSHarpMinor, GFlatMajor, GMajor, GMinor, GSharpMinor,
                 AFlatMajor, AFlatMinor, AMajor, AMinor, ASharpMinor,
-                BFlatMajor, BFlatMinor, BMajor, BMinor
+                BFlatMajor, BFlatMinor, BMajor, BMinor,
+
+                DFlatMinor, GFlatMinor, CFlatMinor, FFlatMajor, BDoubleFlatMajor,
+                EDoubleFlatMajor, GSharpMajor, DSharpMajor, ASharpMajor,
+                ESharpMinor, BSharpMinor, FDoubleSharpMinor
             ];
 
             return tonations
@@ -107,5 +120,22 @@
         public static readonly Tonation BFlatMinor = new("Bb", Mode.Minor, 5, 0);
         public static readonly Tonation BMajor = new("B", Mode.Major, 0, 5);
         public static readonly Tonation BMinor = new("B", Mode.Minor, 0, 2);
+
+        // Tonacje teoretyczne:
+        public static readonly Tonation DFlatMinor = new("Db", Mode.Minor, 8, 0);
+        public static readonly Tonation GFlatMinor = new("Gb", Mode.Minor, 9, 0);
+        public static readonly Tonation CFlatMinor = new("Cb", Mode.Minor, 10, 0);
+
+        public static readonly Tonation FFlatMajor = new("Fb", Mode.Major, 8, 0);
+        public static readonly Tonation BDoubleFlatMajor = new("Bbb", Mode.Major, 9, 0);
+        public static readonly Tonation EDoubleFlatMajor = new("Ebb", Mode.Major, 10, 0);
+
+        public static readonly Tonation GSharpMajor = new("G#", Mode.Major, 0, 8);
+        public static readonly Tonation DSharpMajor = new("D#", Mode.Major, 0, 9);
+        public static readonly Tonation ASharpMajor = new("A#", Mode.Major, 0, 10);
+
+        public static readonly Tonation ESharpMinor = new("E#", Mode.Minor, 0, 8);
+        public static readonly Tonation BSharpMinor = new("B#", Mode.Minor, 0, 9);
+        public static readonly Tonation FDoubleSharpMinor = new("Fx", Mode.Minor, 0, 10);
     }
 }
