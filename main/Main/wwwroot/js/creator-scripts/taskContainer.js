@@ -65,6 +65,16 @@ class Task {
         this.maxPointsInput.type = 'number';
         this.maxPointsInput.value = '10';
         this.maxPointsInput.className = 'form-control points-input border-secondary bg-white';
+        this.maxPointsInput.addEventListener('blur', function () {
+            if (this.value == 0) {
+                this.value = 1;
+            }
+            if (this.value < 0)
+            {
+                this.value = -this.value;
+            }
+            return
+        });
         
         maxPointsSection.appendChild(maxPointsLabel);
         maxPointsSection.appendChild(this.maxPointsInput);
