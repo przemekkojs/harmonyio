@@ -21,25 +21,30 @@ namespace Algorithm.New.Algorithm.Rules.Solution
 
             var stack = stacks[0];
             var stackNotes = stack.Notes;
-            var notNullNotes = stackNotes
-                .Where(x => x != null);
 
-            if (notNullNotes.Count() != 4)
+            var notNullNotes = stackNotes
+                .Where(x => x != null)
+                .ToList();
+
+            if (notNullNotes == null)
+                return true;
+
+            if (notNullNotes.Count != 4)
                 return true;
 
             var stackComponents = notNullNotes
-                .Select(x => x?.Component);
+                .Select(x => x!.Component);
 
             var rootCount = stackComponents
-                .Where(x => x.Equals(Component.Root))
+                .Where(x => x!.Equals(Component.Root))
                 .Count();
 
             var fifthCount = stackComponents
-                .Where(x => x.Equals(Component.Root))
+                .Where(x => x!.Equals(Component.Fifth))
                 .Count();
 
             var thirdCount = stackComponents
-                .Where(x => x.Equals(Component.Third))
+                .Where(x => x!.Equals(Component.Third))
                 .Count();
 
             return thirdCount != 0 && (fifthCount != 0 || rootCount != 0);

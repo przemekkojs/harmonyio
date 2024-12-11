@@ -194,6 +194,12 @@ class Task {
         
         randomTaskBody.appendChild(randomTaskInputSection);
 
+        this.randomTaskErrors = document.createElement('span');
+        this.randomTaskErrors.className = 'text-danger';
+        this.randomTaskErrors.innerText = "";
+
+        
+
         // Przycisk kostki
         this.randomTaskButton = document.createElement('button');
         this.randomTaskButton.type = 'button';
@@ -207,18 +213,8 @@ class Task {
 
         randomTaskBody.appendChild(this.randomTaskButton);
         column3.appendChild(randomTaskBody);
-
-        this.form.appendChild(column3);
-
-        // Funkcja do tworzenia pola wejściowego
-        function createInput(type, value, className) {
-            const input = document.createElement('input');
-            input.type = type;
-            input.value = value;
-            input.className = className;
-            return input;
-        }
-
+        
+        this.form.appendChild(column3);        
         this.form.appendChild(this.hiddenInput);
         this.form.appendChild(this.barContainer.container);
 
@@ -399,6 +395,9 @@ class Task {
     }
 
     generate() {
+        this.randomTaskErrors.innerText = "";
+        this.randomTaskButton.disabled = true;
+
         const questionText = this.questionInput.value;
 
         const tonationLetterSelect = this.tonationNameSelect;
@@ -448,7 +447,15 @@ class Task {
         })
         .then(response => response.json())
         .then(data => {
-            const taskResult = JSON.parse(data);            
+            const taskResult = JSON.parse(data);    
+            this.randomTaskButton.disabled = false;
+
+            console.log(taskResult);
+
+            if (taskResult.length === 0) {
+                this.randomTaskErrors.innerText = "Coś poszło nie tak...";
+                return;
+            }
 
             const exercise = {
                 question: questionText,

@@ -231,7 +231,9 @@ namespace Algorithm.New.Algorithm.Generators
                 tonationList.Where(x => x.Mode == Mode.Minor).First() :
                 tonationList.Where(x => x.Mode == Mode.Major).First();
 
-            return Generate(bars, metre, tonation);
+            var generated = Generate(bars, metre, tonation);
+
+            return generated;
         }
 
         // W tej funkcji powinna się też znaleźć obsługa wtrąceń, kiedy już dodatkowe funkcjonalności będą
@@ -249,6 +251,8 @@ namespace Algorithm.New.Algorithm.Generators
             Function? current = null;
 
             var maxFunctionsInBar = metre.Count + 1;
+            var maxIterationsCount = bars * 4 * 48;
+            var currentIteration = 0;
 
             for (int barIndex = 0; barIndex < bars; barIndex++)
             {
@@ -256,7 +260,6 @@ namespace Algorithm.New.Algorithm.Generators
                     1 : // Ostatni takt powinien zawierać zawsze 1 funkcję
                     _random.Next(1, maxFunctionsInBar);
 
-                // TODO: Trzeba dodać sprawdzanie, czy są spełniane zasady wsm
                 for (int functionIndex = 0; functionIndex < functionsInBar; functionIndex++)
                 {
                     var next = Next(current, metre, tonation, barIndex, functionIndex);
@@ -269,16 +272,21 @@ namespace Algorithm.New.Algorithm.Generators
                     }
 
                     // Dopóki są błędy w takim czymś, to nie można raczej tak zrobić
-                    var mistakesCount = 0;
+                    int mistakesCount;
 
                     do
                     {
+                        currentIteration++;
                         next = Next(current, metre, tonation, barIndex, functionIndex);
                         var tmpProblem = new Problem([current, next], metre, tonation);
                         var mistakes = ProblemChecker.CheckProblem(tmpProblem);
                         mistakesCount = mistakes.Count;
+
+                        if (currentIteration >= maxIterationsCount)
+                            return [];
+
                     } while (mistakesCount != 0);
-                    
+
                     current = next;
                     result.Add(current);
                 }
@@ -302,16 +310,28 @@ namespace Algorithm.New.Algorithm.Generators
             // Logika dodawania dobrego zakończenia zadania
             if (lastFunction.Symbol != Symbol.T)
             {
+                // Dla pewności, że nic się nie popsuje
+                if (lastFunction.Added.Count > 0)
+                {
+                    lastFunction.Added = [];
+                    lastFunction.Position = null;
+                    lastFunction.Root = null;
+                    lastFunction.Removed = null;
+
+                    lastFunction.DeductPossibleComponents();
+                }                    
+
                 var lastBar = lastFunction.Index.Bar;
+                var lastSymbol = lastFunction.Symbol;
 
                 // Jeżeli nie ma dominanty, to trzeba z tym coś zrobić
-                if (!lastFunction.Symbol.ToString()[0].Equals("D"))
+                if (lastSymbol != Symbol.D)
                 {
                     var dominant = new Function(
                         new Music.Index()
                         {
                             Bar = lastBar,
-                            Position = 0,
+                            Position = lastFunction.Index.Position + 1,
                             Duration = 1
                         },
                         Symbol.D,
@@ -323,11 +343,11 @@ namespace Algorithm.New.Algorithm.Generators
                         new Music.Index()
                         {
                             Bar = lastBar,
-                            Position = 0,
-                            Duration = metre.Value
+                            Position = lastFunction.Index.Position + 2,
+                            Duration = 1
                         },
                         Symbol.T,
-                        false,
+                        tonation.Mode == Mode.Minor,
                         tonation
                     );
 
@@ -339,16 +359,21 @@ namespace Algorithm.New.Algorithm.Generators
                         new Music.Index()
                         {
                             Bar = lastBar,
-                            Position = metre.Value,
-                            Duration = metre.Value
+                            Position = lastFunction.Index.Position + 1,
+                            Duration = 1
                         },
                         Symbol.T,
-                        false,
+                        tonation.Mode == Mode.Minor,
                         tonation
                     );
 
                     result.Add(tonic);
                 }
+            }
+            else
+            {
+                lastFunction.Minor = tonation.Mode == Mode.Minor;
+                lastFunction.Added = [];
             }
         }
 
@@ -363,13 +388,24 @@ namespace Algorithm.New.Algorithm.Generators
         /// <returns></returns>
         private static Function Next(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
-            // TODO:
-            // Naprawić, żeby dobre funkcje się generowały
-
             var result = GetBestFittingFunction(prev, metre, tonation, barIndex, functionIndex);
 
             AddAddedComponents(result);
             AddRootAndPosition(result);
+
+            try
+            {
+                result.DeductPossibleComponents();
+            }
+            catch (Exception) // Trochę na chama, ale działa XD
+            {
+                result.Added = [];
+                result.Position = null;
+                result.Root = null;
+                result.Removed = null;
+
+                result.DeductPossibleComponents();
+            }
 
             return result;
         }
@@ -387,7 +423,9 @@ namespace Algorithm.New.Algorithm.Generators
 
             var possibleToAdd = toAddWeights
                 .Where(x => x.Item1 > randomValue)
-                .Select(x => x.Item2);
+                .Select(x => x.Item2)
+                .Distinct()
+                .ToList();
 
             foreach (var possible in possibleToAdd)
             {
@@ -426,7 +464,7 @@ namespace Algorithm.New.Algorithm.Generators
                     function.Root = root;
                 }
             }
-            
+
             if (canAddPosition)
             {
                 var positionRandomValue = _random.Next(MAX_WEIGHT);
@@ -442,7 +480,135 @@ namespace Algorithm.New.Algorithm.Generators
                     var position = possiblePositions[positionIndex];
                     function.Position = position;
                 }
-            }            
+            }
+        }
+
+        private static Function GetBestFittingAfterSeventh(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
+        {
+            var newBar = barIndex;
+            var newPosition = functionIndex;
+            var newDuration = metre.Value;
+            var prevSymbol = prev!.Symbol;
+            var symbolIndex = Function.SymbolIndexes[prevSymbol];
+
+            List<(int, int)> newIndexes =
+            [
+                (PRIORITY_HIGHEST, symbolIndex - 4),
+                (PRIORITY_LOW, symbolIndex - 2),
+                (PRIORITY_LOWEST, symbolIndex + 1)
+            ];
+
+            var randomValue = _random.Next(100);
+            int matchingCount = 0;
+            List<(int, int)> matching;
+
+            do
+            {
+                matching = newIndexes
+                    .Where(x => x.Item1 <= randomValue)
+                    .ToList();
+
+                randomValue = _random.Next(100);
+                matchingCount = matching.Count;
+            } while (matchingCount < 1);
+
+
+            var randomIndex = _random.Next(matchingCount);
+            var selected = matching[randomIndex].Item2;
+
+            var newSymbolIndex = Function.SymbolIndexes
+                .Where(x => x.Value == selected)
+                .FirstOrDefault()
+                .Key;
+
+            return new Function(
+                index: new Music.Index()
+                {
+                    Bar = newBar,
+                    Position = newPosition,
+                    Duration = newDuration
+                },
+                symbol: newSymbolIndex,
+                minor: tonation.Mode == Mode.Minor,
+                tonation: tonation
+            );
+        }
+
+        private static Function GetBestFittingAfterNinth(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
+        {
+            var newBar = barIndex;
+            var newPosition = functionIndex;
+            var newDuration = metre.Value;
+            var prevSymbol = prev!.Symbol;
+
+            var symbolIndex = Function.SymbolIndexes[prevSymbol];
+            var newIndex = symbolIndex - 4;
+
+            if (newIndex < 0)
+                newIndex += 7;
+
+            var newSymbolIndex = Function.SymbolIndexes
+                .Where(x => x.Value == newIndex)
+                .FirstOrDefault()
+                .Key;
+
+            return new Function(
+                index: new Music.Index()
+                {
+                    Bar = newBar,
+                    Position = newPosition,
+                    Duration = newDuration
+                },
+                symbol: newSymbolIndex,
+                minor: tonation.Mode == Mode.Minor,
+                tonation: tonation
+            );
+        }
+
+        private static Function GetFittingAfterSixth(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
+        {
+            var newBar = barIndex;
+            var newPosition = functionIndex;
+            var newDuration = metre.Value;
+            var prevSymbol = prev!.Symbol;
+
+            var symbolIndex = Function.SymbolIndexes[prevSymbol];
+            var newIndex = symbolIndex - 3;
+
+            if (newIndex < 0)
+                newIndex += 7;
+
+            var newSymbolIndex = Function.SymbolIndexes
+                .Where(x => x.Value == newIndex)
+                .FirstOrDefault()
+                .Key;
+
+            return new Function(
+                index: new Music.Index()
+                {
+                    Bar = newBar,
+                    Position = newPosition,
+                    Duration = newDuration
+                },
+                symbol: newSymbolIndex,
+                minor: tonation.Mode == Mode.Minor,
+                tonation: tonation
+            );
+        }
+
+        private static Function FunctionAfterNull(Metre metre, Tonation tonation)
+        {
+            return new Function(
+                index: new Music.Index()
+                {
+                    Bar = 0,
+                    Position = 0,
+                    Duration = metre.Value,
+                },
+                symbol: Symbol.T,
+                minor: tonation.Mode == Mode.Minor,
+                tonation: tonation
+            );
         }
 
         // Ta funkcja, z wykorzystaniem najlepiej dopasowanego symbolu, dorabia resztę informacji,
@@ -451,55 +617,29 @@ namespace Algorithm.New.Algorithm.Generators
         private static Function GetBestFittingFunction(Function? prev, Metre metre, Tonation tonation, int barIndex, int functionIndex)
         {
             if (prev == null)
-            {
-                return new Function(
-                    index: new Music.Index()
-                    {
-                        Bar = 0,
-                        Position = 0,
-                        Duration = metre.Value,
-                    },
-                    symbol: Symbol.T,
-                    minor: tonation.Mode == Mode.Minor,
-                    tonation: tonation
-                );
-            }
+                return FunctionAfterNull(metre, tonation);
 
             var newBar = barIndex;
             var newPosition = functionIndex;
             var newDuration = metre.Value;
-
             var prevSymbol = prev.Symbol;
 
             var hasSixth = prev.Added
                 .Contains(Component.Sixth);
 
-            // Obsługa seksty
-            if (hasSixth)
-            {
-                var symbolIndex = Function.SymbolIndexes[prevSymbol];
-                var newIndex = symbolIndex - 3;
+            var hasSeventh = prev.Added
+                .Contains(Component.Seventh);
 
-                if (newIndex < 0)
-                    newIndex += 7;
+            var hasNinth = prev.Added
+                .Contains(Component.Seventh);
 
-                var newSymbolIndex = Function.SymbolIndexes
-                    .Where(x => x.Value == newIndex)
-                    .FirstOrDefault()
-                    .Key;
-
-                return new Function(
-                    index: new Music.Index()
-                    {
-                        Bar = newBar,
-                        Position = newPosition,
-                        Duration = newDuration
-                    },
-                    symbol: newSymbolIndex,
-                    minor: tonation.Mode == Mode.Minor,
-                    tonation: tonation
-                );
-            }
+            // To są szczególne przypadki, niestety
+            if (hasNinth)
+                return GetBestFittingAfterNinth(prev, metre, tonation, barIndex, functionIndex);
+            else if (hasSeventh)
+                return GetBestFittingAfterSeventh(prev, metre, tonation, barIndex, functionIndex);
+            else if (hasSixth)
+                return GetFittingAfterSixth(prev, metre, tonation, barIndex, functionIndex);
 
             var possibleSymbols = NextSymbols[prevSymbol];
             var bestSymbol = GetBestFittingSymbol(possibleSymbols);

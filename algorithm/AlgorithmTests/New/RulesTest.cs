@@ -10,6 +10,57 @@ namespace AlgorithmTests.New
     public class RulesTest
     {
         [Fact]
+        public void AllComponentsSatisfiedTest()
+        {
+            var settings = new Settings([new AllComponentsSatisfied()]);
+            var tonation = Tonation.CMajor;
+            var metre = Metre.Meter2_4;
+
+            var stack1 = new Stack(new Algorithm.New.Music.Index()
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
+                ["C", "F", null, null]
+            );
+
+            var stack2 = new Stack(new Algorithm.New.Music.Index()
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
+                ["C", "C", "C", "C"]
+            );
+
+            var function = new Function(new Algorithm.New.Music.Index()
+            {
+                Bar = 0,
+                Position = 0,
+                Duration = 4
+            },
+                Symbol.S,
+            true,
+            tonation
+            );
+
+            var problem = new Problem([function], metre, tonation);
+            var solution1 = new Solution(problem, [stack1]);
+            var mistakes1 = SolutionChecker.CheckSolution(solution1, settings);
+
+            Assert.True(mistakes1 != null);
+            Assert.True(mistakes1.Count == 2); // 2, bo 2 nut brakuje
+
+            var solution2 = new Solution(problem, [stack2]);
+            var mistakes2 = SolutionChecker.CheckSolution(solution2, settings);
+
+            Assert.True(mistakes2 != null);
+            Assert.True(mistakes2.Count == 1);
+            Assert.True(mistakes2[0].MistakeCode == settings.ActiveRules[0].Id);
+        }
+
+        [Fact]
         public void UniqueIdsTest()
         {
             var ids = Constants.Settings.ActiveRules
@@ -95,6 +146,249 @@ namespace AlgorithmTests.New
         public void SixthResolutionTest()
         {
 
+        }
+
+        [Fact]
+        public void DoubledFifthsTest()
+        {
+            var settings = new Settings([new DoubledFifthOnStrongBarPart()]);
+            var metre = Metre.Meter2_4;
+            var tonation = Tonation.CMajor;
+
+            var function = new Function(
+                symbol: Symbol.T,
+                minor: false,
+                index: new Algorithm.New.Music.Index(),
+                tonation: tonation
+            );
+
+            var stack1 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 5),
+                    new Note("E", 4),
+                    new Note("G", 3),
+                    new Note("G", 3)
+                ]
+            );
+
+            var stack2 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 5),
+                    new Note("E", 4),
+                    new Note("G", 3),
+                    new Note("C", 3)
+                ]
+            );
+
+            var stack3 = new Stack(
+                new Algorithm.New.Music.Index(0, 1, 0),
+                [
+                    new Note("C", 5),
+                    new Note("E", 4),
+                    new Note("G", 3),
+                    new Note("C", 3)
+                ]
+            );
+
+            var stack4 = new Stack(
+                new Algorithm.New.Music.Index(0, 1, 0),
+                [
+                    new Note("C", 5),
+                    new Note("E", 4),
+                    new Note("G", 3),
+                    new Note("G", 3)
+                ]
+            );
+
+            var problem = new Problem([function], metre, tonation);
+            var solution1 = new Solution(problem, [stack1]);
+            var solution2 = new Solution(problem, [stack2]);
+            var solution3 = new Solution(problem, [stack3]);
+            var solution4 = new Solution(problem, [stack4]);
+
+            var mistakes1 = SolutionChecker.CheckSolution(solution1, settings);
+            var mistakes2 = SolutionChecker.CheckSolution(solution2, settings);
+            var mistakes3 = SolutionChecker.CheckSolution(solution3, settings);
+            var mistakes4 = SolutionChecker.CheckSolution(solution4, settings);
+
+            Assert.True(mistakes1 != null);
+            Assert.True(mistakes2 != null);
+            Assert.True(mistakes3 != null);
+            Assert.True(mistakes4 != null);
+
+            var mistakesCount1 = mistakes1.Count;
+            var mistakesCount2 = mistakes2.Count;
+            var mistakesCount3 = mistakes3.Count;
+            var mistakesCount4 = mistakes4.Count;
+
+            Assert.True(mistakesCount1 == 1);
+            Assert.True(mistakesCount2 == 0);
+            Assert.True(mistakesCount3 == 0);
+            Assert.True(mistakesCount4 == 0);
+        }
+
+        [Fact]
+        public void VoiceCrossingTest()
+        {
+            var settings = new Settings([new VoiceCrossingOneFunction()]);
+            var metre = Metre.Meter2_4;
+            var tonation = Tonation.CMajor;
+
+            var function = new Function(
+                symbol: Symbol.T,
+                minor: false,
+                index: new Algorithm.New.Music.Index(),
+                tonation: tonation
+            );
+
+            var stack1 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 5),
+                    new Note("C", 4),
+                    new Note("E", 4),
+                    new Note("C", 3)
+                ]
+            );
+
+            var stack2 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 4),
+                    new Note("C", 5),
+                    new Note("G", 3),
+                    new Note("E", 3)
+                ]
+            );
+
+            var stack3 = new Stack(
+                new Algorithm.New.Music.Index(0, 1, 0),
+                [
+                    new Note("C", 5),
+                    new Note("E", 4),
+                    new Note("G", 3),
+                    new Note("C", 5)
+                ]
+            );
+
+            var stack4 = new Stack(
+                new Algorithm.New.Music.Index(0, 1, 0),
+                [
+                    new Note("C", 5),
+                    new Note("E", 4),
+                    new Note("G", 3),
+                    new Note("G", 3)
+                ]
+            );
+
+            var problem = new Problem([function], metre, tonation);
+            var solution1 = new Solution(problem, [stack1]);
+            var solution2 = new Solution(problem, [stack2]);
+            var solution3 = new Solution(problem, [stack3]);
+            var solution4 = new Solution(problem, [stack4]);
+
+            var mistakes1 = SolutionChecker.CheckSolution(solution1, settings);
+            var mistakes2 = SolutionChecker.CheckSolution(solution2, settings);
+            var mistakes3 = SolutionChecker.CheckSolution(solution3, settings);
+            var mistakes4 = SolutionChecker.CheckSolution(solution4, settings);
+
+            Assert.True(mistakes1 != null);
+            Assert.True(mistakes2 != null);
+            Assert.True(mistakes3 != null);
+            Assert.True(mistakes4 != null);
+
+            var mistakesCount1 = mistakes1.Count;
+            var mistakesCount2 = mistakes2.Count;
+            var mistakesCount3 = mistakes3.Count;
+            var mistakesCount4 = mistakes4.Count;
+
+            Assert.True(mistakesCount1 == 1);
+            Assert.True(mistakesCount2 == 1);
+            Assert.True(mistakesCount3 == 1);
+            Assert.True(mistakesCount4 == 0);
+        }
+
+        [Fact]
+        public void VoiceDistanceTest()
+        {
+            var settings = new Settings([new VoiceDistance()]);
+            var metre = Metre.Meter2_4;
+            var tonation = Tonation.CMajor;
+
+            var function = new Function(
+                symbol: Symbol.T,
+                minor: false,
+                index: new Algorithm.New.Music.Index(),
+                tonation: tonation
+            );
+
+            var stack1 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 5),
+                    new Note("G", 3),
+                    new Note("E", 3),
+                    new Note("C", 3)
+                ]
+            );
+
+            var stack2 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 5),
+                    new Note("G", 4),
+                    new Note("E", 3),
+                    new Note("C", 3)
+                ]
+            );
+
+            var stack3 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 5),
+                    new Note("G", 4),
+                    new Note("E", 4),
+                    new Note("C", 3)
+                ]
+            );
+
+            var stack4 = new Stack(
+                new Algorithm.New.Music.Index(),
+                [
+                    new Note("C", 5),
+                    new Note("E", 4),
+                    new Note("G", 3),
+                    new Note("C", 3)
+                ]
+            );
+
+            var problem = new Problem([function], metre, tonation);
+            var solution1 = new Solution(problem, [stack1]);
+            var solution2 = new Solution(problem, [stack2]);
+            var solution3 = new Solution(problem, [stack3]);
+            var solution4 = new Solution(problem, [stack4]);
+
+            var mistakes1 = SolutionChecker.CheckSolution(solution1, settings);
+            var mistakes2 = SolutionChecker.CheckSolution(solution2, settings);
+            var mistakes3 = SolutionChecker.CheckSolution(solution3, settings);
+            var mistakes4 = SolutionChecker.CheckSolution(solution4, settings);
+
+            Assert.True(mistakes1 != null);
+            Assert.True(mistakes2 != null);
+            Assert.True(mistakes3 != null);
+            Assert.True(mistakes4 != null);
+
+            var mistakesCount1 = mistakes1.Count;
+            var mistakesCount2 = mistakes2.Count;
+            var mistakesCount3 = mistakes3.Count;
+            var mistakesCount4 = mistakes4.Count;
+
+            Assert.True(mistakesCount1 == 1);
+            Assert.True(mistakesCount2 == 1);
+            Assert.True(mistakesCount3 == 1);
+            Assert.True(mistakesCount4 == 0);
         }
 
         [Fact]
@@ -304,8 +598,8 @@ namespace AlgorithmTests.New
                 (S7, D),
                 (S7, Sii),
             ];
-        
-            foreach(var pair in pairs)
+
+            foreach (var pair in pairs)
             {
                 var function1 = pair.Item1;
                 var function2 = pair.Item2;
