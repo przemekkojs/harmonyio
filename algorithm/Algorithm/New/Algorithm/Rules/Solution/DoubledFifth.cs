@@ -37,7 +37,8 @@ namespace Algorithm.New.Algorithm.Rules.Solution
                     .Where(x => x != null)
                     .Select(x => x?.Component);
 
-                var fifths = components
+                var fifths = components   
+                    .Where(x => x != null)
                     .Where(x => x.Equals(Component.Fifth));
 
                 var fifthsCount = fifths.Count();
