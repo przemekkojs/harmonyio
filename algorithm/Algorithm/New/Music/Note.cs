@@ -4,7 +4,7 @@
     {
         public string Name { get => name; set => SetNewName(value); }
         public int Octave { get; set; }
-        public string Accidental { get; private set; }
+        public string Accidental { get; set; }
 
         public Component? Component { get; set; } = null;
 

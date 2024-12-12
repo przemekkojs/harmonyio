@@ -1,6 +1,8 @@
 ﻿using Algorithm.New.Algorithm.Checkers;
 using Algorithm.New.Music;
 using Algorithm.New.Utils;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace Algorithm.New.Algorithm.Generators
 {
@@ -161,8 +163,8 @@ namespace Algorithm.New.Algorithm.Generators
                 var valueList = mappings[key];
                 uint count = (UInt32)valueList.Count;
 
-                maxIterations *= count != 0 ?
-                    count :
+                maxIterations += count != 0 ?
+                    count * 10 :
                     1;
             }
 
@@ -251,6 +253,30 @@ namespace Algorithm.New.Algorithm.Generators
                 }
                 else
                 {
+                    if (currentIteration >= maxIterations)
+                    {
+                        currentIteration = 0;
+                        currentIndex--;
+                        tolerance++;
+
+                        if (currentIndex >= 0)
+                        {
+                            usedNotesIndexes[currentIndex + 1] = 0;
+                            stacks.RemoveAt(currentIndex);
+                            functionsTmp.RemoveAt(currentIndex);
+                        }
+                        else
+                        {
+                            currentIndex = 0;
+                            usedNotesIndexes[currentIndex] = 0;
+                        }
+
+                        currentFunction = functions[currentIndex];
+                        usedNotesIndex = usedNotesIndexes[currentIndex];
+                        mapping = mappings[currentFunction];
+                        possibleNotes = mapping[usedNotesIndex];
+                    }
+
                     while (usedNotesIndexes[currentIndex] >= mapping.Count)
                     {
                         currentIndex--;
@@ -273,6 +299,7 @@ namespace Algorithm.New.Algorithm.Generators
 
             var result = new Solution(problem, stacks);
             Rhytmize(result);
+            RemoveUnnecessaryAccidentals(result);
 
             return (result, tolerance);
         }
@@ -355,6 +382,44 @@ namespace Algorithm.New.Algorithm.Generators
             }
         }
 
+        private static void RemoveUnnecessaryAccidentals(Solution solution)
+        {
+            var tonation = solution.Problem.Tonation;
+            var sharpsCount = tonation.SharpsCount;
+            var flatsCount = tonation.FlatsCount;
+
+            var accidentalsCount = sharpsCount + flatsCount;
+
+            // Dla C-dur i a-moll nie ma co robić
+            if (sharpsCount == 0 && flatsCount == 0)
+                return;
+
+            var accidentalsList = sharpsCount > 0 ?
+                Constants.SharpsQueue :
+                Constants.FlatsQueue;
+
+            var accidentals = accidentalsList
+                .GetRange(0, accidentalsCount);
+
+            if (accidentals == null)
+                return;
+
+            foreach (var stack in solution.Stacks)
+            {
+                foreach (var note in stack.Notes)
+                {
+                    if (note == null)
+                        continue;
+
+                    var accidental = note.Accidental;
+                    var noteName = note.Name[0].ToString();
+
+                    if (accidentals.Contains(noteName))
+                        note.Accidental = "";
+                }
+            }
+        }
+
         /// <summary>
         /// Z tej funkcji NIE NALEŻY korzystać, chyba że do celów badawczych. Generuje ona wszystkie możliwe rozwiązania,
         /// z obcinaniem dla zadanej tolerancji. Ma jednak gwarantowane zwrócenie najlepszego możliwego rozwiązania, jeżeli
@@ -380,8 +445,6 @@ namespace Algorithm.New.Algorithm.Generators
             stacks = firstItem.Key
                 .Select(x => x.Stack!)
                 .ToList();
-
-            // TODO: Trzeba jeszcze poprawić wartości rytmiczne
 
             return new Solution(problem, stacks);
         }
