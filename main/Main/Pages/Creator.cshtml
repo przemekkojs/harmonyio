@@ -32,8 +32,8 @@
 
                 @if (!Model.BrowseOnly)
                 {
-                    <button type="button" asp-page-handler="Save" class="btn btn-primary btn-std-width mx-auto mt-2"
-                        onclick="submitForm(event, false)">Zapisz</button>
+                    <input type="button" asp-page-handler="Save" class="btn btn-primary btn-std-width mx-auto mt-2"
+                           onclick="submitForm(event, false)" value="Zapisz">
 
                     <a href="#"
                         data-bs-target="#creatorErrorsPopup"
@@ -80,7 +80,6 @@
     import { parseTonationToAccidentalsCount } from "./js/utils.js";
 
     const answer = [];
-
     const exerciseContainer = document.getElementById('exercise-container');
     const taskContainer = new TaskContainer(exerciseContainer);
     const questionsValidationError = document.getElementById('questions-validation-error');
@@ -94,19 +93,16 @@
         )
     );
 
-    window.submitForm = async function submitForm(event, force) {
+    window.submitForm = async function (event, force) {
         questionsValidationError.innerText = "";
+
         const tasksResult = confirmExercises();
-
-        if (!tasksResult) {
-            questionsValidationError.innerText = "Zadania zawierają błędy.";
-            return;
-        }
-
+        const form = document.getElementById('pageForm');
         const questions = [];
+        const maxes = [];
         const tasks = taskContainer.tasks;
 
-        if (tasks.length === 0) {
+        if (!tasksResult || tasks.length === 0) {
             questionsValidationError.innerText = "Dodaj przynajmniej jedno zadanie.";
             return;
         }
@@ -119,13 +115,9 @@
         if (event != null)
             event.preventDefault();
 
-        const form = document.getElementById('pageForm');
-        const maxes = [];
-
         tasks.forEach(t => {
             const toAppend = t.maxPointsInput.value;
 
-            // Niech wartość defaultowa będzie równa 10 pkt / zadanie
             if (toAppend === null)
                 toAppend = defaultPoints;
 
@@ -133,14 +125,15 @@
         });
 
         const quizName = document.getElementById("QuizName").value;
-        const verificationToken = form
-            .querySelector("[name='__RequestVerificationToken']")
-            .value;
 
-        if (quizName == '') {
+        if (quizName === '') {
             document.getElementById('quiz-name-validation').innerText = "Nazwa quizu jest wymagana";
             return;
         }
+
+        const verificationToken = form
+            .querySelector("[name='__RequestVerificationToken']")
+            .value;
 
         const editedQuizId = form
             .querySelector("[name='EditedQuizId']")
@@ -153,6 +146,9 @@
         formData.append("EditedQuizId", editedQuizId);
         formData.append("Maxes", JSON.stringify(maxes));
         formData.append("Force", force);
+
+        console.log(questions);
+        console.log(exercises);
 
         try {
             const response = await fetch(form.action, {
@@ -171,7 +167,6 @@
                             window.location.href = result.redirectUrl;
                         }
                         else {
-                            // TODO: Ładujemy popup
                             const toDisplay = result.display;
                             const creatorErrors = document.getElementById("creator-errors");
                             creatorErrors.setAttribute('data-html', toDisplay);
@@ -202,14 +197,14 @@
         }
     }
 
-    window.saveWithErrors = async function saveWithErrors(){
+    window.saveWithErrors = async function(){
         submitForm(null, true);
         window.location.href = "/Created";
     }
 
-    function addExisting() {
-        taskContainer.load(exercises);
+    window.addExisting = function() {
         questionsValidationError.innerText = '';
+        taskContainer.load(exercises);        
     }
 
     window.addExercise = function () {

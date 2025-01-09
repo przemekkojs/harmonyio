@@ -84,7 +84,9 @@ namespace Main.Pages
             EditedQuizId = quiz.Id;
             QuizName = quiz.Name;
             Code = quiz.Code;
-            Questions = quiz.Exercises.Select(e => e.Question).ToList();
+            Questions = quiz.Exercises
+                .Select(e => e.Question)
+                .ToList();
 
             if (triggerSubmit ?? false)
                 return await OnPostSubmit();
@@ -238,10 +240,6 @@ namespace Main.Pages
 
         public async Task<IActionResult> OnPostSave()
         {
-            // Fixes-2: Kurna, który ma utf-16 włączone? XD
-            // Generalnie, z Creator.cshtml przychodzi lista jako JSON i się ładuje jako zerowy element listy,
-            // wi�c te linijki jakby rozpakowuj� t� lit�.
-            // Je�eli na froncie nie ma b��d�w, to to zawsze si� wykona poprawnie.
             Questions = JsonConvert.DeserializeObject<List<string>>(Questions[0])!;
             Maxes = JsonConvert.DeserializeObject<List<string>>(Maxes[0])!;
 
@@ -292,34 +290,37 @@ namespace Main.Pages
                     await _repository.SaveChangesAsync();
 
                     var quizId = quiz.Id;
-                    for (int index = 0; index < Questions.Count; index++)
-                    {
-                        var question = Questions[index];
-                        var points = Convert.ToInt32(Maxes[index]);
-
-                        _repository.Add(new Exercise
-                        {
-                            Question = question,
-                            QuizId = quizId,
-                            MaxPoints = points
-                        });
-                    }
                     await _repository.SaveChangesAsync();            
-                } 
+                }
                 else 
                 {
                     _repository.Update(quiz);
+
                     foreach (var exercise in quiz.Exercises)
                     {
                         _repository.Delete(exercise);
                     }
+
                     await _repository.SaveChangesAsync();
                 }
+
+                for (int index = 0; index < Questions.Count; index++)
+                {
+                    var question = Questions[index];
+                    var points = Convert.ToInt32(Maxes[index]);
+
+                    _repository.Add(new Exercise
+                    {
+                        Question = question,
+                        QuizId = quiz.Id,
+                        MaxPoints = points
+                    });
+                }
+
+                await _repository.SaveChangesAsync();
             }
 
-//          await _repository.SaveChangesAsync();
-
-            if (quiz.IsValid)
+            if (quiz.IsValid || Force)
             {
                 return new JsonResult(successResult);
             }

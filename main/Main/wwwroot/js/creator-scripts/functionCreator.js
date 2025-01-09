@@ -634,7 +634,7 @@ class FunctionCreator {
     // Typ: ParsedFunction
     confirm() {
         this.allPopups.forEach(p => {
-            p.style.display = "none";
+            p.style.display = "none !important";
         });
 
         const minor = this.minor.checked;
@@ -750,12 +750,12 @@ class FunctionCreator {
 
     createAddedElement(component, option) {
         const container = document.getElementById(`added-container-${this.id}`);
-        let element = document.createElement('input');
+        const element = document.createElement('input');
 
         if (option == "-")
             option = "";
 
-        let val = `${component}${option}`;
+        const val = `${component}${option}`;
         element.type = "button";
         element.value = val;
         element.className = "added-component";
@@ -791,15 +791,11 @@ class FunctionCreator {
     }
 
     togglePopupOn(popup, event) {
-        console.log('on', popup);
-
         popup.style.display = "block";
         this.disableItems(this.allComponents);
     }
 
     togglePopupOff(popup) {
-        console.log('off', popup);
-
         popup.setAttribute('style', 'display: none !important;');
         this.enableItems(this.allComponents);
     }
@@ -809,7 +805,7 @@ class FunctionCreator {
             this.disableElement(item);
         });
 
-        let minorSpan = document.getElementById(`minor-span-${this.id}`);
+        const minorSpan = document.getElementById(`minor-span-${this.id}`);
         minorSpan.classList.remove('checkmark-border');
     }
 
@@ -818,7 +814,7 @@ class FunctionCreator {
             this.enableElement(item);
         });
 
-        let minorSpan = document.getElementById(`minor-span-${this.id}`);
+        const minorSpan = document.getElementById(`minor-span-${this.id}`);
         minorSpan.classList.add('checkmark-border');
     }
 
